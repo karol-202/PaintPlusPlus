@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginLeft="16dp"
+	android:layout_marginRight="16dp">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/size_tool"
+		android:id="@+id/text_marker_size"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_alignBottom="@+id/seekBar_marker_size"
+		android:paddingBottom="4dp" />
+
+	<SeekBar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/seekBar_marker_size"
+		android:layout_alignParentTop="true"
+		android:layout_toRightOf="@+id/text_marker_size"
+		android:layout_toEndOf="@+id/text_marker_size"
+		android:layout_toLeftOf="@+id/marker_size"
+		android:max="99"
+		android:paddingBottom="4dp" />
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/marker_size"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentEnd="true"
+		android:layout_alignBottom="@+id/seekBar_marker_size"
+		android:paddingBottom="4dp" />
+</RelativeLayout>

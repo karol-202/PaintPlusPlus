@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="100dp"
+	android:gravity="center_horizontal">
+
+	<FrameLayout
+		android:layout_width="32dp"
+		android:layout_height="32dp"
+		android:layout_centerVertical="true"
+		android:id="@+id/view_border_color_first"
+		android:background="@drawable/border"
+		android:layout_centerHorizontal="true"
+		android:padding="1dp">
+
+		<View
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:id="@+id/view_color_first"
+			android:background="#0f0"/>
+	</FrameLayout>
+
+	<ImageButton
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/button_colors_swap"
+		android:src="@drawable/ic_swap_horiz_black_48dp"
+		android:layout_toEndOf="@id/view_border_color_first"
+		android:layout_centerInParent="true" />
+
+	<FrameLayout
+		android:layout_width="32dp"
+		android:layout_height="32dp"
+		android:layout_centerVertical="true"
+		android:id="@+id/view_border_color_second"
+		android:background="@drawable/border"
+		android:layout_centerHorizontal="true"
+		android:layout_toEndOf="@id/button_colors_swap"
+		android:padding="1dp">
+
+		<View
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:id="@+id/view_color_second"
+			android:background="#f00" />
+	</FrameLayout>
+
+</RelativeLayout>

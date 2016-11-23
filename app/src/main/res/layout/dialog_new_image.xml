@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/image_x"
+		android:id="@+id/text_x"
+		android:layout_alignParentStart="true"
+		android:layout_alignBaseline="@+id/edit_image_x"
+		android:layout_marginLeft="24dp"
+		android:layout_marginRight="24dp" />
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/image_y"
+		android:id="@+id/text_y"
+		android:layout_alignParentStart="true"
+		android:layout_alignBaseline="@+id/edit_image_y"
+		android:layout_marginRight="24dp"
+		android:layout_marginLeft="24dp" />
+
+	<EditText
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:inputType="number"
+		android:ems="10"
+		android:id="@+id/edit_image_x"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentEnd="true"
+		android:layout_toEndOf="@id/text_x" />
+
+	<EditText
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:inputType="number"
+		android:ems="10"
+		android:id="@+id/edit_image_y"
+		android:layout_alignParentEnd="true"
+		android:layout_below="@+id/edit_image_x"
+		android:layout_toEndOf="@id/text_y" />
+
+</RelativeLayout>

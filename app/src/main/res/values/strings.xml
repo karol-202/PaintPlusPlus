@@ -1,0 +1,36 @@
+<resources>
+	<string name="app_name">Paint++</string>
+	<string name="activity_main">Paint++</string>
+	<string name="activity_paint">Edycja</string>
+	<string name="action_drawer_open">Panel narzędzi otwarty</string>
+	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
+	<string name="properties">Właściwości</string>
+
+	<string name="dialog_new_image">Nowy obraz</string>
+	<string name="dialog_resize_image">Zmień wymiary</string>
+
+	<string name="action_new">Nowy obraz</string>
+	<string name="action_tool">Narzędzie</string>
+	<string name="action_image">Obraz</string>
+	<string name="action_resize">Zmień wymiary</string>
+
+	<string name="tool_marker">Pisak</string>
+	<string name="tool_brush">Pędzel</string>
+
+	<string name="choice_of_tool">Wybór narzędzia</string>
+	<string name="size_tool">Wielkość:</string>
+	<string name="color_r">R</string>
+	<string name="color_g">G</string>
+	<string name="color_b">B</string>
+	<string name="image_x">X</string>
+	<string name="image_y">Y</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Anuluj</string>
+	<string name="keep_ratio">Zachowaj współczynnik proporcji</string>
+	<string name="image_width">Szerokość</string>
+	<string name="image_height">Wysokość</string>
+	<string name="brush_shape">Kształt:</string>
+	<string name="brush_shape_offset">Przesunięcie:</string>
+
+	<string name="message_too_big">Podane wymiary są za duże, aby utworzyć obraz.</string>
+</resources>
