@@ -30,7 +30,7 @@
 	<string name="image_width">Szerokość</string>
 	<string name="image_height">Wysokość</string>
 	<string name="brush_shape">Kształt:</string>
-	<string name="brush_shape_offset">Przesunięcie:</string>
+	<string name="brush_shape_offset">Odstęp:</string>
 
 	<string name="message_too_big">Podane wymiary są za duże, aby utworzyć obraz.</string>
 </resources>
