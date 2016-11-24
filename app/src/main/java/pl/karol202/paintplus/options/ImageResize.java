@@ -1,7 +1,7 @@
 package pl.karol202.paintplus.options;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.*;
 import android.text.Editable;
@@ -9,9 +9,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
-import pl.karol202.paintplus.PaintView;
+import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.math.Utils;
+import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.*;
 
@@ -30,38 +30,37 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 
 	private Bitmap preview;
 	private Canvas prevEdit;
-	private int width; //Aktualne wymiary
-	private int height;
-	private int oldWidth; //Wymiary obrazu przed rozpoczęciem zmieniania wymiarów.
+	private int newWidth;
+	private int newHeight;
+	private int oldWidth;
 	private int oldHeight;
 	private float ratio = -1;
 	private boolean dontFireEvent;
 
-	public ImageResize(Activity activity, PaintView paintView)
+	public ImageResize(Context context, Image image)
 	{
-		super(activity, paintView);
+		super(context, image);
 	}
 
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(activity);
+		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.dialog_resize_image, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 		dialogBuilder.setTitle(R.string.dialog_resize_image);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, this);
-
-		Point currentSize = paintView.getSize();
-		oldWidth = width = currentSize.x;
-		oldHeight = height = currentSize.y;
+		
+		oldWidth = newWidth = image.getWidth();
+		oldHeight = newHeight = image.getHeight();
 
 		editWidth = (EditText) view.findViewById(R.id.edit_image_width);
-		editWidth.setText(Integer.toString(width));
+		editWidth.setText(Integer.toString(newWidth));
 		editWidth.addTextChangedListener(this);
 
 		editHeight = (EditText) view.findViewById(R.id.edit_image_height);
-		editHeight.setText(Integer.toString(height));
+		editHeight.setText(Integer.toString(newHeight));
 		editHeight.addTextChangedListener(this);
 
 		editX = (EditText) view.findViewById(R.id.edit_image_x);
@@ -95,14 +94,14 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 	{
 		if(which == BUTTON_POSITIVE)
 		{
-			if(width * height > MAX_SIZE)
+			if(newWidth * newHeight > MAX_SIZE)
 			{
-				Toast.makeText(activity, R.string.message_too_big, Toast.LENGTH_LONG).show();
+				Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 				return;
 			}
 			int x = parseInt(editX.getText().toString());
 			int y = parseInt(editY.getText().toString());
-			paintView.resize(x, y, width, height);
+			image.resize(x, y, newWidth, newHeight);
 		}
 	}
 
@@ -122,37 +121,42 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 			int newWidth = parseInt(editWidth.getText().toString());
 			int newHeight = parseInt(editHeight.getText().toString());
 
-			if(ratio != -1)
-			{
-				if(newWidth != width)
-				{
-					newHeight = Math.round(newWidth / ratio);
-					editHeight.setText(Integer.toString(newHeight));
-				}
-				else if(newHeight != height)
-				{
-					newWidth = Math.round(newHeight * ratio);
-					editWidth.setText(Integer.toString(newWidth));
-				}
-			}
+			checkRatio(newWidth, newHeight);
 
-			width = newWidth;
-			height = newHeight;
+			this.newWidth = newWidth;
+			this.newHeight = newHeight;
 
 			dontFireEvent = false;
 		}
 		updatePreview();
 	}
 
+	private void checkRatio(int newWidth, int newHeight)
+	{
+		if(ratio != -1)
+		{
+			if(newWidth != this.newWidth)
+			{
+				newHeight = Math.round(newWidth / ratio);
+				editHeight.setText(Integer.toString(newHeight));
+			}
+			else if(newHeight != this.newHeight)
+			{
+				newWidth = Math.round(newHeight * ratio);
+				editWidth.setText(Integer.toString(newWidth));
+			}
+		}
+	}
+	
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
-		if(isChecked && (width == 0 || height == 0))
+		if(isChecked && (newWidth == 0 || newHeight == 0))
 		{
 			checkKeepRatio.setChecked(false);
 			return;
 		}
-		if(isChecked) ratio = (float) width / height;
+		if(isChecked) ratio = (float) newWidth / newHeight;
 		else ratio = -1;
 	}
 
@@ -175,8 +179,8 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 
 		int left = Math.min(0, offsetX);
 		int top = Math.min(0, offsetY);
-		int right = Math.round(Math.max(oldWidth, width + offsetX));
-		int bottom = Math.round(Math.max(oldHeight, height + offsetY));
+		int right = Math.round(Math.max(oldWidth, newWidth + offsetX));
+		int bottom = Math.round(Math.max(oldHeight, newHeight + offsetY));
 
 		int min = Math.min(left, top);
 		int max = Math.max(right, bottom);
@@ -190,8 +194,8 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 
 		float newLeft = Utils.map(offsetX, min, max, 0, previewSize);
 		float newTop = Utils.map(offsetY, min, max, 0, previewSize);
-		float newRight = Utils.map(offsetX + width, min, max, 0, previewSize);
-		float newBottom = Utils.map(offsetY + height, min, max, 0, previewSize);
+		float newRight = Utils.map(offsetX + newWidth, min, max, 0, previewSize);
+		float newBottom = Utils.map(offsetY + newHeight, min, max, 0, previewSize);
 		RectF newR = new RectF(newLeft, newTop, newRight, newBottom);
 
 		Paint paint = new Paint();
@@ -199,7 +203,7 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 		paint.setColor(Color.argb(255, 255, 255, 141));
 		prevEdit.drawRect(oldR, paint);
 
-		paint.setColor(Color.argb(255, 30, 136, 229));
+		paint.setColor(Color.argb(204, 27, 124, 209));
 		prevEdit.drawRect(newR, paint);
 	}
 

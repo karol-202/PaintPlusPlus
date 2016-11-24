@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.math;
+package pl.karol202.paintplus.util;
 
 public class Line
 {
@@ -29,14 +29,5 @@ public class Line
 	public void setEnd(Vector2f end)
 	{
 		this.end = end;
-	}
-
-	public Line perpendicular(float length)
-	{
-		Vector2f relStart = end.sub(start).normalize().rotate(90).mul(length / 2);
-		Vector2f relEnd = relStart.mul(-1);
-		Vector2f absStart = relStart.add(start);
-		Vector2f absEnd = relEnd.add(start);
-		return new Line(absStart, absEnd);
 	}
 }

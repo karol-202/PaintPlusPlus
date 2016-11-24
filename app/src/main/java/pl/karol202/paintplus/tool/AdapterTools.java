@@ -1,4 +1,4 @@
-package pl.karol202.paintplus;
+package pl.karol202.paintplus.tool;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,15 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import pl.karol202.paintplus.tool.ToolType;
+import pl.karol202.paintplus.R;
 
-public class AdapterListTools extends ArrayAdapter<ToolType>
+public class AdapterTools extends ArrayAdapter<Tool>
 {
 	private Context context;
 
-	public AdapterListTools(Context context, ToolType[] toolTypes)
+	public AdapterTools(Context context)
 	{
-		super(context, R.layout.item_tool, toolTypes);
+		super(context, R.layout.item_tool, Tools.getTools());
 		this.context = context;
 	}
 
@@ -29,10 +29,12 @@ public class AdapterListTools extends ArrayAdapter<ToolType>
 			view = inflater.inflate(R.layout.item_tool, parent, false);
 		}
 		else view = convertView;
+		Tool tool = getItem(position);
+		
 		ImageView imageItemTool = (ImageView) view.findViewById(R.id.image_item_tool);
-		TextView textItemTool = (TextView) view.findViewById(R.id.text_item_tool);
-		ToolType tool = getItem(position);
 		imageItemTool.setImageResource(tool.getIcon());
+		
+		TextView textItemTool = (TextView) view.findViewById(R.id.text_item_tool);
 		textItemTool.setText(tool.getName());
 		return view;
 	}

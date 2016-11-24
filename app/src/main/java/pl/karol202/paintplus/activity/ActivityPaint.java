@@ -6,27 +6,27 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import pl.karol202.paintplus.*;
-import pl.karol202.paintplus.ColorsSelect.OnColorSelectedListener;
+import pl.karol202.paintplus.ColorsSelect;
+import pl.karol202.paintplus.PaintView;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.options.ImageNew;
 import pl.karol202.paintplus.options.ImageResize;
-import pl.karol202.paintplus.tool.Tool;
-import pl.karol202.paintplus.tool.Tool.OnToolUpdatedListener;
-import pl.karol202.paintplus.tool.ToolType;
+import pl.karol202.paintplus.tool.AdapterTools;
+import pl.karol202.paintplus.tool.Tools;
 
-public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener, OnToolUpdatedListener, OnColorSelectedListener
+public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener
 {
 	private class DrawerAdapter extends ActionBarDrawerToggle
 	{
@@ -38,11 +38,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		@Override
 		public void onDrawerOpened(View drawerView)
 		{
-			if(drawerView == drawerLeft)
-			{
-				super.onDrawerOpened(drawerView);
-				onLeftDrawerOpened();
-			}
+			if(drawerView == drawerLeft) onLeftDrawerOpened(drawerView);
 			else if(drawerView == drawerRight) onRightDrawerOpened();
 			invalidateOptionsMenu();
 		}
@@ -50,42 +46,76 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		@Override
 		public void onDrawerClosed(View drawerView)
 		{
-			if(drawerView == drawerLeft) super.onDrawerClosed(drawerView);
-			else if(drawerView == drawerRight) removePropertiesFragment();
+			if(drawerView == drawerLeft) onLeftDrawerClosed(drawerView);
+			else if(drawerView == drawerRight) onRightDrawerClosed();
 			if(!(layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight)))
-			{
-				actionBar.setTitle(title);
-			}
+				onAllDrawersClosed();
 			invalidateOptionsMenu();
 		}
 		
 		@Override
 		public void onDrawerSlide(View drawerView, float slideOffset)
 		{
-			if(drawerView == drawerLeft)
-			{
-				super.onDrawerSlide(drawerView, slideOffset);
-				layoutDrawer.closeDrawer(drawerRight);
-			}
-			else if(drawerView == drawerRight && !propertiesAttached) createPropertiesFragment();
+			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
+			else if(drawerView == drawerRight) onRightDrawerMoved(drawerView, slideOffset);
+		}
+		
+		private void onLeftDrawerOpened(View drawerView)
+		{
+			super.onDrawerOpened(drawerView);
+			String toolChoice = getResources().getString(R.string.choice_of_tool);
+			actionBar.setTitle(toolChoice);
+		}
+		
+		private void onRightDrawerOpened()
+		{
+			String properties = getResources().getString(R.string.properties);
+			String tool = getResources().getString(paintView.getTool().getName());
+			actionBar.setTitle(properties + ": " + tool);
+		}
+		
+		private void onLeftDrawerClosed(View drawerView)
+		{
+			super.onDrawerClosed(drawerView);
+		}
+		
+		private void onRightDrawerClosed()
+		{
+			removePropertiesFragment();
+		}
+		
+		private void onAllDrawersClosed()
+		{
+			actionBar.setTitle(R.string.activity_paint);
+		}
+		
+		private void onLeftDrawerMoved(View drawerView, float slideOffset)
+		{
+			super.onDrawerSlide(drawerView, slideOffset);
+			layoutDrawer.closeDrawer(drawerRight);
+		}
+		
+		private void onRightDrawerMoved(View drawerView, float slideOffset)
+		{
+			super.onDrawerSlide(drawerView, slideOffset);
+			if(!propertiesAttached) createPropertiesFragment();
 		}
 	}
 	
 	private View decorView;
 	private FragmentManager fragments;
 	private ActionBarDrawerToggle drawerListener;
-	private boolean propertiesAttached;
 	private ActionBar actionBar;
+	private DisplayMetrics displayMetrics;
+	private boolean propertiesAttached;
+	private float screenWidthDp;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
 	private DrawerLayout layoutDrawer;
 	private ListView drawerLeft;
 	private View drawerRight;
-	
-
-	private ImageNew imageNew;
-	private ImageResize imageResize;
+	private ColorsSelect colorsSelect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -93,67 +123,72 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-									  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-									  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-									  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-									  | View.SYSTEM_UI_FLAG_FULLSCREEN
-									  | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		initSystemUIVisibility();
 		decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
 		{
 			@Override
 			public void onSystemUiVisibilityChange(int visibility)
 			{
-				decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-											  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-											  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-											  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-											  | View.SYSTEM_UI_FLAG_FULLSCREEN
-											  | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+				initSystemUIVisibility();
 			}
 		});
 		fragments = getFragmentManager();
-		
-		/*DisplayMetrics metrics = getResources().getDisplayMetrics();
-		float widthDp = metrics.widthPixels / metrics.density;
-		int maxDrawerLeftWidth = (int) (280 * metrics.density);
-		int maxDrawerRightWidth = (int) (320 * metrics.density);*/
+		displayMetrics = getResources().getDisplayMetrics();
+		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
+		actionBar.setTitle(R.string.activity_paint);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 
 		paintView = (PaintView) findViewById(R.id.paint_view);
 
 		layoutDrawer = (DrawerLayout) findViewById(R.id.layout_drawer);
-		drawerListener = new ActionBarDrawerToggle(this, layoutDrawer, toolbar,
-												   R.string.action_drawer_open, R.string.action_drawer_close)
-		{
-			
-		};
+		drawerListener = new DrawerAdapter(this, layoutDrawer, toolbar);
 		layoutDrawer.addDrawerListener(drawerListener);
 
 		drawerLeft = (ListView) findViewById(R.id.drawer_left);
-		LayoutParams params1 = drawerLeft.getLayoutParams();
-		params1.width = (int) ((widthDp - 112) * metrics.density);
-		if(params1.width > maxDrawerLeftWidth) params1.width = maxDrawerLeftWidth;
-		drawerLeft.setAdapter(new AdapterListTools(this, ToolType.values()));
+		drawerLeft.setAdapter(new AdapterTools(this));
 		drawerLeft.setOnItemClickListener(this);
+		initLeftDrawer();
 
 		drawerRight = findViewById(R.id.drawer_right);
-		LayoutParams params2 = drawerRight.getLayoutParams();
-		params2.width = (int) ((widthDp - 56) * metrics.density);
-		if(params2.width > maxDrawerRightWidth) params2.width = maxDrawerRightWidth;
+		initRightDrawer();
 
-		ColorsSelect colors = (ColorsSelect) fragments.findFragmentById(R.id.colorsFragment);
-		colors.setColors(paintView.getColors());
-
-		imageNew = new ImageNew(this, paintView);
-		imageResize = new ImageResize(this, paintView);
+		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colorsFragment);
+		colorsSelect.setColors(paintView.getColors());
 	}
-
+	
+	private void initSystemUIVisibility()
+	{
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+									  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+									  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+									  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+									  | View.SYSTEM_UI_FLAG_FULLSCREEN
+									  | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+	}
+	
+	private void initLeftDrawer()
+	{
+		LayoutParams params1 = drawerLeft.getLayoutParams();
+		
+		int maxWidth = (int) (280 * displayMetrics.density);
+		int preferredWidth = (int) ((screenWidthDp - 112) * displayMetrics.density);
+		params1.width = Math.min(maxWidth, preferredWidth);
+	}
+	
+	private void initRightDrawer()
+	{
+		LayoutParams params2 = drawerRight.getLayoutParams();
+		
+		int maxWidth = (int) (320 * displayMetrics.density);
+		int preferredWidth = (int) ((screenWidthDp - 112) * displayMetrics.density);
+		params2.width = Math.min(maxWidth, preferredWidth);
+	}
+	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState)
 	{
@@ -165,15 +200,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
 		super.onWindowFocusChanged(hasFocus);
-		if(hasFocus)
-		{
-			decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-		}
+		if(hasFocus) initSystemUIVisibility();
 	}
 
 	@Override
@@ -198,10 +225,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			else layoutDrawer.openDrawer(drawerRight);
 			return true;
 		case R.id.action_new_image:
-			imageNew.execute();
+			new ImageNew(this, paintView.getImage()).execute();
 			return true;
 		case R.id.action_resize_image:
-			imageResize.execute();
+			new ImageResize(this, paintView.getImage()).execute();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -209,9 +236,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
-		boolean drawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) ||
-							 layoutDrawer.isDrawerOpen(drawerRight);
-		menu.setGroupVisible(R.id.group_paint, !drawerOpen);
+		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
+		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -222,36 +248,12 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		setContentView(R.layout.activity_main);
 		drawerListener.onConfigurationChanged(newConfig);
 	}
-
-	private void onLeftDrawerOpened()
-	{
-		String toolChoice = getResources().getString(R.string.choice_of_tool);
-		actionBar.setTitle(toolChoice);
-	}
-	
-	private void onRightDrawerOpened()
-	{
-		String properties = getResources().getString(R.string.properties);
-		String tool = getResources().getString(paintView.getToolType().getName());
-		actionBar.setTitle(properties + ": " + tool);
-	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		paintView.setTool(ToolType.values()[position]);
+		paintView.setTool(Tools.getTool(position));
 		layoutDrawer.closeDrawer(drawerLeft);
-	}
-
-	public void onToolUpdated(Tool tool)
-	{
-		paintView.updateTool(tool);
-	}
-
-	@Override
-	public void onColorSelected(ColorsSet colors)
-	{
-		paintView.setColors(colors);
 	}
 
 	private void createPropertiesFragment()
@@ -270,9 +272,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 
 	private void attachPropertiesFragment() throws InstantiationException, IllegalAccessException
 	{
-		Fragment properties = paintView.getToolType().getFragmentClass().newInstance();
+		Fragment properties = paintView.getTool().getPropertiesFragmentClass().newInstance();
 		Bundle propArgs = new Bundle();
-		propArgs.putParcelable("tool", paintView.getTool());
+		propArgs.putInt("tool", Tools.getToolId(paintView.getTool()));
 		properties.setArguments(propArgs);
 		FragmentTransaction propTrans = fragments.beginTransaction();
 		propTrans.add(R.id.propertiesFragment, properties);

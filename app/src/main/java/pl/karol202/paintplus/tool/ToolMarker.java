@@ -1,108 +1,130 @@
 package pl.karol202.paintplus.tool;
 
-import android.graphics.*;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.app.Fragment;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.ColorsSet;
+import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.properties.MarkerProperties;
 
 public class ToolMarker extends Tool
 {
 	private float size;
-
-	private Paint paint;
-	private Paint viewportMask;
+	
+	private Paint pathPaint;
 	private Path path;
+	private Paint ovalPaint;
+	private RectF oval;
 	private float lastX;
 	private float lastY;
 
-	public ToolMarker()
+	public ToolMarker(Image image)
 	{
+		super(image);
 		this.size = 25;
-
-		this.paint = new Paint();
-		this.paint.setAntiAlias(true);
-		this.paint.setStyle(Paint.Style.STROKE);
-		this.paint.setStrokeCap(Paint.Cap.ROUND);
-		this.paint.setStrokeJoin(Paint.Join.ROUND);
-
-		this.viewportMask = new Paint();
-		this.viewportMask.setColor(Color.BLACK);
-		this.viewportMask.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+		
+		this.pathPaint = new Paint();
+		this.pathPaint.setAntiAlias(true);
+		this.pathPaint.setStyle(Paint.Style.STROKE);
+		this.pathPaint.setStrokeCap(Paint.Cap.ROUND);
+		this.pathPaint.setStrokeJoin(Paint.Join.ROUND);
 
 		this.path = new Path();
 		this.path.setFillType(Path.FillType.EVEN_ODD);
+		
+		this.ovalPaint = new Paint();
+		
+		this.oval = new RectF();
 	}
-
+	
 	@Override
-	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
+	public int getName()
 	{
-		paint.setColor(colors.getFirstColor());
-		paint.setStrokeWidth(size);
-
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(edit, colors, event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(edit, colors, event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, colors, event.getX(), event.getY());
-		return true;
+		return R.string.tool_marker;
 	}
-
+	
 	@Override
-	public void onTouchUp(Canvas edit, ColorsSet colors)
+	public int getIcon()
 	{
-		onTouchStop(edit, colors, -1, -1);
+		return R.drawable.ic_marker_black_48dp;
 	}
-
-	private void onTouchStart(Canvas canvas, ColorsSet colors, float x, float y)
-	{
-		RectF oval = new RectF(x - size / 2,
-							   y - size / 2,
-							   x + size / 2,
-							   y + size / 2);
-		path.reset();
-		path.moveTo(x, y);
-		canvas.drawOval(oval, paint);
-		lastX = x;
-		lastY = y;
-	}
-
-	private void onTouchMove(Canvas canvas, ColorsSet colors, float x, float y)
-	{
-		path.quadTo(lastX, lastY, x, y);
-		lastX = x;
-		lastY = y;
-	}
-
-	private void onTouchStop(Canvas canvas, ColorsSet colors, float x, float y)
-	{
-		if(x != -1 && y != -1) path.lineTo(x, y);
-		canvas.drawPath(path, paint);
-	}
-
+	
 	@Override
-	public void onDraw(Canvas canvas)
+	public Class<? extends Fragment> getPropertiesFragmentClass()
 	{
-		canvas.drawPath(path, paint);
-		canvas.drawRect(new RectF(0, 0, canvas.getWidth(), canvas.getHeight()), viewportMask);
+		return MarkerProperties.class;
 	}
-
-	@Override
-	public ToolType getToolType()
-	{
-		return ToolType.MARKER;
-	}
-
+	
 	@Override
 	public boolean onlyViewport()
 	{
 		return true;
 	}
-
+	
 	@Override
-	public void reset()
+	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
-		path.reset();
+		pathPaint.setColor(colors.getFirstColor());
+		pathPaint.setStrokeWidth(size);
+
+		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(edit, event.getX(), event.getY());
+		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(edit, event.getX(), event.getY());
+		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, event.getX(), event.getY());
+		return true;
 	}
 
+	@Override
+	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event)
+	{
+		onTouchStop(edit, event.getX(), event.getY());
+	}
+
+	private void onTouchStart(Canvas canvas, float x, float y)
+	{
+		path.reset();
+		path.moveTo(x, y);
+		
+		oval.left = x - size / 2;
+		oval.top = y - size / 2;
+		oval.right = x + size / 2;
+		oval.bottom = y + size / 2;
+		canvas.drawOval(oval, ovalPaint);
+		
+		lastX = x;
+		lastY = y;
+	}
+
+	private void onTouchMove(Canvas canvas, float x, float y)
+	{
+		path.quadTo(lastX, lastY, x, y);
+		
+		lastX = x;
+		lastY = y;
+	}
+
+	private void onTouchStop(Canvas canvas, float x, float y)
+	{
+		if(lastX == -1 || lastY == -1) return;
+		path.lineTo(x, y);
+		
+		canvas.drawPath(path, pathPaint);
+		
+		path.reset();
+		lastX = -1;
+		lastY = -1;
+	}
+
+	@Override
+	public void onDraw(Canvas canvas)
+	{
+		canvas.clipRect(0, 0, image.getWidth(), image.getHeight());
+		canvas.drawPath(path, pathPaint);
+	}
+	
 	public float getSize()
 	{
 		return size;
@@ -111,31 +133,5 @@ public class ToolMarker extends Tool
 	public void setSize(float size)
 	{
 		this.size = size;
-	}
-
-	public static final Parcelable.Creator<ToolMarker> CREATOR = new Parcelable.Creator<ToolMarker>()
-	{
-		@Override
-		public ToolMarker createFromParcel(Parcel source)
-		{
-			return new ToolMarker(source);
-		}
-
-		@Override
-		public ToolMarker[] newArray(int size)
-		{
-			return new ToolMarker[size];
-		}
-	};
-
-	private ToolMarker(Parcel source)
-	{
-		this.size = source.readFloat();
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags)
-	{
-		dest.writeFloat(size);
 	}
 }

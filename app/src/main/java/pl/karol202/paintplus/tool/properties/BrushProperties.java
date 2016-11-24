@@ -1,6 +1,5 @@
 package pl.karol202.paintplus.tool.properties;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +7,11 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.Tool.OnToolUpdatedListener;
 import pl.karol202.paintplus.tool.ToolBrush;
 
-public class PropertiesBrush extends Fragment implements SeekBar.OnSeekBarChangeListener
+public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
 	private ToolBrush brush;
-	private OnToolUpdatedListener listener;
 
 	private SeekBar seekBrushSize;
 	private TextView textBrushSize;
@@ -24,17 +21,8 @@ public class PropertiesBrush extends Fragment implements SeekBar.OnSeekBarChange
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		try
-		{
-			listener = (OnToolUpdatedListener) getActivity();
-		}
-		catch(ClassCastException e)
-		{
-			throw new ClassCastException(getActivity().toString() + "must implement OnToolUpdatedListener.");
-		}
-
-		Bundle bundle = getArguments();
-		if(bundle != null) this.brush = bundle.getParcelable("tool");
+		super.onCreateView(inflater, container, savedInstanceState);
+		brush = (ToolBrush) tool;
 
 		View view = inflater.inflate(R.layout.properties_brush, container, false);
 		seekBrushSize = (SeekBar) view.findViewById(R.id.seekBar_brush_size);
@@ -61,13 +49,11 @@ public class PropertiesBrush extends Fragment implements SeekBar.OnSeekBarChange
 		{
 			brush.setSize((progress + 1));
 			textBrushSize.setText(Integer.toString(progress + 1));
-			listener.onToolUpdated(brush);
 		}
 		else if(seekBar == seekBrushShapeOffset)
 		{
 			brush.setShapeOffset(progress);
 			textBrushShapeOffset.setText(Integer.toString(progress));
-			listener.onToolUpdated(brush);
 		}
 	}
 

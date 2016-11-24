@@ -1,17 +1,17 @@
 package pl.karol202.paintplus.options;
 
-import android.app.Activity;
-import pl.karol202.paintplus.PaintView;
+import android.content.Context;
+import pl.karol202.paintplus.Image;
 
 public abstract class Option
 {
-	protected Activity activity;
-	protected PaintView paintView;
+	protected Context context;
+	protected Image image;
 
-	public Option(Activity activity, PaintView paintView)
+	public Option(Context context, Image image)
 	{
-		this.activity = activity;
-		this.paintView = paintView;
+		this.context = context;
+		this.image = image;
 	}
 
 	public abstract void execute();

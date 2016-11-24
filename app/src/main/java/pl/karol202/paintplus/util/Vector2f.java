@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.math;
+package pl.karol202.paintplus.util;
 
 public class Vector2f
 {

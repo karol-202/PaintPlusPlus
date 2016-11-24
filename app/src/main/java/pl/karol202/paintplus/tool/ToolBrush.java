@@ -1,14 +1,13 @@
 package pl.karol202.paintplus.tool;
 
-import android.graphics.*;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+import android.app.Fragment;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.ColorsSet;
-import pl.karol202.paintplus.math.Line;
-import pl.karol202.paintplus.math.Utils;
-import pl.karol202.paintplus.math.Vector2f;
+import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.properties.BrushProperties;
 
 public class ToolBrush extends Tool
 {
@@ -19,26 +18,49 @@ public class ToolBrush extends Tool
 	private float lastX;
 	private float lastY;
 
-	public ToolBrush()
+	public ToolBrush(Image image)
 	{
+		super(image);
 		this.size = 25;
 		this.shapeOffset = 0;
-
+		
 		this.paint = new Paint();
 		this.lastX = -1;
 		this.lastY = -1;
 	}
-
+	
+	@Override
+	public int getName()
+	{
+		return R.string.tool_brush;
+	}
+	
+	@Override
+	public int getIcon()
+	{
+		return R.drawable.ic_brush_black_48dp;
+	}
+	
+	@Override
+	public Class<? extends Fragment> getPropertiesFragmentClass()
+	{
+		return BrushProperties.class;
+	}
+	
+	@Override
+	public boolean onlyViewport()
+	{
+		return true;
+	}
+	
 	@Override
 	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
-
-
 		return true;
 	}
 
 	@Override
-	public void onTouchUp(Canvas edit, ColorsSet colors)
+	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
 
 	}
@@ -63,25 +85,7 @@ public class ToolBrush extends Tool
 	{
 
 	}
-
-	@Override
-	public ToolType getToolType()
-	{
-		return ToolType.BRUSH;
-	}
-
-	@Override
-	public boolean onlyViewport()
-	{
-		return true;
-	}
-
-	@Override
-	public void reset()
-	{
-
-	}
-
+	
 	public float getSize()
 	{
 		return size;
@@ -100,31 +104,5 @@ public class ToolBrush extends Tool
 	public void setShapeOffset(float shapeOffset)
 	{
 		this.shapeOffset = shapeOffset;
-	}
-
-	public static final Parcelable.Creator<ToolBrush> CREATOR = new Parcelable.Creator<ToolBrush>()
-	{
-		@Override
-		public ToolBrush createFromParcel(Parcel source)
-		{
-			return new ToolBrush(source);
-		}
-
-		@Override
-		public ToolBrush[] newArray(int size)
-		{
-			return new ToolBrush[size];
-		}
-	};
-
-	private ToolBrush(Parcel source)
-	{
-		this.size = source.readFloat();
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags)
-	{
-		dest.writeFloat(size);
 	}
 }

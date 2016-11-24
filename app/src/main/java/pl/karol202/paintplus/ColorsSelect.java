@@ -14,15 +14,12 @@ import com.pavelsikun.vintagechroma.IndicatorMode;
 import com.pavelsikun.vintagechroma.OnColorSelectedListener;
 import com.pavelsikun.vintagechroma.colormode.ColorMode;
 
-public class ColorsSelect extends Fragment implements View.OnClickListener, OnColorSelectedListener
+public class ColorsSelect extends Fragment implements View.OnClickListener, com.pavelsikun.vintagechroma.OnColorSelectedListener
 {
-	public interface OnColorSelectedListener
-	{
-		void onColorSelected(ColorsSet colors);
-	}
-
+	private static final int TARGET_FIRST = 0;
+	private static final int TARGET_SECOND = 1;
+	
 	private ColorsSet colors;
-	private OnColorSelectedListener listener;
 
 	private View colorFirst;
 	private View colorSecond;
@@ -32,15 +29,6 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		try
-		{
-			listener = (OnColorSelectedListener) getActivity();
-		}
-		catch(ClassCastException e)
-		{
-			throw new ClassCastException(getActivity().toString() + " must implement OnColorSelectedListener.");
-		}
-
 		View view = inflater.inflate(R.layout.colors, container, false);
 
 		colorFirst = view.findViewById(R.id.view_color_first);
@@ -65,9 +53,8 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 	public void onClick(View v)
 	{
 		if(v == buttonSwap) colors.revert();
-		else if(v == colorFirst) pickColor(0);
-		else if(v == colorSecond) pickColor(1);
-		listener.onColorSelected(colors);
+		else if(v == colorFirst) pickColor(TARGET_FIRST);
+		else if(v == colorSecond) pickColor(TARGET_SECOND);
 		updateColors();
 	}
 
@@ -92,9 +79,8 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 	@Override
 	public void onColorSelected(@ColorInt int color)
 	{
-		if(target == 0) colors.setFirstColor(color);
-		else if(target == 1) colors.setSecondColor(color);
-		listener.onColorSelected(colors);
+		if(target == TARGET_FIRST) colors.setFirstColor(color);
+		else if(target == TARGET_SECOND) colors.setSecondColor(color);
 		updateColors();
 	}
 }
