@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".activity.ActivityPaint">
-
-	<include android:id="@+id/toolbar"
-		layout="@layout/toolbar" />
-
+	
+	<include
+		android:id="@+id/toolbar"
+		layout="@layout/toolbar"
+		tools:layout_constraintRight_creator="1"
+		android:layout_height="wrap_content"
+		app:layout_constraintRight_toRightOf="parent"
+		tools:layout_constraintLeft_creator="1"
+		android:layout_width="0dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+	
 	<android.support.v4.widget.DrawerLayout
 		android:id="@+id/layout_drawer"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_below="@id/toolbar">
-
+		android:layout_width="0dp"
+		tools:layout_constraintRight_creator="1"
+		app:layout_constraintRight_toRightOf="parent"
+		tools:layout_constraintLeft_creator="1"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/toolbar"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toBottomOf="parent">
+		
 		<pl.karol202.paintplus.PaintView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:id="@+id/paint_view"
 			android:background="@color/paintViewBackground" />
-
+		
 		<ListView
 			android:id="@+id/drawer_left"
 			android:layout_width="24dp"
@@ -28,9 +43,8 @@
 			android:divider="@android:color/transparent"
 			android:dividerHeight="0dp"
 			android:choiceMode="singleChoice"
-			android:elevation="0dp">
-		</ListView>
-
+			android:elevation="0dp"/>
+		
 		<RelativeLayout
 			android:id="@+id/drawer_right"
 			android:layout_width="24dp"
@@ -38,7 +52,7 @@
 			android:layout_gravity="end"
 			android:background="@color/drawerBackground"
 			android:elevation="16dp">
-
+			
 			<FrameLayout
 				android:id="@+id/propertiesFragment"
 				android:layout_width="match_parent"
@@ -47,7 +61,7 @@
 				android:layout_alignParentEnd="true"
 				android:layout_alignParentStart="true"
 				android:layout_above="@+id/colorsFragment" />
-
+			
 			<fragment
 				android:id="@+id/colorsFragment"
 				android:layout_width="match_parent"
@@ -56,9 +70,9 @@
 				android:layout_alignParentBottom="true"
 				android:layout_alignParentStart="true"
 				android:layout_alignParentEnd="true" />
-
+		
 		</RelativeLayout>
-
+	
 	</android.support.v4.widget.DrawerLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -17,6 +17,7 @@ public class PaintView extends SurfaceView
 	public PaintView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		if(isInEditMode()) return;
 		colors = ColorsSet.getDefault();
 		image = new Image(colors);
 		
@@ -29,6 +30,7 @@ public class PaintView extends SurfaceView
 	public void draw(Canvas canvas)
 	{
 		super.draw(canvas);
+		if(isInEditMode()) return;
 		canvas.drawBitmap(image.getBitmap(), 0, 0, null);
 		tool.onDraw(canvas);
 	}

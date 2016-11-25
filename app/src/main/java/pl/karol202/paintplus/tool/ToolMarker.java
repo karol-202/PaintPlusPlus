@@ -37,6 +37,7 @@ public class ToolMarker extends Tool
 		this.path.setFillType(Path.FillType.EVEN_ODD);
 		
 		this.ovalPaint = new Paint();
+		this.ovalPaint.setAntiAlias(true);
 		
 		this.oval = new RectF();
 	}
@@ -62,7 +63,7 @@ public class ToolMarker extends Tool
 	@Override
 	public boolean onlyViewport()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -78,10 +79,7 @@ public class ToolMarker extends Tool
 	}
 
 	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event)
-	{
-		onTouchStop(edit, event.getX(), event.getY());
-	}
+	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
 
 	private void onTouchStart(Canvas canvas, float x, float y)
 	{
@@ -100,16 +98,21 @@ public class ToolMarker extends Tool
 
 	private void onTouchMove(Canvas canvas, float x, float y)
 	{
-		path.quadTo(lastX, lastY, x, y);
-		
+		if(lastX != -1 && lastY != -1)
+		{
+			path.quadTo(lastX, lastY, x, y);
+		}
+			
 		lastX = x;
 		lastY = y;
 	}
 
 	private void onTouchStop(Canvas canvas, float x, float y)
 	{
-		if(lastX == -1 || lastY == -1) return;
-		path.lineTo(x, y);
+		if(lastX != -1 && lastY != -1)
+		{
+			path.lineTo(x, y);
+		}
 		
 		canvas.drawPath(path, pathPaint);
 		

@@ -61,7 +61,7 @@ public class ToolBrush extends Tool
 	@Override
 	public boolean onlyViewport()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -76,10 +76,7 @@ public class ToolBrush extends Tool
 	}
 
 	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event)
-	{
-		onTouchStop(edit, colors, event.getX(), event.getY());
-	}
+	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
 
 	private void onTouchStart(Canvas canvas, ColorsSet colors, float x, float y)
 	{

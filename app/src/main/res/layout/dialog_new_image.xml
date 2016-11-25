@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
-	android:layout_width="match_parent" android:layout_height="match_parent">
-
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_x"
 		android:id="@+id/text_x"
-		android:layout_alignParentStart="true"
-		android:layout_alignBaseline="@+id/edit_image_x"
-		android:layout_marginLeft="24dp"
-		android:layout_marginRight="24dp" />
-
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_x" />
+	
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_y"
 		android:id="@+id/text_y"
-		android:layout_alignParentStart="true"
-		android:layout_alignBaseline="@+id/edit_image_y"
-		android:layout_marginRight="24dp"
-		android:layout_marginLeft="24dp" />
-
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_y" />
+	
 	<EditText
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
 		android:id="@+id/edit_image_x"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentEnd="true"
-		android:layout_toEndOf="@id/text_x" />
-
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toRightOf="@+id/text_x"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+	
 	<EditText
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
 		android:id="@+id/edit_image_y"
-		android:layout_alignParentEnd="true"
-		android:layout_below="@+id/edit_image_x"
-		android:layout_toEndOf="@id/text_y" />
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toRightOf="@+id/text_y"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/edit_image_x" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

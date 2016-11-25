@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="48dp">
-
+	
 	<ImageView
 		android:layout_width="24dp"
 		android:layout_height="24dp"
 		android:id="@+id/image_item_tool"
-		android:layout_centerVertical="true"
-		android:layout_alignParentLeft="true"
-		android:layout_marginLeft="16dp"
 		android:scaleType="fitXY"
-		android:alpha="0.54"/>
-
+		android:alpha="0.54"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent" />
+	
 	<TextView
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:id="@+id/text_item_tool"
-		android:layout_centerVertical="true"
-		android:layout_alignParentLeft="true"
-		android:layout_marginLeft="72dp"
 		android:textSize="14sp"
 		android:textColor="@color/textItemTool"
-		android:fontFamily="sans-serif-medium" />
+		android:fontFamily="sans-serif-medium"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginStart="72dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

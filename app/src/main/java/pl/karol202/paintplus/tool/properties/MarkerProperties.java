@@ -9,7 +9,7 @@ import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolMarker;
 
-public class MarkerProperties extends ToolProperties
+public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
 	private ToolMarker marker;
 
@@ -25,23 +25,22 @@ public class MarkerProperties extends ToolProperties
 		View view = inflater.inflate(R.layout.properties_marker, container, false);
 		seekMarkerSize = (SeekBar) view.findViewById(R.id.seekBar_marker_size);
 		seekMarkerSize.setProgress((int) (marker.getSize() - 1));
-		seekMarkerSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-		{
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-			{
-				textMarkerSize.setText(Integer.toString(progress + 1));
-				marker.setSize((progress + 1));
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) { }
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) { }
-		});
+		seekMarkerSize.setOnSeekBarChangeListener(this);
 		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
 		textMarkerSize.setText(Integer.toString(seekMarkerSize.getProgress() + 1));
 		return view;
 	}
+	
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+	{
+		textMarkerSize.setText(Integer.toString(progress + 1));
+		marker.setSize((progress + 1));
+	}
+	
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) { }
+	
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) { }
 }
