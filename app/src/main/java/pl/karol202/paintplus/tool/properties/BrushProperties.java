@@ -30,14 +30,14 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		seekBrushSize.setOnSeekBarChangeListener(this);
 
 		textBrushSize = (TextView) view.findViewById(R.id.brush_size);
-		textBrushSize.setText(Integer.toString((int) brush.getSize()));
+		textBrushSize.setText(String.valueOf((int) brush.getSize()));
 
 		seekBrushShapeOffset = (SeekBar) view.findViewById(R.id.seek_brush_shape_offset);
 		seekBrushShapeOffset.setProgress((int) brush.getShapeOffset());
 		seekBrushShapeOffset.setOnSeekBarChangeListener(this);
 
 		textBrushShapeOffset = (TextView) view.findViewById(R.id.brush_shape_offset);
-		textBrushShapeOffset.setText(Integer.toString((int) brush.getShapeOffset()));
+		textBrushShapeOffset.setText(String.valueOf((int) brush.getShapeOffset()));
 
 		return view;
 	}
@@ -48,12 +48,12 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		if(seekBar == seekBrushSize)
 		{
 			brush.setSize((progress + 1));
-			textBrushSize.setText(Integer.toString(progress + 1));
+			textBrushSize.setText(String.valueOf(progress + 1));
 		}
 		else if(seekBar == seekBrushShapeOffset)
 		{
 			brush.setShapeOffset(progress);
-			textBrushShapeOffset.setText(Integer.toString(progress));
+			textBrushShapeOffset.setText(String.valueOf(progress));
 		}
 	}
 

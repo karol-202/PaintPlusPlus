@@ -36,10 +36,10 @@ public class ImageNew extends Option implements OnClickListener
 		dialogBuilder.setNegativeButton(R.string.cancel, this);
 
 		editX = (EditText) view.findViewById(R.id.edit_image_x);
-		editX.setText(Integer.toString(image.getWidth()));
+		editX.setText(String.valueOf(image.getWidth()));
 
 		editY = (EditText) view.findViewById(R.id.edit_image_y);
-		editY.setText(Integer.toString(image.getHeight()));
+		editY.setText(String.valueOf(image.getHeight()));
 
 		dialog = dialogBuilder.create();
 		dialog.show();

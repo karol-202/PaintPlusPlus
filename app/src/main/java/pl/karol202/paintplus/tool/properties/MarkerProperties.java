@@ -27,14 +27,14 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 		seekMarkerSize.setProgress((int) (marker.getSize() - 1));
 		seekMarkerSize.setOnSeekBarChangeListener(this);
 		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
-		textMarkerSize.setText(Integer.toString(seekMarkerSize.getProgress() + 1));
+		textMarkerSize.setText(String.valueOf(seekMarkerSize.getProgress() + 1));
 		return view;
 	}
 	
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		textMarkerSize.setText(Integer.toString(progress + 1));
+		textMarkerSize.setText(String.valueOf(progress + 1));
 		marker.setSize((progress + 1));
 	}
 	

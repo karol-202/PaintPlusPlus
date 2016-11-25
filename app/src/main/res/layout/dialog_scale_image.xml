@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+	
+	<TextView
+		android:text="@string/image_height"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/text_height"
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_height" />
+	
+	<TextView
+		android:text="@string/image_width"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/text_width"
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_width" />
+	
+	<EditText
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:inputType="number"
+		android:ems="10"
+		android:id="@+id/edit_image_width"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginEnd="16dp"
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toRightOf="@+id/text_height"
+		app:layout_constraintHorizontal_bias="0.62" />
+	
+	<EditText
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:inputType="number"
+		android:ems="10"
+		android:id="@+id/edit_image_height"
+		app:layout_constraintTop_toBottomOf="@+id/edit_image_width"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginStart="24dp"
+		app:layout_constraintLeft_toRightOf="@+id/text_height" />
+	
+	<CheckBox
+		android:text="@string/keep_ratio"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/check_keep_ratio"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/edit_image_height" />
+	
+	<CheckBox
+		android:text="@string/scaling_smooth"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/check_scaling_smooth"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toBottomOf="@+id/check_keep_ratio"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent" />
+</android.support.constraint.ConstraintLayout>

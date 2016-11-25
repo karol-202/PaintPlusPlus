@@ -34,7 +34,7 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 	private int newHeight;
 	private int oldWidth;
 	private int oldHeight;
-	private float ratio = -1;
+	private float ratio;
 	private boolean dontFireEvent;
 
 	public ImageResize(Context context, Image image)
@@ -54,13 +54,14 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 		
 		oldWidth = newWidth = image.getWidth();
 		oldHeight = newHeight = image.getHeight();
+		ratio = -1;
 
 		editWidth = (EditText) view.findViewById(R.id.edit_image_width);
-		editWidth.setText(Integer.toString(newWidth));
+		editWidth.setText(String.valueOf(newWidth));
 		editWidth.addTextChangedListener(this);
 
 		editHeight = (EditText) view.findViewById(R.id.edit_image_height);
-		editHeight.setText(Integer.toString(newHeight));
+		editHeight.setText(String.valueOf(newHeight));
 		editHeight.addTextChangedListener(this);
 
 		editX = (EditText) view.findViewById(R.id.edit_image_x);
@@ -86,7 +87,6 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 			}
 		});
 		dialog.show();
-
 	}
 
 	@Override
@@ -121,31 +121,30 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 			int newWidth = parseInt(editWidth.getText().toString());
 			int newHeight = parseInt(editHeight.getText().toString());
 
-			checkRatio(newWidth, newHeight);
-
-			this.newWidth = newWidth;
-			this.newHeight = newHeight;
+			changeBounds(newWidth, newHeight);
 
 			dontFireEvent = false;
 		}
 		updatePreview();
 	}
 
-	private void checkRatio(int newWidth, int newHeight)
+	private void changeBounds(int newWidth, int newHeight)
 	{
 		if(ratio != -1)
 		{
 			if(newWidth != this.newWidth)
 			{
 				newHeight = Math.round(newWidth / ratio);
-				editHeight.setText(Integer.toString(newHeight));
+				editHeight.setText(String.valueOf(newHeight));
 			}
 			else if(newHeight != this.newHeight)
 			{
 				newWidth = Math.round(newHeight * ratio);
-				editWidth.setText(Integer.toString(newWidth));
+				editWidth.setText(String.valueOf(newWidth));
 			}
 		}
+		this.newWidth = newWidth;
+		this.newHeight = newHeight;
 	}
 	
 	@Override

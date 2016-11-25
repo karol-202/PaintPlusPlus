@@ -49,7 +49,7 @@ public class ToolBrush extends Tool
 	@Override
 	public int getIcon()
 	{
-		return R.drawable.ic_brush_black_48dp;
+		return R.drawable.ic_brush_black_24dp;
 	}
 	
 	@Override

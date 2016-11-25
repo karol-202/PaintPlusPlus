@@ -23,6 +23,7 @@ import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.options.ImageNew;
 import pl.karol202.paintplus.options.ImageResize;
+import pl.karol202.paintplus.options.ImageScale;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
 
@@ -229,6 +230,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			return true;
 		case R.id.action_resize_image:
 			new ImageResize(this, paintView.getImage()).execute();
+		case R.id.action_scale_image:
+			new ImageScale(this, paintView.getImage()).execute();
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -51,7 +51,7 @@ public class ToolMarker extends Tool
 	@Override
 	public int getIcon()
 	{
-		return R.drawable.ic_marker_black_48dp;
+		return R.drawable.ic_marker_black_24dp;
 	}
 	
 	@Override

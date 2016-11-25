@@ -2,6 +2,8 @@ package pl.karol202.paintplus;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class Image
 {
@@ -30,6 +32,17 @@ public class Image
 		Bitmap source = bitmap;
 		createBitmap(width, height);
 		editCanvas.drawBitmap(source, -x, -y, null);
+	}
+	
+	public void scale(int width, int height, boolean bilinear)
+	{
+		Bitmap source = bitmap;
+		createBitmap(width, height);
+		
+		Rect dst = new Rect(0, 0, width, height);
+		Paint paint = new Paint();
+		paint.setFilterBitmap(bilinear);
+		editCanvas.drawBitmap(source, null, dst, paint);
 	}
 	
 	public Bitmap getBitmap()
