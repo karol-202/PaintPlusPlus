@@ -36,6 +36,11 @@
 					android:title="@string/action_flip"
 					android:orderInCategory="4"
 					app:showAsAction="never"/>
+				<item android:id="@+id/action_rotate_image"
+					android:icon="@drawable/ic_rotate_white_24dp"
+					android:title="@string/action_rotate"
+					android:orderInCategory="5"
+					app:showAsAction="never"/>
 			</menu>
 		</item>
 	</group>

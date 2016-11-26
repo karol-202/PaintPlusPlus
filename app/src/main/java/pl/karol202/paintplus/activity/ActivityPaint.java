@@ -21,10 +21,7 @@ import android.widget.ListView;
 import pl.karol202.paintplus.ColorsSelect;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.options.ImageFlip;
-import pl.karol202.paintplus.options.ImageNew;
-import pl.karol202.paintplus.options.ImageResize;
-import pl.karol202.paintplus.options.ImageScale;
+import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
 
@@ -238,6 +235,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		case R.id.action_flip_image:
 			new ImageFlip(this, paintView.getImage()).execute();
 			return true;
+		case R.id.action_rotate_image:
+			new ImageRotate(this, paintView.getImage()).execute();
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -9,14 +9,16 @@
 	<string name="dialog_new_image">Nowy obraz</string>
 	<string name="dialog_resize_image">Zmień wymiary</string>
 	<string name="dialog_scale_image">Skaluj obraz</string>
-	<string name="dialog_flip_image">Przerzuć</string>
+	<string name="dialog_flip_image">Odbij</string>
+	<string name="dialog_rotate_image">Obróć</string>
 
 	<string name="action_new">Nowy obraz</string>
 	<string name="action_tool">Narzędzie</string>
 	<string name="action_image">Obraz</string>
 	<string name="action_resize">Zmień wymiary</string>
 	<string name="action_scale">Skaluj obraz</string>
-	<string name="action_flip">Przerzuć</string>
+	<string name="action_flip">Odbij</string>
+	<string name="action_rotate">Obróć</string>
 
 	<string name="tool_marker">Pisak</string>
 	<string name="tool_brush">Pędzel</string>
@@ -40,4 +42,5 @@
 	<string name="direction">Kierunek</string>
 	<string name="direction_horizontal">Poziomo</string>
 	<string name="direction_vertical">Pionowo</string>
+	<string name="angle">Kąt</string>
 </resources>

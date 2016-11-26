@@ -54,6 +54,16 @@ public class Image
 		editCanvas.drawBitmap(source, 0, 0, null);
 	}
 	
+	public void rotate(float angle)
+	{
+		Matrix matrix = new Matrix();
+		matrix.preRotate(angle);
+		
+		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+		createBitmap(source.getWidth(), source.getHeight());
+		editCanvas.drawBitmap(source, 0, 0, null);
+	}
+	
 	public Bitmap getBitmap()
 	{
 		return bitmap;
