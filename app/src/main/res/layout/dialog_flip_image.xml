@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+	
+	<RadioGroup
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:layout_marginEnd="24dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginTop="8dp"
+		android:id="@+id/radiogroup_direction"
+		app:layout_constraintTop_toTopOf="parent">
+		
+		<RadioButton
+			android:text="@string/direction_horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/radio_horizontal"
+			tools:layout_editor_absoluteY="400dp"
+			tools:layout_editor_absoluteX="60dp"
+			android:layout_weight="1"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+		
+		<RadioButton
+			android:text="@string/direction_vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/radio_vertical"
+			tools:layout_editor_absoluteY="400dp"
+			tools:layout_editor_absoluteX="60dp"
+			android:layout_weight="1"
+			android:layout_marginTop="8dp"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+	</RadioGroup>
+</android.support.constraint.ConstraintLayout>
