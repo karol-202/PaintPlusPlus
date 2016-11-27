@@ -24,7 +24,7 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/seekBar_angle"
-		android:layout_marginStart="16dp"
+		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:text="@string/angle" />
 </android.support.constraint.ConstraintLayout>

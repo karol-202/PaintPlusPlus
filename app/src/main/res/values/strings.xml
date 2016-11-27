@@ -20,6 +20,7 @@
 	<string name="action_flip">Odbij</string>
 	<string name="action_rotate">Obróć</string>
 
+	<string name="tool_pan">Widok</string>
 	<string name="tool_marker">Pisak</string>
 	<string name="tool_brush">Pędzel</string>
 
@@ -43,4 +44,5 @@
 	<string name="direction_horizontal">Poziomo</string>
 	<string name="direction_vertical">Pionowo</string>
 	<string name="angle">Kąt</string>
+	<string name="zoom">Zoom</string>
 </resources>

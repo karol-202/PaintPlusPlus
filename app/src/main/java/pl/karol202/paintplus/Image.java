@@ -12,10 +12,14 @@ public class Image
 	private ColorsSet colorsSet;
 	private int width;
 	private int height;
+	private int viewX;
+	private int viewY;
+	private float zoom;
 	
 	public Image(ColorsSet colorsSet)
 	{
 		this.colorsSet = colorsSet;
+		this.zoom = 1;
 	}
 	
 	public void createBitmap(int width, int height)
@@ -82,5 +86,35 @@ public class Image
 	public int getHeight()
 	{
 		return height;
+	}
+	
+	public int getViewX()
+	{
+		return viewX;
+	}
+	
+	public int getViewY()
+	{
+		return viewY;
+	}
+	
+	public void setViewX(int viewX)
+	{
+		this.viewX = viewX;
+	}
+	
+	public void setViewY(int viewY)
+	{
+		this.viewY = viewY;
+	}
+	
+	public float getZoom()
+	{
+		return zoom;
+	}
+	
+	public void setZoom(float zoom)
+	{
+		this.zoom = zoom;
 	}
 }

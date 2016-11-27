@@ -11,6 +11,7 @@ public class Tools
 	public static void init(Image image)
 	{
 		tools.clear();
+		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
 	}

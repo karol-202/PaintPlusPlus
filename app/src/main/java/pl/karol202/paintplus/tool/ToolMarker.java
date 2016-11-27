@@ -51,7 +51,7 @@ public class ToolMarker extends Tool
 	@Override
 	public int getIcon()
 	{
-		return R.drawable.ic_marker_black_24dp;
+		return R.drawable.ic_tool_marker_black_24dp;
 	}
 	
 	@Override
@@ -71,16 +71,14 @@ public class ToolMarker extends Tool
 	{
 		pathPaint.setColor(colors.getFirstColor());
 		pathPaint.setStrokeWidth(size);
+		ovalPaint.setColor(colors.getFirstColor());
 
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(edit, event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(edit, event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, event.getX(), event.getY());
 		return true;
 	}
-
-	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
-
+	
 	private void onTouchStart(Canvas canvas, float x, float y)
 	{
 		path.reset();
@@ -95,24 +93,18 @@ public class ToolMarker extends Tool
 		lastX = x;
 		lastY = y;
 	}
-
+	
 	private void onTouchMove(Canvas canvas, float x, float y)
 	{
-		if(lastX != -1 && lastY != -1)
-		{
-			path.quadTo(lastX, lastY, x, y);
-		}
-			
+		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
+		
 		lastX = x;
 		lastY = y;
 	}
-
+	
 	private void onTouchStop(Canvas canvas, float x, float y)
 	{
-		if(lastX != -1 && lastY != -1)
-		{
-			path.lineTo(x, y);
-		}
+		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
 		canvas.drawPath(path, pathPaint);
 		
@@ -120,6 +112,9 @@ public class ToolMarker extends Tool
 		lastX = -1;
 		lastY = -1;
 	}
+	
+	@Override
+	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
 
 	@Override
 	public void onDraw(Canvas canvas)
