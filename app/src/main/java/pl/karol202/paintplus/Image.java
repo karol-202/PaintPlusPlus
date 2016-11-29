@@ -4,22 +4,35 @@ import android.graphics.*;
 
 public class Image
 {
+	public interface ImageChangeListener
+	{
+		void imageChanged();
+	}
+	
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
+	private ImageChangeListener listener;
 	private Bitmap bitmap;
 	private Canvas editCanvas;
 	private ColorsSet colorsSet;
 	private int width;
 	private int height;
+	
 	private int viewX;
 	private int viewY;
 	private float zoom;
+	private Matrix imageMatrix;
+	private int viewportWidth;
+	private int viewportHeight;
 	
-	public Image(ColorsSet colorsSet)
+	public Image(ImageChangeListener listener, ColorsSet colorsSet)
 	{
+		this.listener = listener;
 		this.colorsSet = colorsSet;
 		this.zoom = 1;
+		this.imageMatrix = new Matrix();
+		updateMatrix();
 	}
 	
 	public void createBitmap(int width, int height)
@@ -68,6 +81,16 @@ public class Image
 		editCanvas.drawBitmap(source, 0, 0, null);
 	}
 	
+	private void updateMatrix()
+	{
+		Matrix matrix = new Matrix();
+		matrix.postTranslate(-viewX, -viewY);
+		matrix.postScale(zoom, zoom);
+		
+		imageMatrix.set(matrix);
+		listener.imageChanged();
+	}
+	
 	public Bitmap getBitmap()
 	{
 		return bitmap;
@@ -101,11 +124,13 @@ public class Image
 	public void setViewX(int viewX)
 	{
 		this.viewX = viewX;
+		updateMatrix();
 	}
 	
 	public void setViewY(int viewY)
 	{
 		this.viewY = viewY;
+		updateMatrix();
 	}
 	
 	public float getZoom()
@@ -115,6 +140,25 @@ public class Image
 	
 	public void setZoom(float zoom)
 	{
+		this.viewX += ((viewportWidth / this.zoom) - (viewportWidth / zoom)) / 2;
+		this.viewY += ((viewportHeight / this.zoom) - (viewportHeight / zoom)) / 2;
+		
 		this.zoom = zoom;
+		updateMatrix();
+	}
+	
+	public Matrix getImageMatrix()
+	{
+		return imageMatrix;
+	}
+	
+	public void setViewportWidth(int viewportWidth)
+	{
+		this.viewportWidth = viewportWidth;
+	}
+	
+	public void setViewportHeight(int viewportHeight)
+	{
+		this.viewportHeight = viewportHeight;
 	}
 }

@@ -9,50 +9,62 @@ import android.view.SurfaceView;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
-public class PaintView extends SurfaceView
+public class PaintView extends SurfaceView implements Image.ImageChangeListener
 {
 	private ColorsSet colors;
 	private Image image;
 	private Tool tool;
+	private Bitmap toolBitmap;
+	private boolean initialized;
 
 	public PaintView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		if(isInEditMode()) return;
 		colors = ColorsSet.getDefault();
-		image = new Image(colors);
-		
+		image = new Image(this, colors);
 		Tools.init(image);
 		tool = Tools.getTool(1);
+		
 		image.createBitmap(600, 600);
 	}
-
+	
 	@Override
 	public void draw(Canvas canvas)
 	{
 		super.draw(canvas);
 		if(isInEditMode()) return;
-		canvas.drawBitmap(image.getBitmap(), -image.getViewX(), -image.getViewY(), null);
+		if(!initialized)
+		{
+			image.setViewportWidth(getWidth());
+			image.setViewportHeight(getHeight());
+			initialized = true;
+		}
 		
-		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), null);
+		
+		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
 		tool.onDraw(toolCanvas);
-		canvas.drawBitmap(toolBitmap, -image.getViewX(), -image.getViewY(), null);
+		canvas.drawBitmap(toolBitmap, image.getImageMatrix(), null);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		float x = event.getX() + image.getViewX();
-		float y = event.getY() + image.getViewY();
+		float x = (event.getX() / image.getZoom()) + image.getViewX();
+		float y = (event.getY() / image.getZoom()) + image.getViewY();
 		event.setLocation(x, y);
 		
-		boolean touchInViewport = x >= 0 && y >= 0 && x < image.getWidth() && y < image.getHeight();
-		boolean result = true;
-		if(tool.onlyViewport() && !touchInViewport) tool.onTouchOutsideViewport(image.getEditCanvas(), colors, event);
-		else result = tool.onTouch(image.getEditCanvas(), colors, event);
+		boolean result = tool.onTouch(image.getEditCanvas(), colors, event);
 		invalidate();
 		return result;
+	}
+	
+	@Override
+	public void imageChanged()
+	{
+		invalidate();
 	}
 	
 	public Image getImage()

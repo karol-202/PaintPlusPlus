@@ -16,8 +16,8 @@ import java.util.Locale;
 public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher
 {
 	private final double SQRT2 = Math.sqrt(2);
-	private final double MIN_ZOOM = 0.01;
-	private final double MAX_ZOOM = 100;
+	private final double MIN_ZOOM = 0.05;
+	private final double MAX_ZOOM = 8;
 	
 	private ToolPan pan;
 	private double zoom;
@@ -74,21 +74,21 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			return;
 		}
 		
-		if(!string.equals("%")) zoom = textToZoom(string);
-		else return;
-		
-		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM);
-		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM);
-		else pan.setZoom((float) zoom);
+		if(!string.equals("%")) updateZoom((float) textToZoom(string));
 	}
 	
 	private void updateZoom(double zoom)
 	{
 		dontFireEvent = true;
 		
-		this.zoom = zoom;
-		editTextZoom.setText(zoomToText(zoom));
-		pan.setZoom((float) zoom);
+		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM);
+		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM);
+		else
+		{
+			this.zoom = zoom;
+			editTextZoom.setText(zoomToText(zoom));
+			pan.setZoom((float) zoom);
+		}
 		
 		dontFireEvent = false;
 	}
