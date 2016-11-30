@@ -38,6 +38,7 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 		{
 			image.setViewportWidth(getWidth());
 			image.setViewportHeight(getHeight());
+			image.centerView();
 			initialized = true;
 		}
 		

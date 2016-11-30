@@ -11,9 +11,11 @@
 	<string name="dialog_scale_image">Skaluj obraz</string>
 	<string name="dialog_flip_image">Odbij</string>
 	<string name="dialog_rotate_image">Obróć</string>
-
-	<string name="action_new">Nowy obraz</string>
+	
 	<string name="action_tool">Narzędzie</string>
+	<string name="action_file">Plik</string>
+	<string name="action_capture_photo">Zrób zdjęcie</string>
+	<string name="action_new">Nowy obraz</string>
 	<string name="action_image">Obraz</string>
 	<string name="action_resize">Zmień wymiary</string>
 	<string name="action_scale">Skaluj obraz</string>
@@ -37,7 +39,6 @@
 	<string name="image_width">Szerokość</string>
 	<string name="image_height">Wysokość</string>
 	<string name="brush_shape_offset">Odstęp:</string>
-
 	<string name="message_too_big">Podane wymiary są za duże, aby utworzyć obraz.</string>
 	<string name="scaling_smooth">Wygładź</string>
 	<string name="direction">Kierunek</string>
@@ -45,4 +46,5 @@
 	<string name="direction_vertical">Pionowo</string>
 	<string name="angle">Kąt</string>
 	<string name="zoom">Zoom</string>
+	<string name="center_view">Wyśrodkuj</string>
 </resources>

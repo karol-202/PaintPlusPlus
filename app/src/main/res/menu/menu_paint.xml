@@ -7,39 +7,52 @@
 			android:orderInCategory="1"
 			app:showAsAction="ifRoom" />
 
-		<item android:id="@+id/action_image"
-			android:icon="@drawable/ic_image_white_24dp"
-			android:title="@string/action_image"
+		<item android:id="@+id/action_file"
+			android:icon="@drawable/ic_file_white_24dp"
+			android:title="@string/action_file"
 			android:orderInCategory="2"
 			app:showAsAction="never">
-
+			
 			<menu>
 				<item android:id="@+id/action_new_image"
 					android:icon="@drawable/ic_add_white_24dp"
 					android:title="@string/action_new"
 					android:orderInCategory="1"
 					app:showAsAction="never"/>
+				<item android:id="@+id/action_capture_photo"
+					android:icon="@drawable/ic_camera_white_24dp"
+					android:title="@string/action_capture_photo"
+					android:orderInCategory="2"
+					app:showAsAction="never"/>
+			</menu>
+		</item>
+		
+		<item android:id="@+id/action_image"
+			android:icon="@drawable/ic_image_white_24dp"
+			android:title="@string/action_image"
+			android:orderInCategory="3"
+			app:showAsAction="never">
 
+			<menu>
 				<item android:id="@+id/action_resize_image"
 					android:icon="@drawable/ic_resize_white_24dp"
 					android:title="@string/action_resize"
-					android:orderInCategory="2"
+					android:orderInCategory="1"
 					app:showAsAction="never"/>
-				
 				<item android:id="@+id/action_scale_image"
 					android:icon="@drawable/ic_scale_white_24dp"
 					android:title="@string/action_scale"
-					android:orderInCategory="3"
+					android:orderInCategory="2"
 					app:showAsAction="never"/>
 				<item android:id="@+id/action_flip_image"
 					android:icon="@drawable/ic_flip_white_24dp"
 					android:title="@string/action_flip"
-					android:orderInCategory="4"
+					android:orderInCategory="3"
 					app:showAsAction="never"/>
 				<item android:id="@+id/action_rotate_image"
 					android:icon="@drawable/ic_rotate_white_24dp"
 					android:title="@string/action_rotate"
-					android:orderInCategory="5"
+					android:orderInCategory="4"
 					app:showAsAction="never"/>
 			</menu>
 		</item>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,8 +27,15 @@ import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
 
+import java.util.HashMap;
+
 public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener
 {
+	public interface ActivityResultListener
+	{
+		void onActivityResult(int resultCode, Intent data);
+	}
+	
 	private class DrawerAdapter extends ActionBarDrawerToggle
 	{
 		public DrawerAdapter(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar)
@@ -108,6 +117,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private DisplayMetrics displayMetrics;
 	private boolean propertiesAttached;
 	private float screenWidthDp;
+	private HashMap<Integer, ActivityResultListener> resultListeners;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
@@ -134,6 +144,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		fragments = getFragmentManager();
 		displayMetrics = getResources().getDisplayMetrics();
 		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+		resultListeners = new HashMap<>();
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -215,17 +226,18 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		int id = item.getItemId();
 		switch(id)
 		{
-		case android.R.id.home:
-			drawerListener.onOptionsItemSelected(item);
-			return true;
 		case R.id.action_tool:
 			layoutDrawer.closeDrawer(drawerLeft);
 			if(layoutDrawer.isDrawerOpen(drawerRight)) layoutDrawer.closeDrawer(drawerRight);
 			else layoutDrawer.openDrawer(drawerRight);
 			return true;
 		case R.id.action_new_image:
-			new ImageNew(this, paintView.getImage()).execute();
+			new FileNew(this, paintView.getImage()).execute();
 			return true;
+		case R.id.action_capture_photo:
+			new FileCapturePhoto(this, paintView.getImage()).execute();
+			return true;
+			
 		case R.id.action_resize_image:
 			new ImageResize(this, paintView.getImage()).execute();
 			return true;
@@ -246,6 +258,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
 		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
+		
+		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
+		
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -263,7 +279,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		paintView.setTool(Tools.getTool(position));
 		layoutDrawer.closeDrawer(drawerLeft);
 	}
-
+	
 	private void createPropertiesFragment()
 	{
 		try
@@ -297,5 +313,18 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		propTrans.remove(fragment);
 		propTrans.commit();
 		propertiesAttached = false;
+	}
+	
+	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)
+	{
+		if(resultListeners.containsKey(requestCode)) throw new RuntimeException("requestCode is already used.");
+		resultListeners.put(requestCode, listener);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if(!resultListeners.containsKey(requestCode)) return;
+		resultListeners.get(requestCode).onActivityResult(resultCode, data);
 	}
 }

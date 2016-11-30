@@ -12,7 +12,7 @@ import pl.karol202.paintplus.R;
 
 import static android.content.DialogInterface.OnClickListener;
 
-public class ImageNew extends Option implements OnClickListener
+public class FileNew extends Option implements OnClickListener
 {
 	private final int MAX_SIZE = 2048 * 2048;
 	
@@ -20,7 +20,7 @@ public class ImageNew extends Option implements OnClickListener
 	private EditText editX;
 	private EditText editY;
 
-	public ImageNew(Context context, Image image)
+	public FileNew(Context context, Image image)
 	{
 		super(context, image);
 	}
@@ -57,5 +57,6 @@ public class ImageNew extends Option implements OnClickListener
 			return;
 		}
 		image.createBitmap(x, y);
+		image.centerView();
 	}
 }

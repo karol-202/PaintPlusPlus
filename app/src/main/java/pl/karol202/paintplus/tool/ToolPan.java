@@ -88,4 +88,9 @@ public class ToolPan extends Tool
 	{
 		image.setZoom(zoom);
 	}
+	
+	public void centerView()
+	{
+		image.centerView();
+	}
 }

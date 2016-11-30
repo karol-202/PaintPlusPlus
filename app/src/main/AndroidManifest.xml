@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.karol202.paintplus">
-
+	
+	<uses-feature android:name="android.hardware.camera"
+		android:required="false" />
+	
     <application
 		android:allowBackup="true"
         android:label="@string/app_name"

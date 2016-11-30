@@ -91,9 +91,24 @@ public class Image
 		listener.imageChanged();
 	}
 	
+	public void centerView()
+	{
+		viewX = (int) (((width * zoom / 2) - (viewportWidth / 2)) / zoom);
+		viewY = (int) (((height * zoom / 2) - (viewportHeight / 2)) / zoom);
+		updateMatrix();
+	}
+	
 	public Bitmap getBitmap()
 	{
 		return bitmap;
+	}
+	
+	public void setBitmap(Bitmap bitmap)
+	{
+		this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		width = bitmap.getWidth();
+		height = bitmap.getHeight();
+		editCanvas = new Canvas(this.bitmap);
 	}
 	
 	public Canvas getEditCanvas()

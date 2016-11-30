@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
@@ -26,6 +27,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	private ImageButton buttonZoomOut;
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
+	private Button buttonCenter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -46,15 +48,26 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		updateZoom(zoom);
 		editTextZoom.addTextChangedListener(this);
 		
+		buttonCenter = (Button) view.findViewById(R.id.button_center_view);
+		buttonCenter.setOnClickListener(this);
+		
 		return view;
 	}
 	
 	@Override
 	public void onClick(View view)
 	{
-		if(view == buttonZoomOut) zoom = getLowerZoom();
-		else if(view == buttonZoomIn) zoom = getGreaterZoom();
-		updateZoom(zoom);
+		if(view == buttonZoomOut)
+		{
+			zoom = getLowerZoom();
+			updateZoom(zoom);
+		}
+		else if(view == buttonZoomIn)
+		{
+			zoom = getGreaterZoom();
+			updateZoom(zoom);
+		}
+		else if(view == buttonCenter) pan.centerView();
 	}
 	
 	@Override
@@ -111,7 +124,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			double lower = 1;
 			while(true)
 			{
-				double next = getZoomRatio(++position);
+				double next = calculateZoomRatio(++position);
 				if(next >= zoom) return lower;
 				lower = next;
 			}
@@ -120,7 +133,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		{
 			while(true)
 			{
-				double next = getZoomRatio(--position);
+				double next = calculateZoomRatio(--position);
 				if(next < zoom) return next;
 			}
 		}
@@ -134,7 +147,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			double greater = 1;
 			while(true)
 			{
-				double next = getZoomRatio(--position);
+				double next = calculateZoomRatio(--position);
 				if(next <= zoom) return greater;
 				greater = next;
 			}
@@ -143,13 +156,13 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		{
 			while(true)
 			{
-				double next = getZoomRatio(++position);
+				double next = calculateZoomRatio(++position);
 				if(next > zoom) return next;
 			}
 		}
 	}
 	
-	private double getZoomRatio(int position)
+	private double calculateZoomRatio(int position)
 	{
 		int posAbs = Math.abs(position);
 		double fract = Math.pow(SQRT2, posAbs);
