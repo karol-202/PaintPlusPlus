@@ -105,7 +105,8 @@ public class Image
 	
 	public void setBitmap(Bitmap bitmap)
 	{
-		this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		if(!bitmap.isMutable()) this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		else this.bitmap = bitmap;
 		width = bitmap.getWidth();
 		height = bitmap.getHeight();
 		editCanvas = new Canvas(this.bitmap);

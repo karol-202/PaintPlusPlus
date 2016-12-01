@@ -44,7 +44,7 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 		
 		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), null);
 		
-		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		toolBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
 		tool.onDraw(toolCanvas);
 		canvas.drawBitmap(toolBitmap, image.getImageMatrix(), null);
@@ -77,11 +77,6 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 	{
 		return colors;
 	}
-
-	/*public void setColors(ColorsSet colors)
-	{
-		this.colors = colors;
-	}*/
 
 	public Tool getTool()
 	{

@@ -15,7 +15,7 @@ import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.*;
 
-public class ImageResize extends Option implements OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
+public class OptionImageResize extends Option implements OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
 {
 	private final int MAX_SIZE = 2048 * 2048;
 
@@ -37,7 +37,7 @@ public class ImageResize extends Option implements OnClickListener, TextWatcher,
 	private float ratio;
 	private boolean dontFireEvent;
 
-	public ImageResize(Context context, Image image)
+	public OptionImageResize(Context context, Image image)
 	{
 		super(context, image);
 	}

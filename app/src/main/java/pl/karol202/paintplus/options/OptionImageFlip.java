@@ -11,14 +11,14 @@ import pl.karol202.paintplus.R;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class ImageFlip extends Option implements DialogInterface.OnClickListener
+public class OptionImageFlip extends Option implements DialogInterface.OnClickListener
 {
 	private AlertDialog dialog;
 	
 	private RadioButton radioHorizontal;
 	private RadioButton radioVertical;
 	
-	public ImageFlip(Context context, Image image)
+	public OptionImageFlip(Context context, Image image)
 	{
 		super(context, image);
 	}

@@ -13,14 +13,14 @@ import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class ImageRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class OptionImageRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private AlertDialog dialog;
 	
 	private SeekBar seekBarAngle;
 	private TextView textAngle;
 	
-	public ImageRotate(Context context, Image image)
+	public OptionImageRotate(Context context, Image image)
 	{
 		super(context, image);
 	}

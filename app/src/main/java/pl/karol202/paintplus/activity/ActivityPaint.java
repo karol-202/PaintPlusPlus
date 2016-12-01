@@ -26,6 +26,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
+import pl.karol202.paintplus.util.GLHelper;
 
 import java.util.HashMap;
 
@@ -118,6 +119,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private boolean propertiesAttached;
 	private float screenWidthDp;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
+	private GLHelper glHelper;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
@@ -145,6 +147,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		displayMetrics = getResources().getDisplayMetrics();
 		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
 		resultListeners = new HashMap<>();
+		glHelper = new GLHelper();
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -231,24 +234,25 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			if(layoutDrawer.isDrawerOpen(drawerRight)) layoutDrawer.closeDrawer(drawerRight);
 			else layoutDrawer.openDrawer(drawerRight);
 			return true;
+			
 		case R.id.action_new_image:
-			new FileNew(this, paintView.getImage()).execute();
+			new OptionFileNew(this, paintView.getImage()).execute();
 			return true;
 		case R.id.action_capture_photo:
-			new FileCapturePhoto(this, paintView.getImage()).execute();
+			new OptionFileCapturePhoto(this, paintView.getImage()).execute();
 			return true;
 			
 		case R.id.action_resize_image:
-			new ImageResize(this, paintView.getImage()).execute();
+			new OptionImageResize(this, paintView.getImage()).execute();
 			return true;
 		case R.id.action_scale_image:
-			new ImageScale(this, paintView.getImage()).execute();
+			new OptionImageScale(this, paintView.getImage()).execute();
 			return true;
 		case R.id.action_flip_image:
-			new ImageFlip(this, paintView.getImage()).execute();
+			new OptionImageFlip(this, paintView.getImage()).execute();
 			return true;
 		case R.id.action_rotate_image:
-			new ImageRotate(this, paintView.getImage()).execute();
+			new OptionImageRotate(this, paintView.getImage()).execute();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -321,10 +325,21 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		resultListeners.put(requestCode, listener);
 	}
 	
+	public void unregisterActivityResultListener(int requestCode)
+	{
+		if(!resultListeners.containsKey(requestCode)) throw new RuntimeException("requestCode isn't registered yet.");
+		resultListeners.remove(requestCode);
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if(!resultListeners.containsKey(requestCode)) return;
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
+	}
+	
+	public GLHelper getGLHelper()
+	{
+		return glHelper;
 	}
 }

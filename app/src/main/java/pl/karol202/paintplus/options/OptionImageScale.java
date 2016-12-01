@@ -16,7 +16,7 @@ import pl.karol202.paintplus.R;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class ImageScale extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
+public class OptionImageScale extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
 {
 	private final int MAX_SIZE = 2048 * 2048;
 	
@@ -32,7 +32,7 @@ public class ImageScale extends Option implements DialogInterface.OnClickListene
 	private float ratio;
 	private boolean dontFireEvent;
 	
-	public ImageScale(Context context, Image image)
+	public OptionImageScale(Context context, Image image)
 	{
 		super(context, image);
 	}

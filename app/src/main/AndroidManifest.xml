@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.karol202.paintplus">
 	
-	<uses-feature android:name="android.hardware.camera"
-		android:required="false" />
+	<uses-feature android:name="android.hardware.camera" android:required="false" />
+	<uses-feature android:glEsVersion="0x00020000" android:required="true" />
+	
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	
     <application
 		android:allowBackup="true"
@@ -24,5 +26,15 @@
             android:name=".activity.ActivityPaint"
             android:label=""
 	        android:configChanges="keyboardHidden|orientation|screenSize" />
+	
+	    <provider
+		    android:name="android.support.v4.content.FileProvider"
+		    android:authorities="pl.karol202.paintplus"
+		    android:exported="false"
+		    android:grantUriPermissions="true">
+		    <meta-data
+			    android:name="android.support.FILE_PROVIDER_PATHS"
+			    android:resource="@xml/file_paths"/>
+	    </provider>
     </application>
 </manifest>
