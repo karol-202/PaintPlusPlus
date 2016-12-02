@@ -14,8 +14,7 @@
         android:theme="@style/AppTheme">
 		<activity
             android:name=".activity.ActivityMain"
-            android:label="@string/activity_main"
-	        android:configChanges="keyboardHidden|orientation|screenSize">
+            android:label="@string/activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,9 +23,11 @@
         </activity>
         <activity
             android:name=".activity.ActivityPaint"
-            android:label=""
-	        android:configChanges="keyboardHidden|orientation|screenSize" />
-	
+            android:label="" />
+		<activity
+			android:name=".activity.ActivityFileOpen"
+			android:label="@string/activity_file_open" />
+	    
 	    <provider
 		    android:name="android.support.v4.content.FileProvider"
 		    android:authorities="pl.karol202.paintplus"

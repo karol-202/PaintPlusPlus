@@ -2,6 +2,7 @@
 	<string name="app_name">Paint++</string>
 	<string name="activity_main">Paint++</string>
 	<string name="activity_paint">Edycja</string>
+	<string name="activity_file_open">Otwórz plik</string>
 	<string name="action_drawer_open">Panel narzędzi otwarty</string>
 	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
 	<string name="properties">Właściwości</string>
@@ -14,8 +15,10 @@
 	
 	<string name="action_tool">Narzędzie</string>
 	<string name="action_file">Plik</string>
-	<string name="action_capture_photo">Zrób zdjęcie</string>
 	<string name="action_new">Nowy obraz</string>
+	<string name="action_capture_photo">Zrób zdjęcie</string>
+	<string name="action_open">Otwórz plik</string>
+	<string name="action_save">Zapisz plik</string>
 	<string name="action_image">Obraz</string>
 	<string name="action_resize">Zmień wymiary</string>
 	<string name="action_scale">Skaluj obraz</string>
@@ -47,4 +50,6 @@
 	<string name="angle">Kąt</string>
 	<string name="zoom">Zoom</string>
 	<string name="center_view">Wyśrodkuj</string>
+	<string name="unknown">Nieznany</string>
+	<string name="file_back">Powrót</string>
 </resources>

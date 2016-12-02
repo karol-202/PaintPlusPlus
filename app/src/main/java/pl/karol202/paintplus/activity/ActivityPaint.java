@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -241,6 +242,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		case R.id.action_capture_photo:
 			new OptionFileCapturePhoto(this, paintView.getImage()).execute();
 			return true;
+		case R.id.action_open_image:
+			new OptionFileOpen(this, paintView.getImage()).execute();
+			return true;
 			
 		case R.id.action_resize_image:
 			new OptionImageResize(this, paintView.getImage()).execute();
@@ -263,12 +267,33 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
 		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
 		
-		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
+		preparePhotoCaptureOption(menu);
+		prepareFileOpenOption(menu);
+		prepareFileSaveOption(menu);
 		
 		return super.onPrepareOptionsMenu(menu);
 	}
-
+	
+	private void preparePhotoCaptureOption(Menu menu)
+	{
+		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
+	}
+	
+	private void prepareFileOpenOption(Menu menu)
+	{
+		String state = Environment.getExternalStorageState();
+		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+		menu.findItem(R.id.action_open_image).setEnabled(enable);
+	}
+	
+	private void prepareFileSaveOption(Menu menu)
+	{
+		String state = Environment.getExternalStorageState();
+		boolean enable = state.equals(Environment.MEDIA_MOUNTED);
+		menu.findItem(R.id.action_save_image).setEnabled(enable);
+	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{

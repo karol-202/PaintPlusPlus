@@ -24,6 +24,16 @@
 					android:title="@string/action_capture_photo"
 					android:orderInCategory="2"
 					app:showAsAction="never"/>
+				<item android:id="@+id/action_open_image"
+					android:icon="@drawable/ic_folder_white_24dp"
+					android:title="@string/action_open"
+					android:orderInCategory="3"
+					app:showAsAction="never"/>
+				<item android:id="@+id/action_save_image"
+					android:icon="@drawable/ic_save_white_24dp"
+					android:title="@string/action_save"
+					android:orderInCategory="4"
+					app:showAsAction="never"/>
 			</menu>
 		</item>
 		

@@ -1,8 +1,6 @@
 package pl.karol202.paintplus.options;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
@@ -25,7 +23,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	
 	private ActivityPaint activity;
 	private GLHelper glHelper;
-	private String photoFilePath;
+	private File photoFile;
 	
 	public OptionFileCapturePhoto(ActivityPaint activity, Image image)
 	{
@@ -42,7 +40,6 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		if(intent.resolveActivity(activity.getPackageManager()) == null)
 			throw new RuntimeException("Cannot resolve camera activity.");
 		
-		File photoFile;
 		try
 		{
 			photoFile = createPhotoFile();
@@ -62,8 +59,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		String dateString = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss").format(new Date());
 		String fileName = "CAPTURED_" + dateString;
 		File directory = context.getExternalFilesDir(DIRECTORY_PICTURES);
-		File photoFile = File.createTempFile(fileName, ".jpeg", directory);
-		photoFilePath = photoFile.getAbsolutePath();
+		photoFile = File.createTempFile(fileName, ".jpeg", directory);
 		return photoFile;
 	}
 	
@@ -72,20 +68,8 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	{
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
-		Bitmap photo = BitmapFactory.decodeFile(photoFilePath);
+		OptionFileOpen.openImageFromFile(image, glHelper, photoFile.getAbsolutePath());
+		photoFile.delete();
 		
-		float maxSize = glHelper.getMaxTextureSize();
-		if(photo.getWidth() < maxSize || photo.getHeight() < maxSize)
-		{
-			float widthRatio = photo.getWidth() / maxSize;
-			float heightRatio = photo.getHeight() / maxSize;
-			float higher = Math.max(widthRatio, heightRatio);
-			int newWidth = (int) Math.floor(photo.getWidth() / higher);
-			int newHeight = (int) Math.floor(photo.getHeight() / higher);
-			Bitmap scaled = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			image.setBitmap(scaled);
-		}
-		else image.setBitmap(photo);
-		image.centerView();
 	}
 }

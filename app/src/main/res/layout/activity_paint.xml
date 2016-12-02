@@ -42,16 +42,14 @@
 			android:background="@color/drawerBackground"
 			android:divider="@android:color/transparent"
 			android:dividerHeight="0dp"
-			android:choiceMode="singleChoice"
-			android:elevation="0dp"/>
+			android:choiceMode="singleChoice"/>
 		
 		<RelativeLayout
 			android:id="@+id/drawer_right"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="end"
-			android:background="@color/drawerBackground"
-			android:elevation="16dp">
+			android:background="@color/drawerBackground">
 			
 			<FrameLayout
 				android:id="@+id/propertiesFragment"
