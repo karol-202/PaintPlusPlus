@@ -69,6 +69,21 @@ public class ToolPan extends Tool
 		int deltaTouchY = Math.round(y - oldTouchY);
 		image.setViewX(oldImageX - deltaTouchX);
 		image.setViewY(oldImageY - deltaTouchY);
+		
+		checkLimits();
+	}
+	
+	private void checkLimits()
+	{
+		int xMin = -image.getViewportWidth();
+		int xMax = image.getWidth();
+		if(image.getViewX() < xMin) image.setViewX(xMin);
+		else if(image.getViewX() > xMax) image.setViewX(xMax);
+		
+		int yMin = -image.getViewportHeight();
+		int yMax = image.getHeight();
+		if(image.getViewY() < yMin) image.setViewY(yMin);
+		else if(image.getViewY() > yMax) image.setViewY(yMax);
 	}
 	
 	private void onTouchStop(Canvas canvas, float x, float y) { }

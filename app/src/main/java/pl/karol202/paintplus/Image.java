@@ -168,9 +168,19 @@ public class Image
 		return imageMatrix;
 	}
 	
+	public int getViewportWidth()
+	{
+		return viewportWidth;
+	}
+	
 	public void setViewportWidth(int viewportWidth)
 	{
 		this.viewportWidth = viewportWidth;
+	}
+	
+	public int getViewportHeight()
+	{
+		return viewportHeight;
 	}
 	
 	public void setViewportHeight(int viewportHeight)
