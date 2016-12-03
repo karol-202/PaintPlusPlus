@@ -3,6 +3,8 @@
 	<string name="activity_main">Paint++</string>
 	<string name="activity_paint">Edycja</string>
 	<string name="activity_file_open">Otwórz plik</string>
+	<string name="activity_file_save">Zapisz plik</string>
+	
 	<string name="action_drawer_open">Panel narzędzi otwarty</string>
 	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
 	<string name="properties">Właściwości</string>
@@ -12,6 +14,7 @@
 	<string name="dialog_scale_image">Skaluj obraz</string>
 	<string name="dialog_flip_image">Odbij</string>
 	<string name="dialog_rotate_image">Obróć</string>
+	<string name="dialog_replace_file">Czy chcesz zamienić?</string>
 	
 	<string name="action_tool">Narzędzie</string>
 	<string name="action_file">Plik</string>
@@ -52,4 +55,9 @@
 	<string name="center_view">Wyśrodkuj</string>
 	<string name="unknown">Nieznany</string>
 	<string name="file_back">Powrót</string>
+	<string name="save">Zapisz</string>
+	<string name="save_file_name">Wpisz nazwę</string>
+	<string name="unsupported_file_format">Ten format pliku nie jest obsługiwany.</string>
+	<string name="replace_file_text">Plik o podanej nazwie już istnieje. Czy chcesz go zamienić?</string>
+	<string name="replace">Zamień</string>
 </resources>

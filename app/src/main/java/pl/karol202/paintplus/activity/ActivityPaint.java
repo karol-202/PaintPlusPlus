@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import pl.karol202.paintplus.ColorsSelect;
+import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.options.*;
@@ -244,6 +244,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			return true;
 		case R.id.action_open_image:
 			new OptionFileOpen(this, paintView.getImage()).execute();
+			return true;
+		case R.id.action_save_image:
+			new OptionFileSave(this, paintView.getImage()).execute();
 			return true;
 			
 		case R.id.action_resize_image:

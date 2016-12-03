@@ -27,6 +27,9 @@
 		<activity
 			android:name=".activity.ActivityFileOpen"
 			android:label="@string/activity_file_open" />
+	    <activity
+		    android:name=".activity.ActivityFileSave"
+		    android:label="@string/activity_file_save" />
 	    
 	    <provider
 		    android:name="android.support.v4.content.FileProvider"

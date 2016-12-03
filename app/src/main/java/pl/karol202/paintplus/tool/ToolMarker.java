@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.ColorsSet;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.properties.MarkerProperties;

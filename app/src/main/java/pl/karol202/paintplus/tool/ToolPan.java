@@ -3,7 +3,7 @@ package pl.karol202.paintplus.tool;
 import android.app.Fragment;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.ColorsSet;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.properties.PanProperties;

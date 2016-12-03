@@ -7,8 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import pl.karol202.paintplus.AdapterFile;
+import pl.karol202.paintplus.file.AdapterFile;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.util.ItemDivider;
 
 import java.io.File;
@@ -19,8 +20,6 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 {
 	private class FileFilter implements FilenameFilter
 	{
-		private final String[] FILTER = new String[] { "jpg", "jpeg" };
-		
 		@Override
 		public boolean accept(File dir, String name)
 		{
@@ -29,7 +28,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 			
 			String[] parts = name.split("\\.");
 			String extension = parts[parts.length - 1];
-			for(String filter : FILTER)
+			for(String filter : ImageLoader.FORMATS)
 				if(extension.equalsIgnoreCase(filter)) return true;
 			return false;
 		}
@@ -51,8 +50,8 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 	private Stack<File> previousDirectories;
 	private ArrayList<File> files;
 	
-	private Toolbar toolbar;
-	private RecyclerView recyclerFiles;
+	protected Toolbar toolbar;
+	protected RecyclerView recyclerFiles;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -141,5 +140,10 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 		else if(file.isDirectory()) navigateTo(file);
 		else return true;
 		return false;
+	}
+	
+	public File getCurrentDirectory()
+	{
+		return currentDirectory;
 	}
 }

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus;
+package pl.karol202.paintplus.file;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import pl.karol202.paintplus.R;
 
 import java.io.File;
 import java.util.ArrayList;

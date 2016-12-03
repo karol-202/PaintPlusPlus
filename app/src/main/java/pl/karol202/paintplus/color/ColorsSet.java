@@ -1,4 +1,4 @@
-package pl.karol202.paintplus;
+package pl.karol202.paintplus.color;
 
 import android.graphics.Color;
 import android.os.Parcel;

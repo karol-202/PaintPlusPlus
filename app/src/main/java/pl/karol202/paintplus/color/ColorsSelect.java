@@ -1,4 +1,4 @@
-package pl.karol202.paintplus;
+package pl.karol202.paintplus.color;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.widget.ImageButton;
 
 import com.pavelsikun.vintagechroma.ChromaDialog;
 import com.pavelsikun.vintagechroma.IndicatorMode;
-import com.pavelsikun.vintagechroma.OnColorSelectedListener;
 import com.pavelsikun.vintagechroma.colormode.ColorMode;
+import pl.karol202.paintplus.R;
 
 public class ColorsSelect extends Fragment implements View.OnClickListener, com.pavelsikun.vintagechroma.OnColorSelectedListener
 {

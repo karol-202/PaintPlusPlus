@@ -64,7 +64,7 @@
 				android:id="@+id/colorsFragment"
 				android:layout_width="match_parent"
 				android:layout_height="100dp"
-				android:name="pl.karol202.paintplus.ColorsSelect"
+				android:name="pl.karol202.paintplus.color.ColorsSelect"
 				android:layout_alignParentBottom="true"
 				android:layout_alignParentStart="true"
 				android:layout_alignParentEnd="true" />

@@ -1,6 +1,7 @@
 package pl.karol202.paintplus;
 
 import android.graphics.*;
+import pl.karol202.paintplus.color.ColorsSet;
 
 public class Image
 {

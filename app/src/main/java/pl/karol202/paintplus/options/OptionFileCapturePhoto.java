@@ -6,7 +6,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.util.GLHelper;
+import pl.karol202.paintplus.file.ImageLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,6 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	private static final int REQUEST_CAPTURE_PHOTO = 0;
 	
 	private ActivityPaint activity;
-	private GLHelper glHelper;
 	private File photoFile;
 	
 	public OptionFileCapturePhoto(ActivityPaint activity, Image image)
@@ -30,7 +29,6 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		super(activity, image);
 		this.activity = activity;
 		this.activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
-		this.glHelper = activity.getGLHelper();
 	}
 	
 	@Override
@@ -68,7 +66,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	{
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
-		OptionFileOpen.openImageFromFile(image, glHelper, photoFile.getAbsolutePath());
+		ImageLoader.openImageFromFile(image, photoFile.getAbsolutePath());
 		photoFile.delete();
 		
 	}
