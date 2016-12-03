@@ -59,12 +59,6 @@ public class ToolBrush extends Tool
 	}
 	
 	@Override
-	public boolean onlyViewport()
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
 		paint.setStrokeWidth(size);
@@ -74,9 +68,6 @@ public class ToolBrush extends Tool
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, colors, event.getX(), event.getY());
 		return true;
 	}
-
-	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
 
 	private void onTouchStart(Canvas canvas, ColorsSet colors, float x, float y)
 	{
@@ -137,7 +128,7 @@ public class ToolBrush extends Tool
 	}
 	
 	@Override
-	public void onDraw(Canvas canvas) { }
+	public void onScreenDraw(Canvas canvas) { }
 	
 	public float getSize()
 	{

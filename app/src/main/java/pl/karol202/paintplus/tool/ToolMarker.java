@@ -61,12 +61,6 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
-	public boolean onlyViewport()
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
 		pathPaint.setColor(colors.getFirstColor());
@@ -88,7 +82,6 @@ public class ToolMarker extends Tool
 		oval.top = y - size / 2;
 		oval.right = x + size / 2;
 		oval.bottom = y + size / 2;
-		canvas.drawOval(oval, ovalPaint);
 		
 		lastX = x;
 		lastY = y;
@@ -106,20 +99,27 @@ public class ToolMarker extends Tool
 	{
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
+		canvas.drawOval(oval, ovalPaint);
 		canvas.drawPath(path, pathPaint);
 		
 		path.reset();
 		lastX = -1;
 		lastY = -1;
 	}
-	
-	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
 
 	@Override
-	public void onDraw(Canvas canvas)
+	public void onScreenDraw(Canvas canvas)
 	{
-		canvas.clipRect(0, 0, image.getWidth(), image.getHeight());
+		int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
+		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
+		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
+		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
+		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
+		
+		//Path pathWithOffset = new Path();
+		canvas.scale(image.getZoom(), image.getZoom());
+		canvas.translate(-image.getViewX(), -image.getViewY());
+		//path.offset(-image.getViewX(), -image.getViewY(), pathWithOffset);
 		canvas.drawPath(path, pathPaint);
 	}
 	

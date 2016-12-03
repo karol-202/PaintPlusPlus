@@ -362,9 +362,4 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		if(!resultListeners.containsKey(requestCode)) return;
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
 	}
-	
-	public GLHelper getGLHelper()
-	{
-		return glHelper;
-	}
 }

@@ -15,13 +15,11 @@ public class OptionFileOpen extends Option implements ActivityPaint.ActivityResu
 	private static final int REQUEST_OPEN_FILE = 1;
 	
 	private ActivityPaint activity;
-	private GLHelper glHelper;
 	
 	public OptionFileOpen(ActivityPaint activity, Image image)
 	{
 		super(activity, image);
 		this.activity = activity;
-		this.glHelper = activity.getGLHelper();
 		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
 	}
 	
@@ -39,15 +37,15 @@ public class OptionFileOpen extends Option implements ActivityPaint.ActivityResu
 		if(resultCode != RESULT_OK) return;
 		String filePath = data.getStringExtra("filePath");
 		
-		openImageFromFile(image, glHelper, filePath);
+		openImageFromFile(image, filePath);
 	}
 	
-	public static void openImageFromFile(Image image, GLHelper glHelper, String photoFilePath)
+	public static void openImageFromFile(Image image, String photoFilePath)
 	{
 		Bitmap photo = BitmapFactory.decodeFile(photoFilePath);
 		if(photo == null) return;
 		
-		float maxSize = glHelper.getMaxTextureSize();
+		float maxSize = GLHelper.getMaxTextureSize();
 		if(photo.getWidth() < maxSize || photo.getHeight() < maxSize)
 		{
 			float widthRatio = photo.getWidth() / maxSize;

@@ -39,12 +39,6 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean onlyViewport()
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
 	{
 		float x = event.getX() - image.getViewX();
@@ -89,10 +83,7 @@ public class ToolPan extends Tool
 	private void onTouchStop(Canvas canvas, float x, float y) { }
 	
 	@Override
-	public void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event) { }
-	
-	@Override
-	public void onDraw(Canvas canvas) { }
+	public void onScreenDraw(Canvas canvas) { }
 	
 	public float getZoom()
 	{

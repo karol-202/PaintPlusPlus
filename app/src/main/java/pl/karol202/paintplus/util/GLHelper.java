@@ -14,11 +14,11 @@ public class GLHelper
 		}
 	}
 	
+	private static int maxTextureSize;
+	
 	private EGLDisplay display;
 	private EGLSurface surface;
 	private EGLContext context;
-	
-	private int maxTextureSize;
 	
 	public GLHelper()
 	{
@@ -80,7 +80,7 @@ public class GLHelper
 		EGL14.eglTerminate(display);
 	}
 	
-	public int getMaxTextureSize()
+	public static int getMaxTextureSize()
 	{
 		return maxTextureSize;
 	}

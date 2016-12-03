@@ -44,10 +44,10 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 		
 		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), null);
 		
-		toolBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
-		tool.onDraw(toolCanvas);
-		canvas.drawBitmap(toolBitmap, image.getImageMatrix(), null);
+		tool.onScreenDraw(toolCanvas);
+		canvas.drawBitmap(toolBitmap, 0, 0, null);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.util.GLHelper;
 
 import static android.content.DialogInterface.OnClickListener;
 
@@ -51,7 +52,8 @@ public class OptionFileNew extends Option implements OnClickListener
 		if(which != DialogInterface.BUTTON_POSITIVE) return;
 		int x = Integer.parseInt(editX.getText().toString());
 		int y = Integer.parseInt(editY.getText().toString());
-		if(x * y > MAX_SIZE)
+		if(x > GLHelper.getMaxTextureSize() ||
+		   y > GLHelper.getMaxTextureSize())
 		{
 			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 			return;

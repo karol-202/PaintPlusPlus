@@ -11,14 +11,13 @@ import android.view.View;
 import android.widget.*;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.util.GLHelper;
 import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.*;
 
 public class OptionImageResize extends Option implements OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
 {
-	private final int MAX_SIZE = 2048 * 2048;
-
 	private AlertDialog dialog;
 
 	private EditText editWidth;
@@ -94,7 +93,8 @@ public class OptionImageResize extends Option implements OnClickListener, TextWa
 	{
 		if(which == BUTTON_POSITIVE)
 		{
-			if(newWidth * newHeight > MAX_SIZE)
+			if(newWidth > GLHelper.getMaxTextureSize() ||
+			   newHeight > GLHelper.getMaxTextureSize())
 			{
 				Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 				return;

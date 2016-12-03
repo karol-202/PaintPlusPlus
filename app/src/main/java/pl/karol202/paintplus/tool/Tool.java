@@ -26,11 +26,7 @@ public abstract class Tool
 	
 	public abstract Class<? extends Fragment> getPropertiesFragmentClass();
 	
-	public abstract boolean onlyViewport();
-	
 	public abstract boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event);
 
-	public abstract void onTouchOutsideViewport(Canvas edit, ColorsSet colors, MotionEvent event);
-
-	public abstract void onDraw(Canvas canvas);
+	public abstract void onScreenDraw(Canvas canvas);
 }
