@@ -13,6 +13,7 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 {
 	private ToolMarker marker;
 
+	private View view;
 	private SeekBar seekMarkerSize;
 	private TextView textMarkerSize;
 
@@ -20,15 +21,21 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
+		view = inflater.inflate(R.layout.properties_marker, container, false);
+		return view;
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
 		marker = (ToolMarker) tool;
-
-		View view = inflater.inflate(R.layout.properties_marker, container, false);
+		
 		seekMarkerSize = (SeekBar) view.findViewById(R.id.seekBar_marker_size);
 		seekMarkerSize.setProgress((int) (marker.getSize() - 1));
 		seekMarkerSize.setOnSeekBarChangeListener(this);
 		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
 		textMarkerSize.setText(String.valueOf(seekMarkerSize.getProgress() + 1));
-		return view;
 	}
 	
 	@Override

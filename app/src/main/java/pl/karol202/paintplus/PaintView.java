@@ -6,14 +6,16 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
 public class PaintView extends SurfaceView implements Image.ImageChangeListener
 {
-	private ColorsSet colors;
 	private Image image;
+	private Tools tools;
+	private ColorsSet colors;
 	private Tool tool;
 	private Bitmap toolBitmap;
 	private boolean initialized;
@@ -21,13 +23,18 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 	public PaintView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		if(isInEditMode()) return;
-		colors = ColorsSet.getDefault();
-		image = new Image(this, colors);
-		Tools.init(image);
-		tool = Tools.getTool(1);
+	}
+	
+	public void init(ActivityPaint activity)
+	{
+		image = activity.getImage();
+		image.setImageChangeListener(this);
 		
-		image.createBitmap(600, 600);
+		tools = activity.getTools();
+		
+		colors = image.getColorsSet();
+		
+		tool = tools.getTool(1);
 	}
 	
 	@Override

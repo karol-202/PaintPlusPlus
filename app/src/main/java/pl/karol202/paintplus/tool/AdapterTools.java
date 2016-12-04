@@ -13,9 +13,9 @@ public class AdapterTools extends ArrayAdapter<Tool>
 {
 	private Context context;
 
-	public AdapterTools(Context context)
+	public AdapterTools(Context context, Tools tools)
 	{
-		super(context, R.layout.item_tool, Tools.getTools());
+		super(context, R.layout.item_tool, tools.getTools());
 		this.context = context;
 	}
 

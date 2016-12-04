@@ -27,10 +27,9 @@ public class Image
 	private int viewportWidth;
 	private int viewportHeight;
 	
-	public Image(ImageChangeListener listener, ColorsSet colorsSet)
+	public Image()
 	{
-		this.listener = listener;
-		this.colorsSet = colorsSet;
+		this.colorsSet = ColorsSet.getDefault();
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
 		updateMatrix();
@@ -89,7 +88,7 @@ public class Image
 		matrix.postScale(zoom, zoom);
 		
 		imageMatrix.set(matrix);
-		listener.imageChanged();
+		if(listener != null) listener.imageChanged();
 	}
 	
 	public void centerView()
@@ -97,6 +96,12 @@ public class Image
 		viewX = (int) (((width * zoom / 2) - (viewportWidth / 2)) / zoom);
 		viewY = (int) (((height * zoom / 2) - (viewportHeight / 2)) / zoom);
 		updateMatrix();
+	}
+	
+	
+	public void setImageChangeListener(ImageChangeListener listener)
+	{
+		this.listener = listener;
 	}
 	
 	public Bitmap getBitmap()
@@ -117,6 +122,12 @@ public class Image
 	{
 		return editCanvas;
 	}
+	
+	public ColorsSet getColorsSet()
+	{
+		return colorsSet;
+	}
+	
 	
 	public int getWidth()
 	{

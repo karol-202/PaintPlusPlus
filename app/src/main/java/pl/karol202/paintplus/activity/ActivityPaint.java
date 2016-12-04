@@ -21,9 +21,11 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import pl.karol202.paintplus.color.ColorsSelect;
+import pl.karol202.paintplus.AppDataFragment;
+import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
@@ -120,7 +122,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private boolean propertiesAttached;
 	private float screenWidthDp;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
-	private GLHelper glHelper;
+	private AppDataFragment dataFragment;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
@@ -148,8 +150,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		displayMetrics = getResources().getDisplayMetrics();
 		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
 		resultListeners = new HashMap<>();
-		glHelper = new GLHelper();
-
+		new GLHelper();
+		restoreInstanceState(savedInstanceState);
+		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
@@ -164,7 +167,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		layoutDrawer.addDrawerListener(drawerListener);
 
 		drawerLeft = (ListView) findViewById(R.id.drawer_left);
-		drawerLeft.setAdapter(new AdapterTools(this));
 		drawerLeft.setOnItemClickListener(this);
 		initLeftDrawer();
 
@@ -172,7 +174,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		initRightDrawer();
 
 		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colorsFragment);
-		colorsSelect.setColors(paintView.getColors());
 	}
 	
 	private void initSystemUIVisibility()
@@ -203,11 +204,28 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		params2.width = Math.min(maxWidth, preferredWidth);
 	}
 	
+	private void restoreInstanceState(Bundle state)
+	{
+		if(state != null) super.onRestoreInstanceState(state);
+		dataFragment = (AppDataFragment) fragments.findFragmentByTag(AppDataFragment.TAG);
+		if(dataFragment == null)
+		{
+			dataFragment = new AppDataFragment();
+			FragmentTransaction transaction = fragments.beginTransaction();
+			transaction.add(dataFragment, AppDataFragment.TAG);
+			transaction.commit();
+		}
+	}
+	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState)
 	{
 		super.onPostCreate(savedInstanceState);
 		drawerListener.syncState();
+		
+		paintView.init(this);
+		drawerLeft.setAdapter(new AdapterTools(this, getTools()));
+		colorsSelect.setColors(paintView.getColors());
 	}
 
 	@Override
@@ -308,7 +326,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		paintView.setTool(Tools.getTool(position));
+		paintView.setTool(getTools().getTool(position));
 		layoutDrawer.closeDrawer(drawerLeft);
 	}
 	
@@ -330,7 +348,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		Fragment properties = paintView.getTool().getPropertiesFragmentClass().newInstance();
 		Bundle propArgs = new Bundle();
-		propArgs.putInt("tool", Tools.getToolId(paintView.getTool()));
+		propArgs.putInt("tool", getTools().getToolId(paintView.getTool()));
 		properties.setArguments(propArgs);
 		FragmentTransaction propTrans = fragments.beginTransaction();
 		propTrans.add(R.id.propertiesFragment, properties);
@@ -364,5 +382,15 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		if(!resultListeners.containsKey(requestCode)) return;
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
+	}
+	
+	public Image getImage()
+	{
+		return dataFragment.getImage();
+	}
+	
+	public Tools getTools()
+	{
+		return dataFragment.getTools();
 	}
 }

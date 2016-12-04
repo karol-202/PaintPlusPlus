@@ -39,7 +39,9 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 		@Override
 		public int compare(File file1, File file2)
 		{
-			return file1.getAbsolutePath().compareToIgnoreCase(file2.getAbsolutePath());
+			if(file1.isDirectory() && !file2.isDirectory()) return -1;
+			else if(!file1.isDirectory() && file2.isDirectory()) return 1;
+			else return file1.getAbsolutePath().compareToIgnoreCase(file2.getAbsolutePath());
 		}
 	}
 	
@@ -54,17 +56,16 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 	protected RecyclerView recyclerFiles;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(Bundle state)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(state);
 		setContentView(getLayout());
 		
 		adapter = new AdapterFile(this, this);
 		fileFilter = new FileFilter();
 		fileComparator = new FileComparator();
-		currentDirectory = Environment.getExternalStorageDirectory();
-		previousDirectories = new Stack<>();
-		files = new ArrayList<>();
+		if(state == null) init();
+		else initFromSavedState(state);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -75,8 +76,26 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 		recyclerFiles.setLayoutManager(new LinearLayoutManager(this));
 		recyclerFiles.setAdapter(adapter);
 		recyclerFiles.addItemDecoration(new ItemDivider(this));
-		
+	}
+	
+	private void init()
+	{
+		currentDirectory = Environment.getExternalStorageDirectory();
+		previousDirectories = new Stack<>();
+		files = new ArrayList<>();
 		navigateTo(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
+	}
+	
+	private void initFromSavedState(Bundle state)
+	{
+		currentDirectory = new File(state.getString("currentDirectory"));
+		
+		previousDirectories = new Stack<>();
+		ArrayList<String> previousList = state.getStringArrayList("previousDirectories");
+		for(String filePath : previousList) previousDirectories.push(new File(filePath));
+		
+		files = new ArrayList<>();
+		updateItems();
 	}
 	
 	public abstract int getLayout();
@@ -86,6 +105,17 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 	{
 		if(canNavigateBack()) navigateBack();
 		else super.onBackPressed();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putString("currentDirectory", currentDirectory.getAbsolutePath());
+		
+		ArrayList<String> previousList = new ArrayList<>();
+		for(File file : previousDirectories) previousList.add(file.getAbsolutePath());
+		outState.putStringArrayList("previousDirectories", previousList);
 	}
 	
 	@Override

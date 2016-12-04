@@ -24,6 +24,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	private double zoom;
 	private boolean dontFireEvent;
 	
+	private View view;
 	private ImageButton buttonZoomOut;
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
@@ -33,10 +34,16 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
+		view = inflater.inflate(R.layout.properties_pan, container, false);
+		return view;
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
 		pan = (ToolPan) tool;
 		zoom = pan.getZoom();
-		
-		View view = inflater.inflate(R.layout.properties_pan, container, false);
 		
 		buttonZoomOut = (ImageButton) view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
@@ -50,8 +57,6 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		
 		buttonCenter = (Button) view.findViewById(R.id.button_center_view);
 		buttonCenter.setOnClickListener(this);
-		
-		return view;
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +11,6 @@ import pl.karol202.paintplus.R;
 public class ActivityMain extends AppCompatActivity
 {
 	private Toolbar toolbar;
-	//private RecyclerView recentlyEdited;
-	//private LinearLayoutManager layoutManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -23,12 +20,6 @@ public class ActivityMain extends AppCompatActivity
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		
-		//recentlyEdited = (RecyclerView) findViewById(R.id.recyclerRecentlyEdited);
-
-		//layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-		
-		//recentlyEdited.setLayoutManager(layoutManager);
 	}
 
 	@Override
@@ -49,12 +40,5 @@ public class ActivityMain extends AppCompatActivity
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-		setContentView(R.layout.activity_main);
 	}
 }

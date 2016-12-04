@@ -6,22 +6,22 @@ import java.util.ArrayList;
 
 public class Tools
 {
-	private static ArrayList<Tool> tools = new ArrayList<>();
+	private ArrayList<Tool> tools;
 	
-	public static void init(Image image)
+	public Tools(Image image)
 	{
-		tools.clear();
+		tools = new ArrayList<>();
 		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
 	}
 	
-	public static Tool getTool(int id)
+	public Tool getTool(int id)
 	{
 		return tools.get(id);
 	}
 	
-	public static int getToolId(Tool tool)
+	public int getToolId(Tool tool)
 	{
 		for(int i = 0; i < tools.size(); i++)
 		{
@@ -31,7 +31,7 @@ public class Tools
 		return -1;
 	}
 	
-	public static ArrayList<Tool> getTools()
+	public ArrayList<Tool> getTools()
 	{
 		return tools;
 	}

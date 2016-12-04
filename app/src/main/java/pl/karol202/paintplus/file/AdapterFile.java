@@ -48,14 +48,9 @@ public class AdapterFile extends RecyclerView.Adapter<AdapterFile.ViewHolder>
 			else
 			{
 				String extension = getFileExtension(file);
-				switch(extension)
-				{
-				case "jpg":
-				case "jpeg":
-					return R.drawable.ic_image_black_24dp;
-				default:
-					return R.drawable.ic_file_black_24dp;
-				}
+				for(String filter : ImageLoader.OPEN_FORMATS)
+					if(extension.equalsIgnoreCase(filter)) return R.drawable.ic_image_black_24dp;
+				return R.drawable.ic_file_black_24dp;
 			}
 		}
 		

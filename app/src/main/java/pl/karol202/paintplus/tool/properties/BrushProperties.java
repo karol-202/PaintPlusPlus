@@ -12,7 +12,8 @@ import pl.karol202.paintplus.tool.ToolBrush;
 public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
 	private ToolBrush brush;
-
+	
+	private View view;
 	private SeekBar seekBrushSize;
 	private TextView textBrushSize;
 	private SeekBar seekBrushShapeOffset;
@@ -22,26 +23,31 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
+		view = inflater.inflate(R.layout.properties_brush, container, false);
+		return view;
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
 		brush = (ToolBrush) tool;
-
-		View view = inflater.inflate(R.layout.properties_brush, container, false);
+		
 		seekBrushSize = (SeekBar) view.findViewById(R.id.seekBar_brush_size);
 		seekBrushSize.setProgress((int) (brush.getSize() - 1));
 		seekBrushSize.setOnSeekBarChangeListener(this);
-
+		
 		textBrushSize = (TextView) view.findViewById(R.id.brush_size);
 		textBrushSize.setText(String.valueOf((int) brush.getSize()));
-
+		
 		seekBrushShapeOffset = (SeekBar) view.findViewById(R.id.seek_brush_shape_offset);
 		seekBrushShapeOffset.setProgress((int) brush.getShapeOffset());
 		seekBrushShapeOffset.setOnSeekBarChangeListener(this);
-
+		
 		textBrushShapeOffset = (TextView) view.findViewById(R.id.brush_shape_offset);
 		textBrushShapeOffset.setText(String.valueOf((int) brush.getShapeOffset()));
-
-		return view;
 	}
-
+	
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
