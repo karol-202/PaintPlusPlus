@@ -28,7 +28,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 			
 			String[] parts = name.split("\\.");
 			String extension = parts[parts.length - 1];
-			for(String filter : ImageLoader.FORMATS)
+			for(String filter : ImageLoader.OPEN_FORMATS)
 				if(extension.equalsIgnoreCase(filter)) return true;
 			return false;
 		}

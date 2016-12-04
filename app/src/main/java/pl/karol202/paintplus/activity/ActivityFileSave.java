@@ -57,7 +57,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 	{
 		String[] parts = fileName.split("\\.");
 		String extension = parts[parts.length - 1];
-		for(String filter : ImageLoader.FORMATS)
+		for(String filter : ImageLoader.SAVE_FORMATS)
 			if(extension.equalsIgnoreCase(filter)) return true;
 		return false;
 	}

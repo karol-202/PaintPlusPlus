@@ -69,12 +69,12 @@ public class ToolPan extends Tool
 	
 	private void checkLimits()
 	{
-		int xMin = -image.getViewportWidth();
+		int xMin = (int) (-image.getViewportWidth() / image.getZoom());
 		int xMax = image.getWidth();
 		if(image.getViewX() < xMin) image.setViewX(xMin);
 		else if(image.getViewX() > xMax) image.setViewX(xMax);
 		
-		int yMin = -image.getViewportHeight();
+		int yMin = (int) (-image.getViewportHeight() / image.getZoom());
 		int yMax = image.getHeight();
 		if(image.getViewY() < yMin) image.setViewY(yMin);
 		else if(image.getViewY() > yMax) image.setViewY(yMax);

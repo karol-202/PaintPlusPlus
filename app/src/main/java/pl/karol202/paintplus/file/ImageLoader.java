@@ -1,13 +1,19 @@
 package pl.karol202.paintplus.file;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.util.GLHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class ImageLoader
 {
-	public static final String[] FORMATS = new String[] { "jpg", "jpeg" };
+	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
+	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
 	
 	public static void openImageFromFile(Image image, String path)
 	{
@@ -15,7 +21,7 @@ public class ImageLoader
 		if(photo == null) return;
 		
 		float maxSize = GLHelper.getMaxTextureSize();
-		if(photo.getWidth() < maxSize || photo.getHeight() < maxSize)
+		if(photo.getWidth() > maxSize || photo.getHeight() > maxSize)
 		{
 			float widthRatio = photo.getWidth() / maxSize;
 			float heightRatio = photo.getHeight() / maxSize;
@@ -31,6 +37,33 @@ public class ImageLoader
 	
 	public static void saveImageToFile(Image image, String path)
 	{
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!File saved " + path);
+		try
+		{
+			File file = new File(path);
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			CompressFormat format = getExtension(path);
+			Bitmap bitmap = image.getBitmap();
+			bitmap.compress(format, 100, fos);
+			fos.close();
+		}
+		catch(IOException e)
+		{
+			throw new RuntimeException("Cannot save image to file.", e);
+		}
+	}
+	
+	private static CompressFormat getExtension(String path)
+	{
+		String[] parts = path.split("\\.");
+		String extension = parts[parts.length - 1];
+		switch(extension)
+		{
+		case "jpg":
+		case "jpeg": return CompressFormat.JPEG;
+		case "png": return CompressFormat.PNG;
+		case "webp": return CompressFormat.WEBP;
+		default: throw new RuntimeException("Unsupported format: " + extension);
+		}
 	}
 }
