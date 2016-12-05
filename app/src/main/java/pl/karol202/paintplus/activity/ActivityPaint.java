@@ -29,6 +29,7 @@ import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
+import pl.karol202.paintplus.tool.properties.ToolProperties;
 import pl.karol202.paintplus.util.GLHelper;
 
 import java.util.HashMap;
@@ -346,7 +347,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 
 	private void attachPropertiesFragment() throws InstantiationException, IllegalAccessException
 	{
-		Fragment properties = paintView.getTool().getPropertiesFragmentClass().newInstance();
+		Class<? extends ToolProperties> propertiesClass = paintView.getTool().getPropertiesFragmentClass();
+		Fragment properties = propertiesClass.newInstance();
 		Bundle propArgs = new Bundle();
 		propArgs.putInt("tool", getTools().getToolId(paintView.getTool()));
 		properties.setArguments(propArgs);

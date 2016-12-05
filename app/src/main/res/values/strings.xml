@@ -31,6 +31,7 @@
 	<string name="tool_pan">Widok</string>
 	<string name="tool_marker">Pisak</string>
 	<string name="tool_brush">Pędzel</string>
+	<string name="tool_fill">Wypełnienie</string>
 
 	<string name="choice_of_tool">Wybór narzędzia</string>
 	<string name="size_tool">Wielkość:</string>
@@ -60,4 +61,5 @@
 	<string name="unsupported_file_format">Ten format pliku nie jest obsługiwany.</string>
 	<string name="replace_file_text">Plik o podanej nazwie już istnieje. Czy chcesz go zamienić?</string>
 	<string name="replace">Zamień</string>
+	<string name="fill_threshold">Progowanie</string>
 </resources>

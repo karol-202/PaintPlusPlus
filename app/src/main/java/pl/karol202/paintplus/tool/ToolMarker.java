@@ -1,15 +1,15 @@
 package pl.karol202.paintplus.tool;
 
-import android.app.Fragment;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.properties.MarkerProperties;
+import pl.karol202.paintplus.tool.properties.ToolProperties;
 
 public class ToolMarker extends Tool
 {
@@ -28,7 +28,7 @@ public class ToolMarker extends Tool
 		this.size = 25;
 		
 		this.pathPaint = new Paint();
-		this.pathPaint.setAntiAlias(true);
+		this.pathPaint.setAntiAlias(false);
 		this.pathPaint.setStyle(Paint.Style.STROKE);
 		this.pathPaint.setStrokeCap(Paint.Cap.ROUND);
 		this.pathPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -37,7 +37,7 @@ public class ToolMarker extends Tool
 		this.path.setFillType(Path.FillType.EVEN_ODD);
 		
 		this.ovalPaint = new Paint();
-		this.ovalPaint.setAntiAlias(true);
+		this.ovalPaint.setAntiAlias(false);
 		
 		this.oval = new RectF();
 	}
@@ -55,7 +55,7 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
-	public Class<? extends Fragment> getPropertiesFragmentClass()
+	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return MarkerProperties.class;
 	}

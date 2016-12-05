@@ -1,12 +1,12 @@
 package pl.karol202.paintplus.tool;
 
-import android.app.Fragment;
 import android.graphics.*;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.properties.BrushProperties;
+import pl.karol202.paintplus.tool.properties.ToolProperties;
 
 public class ToolBrush extends Tool
 {
@@ -53,7 +53,7 @@ public class ToolBrush extends Tool
 	}
 	
 	@Override
-	public Class<? extends Fragment> getPropertiesFragmentClass()
+	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return BrushProperties.class;
 	}

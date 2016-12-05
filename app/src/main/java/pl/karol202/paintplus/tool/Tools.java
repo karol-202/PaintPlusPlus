@@ -14,6 +14,7 @@ public class Tools
 		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
+		tools.add(new ToolFill(image));
 	}
 	
 	public Tool getTool(int id)

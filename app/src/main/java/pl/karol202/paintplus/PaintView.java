@@ -3,6 +3,7 @@ package pl.karol202.paintplus;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -18,6 +19,7 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 	private ColorsSet colors;
 	private Tool tool;
 	private Bitmap toolBitmap;
+	private Paint bitmapPaint;
 	private boolean initialized;
 
 	public PaintView(Context context, AttributeSet attrs)
@@ -35,6 +37,9 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 		colors = image.getColorsSet();
 		
 		tool = tools.getTool(1);
+		
+		bitmapPaint = new Paint();
+		bitmapPaint.setFilterBitmap(false);
 	}
 	
 	@Override
@@ -50,7 +55,7 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 			initialized = true;
 		}
 		
-		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), null);
+		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), bitmapPaint);
 		
 		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);

@@ -1,10 +1,10 @@
 package pl.karol202.paintplus.tool;
 
-import android.app.Fragment;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.tool.properties.ToolProperties;
 
 public abstract class Tool
 {
@@ -24,7 +24,7 @@ public abstract class Tool
 	
 	public abstract int getIcon();
 	
-	public abstract Class<? extends Fragment> getPropertiesFragmentClass();
+	public abstract Class<? extends ToolProperties> getPropertiesFragmentClass();
 	
 	public abstract boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event);
 
