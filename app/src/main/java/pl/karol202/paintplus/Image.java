@@ -5,15 +5,15 @@ import pl.karol202.paintplus.color.ColorsSet;
 
 public class Image
 {
-	public interface ImageChangeListener
+	public interface OnImageChangeListener
 	{
-		void imageChanged();
+		void onImageChanged();
 	}
 	
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
-	private ImageChangeListener listener;
+	private OnImageChangeListener listener;
 	private Bitmap bitmap;
 	private Canvas editCanvas;
 	private ColorsSet colorsSet;
@@ -88,7 +88,7 @@ public class Image
 		matrix.postScale(zoom, zoom);
 		
 		imageMatrix.set(matrix);
-		if(listener != null) listener.imageChanged();
+		if(listener != null) listener.onImageChanged();
 	}
 	
 	public void centerView()
@@ -99,7 +99,7 @@ public class Image
 	}
 	
 	
-	public void setImageChangeListener(ImageChangeListener listener)
+	public void setOnImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
 	}

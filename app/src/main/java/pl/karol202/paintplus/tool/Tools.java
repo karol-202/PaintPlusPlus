@@ -1,6 +1,9 @@
 package pl.karol202.paintplus.tool;
 
+import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.tool.fill.ToolFill;
 
 import java.util.ArrayList;
 
@@ -8,13 +11,13 @@ public class Tools
 {
 	private ArrayList<Tool> tools;
 	
-	public Tools(Image image)
+	public Tools(Image image, OnImageChangeListener listener, AsyncBlocker asyncBlocker)
 	{
 		tools = new ArrayList<>();
 		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
-		tools.add(new ToolFill(image));
+		tools.add(new ToolFill(image, listener, asyncBlocker));
 	}
 	
 	public Tool getTool(int id)

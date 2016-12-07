@@ -21,10 +21,8 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import pl.karol202.paintplus.AppDataFragment;
-import pl.karol202.paintplus.Image;
-import pl.karol202.paintplus.PaintView;
-import pl.karol202.paintplus.R;
+import android.widget.ProgressBar;
+import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.AdapterTools;
@@ -124,6 +122,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private float screenWidthDp;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
 	private AppDataFragment dataFragment;
+	private AsyncBlocker asyncBlocker;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
@@ -131,6 +130,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private ListView drawerLeft;
 	private View drawerRight;
 	private ColorsSelect colorsSelect;
+	private ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -152,7 +152,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
 		resultListeners = new HashMap<>();
 		new GLHelper();
-		restoreInstanceState(savedInstanceState);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -175,6 +174,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		initRightDrawer();
 
 		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colorsFragment);
+		
+		progressBar = (ProgressBar) findViewById(R.id.progress);
+		asyncBlocker = new AsyncBlocker(progressBar);
+		
+		restoreInstanceState(savedInstanceState);
 	}
 	
 	private void initSystemUIVisibility()
@@ -212,6 +216,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		if(dataFragment == null)
 		{
 			dataFragment = new AppDataFragment();
+			dataFragment.setOnImageChangeListener(paintView);
+			dataFragment.setAsyncBlocker(asyncBlocker);
 			FragmentTransaction transaction = fragments.beginTransaction();
 			transaction.add(dataFragment, AppDataFragment.TAG);
 			transaction.commit();
@@ -394,5 +400,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	public Tools getTools()
 	{
 		return dataFragment.getTools();
+	}
+	
+	public AsyncBlocker getAsyncBlocker()
+	{
+		return asyncBlocker;
 	}
 }

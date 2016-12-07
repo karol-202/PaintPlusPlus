@@ -24,13 +24,6 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_brush, container, false);
-		return view;
-	}
-	
-	@Override
-	public void onStart()
-	{
-		super.onStart();
 		brush = (ToolBrush) tool;
 		
 		seekBrushSize = (SeekBar) view.findViewById(R.id.seekBar_brush_size);
@@ -46,6 +39,7 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		
 		textBrushShapeOffset = (TextView) view.findViewById(R.id.brush_shape_offset);
 		textBrushShapeOffset.setText(String.valueOf((int) brush.getShapeOffset()));
+		return view;
 	}
 	
 	@Override

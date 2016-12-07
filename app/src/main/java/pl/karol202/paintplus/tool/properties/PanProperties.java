@@ -35,13 +35,6 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_pan, container, false);
-		return view;
-	}
-	
-	@Override
-	public void onStart()
-	{
-		super.onStart();
 		pan = (ToolPan) tool;
 		zoom = pan.getZoom();
 		
@@ -57,6 +50,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		
 		buttonCenter = (Button) view.findViewById(R.id.button_center_view);
 		buttonCenter.setOnClickListener(this);
+		return view;
 	}
 	
 	@Override

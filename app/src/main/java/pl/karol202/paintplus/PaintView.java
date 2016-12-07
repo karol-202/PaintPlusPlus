@@ -12,7 +12,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
-public class PaintView extends SurfaceView implements Image.ImageChangeListener
+public class PaintView extends SurfaceView implements Image.OnImageChangeListener
 {
 	private Image image;
 	private Tools tools;
@@ -30,7 +30,7 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 	public void init(ActivityPaint activity)
 	{
 		image = activity.getImage();
-		image.setImageChangeListener(this);
+		image.setOnImageChangeListener(this);
 		
 		tools = activity.getTools();
 		
@@ -70,13 +70,13 @@ public class PaintView extends SurfaceView implements Image.ImageChangeListener
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
 		event.setLocation(x, y);
 		
-		boolean result = tool.onTouch(image.getEditCanvas(), colors, event);
+		boolean result = tool.onTouch(event);
 		invalidate();
 		return result;
 	}
 	
 	@Override
-	public void imageChanged()
+	public void onImageChanged()
 	{
 		invalidate();
 	}

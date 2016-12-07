@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.properties.PanProperties;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 
@@ -39,17 +38,17 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
+	public boolean onTouch(MotionEvent event)
 	{
 		float x = event.getX() - image.getViewX();
 		float y = event.getY() - image.getViewY();
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(edit, x, y);
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(edit, x, y);
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, x, y);
+		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(x, y);
+		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(x, y);
+		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(x, y);
 		return true;
 	}
 	
-	private void onTouchStart(Canvas canvas, float x, float y)
+	private void onTouchStart(float x, float y)
 	{
 		oldImageX = image.getViewX();
 		oldImageY = image.getViewY();
@@ -57,7 +56,7 @@ public class ToolPan extends Tool
 		oldTouchY = y;
 	}
 	
-	private void onTouchMove(Canvas canvas, float x, float y)
+	private void onTouchMove(float x, float y)
 	{
 		int deltaTouchX = Math.round(x - oldTouchX);
 		int deltaTouchY = Math.round(y - oldTouchY);
@@ -80,7 +79,7 @@ public class ToolPan extends Tool
 		else if(image.getViewY() > yMax) image.setViewY(yMax);
 	}
 	
-	private void onTouchStop(Canvas canvas, float x, float y) { }
+	private void onTouchStop(float x, float y) { }
 	
 	@Override
 	public void onScreenDraw(Canvas canvas) { }

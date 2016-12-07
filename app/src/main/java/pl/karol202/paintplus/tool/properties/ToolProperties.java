@@ -17,16 +17,6 @@ public abstract class ToolProperties extends Fragment
 	protected Tool tool;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		Bundle bundle = getArguments();
-		if(bundle == null) throw new RuntimeException("No arguments found.");
-		toolId = bundle.getInt("tool");
-		if(toolId == -1) throw new RuntimeException("-1 is not valid key id.");
-		return null;
-	}
-	
-	@Override
 	public void onAttach(Context context)
 	{
 		super.onAttach(context);
@@ -37,9 +27,13 @@ public abstract class ToolProperties extends Fragment
 	}
 	
 	@Override
-	public void onStart()
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		super.onStart();
+		Bundle bundle = getArguments();
+		if(bundle == null) throw new RuntimeException("No arguments found.");
+		this.toolId = bundle.getInt("tool");
+		if(toolId == -1) throw new RuntimeException("-1 is not valid key id.");
 		this.tool = tools.getTool(toolId);
+		return null;
 	}
 }

@@ -14,7 +14,10 @@ import pl.karol202.paintplus.tool.properties.ToolProperties;
 public class ToolMarker extends Tool
 {
 	private float size;
+	private boolean smooth;
 	
+	private Canvas canvas;
+	private ColorsSet colors;
 	private Paint pathPaint;
 	private Path path;
 	private Paint ovalPaint;
@@ -26,9 +29,9 @@ public class ToolMarker extends Tool
 	{
 		super(image);
 		this.size = 25;
+		this.smooth = false;
 		
 		this.pathPaint = new Paint();
-		this.pathPaint.setAntiAlias(false);
 		this.pathPaint.setStyle(Paint.Style.STROKE);
 		this.pathPaint.setStrokeCap(Paint.Cap.ROUND);
 		this.pathPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -37,7 +40,6 @@ public class ToolMarker extends Tool
 		this.path.setFillType(Path.FillType.EVEN_ODD);
 		
 		this.ovalPaint = new Paint();
-		this.ovalPaint.setAntiAlias(false);
 		
 		this.oval = new RectF();
 	}
@@ -61,20 +63,24 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(Canvas edit, ColorsSet colors, MotionEvent event)
+	public boolean onTouch(MotionEvent event)
 	{
-		pathPaint.setColor(colors.getFirstColor());
-		pathPaint.setStrokeWidth(size);
-		ovalPaint.setColor(colors.getFirstColor());
-
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(edit, event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(edit, event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(edit, event.getX(), event.getY());
+		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(event.getX(), event.getY());
+		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
+		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
 		return true;
 	}
 	
-	private void onTouchStart(Canvas canvas, float x, float y)
+	private void onTouchStart(float x, float y)
 	{
+		canvas = image.getEditCanvas();
+		colors = image.getColorsSet();
+		ovalPaint.setColor(colors.getFirstColor());
+		ovalPaint.setAntiAlias(smooth);
+		pathPaint.setColor(colors.getFirstColor());
+		pathPaint.setStrokeWidth(size);
+		pathPaint.setAntiAlias(smooth);
+		
 		path.reset();
 		path.moveTo(x, y);
 		
@@ -87,7 +93,7 @@ public class ToolMarker extends Tool
 		lastY = y;
 	}
 	
-	private void onTouchMove(Canvas canvas, float x, float y)
+	private void onTouchMove(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
 		
@@ -95,7 +101,7 @@ public class ToolMarker extends Tool
 		lastY = y;
 	}
 	
-	private void onTouchStop(Canvas canvas, float x, float y)
+	private void onTouchStop(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
@@ -116,10 +122,8 @@ public class ToolMarker extends Tool
 		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
 		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
 		
-		//Path pathWithOffset = new Path();
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX(), -image.getViewY());
-		//path.offset(-image.getViewX(), -image.getViewY(), pathWithOffset);
 		canvas.drawPath(path, pathPaint);
 	}
 	
@@ -131,5 +135,15 @@ public class ToolMarker extends Tool
 	public void setSize(float size)
 	{
 		this.size = size;
+	}
+	
+	public boolean isSmooth()
+	{
+		return smooth;
+	}
+	
+	public void setSmooth(boolean smooth)
+	{
+		this.smooth = smooth;
 	}
 }

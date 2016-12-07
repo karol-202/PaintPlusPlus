@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.ToolFill;
+import pl.karol202.paintplus.tool.fill.ToolFill;
 
 public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
@@ -22,13 +22,6 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_fill, container, false);
-		return view;
-	}
-	
-	@Override
-	public void onStart()
-	{
-		super.onStart();
 		fill = (ToolFill) tool;
 		
 		seekBarThreshold = (SeekBar) view.findViewById(R.id.seekBar_fill_threshold);
@@ -37,6 +30,7 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		
 		textThreshold = (TextView) view.findViewById(R.id.fill_threshold);
 		textThreshold.setText(String.valueOf((int) fill.getFillThreshold()) + "%");
+		return view;
 	}
 	
 	@Override
