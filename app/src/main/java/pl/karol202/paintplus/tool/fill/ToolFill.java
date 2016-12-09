@@ -2,8 +2,10 @@ package pl.karol202.paintplus.tool.fill;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.AsyncBlocker;
+import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
@@ -13,20 +15,21 @@ import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 import pl.karol202.paintplus.tool.properties.FillProperties;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 
-public class ToolFill extends Tool implements OnFillCompleteListener
+public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlocker
 {
 	private float fillThreshold;
 	
 	private ColorsSet colors;
 	private OnImageChangeListener listener;
-	private AsyncBlocker asyncBlocker;
+	private AsyncManager asyncManager;
+	private AsyncTask asyncTask;
 	
-	public ToolFill(Image image, OnImageChangeListener listener, AsyncBlocker asyncBlocker)
+	public ToolFill(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
 	{
 		super(image);
 		
 		this.listener = listener;
-		this.asyncBlocker = asyncBlocker;
+		this.asyncManager = asyncManager;
 	}
 	
 	@Override
@@ -58,9 +61,9 @@ public class ToolFill extends Tool implements OnFillCompleteListener
 		{
 			colors = image.getColorsSet();
 			
-			if(!asyncBlocker.block(this)) return false;
-			FillParams params = new FillParams(this, image, (int) event.getX(), (int) event.getY());
-			new ToolFillAsyncTask().execute(params);
+			if(!asyncManager.block(this)) return false;
+			FillParams params = new FillParams(this, image, fillThreshold, (int) event.getX(), (int) event.getY());
+			asyncTask = new ToolFillAsyncTask().execute(params);
 		}
 		return false;
 	}
@@ -73,7 +76,14 @@ public class ToolFill extends Tool implements OnFillCompleteListener
 	{
 		image.getEditCanvas().drawBitmap(bitmap, 0, 0, null);
 		listener.onImageChanged();
-		if(!asyncBlocker.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
+		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
+	}
+	
+	@Override
+	public void cancel()
+	{
+		asyncTask.cancel(true);
+		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
 	
 	public float getFillThreshold()

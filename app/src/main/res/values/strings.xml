@@ -61,6 +61,9 @@
 	<string name="unsupported_file_format">Ten format pliku nie jest obsługiwany.</string>
 	<string name="replace_file_text">Plik o podanej nazwie już istnieje. Czy chcesz go zamienić?</string>
 	<string name="replace">Zamień</string>
-	<string name="fill_threshold">Progowanie(niedostępne)</string>
+	<string name="fill_threshold">Progowanie</string>
 	<string name="marker_smooth">Wygładź</string>
+	<string name="fill_warning">Uwaga! Wypełnianie dużych obszarów może chwilę potrwać.</string>
+	<string name="fill_dialog_title">Proszę czekać</string>
+	<string name="fill_dialog_message">Trwa wypełnianie...</string>
 </resources>

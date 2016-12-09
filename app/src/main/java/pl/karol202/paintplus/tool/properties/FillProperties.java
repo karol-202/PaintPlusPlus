@@ -16,6 +16,7 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 	private View view;
 	private SeekBar seekBarThreshold;
 	private TextView textThreshold;
+	private TextView textWarning;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -30,6 +31,8 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		
 		textThreshold = (TextView) view.findViewById(R.id.fill_threshold);
 		textThreshold.setText(String.valueOf((int) fill.getFillThreshold()) + "%");
+		
+		textWarning = (TextView) view.findViewById(R.id.text_fill_warning);
 		return view;
 	}
 	

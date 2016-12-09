@@ -12,7 +12,7 @@ public class AppDataFragment extends Fragment
 	private Image image;
 	private Tools tools;
 	private OnImageChangeListener listener;
-	private AsyncBlocker asyncBlocker;
+	private AsyncManager asyncManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -23,7 +23,7 @@ public class AppDataFragment extends Fragment
 		image = new Image();
 		image.createBitmap(600, 600);
 		
-		tools = new Tools(image, listener, asyncBlocker);
+		tools = new Tools(image, listener, asyncManager);
 	}
 	
 	public Image getImage()
@@ -41,8 +41,8 @@ public class AppDataFragment extends Fragment
 		this.listener = listener;
 	}
 	
-	public void setAsyncBlocker(AsyncBlocker asyncBlocker)
+	public void setAsyncManager(AsyncManager asyncManager)
 	{
-		this.asyncBlocker = asyncBlocker;
+		this.asyncManager = asyncManager;
 	}
 }
