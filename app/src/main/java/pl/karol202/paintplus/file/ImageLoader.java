@@ -35,7 +35,7 @@ public class ImageLoader
 		image.centerView();
 	}
 	
-	public static void saveImageToFile(Image image, String path)
+	public static void saveImageToFile(Image image, String path, int quality)
 	{
 		try
 		{
@@ -44,7 +44,7 @@ public class ImageLoader
 			FileOutputStream fos = new FileOutputStream(file);
 			CompressFormat format = getExtension(path);
 			Bitmap bitmap = image.getBitmap();
-			bitmap.compress(format, 100, fos);
+			bitmap.compress(format, quality, fos);
 			fos.close();
 		}
 		catch(IOException e)

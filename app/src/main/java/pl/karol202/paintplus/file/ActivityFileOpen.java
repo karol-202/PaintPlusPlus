@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.activity;
+package pl.karol202.paintplus.file;
 
 import android.content.Intent;
 import pl.karol202.paintplus.R;

@@ -4,6 +4,7 @@
 	<string name="activity_paint">Edycja</string>
 	<string name="activity_file_open">Otwórz plik</string>
 	<string name="activity_file_save">Zapisz plik</string>
+	<string name="activity_settings">Ustawienia</string>
 	
 	<string name="action_drawer_open">Panel narzędzi otwarty</string>
 	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
@@ -15,6 +16,11 @@
 	<string name="dialog_flip_image">Odbij</string>
 	<string name="dialog_rotate_image">Obróć</string>
 	<string name="dialog_replace_file">Czy chcesz zamienić?</string>
+	<string name="dialog_fill">Proszę czekać</string>
+	<string name="dialog_fill_message">Trwa wypełnianie...</string>
+	
+	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
+	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
 	
 	<string name="action_tool">Narzędzie</string>
 	<string name="action_file">Plik</string>
@@ -64,6 +70,6 @@
 	<string name="fill_threshold">Progowanie</string>
 	<string name="marker_smooth">Wygładź</string>
 	<string name="fill_warning">Uwaga! Wypełnianie dużych obszarów może chwilę potrwać.</string>
-	<string name="fill_dialog_title">Proszę czekać</string>
-	<string name="fill_dialog_message">Trwa wypełnianie...</string>
+	
+	<string name="action_settings">Ustawienia</string>
 </resources>

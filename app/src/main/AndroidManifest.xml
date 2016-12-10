@@ -26,11 +26,14 @@
             android:name=".activity.ActivityPaint"
             android:label="" />
 		<activity
-			android:name=".activity.ActivityFileOpen"
+			android:name=".file.ActivityFileOpen"
 			android:label="@string/activity_file_open" />
 	    <activity
-		    android:name=".activity.ActivityFileSave"
+		    android:name=".file.ActivityFileSave"
 		    android:label="@string/activity_file_save" />
+	    <activity
+		    android:name=".settings.ActivitySettings"
+		    android:label="@string/activity_settings"/>
 	    
 	    <provider
 		    android:name="android.support.v4.content.FileProvider"

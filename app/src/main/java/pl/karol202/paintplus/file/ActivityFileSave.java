@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.activity;
+package pl.karol202.paintplus.file;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.file.ImageLoader;
 
 import java.io.File;
 

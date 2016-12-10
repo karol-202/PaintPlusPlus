@@ -66,5 +66,11 @@
 					app:showAsAction="never"/>
 			</menu>
 		</item>
+		<item
+			android:id="@+id/action_settings"
+			android:icon="@drawable/ic_settings_white_24dp"
+			android:title="@string/action_settings"
+			android:orderInCategory="4"
+			app:showAsAction="never" />
 	</group>
 </menu>

@@ -26,7 +26,7 @@
 		android:layout_marginEnd="32dp"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/text_marker_size"
-		android:layout_marginTop="2dp" />
+		app:layout_constraintHorizontal_bias="0.03" />
 	
 	<TextView
 		android:layout_width="wrap_content"

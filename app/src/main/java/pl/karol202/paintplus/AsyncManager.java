@@ -66,8 +66,8 @@ public class AsyncManager implements DialogInterface.OnCancelListener
 	
 	private void showProgressDialog()
 	{
-		String title = context.getString(R.string.fill_dialog_title);
-		String message = context.getString(R.string.fill_dialog_message);
+		String title = context.getString(R.string.dialog_fill);
+		String message = context.getString(R.string.dialog_fill_message);
 		dialog = ProgressDialog.show(context, title, message, true, true, this);
 	}
 	

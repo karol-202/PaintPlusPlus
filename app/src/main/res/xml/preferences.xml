@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<pl.karol202.paintplus.settings.SeekBarPreference
+		android:key="preference_jpg_quality"
+		android:title="@string/preference_jpg_quality"
+		android:dialogTitle="@string/preference_jpg_quality_dialog"
+		android:defaultValue="95"/>
+</PreferenceScreen>

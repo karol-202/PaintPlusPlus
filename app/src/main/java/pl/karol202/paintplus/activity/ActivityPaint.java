@@ -24,6 +24,7 @@ import android.widget.ListView;
 import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
+import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.AdapterTools;
 import pl.karol202.paintplus.tool.Tools;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
@@ -237,14 +238,55 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		super.onWindowFocusChanged(hasFocus);
 		if(hasFocus) initSystemUIVisibility();
 	}
-
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		super.onConfigurationChanged(newConfig);
+		setContentView(R.layout.activity_main);
+		drawerListener.onConfigurationChanged(newConfig);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.menu_paint, menu);
 		return true;
 	}
-
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+	{
+		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
+		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
+		
+		preparePhotoCaptureOption(menu);
+		prepareFileOpenOption(menu);
+		prepareFileSaveOption(menu);
+		
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	private void preparePhotoCaptureOption(Menu menu)
+	{
+		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
+	}
+	
+	private void prepareFileOpenOption(Menu menu)
+	{
+		String state = Environment.getExternalStorageState();
+		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+		menu.findItem(R.id.action_open_image).setEnabled(enable);
+	}
+	
+	private void prepareFileSaveOption(Menu menu)
+	{
+		String state = Environment.getExternalStorageState();
+		boolean enable = state.equals(Environment.MEDIA_MOUNTED);
+		menu.findItem(R.id.action_save_image).setEnabled(enable);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -281,49 +323,17 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			return true;
 		case R.id.action_rotate_image:
 			new OptionImageRotate(this, paintView.getImage()).execute();
+			
+		case R.id.action_settings:
+			showSettingsActivity();
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu)
+	private void showSettingsActivity()
 	{
-		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
-		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
-		
-		preparePhotoCaptureOption(menu);
-		prepareFileOpenOption(menu);
-		prepareFileSaveOption(menu);
-		
-		return super.onPrepareOptionsMenu(menu);
-	}
-	
-	private void preparePhotoCaptureOption(Menu menu)
-	{
-		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
-	}
-	
-	private void prepareFileOpenOption(Menu menu)
-	{
-		String state = Environment.getExternalStorageState();
-		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
-		menu.findItem(R.id.action_open_image).setEnabled(enable);
-	}
-	
-	private void prepareFileSaveOption(Menu menu)
-	{
-		String state = Environment.getExternalStorageState();
-		boolean enable = state.equals(Environment.MEDIA_MOUNTED);
-		menu.findItem(R.id.action_save_image).setEnabled(enable);
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-		setContentView(R.layout.activity_main);
-		drawerListener.onConfigurationChanged(newConfig);
+		Intent intent = new Intent(this, ActivitySettings.class);
+		startActivity(intent);
 	}
 	
 	@Override
