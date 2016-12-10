@@ -39,6 +39,14 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 	}
 	
 	@Override
+	public boolean onFileSelected(File file)
+	{
+		if(!super.onFileSelected(file)) return false;
+		editFileName.setText(file.getName());
+		return true;
+	}
+	
+	@Override
 	public void onClick(View v)
 	{
 		String fileName = editFileName.getText().toString();
