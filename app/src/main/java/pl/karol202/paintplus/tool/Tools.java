@@ -4,6 +4,7 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.fill.ToolFill;
+import pl.karol202.paintplus.tool.shape.ToolShape;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class Tools
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
 		tools.add(new ToolFill(image, listener, asyncManager));
+		tools.add(new ToolShape(image));
 	}
 	
 	public Tool getTool(int id)

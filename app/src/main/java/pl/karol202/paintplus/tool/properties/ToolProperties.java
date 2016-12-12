@@ -32,7 +32,7 @@ public abstract class ToolProperties extends Fragment
 		Bundle bundle = getArguments();
 		if(bundle == null) throw new RuntimeException("No arguments found.");
 		this.toolId = bundle.getInt("tool");
-		if(toolId == -1) throw new RuntimeException("-1 is not valid key id.");
+		if(toolId == -1) throw new RuntimeException("-1 is not valid tool id.");
 		this.tool = tools.getTool(toolId);
 		return null;
 	}

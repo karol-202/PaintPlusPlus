@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-public class AdapterTools extends ArrayAdapter<Tool>
+public class ToolsAdapter extends ArrayAdapter<Tool>
 {
 	private Context context;
 
-	public AdapterTools(Context context, Tools tools)
+	public ToolsAdapter(Context context, Tools tools)
 	{
 		super(context, R.layout.item_tool, tools.getTools());
 		this.context = context;

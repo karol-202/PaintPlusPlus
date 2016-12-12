@@ -25,7 +25,7 @@ import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
-import pl.karol202.paintplus.tool.AdapterTools;
+import pl.karol202.paintplus.tool.ToolsAdapter;
 import pl.karol202.paintplus.tool.Tools;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 import pl.karol202.paintplus.util.GLHelper;
@@ -228,7 +228,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		drawerListener.syncState();
 		
 		paintView.init(this);
-		drawerLeft.setAdapter(new AdapterTools(this, getTools()));
+		drawerLeft.setAdapter(new ToolsAdapter(this, getTools()));
 		colorsSelect.setColors(paintView.getColors());
 	}
 

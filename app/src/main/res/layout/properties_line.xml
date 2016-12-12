@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	android:background="@color/shape_properties">
+	
+	<TextView
+		android:text="@string/line_width"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/text_line_width"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent" />
+	
+	<SeekBar
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:id="@+id/seekBar_line_width"
+		app:layout_constraintLeft_toRightOf="@+id/text_line_width"
+		android:layout_marginEnd="32dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toTopOf="parent"
+		android:max="99" />
+	
+	<TextView
+		android:text="100"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/line_width"
+		app:layout_constraintLeft_toRightOf="@+id/seekBar_line_width"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toTopOf="parent" />
+	
+	<TextView
+		android:text="@string/line_cap"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/text_line_cap"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:layout_marginTop="12dp"
+		app:layout_constraintTop_toBottomOf="@+id/seekBar_line_width" />
+	
+	<Spinner
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:id="@+id/spinner_line_cap"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toBottomOf="@+id/text_line_cap"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

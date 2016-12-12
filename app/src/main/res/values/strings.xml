@@ -33,14 +33,23 @@
 	<string name="action_scale">Skaluj obraz</string>
 	<string name="action_flip">Odbij</string>
 	<string name="action_rotate">Obróć</string>
+	<string name="action_settings">Ustawienia</string>
 
 	<string name="tool_pan">Widok</string>
 	<string name="tool_marker">Pisak</string>
 	<string name="tool_brush">Pędzel</string>
 	<string name="tool_fill">Wypełnienie</string>
-
+	<string name="tool_shape">Figury geometryczne</string>
+	
+	<string name="shape_line">Linia</string>
+	<string name="shape_circle">Okrąg</string>
+	
+	<string name="line_cap_round">Zaokrąglone</string>
+	<string name="line_cap_square">Kwadratowe</string>
+	<string name="line_cap_butt">Ucięte</string>
+	
 	<string name="choice_of_tool">Wybór narzędzia</string>
-	<string name="size_tool">Wielkość:</string>
+	<string name="size_tool">Wielkość</string>
 	<string name="color_r">R</string>
 	<string name="color_g">G</string>
 	<string name="color_b">B</string>
@@ -51,7 +60,7 @@
 	<string name="keep_ratio">Zachowaj współczynnik proporcji</string>
 	<string name="image_width">Szerokość</string>
 	<string name="image_height">Wysokość</string>
-	<string name="brush_shape_offset">Odstęp:</string>
+	<string name="brush_shape_offset">Odstęp</string>
 	<string name="message_too_big">Podane wymiary są za duże, aby utworzyć obraz.</string>
 	<string name="scaling_smooth">Wygładź</string>
 	<string name="direction">Kierunek</string>
@@ -70,6 +79,7 @@
 	<string name="fill_threshold">Progowanie</string>
 	<string name="marker_smooth">Wygładź</string>
 	<string name="fill_warning">Uwaga! Wypełnianie dużych obszarów może chwilę potrwać.</string>
-	
-	<string name="action_settings">Ustawienia</string>
+	<string name="shape">Kształt</string>
+	<string name="line_width">Grubość</string>
+	<string name="line_cap">Zakończenie</string>
 </resources>
