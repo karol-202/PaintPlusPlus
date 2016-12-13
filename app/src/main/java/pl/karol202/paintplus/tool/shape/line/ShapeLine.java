@@ -1,9 +1,9 @@
-package pl.karol202.paintplus.tool.shape;
+package pl.karol202.paintplus.tool.shape.line;
 
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.shape.Shape;
+import pl.karol202.paintplus.tool.shape.properties.LineProperties;
 import pl.karol202.paintplus.tool.shape.properties.ShapeProperties;
-import pl.karol202.paintplus.tool.shape.properties.line.Cap;
-import pl.karol202.paintplus.tool.shape.properties.line.LineProperties;
 
 public class ShapeLine implements Shape
 {

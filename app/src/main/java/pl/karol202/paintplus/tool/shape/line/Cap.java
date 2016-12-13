@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.shape.properties.line;
+package pl.karol202.paintplus.tool.shape.line;
 
 import pl.karol202.paintplus.R;
 

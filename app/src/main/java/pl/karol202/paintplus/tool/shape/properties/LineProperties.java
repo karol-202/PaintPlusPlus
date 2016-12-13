@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.shape.properties.line;
+package pl.karol202.paintplus.tool.shape.properties;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,8 +9,9 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.shape.ShapeLine;
-import pl.karol202.paintplus.tool.shape.properties.ShapeProperties;
+import pl.karol202.paintplus.tool.shape.line.Cap;
+import pl.karol202.paintplus.tool.shape.line.CapAdapter;
+import pl.karol202.paintplus.tool.shape.line.ShapeLine;
 
 public class LineProperties extends ShapeProperties implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener
 {

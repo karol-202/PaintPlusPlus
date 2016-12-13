@@ -1,5 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
+import pl.karol202.paintplus.tool.shape.line.ShapeLine;
+
 import java.util.ArrayList;
 
 public class Shapes

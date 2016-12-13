@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.shape.properties.line;
+package pl.karol202.paintplus.tool.shape.line;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import pl.karol202.paintplus.R;
 
 public class CapAdapter extends ArrayAdapter<Cap>
 {
-	protected CapAdapter(Context context)
+	public CapAdapter(Context context)
 	{
 		super(context, R.layout.spinner_item_cap, Cap.values());
 	}
