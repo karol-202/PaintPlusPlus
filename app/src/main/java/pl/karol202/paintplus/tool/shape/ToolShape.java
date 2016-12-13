@@ -3,23 +3,25 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.properties.ShapeToolProperties;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 
-public class ToolShape extends Tool
+public class ToolShape extends Tool implements OnShapeEditListener
 {
 	private Shape shape;
 	
 	private Shapes shapes;
+	private OnShapeEditListener listener;
 	
-	public ToolShape(Image image)
+	public ToolShape(Image image, OnImageChangeListener listener)
 	{
 		super(image);
-		shapes = new Shapes();
+		shapes = new Shapes(listener, this);
 		
-		shape = shapes.getShape(0);
+		setShape(shapes.getShape(0));
 	}
 	
 	@Override
@@ -43,13 +45,37 @@ public class ToolShape extends Tool
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
-		return false;
+		return shape.onTouch(event);
 	}
 	
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
+		int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
+		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
+		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
+		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
+		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
 		
+		canvas.scale(image.getZoom(), image.getZoom());
+		canvas.translate(-image.getViewX(), -image.getViewY());
+		shape.onScreenDraw(canvas);
+	}
+	
+	@Override
+	public void onStartShapeEditing()
+	{
+		listener.onStartShapeEditing();
+	}
+	
+	public void apply()
+	{
+		shape.apply(image.getEditCanvas());
+	}
+	
+	public void cancel()
+	{
+		shape.cancel();
 	}
 	
 	public Shapes getShapesClass()
@@ -65,5 +91,15 @@ public class ToolShape extends Tool
 	public void setShape(Shape shape)
 	{
 		this.shape = shape;
+	}
+	
+	public boolean isInEditMode()
+	{
+		return shape.isInEditMode();
+	}
+	
+	public void setShapeEditListener(OnShapeEditListener listener)
+	{
+		this.listener = listener;
 	}
 }

@@ -19,7 +19,7 @@ public class Tools
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
 		tools.add(new ToolFill(image, listener, asyncManager));
-		tools.add(new ToolShape(image));
+		tools.add(new ToolShape(image, listener));
 	}
 	
 	public Tool getTool(int id)

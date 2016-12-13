@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
@@ -25,8 +24,8 @@ import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
-import pl.karol202.paintplus.tool.ToolsAdapter;
 import pl.karol202.paintplus.tool.Tools;
+import pl.karol202.paintplus.tool.ToolsAdapter;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 import pl.karol202.paintplus.util.GLHelper;
 
@@ -58,7 +57,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		public void onDrawerClosed(View drawerView)
 		{
 			if(drawerView == drawerLeft) onLeftDrawerClosed(drawerView);
-			else if(drawerView == drawerRight) onRightDrawerClosed();
 			if(!(layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight)))
 				onAllDrawersClosed();
 			invalidateOptionsMenu();
@@ -68,7 +66,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		public void onDrawerSlide(View drawerView, float slideOffset)
 		{
 			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
-			else if(drawerView == drawerRight) onRightDrawerMoved(drawerView, slideOffset);
 		}
 		
 		private void onLeftDrawerOpened(View drawerView)
@@ -90,11 +87,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			super.onDrawerClosed(drawerView);
 		}
 		
-		private void onRightDrawerClosed()
-		{
-			removePropertiesFragment();
-		}
-		
 		private void onAllDrawersClosed()
 		{
 			actionBar.setTitle(R.string.activity_paint);
@@ -104,12 +96,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		{
 			super.onDrawerSlide(drawerView, slideOffset);
 			layoutDrawer.closeDrawer(drawerRight);
-		}
-		
-		private void onRightDrawerMoved(View drawerView, float slideOffset)
-		{
-			super.onDrawerSlide(drawerView, slideOffset);
-			if(!propertiesAttached) createPropertiesFragment();
 		}
 	}
 	
@@ -230,6 +216,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		paintView.init(this);
 		drawerLeft.setAdapter(new ToolsAdapter(this, getTools()));
 		colorsSelect.setColors(paintView.getColors());
+		tryToAttachPropertiesFragment();
 	}
 
 	@Override
@@ -237,14 +224,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		super.onWindowFocusChanged(hasFocus);
 		if(hasFocus) initSystemUIVisibility();
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-		setContentView(R.layout.activity_main);
-		drawerListener.onConfigurationChanged(newConfig);
 	}
 	
 	@Override
@@ -323,6 +302,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			return true;
 		case R.id.action_rotate_image:
 			new OptionImageRotate(this, paintView.getImage()).execute();
+			return true;
 			
 		case R.id.action_settings:
 			showSettingsActivity();
@@ -340,10 +320,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		paintView.setTool(getTools().getTool(position));
+		tryToAttachPropertiesFragment();
 		layoutDrawer.closeDrawer(drawerLeft);
 	}
 	
-	private void createPropertiesFragment()
+	private void tryToAttachPropertiesFragment()
 	{
 		try
 		{
@@ -365,18 +346,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		propArgs.putInt("tool", getTools().getToolId(paintView.getTool()));
 		properties.setArguments(propArgs);
 		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.add(R.id.propertiesFragment, properties);
+		propTrans.replace(R.id.propertiesFragment, properties);
 		propTrans.commit();
 		propertiesAttached = true;
-	}
-	
-	private void removePropertiesFragment()
-	{
-		Fragment fragment = fragments.findFragmentById(R.id.propertiesFragment);
-		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.remove(fragment);
-		propTrans.commit();
-		propertiesAttached = false;
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)
