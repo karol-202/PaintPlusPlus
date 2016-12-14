@@ -104,7 +104,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private ActionBarDrawerToggle drawerListener;
 	private ActionBar actionBar;
 	private DisplayMetrics displayMetrics;
-	private boolean propertiesAttached;
 	private float screenWidthDp;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
 	private AppDataFragment dataFragment;
@@ -159,7 +158,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		drawerRight = findViewById(R.id.drawer_right);
 		initRightDrawer();
 
-		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colorsFragment);
+		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colors_fragment);
 		
 		restoreInstanceState(savedInstanceState);
 	}
@@ -215,8 +214,8 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		
 		paintView.init(this);
 		drawerLeft.setAdapter(new ToolsAdapter(this, getTools()));
-		colorsSelect.setColors(paintView.getColors());
 		tryToAttachPropertiesFragment();
+		tryToAttachColorsFragment();
 	}
 
 	@Override
@@ -348,7 +347,28 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		FragmentTransaction propTrans = fragments.beginTransaction();
 		propTrans.replace(R.id.propertiesFragment, properties);
 		propTrans.commit();
-		propertiesAttached = true;
+	}
+	
+	private void tryToAttachColorsFragment()
+	{
+		try
+		{
+			attachColorsFragment();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
+									   "Probably the fragment class does not contain " +
+									   "default constructor.", e);
+		}
+	}
+	
+	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
+	{
+		ColorsSelect colorsSelect = new ColorsSelect();
+		FragmentTransaction propTrans = fragments.beginTransaction();
+		propTrans.replace(R.id.colors_fragment, colorsSelect);
+		propTrans.commit();
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)

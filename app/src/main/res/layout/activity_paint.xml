@@ -60,13 +60,12 @@
 				android:layout_alignParentTop="true"
 				android:layout_alignParentEnd="true"
 				android:layout_alignParentStart="true"
-				android:layout_above="@+id/colorsFragment" />
+				android:layout_above="@+id/colors_fragment" />
 			
-			<fragment
-				android:id="@+id/colorsFragment"
+			<FrameLayout
+				android:id="@+id/colors_fragment"
 				android:layout_width="match_parent"
 				android:layout_height="100dp"
-				android:name="pl.karol202.paintplus.color.ColorsSelect"
 				android:layout_alignParentBottom="true"
 				android:layout_alignParentStart="true"
 				android:layout_alignParentEnd="true" />

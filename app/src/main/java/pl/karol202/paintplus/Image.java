@@ -91,6 +91,11 @@ public class Image
 		if(listener != null) listener.onImageChanged();
 	}
 	
+	public void updateColors()
+	{
+		if(listener != null) listener.onImageChanged();
+	}
+	
 	public void centerView()
 	{
 		viewX = (int) (((width * zoom / 2) - (viewportWidth / 2)) / zoom);

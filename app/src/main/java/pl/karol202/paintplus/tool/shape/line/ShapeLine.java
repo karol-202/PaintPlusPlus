@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.properties.LineProperties;
@@ -138,16 +139,18 @@ public class ShapeLine implements Shape
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public void onScreenDraw(Canvas canvas, ColorsSet colors)
 	{
 		if(start == null || end == null) return;
+		paint.setColor(colors.getFirstColor());
 		canvas.drawLine(start.x, start.y, end.x, end.y, paint);
 	}
 	
 	@Override
-	public void apply(Canvas imageCanvas)
+	public void apply(Canvas imageCanvas, ColorsSet colors)
 	{
 		if(start == null || end == null) return;
+		paint.setColor(colors.getFirstColor());
 		imageCanvas.drawLine(start.x, start.y, end.x, end.y, paint);
 		cleanUp();
 	}
