@@ -24,6 +24,8 @@ import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
+import pl.karol202.paintplus.tool.OnToolChangeListener;
+import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 import pl.karol202.paintplus.tool.ToolsAdapter;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
@@ -318,9 +320,15 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		paintView.setTool(getTools().getTool(position));
+		Tool previousTool = paintView.getTool();
+		Tool newTool = getTools().getTool(position);
+		
+		paintView.setTool(newTool);
 		tryToAttachPropertiesFragment();
 		layoutDrawer.closeDrawer(drawerLeft);
+		
+		if(previousTool instanceof OnToolChangeListener) ((OnToolChangeListener) previousTool).onOtherToolSelected();
+		if(newTool instanceof OnToolChangeListener) ((OnToolChangeListener) newTool).onToolSelected();
 	}
 	
 	private void tryToAttachPropertiesFragment()

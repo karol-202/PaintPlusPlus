@@ -9,7 +9,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.*;
-import pl.karol202.paintplus.tool.shape.properties.ShapeProperties;
+import pl.karol202.paintplus.tool.shape.ShapeProperties;
 
 public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener
 {

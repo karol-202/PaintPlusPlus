@@ -6,11 +6,12 @@ import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.properties.ShapeToolProperties;
 import pl.karol202.paintplus.tool.properties.ToolProperties;
 
-public class ToolShape extends Tool implements OnShapeEditListener
+public class ToolShape extends Tool implements OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
@@ -79,6 +80,15 @@ public class ToolShape extends Tool implements OnShapeEditListener
 	public void cancel()
 	{
 		shape.cancel();
+	}
+	
+	@Override
+	public void onToolSelected() { }
+	
+	@Override
+	public void onOtherToolSelected()
+	{
+		cancel();
 	}
 	
 	public Shapes getShapesClass()

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.shape.properties;
+package pl.karol202.paintplus.tool.shape;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import pl.karol202.paintplus.tool.properties.ShapeToolProperties;
-import pl.karol202.paintplus.tool.shape.Shape;
-import pl.karol202.paintplus.tool.shape.Shapes;
 
 public class ShapeProperties extends Fragment
 {

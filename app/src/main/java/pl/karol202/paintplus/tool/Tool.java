@@ -7,11 +7,6 @@ import pl.karol202.paintplus.tool.properties.ToolProperties;
 
 public abstract class Tool
 {
-	public interface OnToolUpdatedListener
-	{
-		void onToolUpdated(Tool tool);
-	}
-	
 	protected Image image;
 	
 	protected Tool(Image image)

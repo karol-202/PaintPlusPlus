@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
 import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.tool.shape.circle.ShapeCircle;
 import pl.karol202.paintplus.tool.shape.line.ShapeLine;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Shapes
 	{
 		shapes = new ArrayList<>();
 		shapes.add(new ShapeLine(imageChangeListener, shapeEditListener));
+		shapes.add(new ShapeCircle(imageChangeListener, shapeEditListener));
 	}
 	
 	public Shape getShape(int id)

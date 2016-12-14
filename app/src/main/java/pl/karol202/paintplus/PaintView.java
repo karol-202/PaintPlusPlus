@@ -99,5 +99,6 @@ public class PaintView extends SurfaceView implements Image.OnImageChangeListene
 	public void setTool(Tool tool)
 	{
 		this.tool = tool;
+		invalidate();
 	}
 }

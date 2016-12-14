@@ -29,7 +29,7 @@ public class ToolMarker extends Tool
 	{
 		super(image);
 		this.size = 25;
-		this.smooth = false;
+		this.smooth = true;
 		
 		this.pathPaint = new Paint();
 		this.pathPaint.setStyle(Paint.Style.STROKE);

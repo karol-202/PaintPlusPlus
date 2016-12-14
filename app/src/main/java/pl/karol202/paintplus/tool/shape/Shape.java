@@ -3,7 +3,6 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.tool.shape.properties.ShapeProperties;
 
 public interface Shape
 {

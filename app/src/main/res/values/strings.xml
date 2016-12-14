@@ -83,4 +83,6 @@
 	<string name="line_width">Grubość</string>
 	<string name="line_cap">Zakończenie</string>
 	<string name="apply">Zatwierdź</string>
+	<string name="circle_fill">Wypełnij</string>
+	<string name="circle_width">Grubość</string>
 </resources>
