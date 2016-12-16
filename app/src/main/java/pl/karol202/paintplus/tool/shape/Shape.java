@@ -1,24 +1,93 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.view.MotionEvent;
+import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.color.ColorsSet;
 
-public interface Shape
+public abstract class Shape
 {
-	int getName();
+	private boolean smooth;
 	
-	int getIcon();
+	private OnImageChangeListener imageChangeListener;
+	private OnShapeEditListener shapeEditListener;
+	private boolean editMode;
+	private Paint paint;
+	private ColorsSet colors;
 	
-	Class<? extends ShapeProperties> getPropertiesClass();
+	public Shape(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	{
+		this.smooth = true;
+		
+		this.imageChangeListener = imageChangeListener;
+		this.shapeEditListener = shapeEditListener;
+		this.paint = new Paint();
+		this.colors = colors;
+	}
 	
-	boolean onTouch(MotionEvent event);
+	public abstract int getName();
 	
-	void onScreenDraw(Canvas canvas, ColorsSet colors);
+	public abstract int getIcon();
 	
-	void apply(Canvas imageCanvas, ColorsSet colors);
+	public abstract Class<? extends ShapeProperties> getPropertiesClass();
 	
-	void cancel();
+	public abstract boolean onTouch(MotionEvent event);
 	
-	boolean isInEditMode();
+	public abstract void onScreenDraw(Canvas canvas);
+	
+	public abstract void apply(Canvas imageCanvas);
+	
+	public abstract void cancel();
+	
+	public float calcDistance(Point point, int x, int y)
+	{
+		return (float) Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
+	}
+	
+	public void update()
+	{
+		updateColor();
+		paint.setAntiAlias(smooth);
+		imageChangeListener.onImageChanged();
+	}
+	
+	public void updateColor()
+	{
+		paint.setColor(colors.getFirstColor());
+	}
+	
+	public void cleanUp()
+	{
+		editMode = false;
+		imageChangeListener.onImageChanged();
+	}
+	
+	public boolean isInEditMode()
+	{
+		return editMode;
+	}
+	
+	public void enableEditMode()
+	{
+		editMode = true;
+		shapeEditListener.onStartShapeEditing();
+	}
+	
+	public Paint getPaint()
+	{
+		return paint;
+	}
+	
+	public boolean isSmooth()
+	{
+		return smooth;
+	}
+	
+	public void setSmooth(boolean smooth)
+	{
+		this.smooth = smooth;
+		update();
+	}
 }

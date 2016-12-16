@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.tool.shape.line;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
@@ -11,33 +10,27 @@ import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
 
-public class ShapeLine implements Shape
+public class ShapeLine extends Shape
 {
 	private final int MAX_DISTANCE = 50;
 	
 	private int lineWidth;
 	private Cap lineCap;
 	
-	private OnImageChangeListener imageChangeListener;
-	private OnShapeEditListener shapeEditListener;
-	private boolean editMode;
 	private boolean lineCreated;
 	private Point start;
 	private Point end;
-	private Paint paint;
 	
 	private int draggedIndex;
 	private Point draggedPoint;
 	private Point draggingStart;
 	
-	public ShapeLine(OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeLine(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
+		super(colors, imageChangeListener, shapeEditListener);
 		this.lineWidth = 10;
 		this.lineCap = Cap.ROUND;
 		
-		this.imageChangeListener = imageChangeListener;
-		this.shapeEditListener = shapeEditListener;
-		this.paint = new Paint();
 		update();
 	}
 	
@@ -70,7 +63,7 @@ public class ShapeLine implements Shape
 	
 	private void onTouchStart(int x, int y)
 	{
-		if(!editMode) enableEditMode();
+		if(!isInEditMode()) enableEditMode();
 		if(!lineCreated) start = new Point(x, y);
 		else
 		{
@@ -95,21 +88,7 @@ public class ShapeLine implements Shape
 			draggingStart = new Point(x, y);
 		}
 	}
-	
-	private void enableEditMode()
-	{
-		editMode = true;
-		lineCreated = false;
-		start = null;
-		end = null;
-		shapeEditListener.onStartShapeEditing();
-	}
-	
-	private float calcDistance(Point point, int x, int y)
-	{
-		return (float) Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
-	}
-	
+
 	private void onTouchMove(int x, int y)
 	{
 		if(!lineCreated) end = new Point(x, y);
@@ -138,19 +117,19 @@ public class ShapeLine implements Shape
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas, ColorsSet colors)
+	public void onScreenDraw(Canvas canvas)
 	{
 		if(start == null || end == null) return;
-		paint.setColor(colors.getFirstColor());
-		canvas.drawLine(start.x, start.y, end.x, end.y, paint);
+		updateColor();
+		canvas.drawLine(start.x, start.y, end.x, end.y, getPaint());
 	}
 	
 	@Override
-	public void apply(Canvas imageCanvas, ColorsSet colors)
+	public void apply(Canvas imageCanvas)
 	{
 		if(start == null || end == null) return;
-		paint.setColor(colors.getFirstColor());
-		imageCanvas.drawLine(start.x, start.y, end.x, end.y, paint);
+		update();
+		imageCanvas.drawLine(start.x, start.y, end.x, end.y, getPaint());
 		cleanUp();
 	}
 	
@@ -161,26 +140,29 @@ public class ShapeLine implements Shape
 	}
 	
 	@Override
-	public boolean isInEditMode()
+	public void update()
 	{
-		return editMode;
+		getPaint().setStrokeWidth(lineWidth);
+		getPaint().setStrokeCap(lineCap.getPaintCap());
+		super.update();
 	}
 	
-	private void update()
+	@Override
+	public void cleanUp()
 	{
-		paint.setStrokeWidth(lineWidth);
-		paint.setStrokeCap(lineCap.getPaintCap());
-		
-		imageChangeListener.onImageChanged();
-	}
-	
-	private void cleanUp()
-	{
-		editMode = false;
 		lineCreated = false;
 		start = null;
 		end = null;
-		imageChangeListener.onImageChanged();
+		super.cleanUp();
+	}
+	
+	@Override
+	public void enableEditMode()
+	{
+		lineCreated = false;
+		start = null;
+		end = null;
+		super.enableEditMode();
 	}
 	
 	public int getLineWidth()

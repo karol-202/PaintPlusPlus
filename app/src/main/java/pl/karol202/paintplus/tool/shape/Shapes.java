@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
 import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.shape.circle.ShapeCircle;
 import pl.karol202.paintplus.tool.shape.line.ShapeLine;
 
@@ -10,11 +11,11 @@ public class Shapes
 {
 	private ArrayList<Shape> shapes;
 	
-	public Shapes(OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public Shapes(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
 		shapes = new ArrayList<>();
-		shapes.add(new ShapeLine(imageChangeListener, shapeEditListener));
-		shapes.add(new ShapeCircle(imageChangeListener, shapeEditListener));
+		shapes.add(new ShapeLine(colors, imageChangeListener, shapeEditListener));
+		shapes.add(new ShapeCircle(colors, imageChangeListener, shapeEditListener));
 	}
 	
 	public Shape getShape(int id)
@@ -35,5 +36,10 @@ public class Shapes
 	public ArrayList<Shape> getShapes()
 	{
 		return shapes;
+	}
+	
+	public void setSmooth(boolean smooth)
+	{
+		for(Shape shape : shapes) shape.setSmooth(smooth);
 	}
 }

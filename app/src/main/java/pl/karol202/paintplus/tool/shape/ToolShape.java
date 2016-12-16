@@ -15,15 +15,17 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 {
 	private Shape shape;
 	
-	private Shapes shapes;
 	private ColorsSet colors;
-	private OnShapeEditListener listener;
+	private Shapes shapes;
+	private OnImageChangeListener imageChangeListener;
+	private OnShapeEditListener shapeEditListener;
 	
-	public ToolShape(Image image, OnImageChangeListener listener)
+	public ToolShape(Image image, OnImageChangeListener imageChangeListener)
 	{
 		super(image);
-		shapes = new Shapes(listener, this);
-		colors = image.getColorsSet();
+		this.colors = image.getColorsSet();
+		this.shapes = new Shapes(colors, imageChangeListener, this);
+		this.imageChangeListener = imageChangeListener;
 		
 		setShape(shapes.getShape(0));
 	}
@@ -63,18 +65,18 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX(), -image.getViewY());
-		shape.onScreenDraw(canvas, colors);
+		shape.onScreenDraw(canvas);
 	}
 	
 	@Override
 	public void onStartShapeEditing()
 	{
-		listener.onStartShapeEditing();
+		if(shapeEditListener != null) shapeEditListener.onStartShapeEditing();
 	}
 	
 	public void apply()
 	{
-		shape.apply(image.getEditCanvas(), colors);
+		shape.apply(image.getEditCanvas());
 	}
 	
 	public void cancel()
@@ -103,7 +105,9 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	
 	public void setShape(Shape shape)
 	{
+		if(this.shape == shape) this.shape.cancel();
 		this.shape = shape;
+		imageChangeListener.onImageChanged();
 	}
 	
 	public boolean isInEditMode()
@@ -113,6 +117,16 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	
 	public void setShapeEditListener(OnShapeEditListener listener)
 	{
-		this.listener = listener;
+		this.shapeEditListener = listener;
+	}
+	
+	public boolean isSmoothed()
+	{
+		return shape.isSmooth();
+	}
+	
+	public void setSmoothed(boolean smooth)
+	{
+		shapes.setSmooth(smooth);
 	}
 }

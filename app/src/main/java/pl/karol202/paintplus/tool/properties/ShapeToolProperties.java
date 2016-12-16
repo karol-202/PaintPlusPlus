@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.*;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
 
-public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener
+public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener, OnCheckedChangeListener
 {
 	private FragmentManager fragments;
 	private ToolShape shapeTool;
@@ -20,6 +23,7 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	
 	private View view;
 	private Spinner spinnerShape;
+	private CheckBox checkBoxSmooth;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -38,6 +42,10 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 		spinnerShape.setAdapter(shapeAdapter);
 		spinnerShape.setSelection(getShapeId(shapeTool.getShape()));
 		spinnerShape.setOnItemSelectedListener(this);
+		
+		checkBoxSmooth = (CheckBox) view.findViewById(R.id.check_shape_smooth);
+		checkBoxSmooth.setChecked(shapeTool.isSmoothed());
+		checkBoxSmooth.setOnCheckedChangeListener(this);
 		
 		tryToUpdateFragment();
 		
@@ -84,6 +92,12 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	public void onStartShapeEditing()
 	{
 		getActivity().invalidateOptionsMenu();
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+	{
+		shapeTool.setSmoothed(isChecked);
 	}
 	
 	private void tryToUpdateFragment()

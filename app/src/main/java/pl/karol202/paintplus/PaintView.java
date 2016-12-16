@@ -7,12 +7,13 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
-public class PaintView extends SurfaceView implements Image.OnImageChangeListener
+public class PaintView extends SurfaceView implements OnImageChangeListener
 {
 	private Image image;
 	private Tools tools;

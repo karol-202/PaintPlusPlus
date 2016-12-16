@@ -85,4 +85,5 @@
 	<string name="apply">Zatwierdź</string>
 	<string name="circle_fill">Wypełnij</string>
 	<string name="circle_width">Grubość</string>
+	<string name="shapes_smooth">Wygładź</string>
 </resources>
