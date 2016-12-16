@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.tool.shape;
 
-import android.graphics.Canvas;
+import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
@@ -19,6 +19,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	private Shapes shapes;
 	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
+	private Paint maskPaint;
 	
 	public ToolShape(Image image, OnImageChangeListener imageChangeListener)
 	{
@@ -26,6 +27,9 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		this.colors = image.getColorsSet();
 		this.shapes = new Shapes(colors, imageChangeListener, this);
 		this.imageChangeListener = imageChangeListener;
+		this.maskPaint = new Paint();
+		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+		this.maskPaint.setColor(Color.argb(140, 255, 255, 255));
 		
 		setShape(shapes.getShape(0));
 	}
@@ -61,11 +65,15 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
 		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
 		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
-		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
 		
+		canvas.save();
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX(), -image.getViewY());
 		shape.onScreenDraw(canvas);
+		
+		canvas.restore();
+		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom, Region.Op.DIFFERENCE);
+		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
 	}
 	
 	@Override
