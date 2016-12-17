@@ -31,7 +31,6 @@
 		android:id="@+id/seekBar_circle_width"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/check_circle_fill"
-		android:layout_marginStart="8dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_circle_width"
 		android:layout_marginEnd="32dp"
 		app:layout_constraintRight_toRightOf="parent"

@@ -8,7 +8,7 @@
 		android:text="@string/zoom"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/textView"
+		android:id="@+id/text_zoom"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginTop="8dp"
@@ -23,7 +23,7 @@
 		app:srcCompat="@drawable/ic_zoom_out_black_48dp"
 		android:layout_marginStart="12dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/textView"
+		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
 		android:layout_marginTop="8dp"
 		android:scaleType="fitXY" />
 	
@@ -35,7 +35,7 @@
 		android:layout_marginEnd="12dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:background="?android:attr/selectableItemBackground"
-		app:layout_constraintTop_toBottomOf="@+id/textView"
+		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
 		android:layout_marginTop="8dp"
 		android:scaleType="fitXY" />
 	
@@ -50,7 +50,7 @@
 		android:layout_marginEnd="8dp"
 		android:textAlignment="center"
 		android:inputType="numberDecimal"
-		app:layout_constraintTop_toBottomOf="@+id/textView"
+		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
 		android:layout_marginTop="8dp" />
 	
 	<Button

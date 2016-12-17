@@ -4,6 +4,7 @@ import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.shape.circle.ShapeCircle;
 import pl.karol202.paintplus.tool.shape.line.ShapeLine;
+import pl.karol202.paintplus.tool.shape.polygon.ShapePolygon;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class Shapes
 		shapes = new ArrayList<>();
 		shapes.add(new ShapeLine(colors, imageChangeListener, shapeEditListener));
 		shapes.add(new ShapeCircle(colors, imageChangeListener, shapeEditListener));
+		shapes.add(new ShapePolygon(colors, imageChangeListener, shapeEditListener));
 	}
 	
 	public Shape getShape(int id)

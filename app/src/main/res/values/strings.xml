@@ -43,6 +43,7 @@
 	
 	<string name="shape_line">Linia</string>
 	<string name="shape_circle">Okrąg</string>
+	<string name="shape_polygon">Wielokąt foremny</string>
 	
 	<string name="line_cap_round">Zaokrąglone</string>
 	<string name="line_cap_square">Kwadratowe</string>
@@ -86,4 +87,7 @@
 	<string name="circle_fill">Wypełnij</string>
 	<string name="circle_width">Grubość</string>
 	<string name="shapes_smooth">Wygładź</string>
+	<string name="polygon_sides">Ilość boków</string>
+	<string name="polygon_fill">Wypełnij</string>
+	<string name="polygon_width">Grubość</string>
 </resources>

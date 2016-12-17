@@ -46,7 +46,7 @@ public class CircleProperties extends ShapeProperties implements CompoundButton.
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
 		circle.setFill(isChecked);
-		seekBarWidth.setEnabled(!isChecked);
+		//seekBarWidth.setEnabled(!isChecked);
 	}
 	
 	@Override

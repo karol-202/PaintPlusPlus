@@ -30,7 +30,7 @@ public class ShapeCircle extends Shape
 	{
 		super(colors, imageChangeListener, shapeEditListener);
 		this.fill = false;
-		this.circleWidth = 50;
+		this.circleWidth = 30;
 		
 		update();
 	}
