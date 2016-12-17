@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.properties;
+package pl.karol202.paintplus.tool;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.tool.Tool;
-import pl.karol202.paintplus.tool.Tools;
 
 public abstract class ToolProperties extends Fragment
 {

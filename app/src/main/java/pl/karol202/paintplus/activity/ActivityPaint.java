@@ -28,7 +28,7 @@ import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 import pl.karol202.paintplus.tool.ToolsAdapter;
-import pl.karol202.paintplus.tool.properties.ToolProperties;
+import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.util.GLHelper;
 
 import java.util.HashMap;

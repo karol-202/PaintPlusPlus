@@ -8,8 +8,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.Tool;
-import pl.karol202.paintplus.tool.properties.ShapeToolProperties;
-import pl.karol202.paintplus.tool.properties.ToolProperties;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolShape extends Tool implements OnShapeEditListener, OnToolChangeListener
 {

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.properties;
+package pl.karol202.paintplus.tool.shape;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -11,8 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.shape.*;
-import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener, OnCheckedChangeListener
 {

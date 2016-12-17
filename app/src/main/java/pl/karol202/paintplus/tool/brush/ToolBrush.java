@@ -1,12 +1,12 @@
-package pl.karol202.paintplus.tool;
+package pl.karol202.paintplus.tool.brush;
 
 import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.tool.properties.BrushProperties;
-import pl.karol202.paintplus.tool.properties.ToolProperties;
+import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolBrush extends Tool
 {

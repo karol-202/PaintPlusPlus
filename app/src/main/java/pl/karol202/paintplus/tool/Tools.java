@@ -3,7 +3,10 @@ package pl.karol202.paintplus.tool;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.tool.brush.ToolBrush;
 import pl.karol202.paintplus.tool.fill.ToolFill;
+import pl.karol202.paintplus.tool.marker.ToolMarker;
+import pl.karol202.paintplus.tool.pan.ToolPan;
 import pl.karol202.paintplus.tool.shape.ToolShape;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.properties;
+package pl.karol202.paintplus.tool.marker;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.ToolMarker;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener
 {

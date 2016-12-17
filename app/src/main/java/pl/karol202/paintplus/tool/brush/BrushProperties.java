@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.properties;
+package pl.karol202.paintplus.tool.brush;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.ToolBrush;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {

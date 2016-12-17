@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.properties;
+package pl.karol202.paintplus.tool.pan;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.ToolPan;
+import pl.karol202.paintplus.tool.ToolProperties;
 
 import java.util.Locale;
 
