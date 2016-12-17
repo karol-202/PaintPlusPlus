@@ -139,6 +139,7 @@ public class ShapePolygon extends Shape
 		double ratio = deltaX / deltaY;
 		double angleRad = Math.atan(ratio);
 		angle = Math.round(Math.toDegrees(angleRad));
+		if(deltaY < 0) angle += 180;
 		
 		createPath();
 	}

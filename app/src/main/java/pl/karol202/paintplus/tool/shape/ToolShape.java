@@ -29,7 +29,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		this.imageChangeListener = imageChangeListener;
 		this.maskPaint = new Paint();
 		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-		this.maskPaint.setColor(Color.argb(140, 255, 255, 255));
+		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));
 		
 		setShape(shapes.getShape(0));
 	}
