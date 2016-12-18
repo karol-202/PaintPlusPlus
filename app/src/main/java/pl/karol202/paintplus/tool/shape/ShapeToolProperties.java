@@ -67,8 +67,10 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 			{
 			case R.id.action_apply:
 				shapeTool.apply();
+				break;
 			case R.id.action_cancel:
 				shapeTool.cancel();
+				break;
 			}
 			getActivity().invalidateOptionsMenu();
 			return true;

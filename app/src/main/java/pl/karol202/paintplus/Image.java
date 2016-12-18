@@ -2,6 +2,7 @@ package pl.karol202.paintplus;
 
 import android.graphics.*;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 public class Image
 {
@@ -17,6 +18,7 @@ public class Image
 	private Bitmap bitmap;
 	private Canvas editCanvas;
 	private ColorsSet colorsSet;
+	private Selection selection;
 	private int width;
 	private int height;
 	
@@ -30,6 +32,7 @@ public class Image
 	public Image()
 	{
 		this.colorsSet = ColorsSet.getDefault();
+		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
 		updateMatrix();
@@ -40,8 +43,9 @@ public class Image
 		this.width = width;
 		this.height = height;
 		bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		editCanvas = new Canvas(bitmap);
 		bitmap.eraseColor(colorsSet.getSecondColor());
+		editCanvas = new Canvas(bitmap);
+		selection = new Selection(width, height);
 	}
 	
 	public void resize(int x, int y, int width, int height)
@@ -131,6 +135,11 @@ public class Image
 	public ColorsSet getColorsSet()
 	{
 		return colorsSet;
+	}
+	
+	public Selection getSelection()
+	{
+		return selection;
 	}
 	
 	

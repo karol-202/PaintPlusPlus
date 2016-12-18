@@ -1,9 +1,7 @@
 package pl.karol202.paintplus;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -15,12 +13,15 @@ import pl.karol202.paintplus.tool.Tools;
 
 public class PaintView extends SurfaceView implements OnImageChangeListener
 {
+	private final float[] SELECTION_PAINT_DASH = new float[] { 5f, 5f };
+	
 	private Image image;
 	private Tools tools;
 	private ColorsSet colors;
 	private Tool tool;
 	private Bitmap toolBitmap;
 	private Paint bitmapPaint;
+	private Paint selectionPaint;
 	private boolean initialized;
 
 	public PaintView(Context context, AttributeSet attrs)
@@ -41,6 +42,11 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		
 		bitmapPaint = new Paint();
 		bitmapPaint.setFilterBitmap(false);
+		
+		selectionPaint = new Paint();
+		selectionPaint.setStyle(Paint.Style.STROKE);
+		selectionPaint.setStrokeWidth(2f);
+		selectionPaint.setPathEffect(new DashPathEffect(SELECTION_PAINT_DASH, 0));
 	}
 	
 	@Override
@@ -55,8 +61,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			image.centerView();
 			initialized = true;
 		}
-		
 		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), bitmapPaint);
+		Path selectionPath = new Path(image.getSelection().getPath());
+		selectionPath.transform(image.getImageMatrix());
+		canvas.drawPath(selectionPath, selectionPaint);
 		
 		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);

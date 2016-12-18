@@ -116,7 +116,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private DrawerLayout layoutDrawer;
 	private ListView drawerLeft;
 	private View drawerRight;
-	private ColorsSelect colorsSelect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -159,8 +158,6 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 
 		drawerRight = findViewById(R.id.drawer_right);
 		initRightDrawer();
-
-		colorsSelect = (ColorsSelect) fragments.findFragmentById(R.id.colors_fragment);
 		
 		restoreInstanceState(savedInstanceState);
 	}

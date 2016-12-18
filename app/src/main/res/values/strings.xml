@@ -40,6 +40,7 @@
 	<string name="tool_brush">Pędzel</string>
 	<string name="tool_fill">Wypełnienie</string>
 	<string name="tool_shape">Figury geometryczne</string>
+	<string name="tool_selection">Zaznaczenie</string>
 	
 	<string name="shape_line">Linia</string>
 	<string name="shape_circle">Okrąg</string>
@@ -48,6 +49,11 @@
 	<string name="line_cap_round">Zaokrąglone</string>
 	<string name="line_cap_square">Kwadratowe</string>
 	<string name="line_cap_butt">Ucięte</string>
+	
+	<string name="selection_mode_new">Zastąp</string>
+	<string name="selection_mode_add">Dodaj</string>
+	<string name="selection_mode_subtract">Odejmij</string>
+	<string name="selection_mode_multiply">Część wspólna</string>
 	
 	<string name="choice_of_tool">Wybór narzędzia</string>
 	<string name="size_tool">Wielkość</string>
@@ -90,4 +96,5 @@
 	<string name="polygon_sides">Ilość boków</string>
 	<string name="polygon_fill">Wypełnij</string>
 	<string name="polygon_width">Grubość</string>
+	<string name="selection_mode">Tryb zaznaczania</string>
 </resources>
