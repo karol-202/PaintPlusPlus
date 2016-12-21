@@ -7,6 +7,7 @@ import pl.karol202.paintplus.tool.brush.ToolBrush;
 import pl.karol202.paintplus.tool.fill.ToolFill;
 import pl.karol202.paintplus.tool.marker.ToolMarker;
 import pl.karol202.paintplus.tool.pan.ToolPan;
+import pl.karol202.paintplus.tool.pickcolor.ToolColorPick;
 import pl.karol202.paintplus.tool.selection.ToolSelection;
 import pl.karol202.paintplus.tool.shape.ToolShape;
 
@@ -25,6 +26,7 @@ public class Tools
 		tools.add(new ToolFill(image, listener, asyncManager));
 		tools.add(new ToolShape(image, listener));
 		tools.add(new ToolSelection(image, listener));
+		tools.add(new ToolColorPick(image));
 	}
 	
 	public Tool getTool(int id)

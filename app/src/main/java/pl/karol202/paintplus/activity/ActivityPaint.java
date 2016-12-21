@@ -68,6 +68,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		public void onDrawerSlide(View drawerView, float slideOffset)
 		{
 			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
+			else onRightDrawerMoved();
 		}
 		
 		private void onLeftDrawerOpened(View drawerView)
@@ -99,6 +100,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 			super.onDrawerSlide(drawerView, slideOffset);
 			layoutDrawer.closeDrawer(drawerRight);
 		}
+		
+		private void onRightDrawerMoved()
+		{
+			colorsSelect.updateColors();
+		}
 	}
 	
 	private View decorView;
@@ -110,6 +116,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private HashMap<Integer, ActivityResultListener> resultListeners;
 	private AppDataFragment dataFragment;
 	private AsyncManager asyncBlocker;
+	private ColorsSelect colorsSelect;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
@@ -370,7 +377,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	
 	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
 	{
-		ColorsSelect colorsSelect = new ColorsSelect();
+		colorsSelect = new ColorsSelect();
 		FragmentTransaction propTrans = fragments.beginTransaction();
 		propTrans.replace(R.id.colors_fragment, colorsSelect);
 		propTrans.commit();

@@ -41,6 +41,7 @@
 	<string name="tool_fill">Wypełnienie</string>
 	<string name="tool_shape">Figury geometryczne</string>
 	<string name="tool_selection">Zaznaczenie</string>
+	<string name="tool_color_pick">Pobierz kolor</string>
 	
 	<string name="shape_line">Linia</string>
 	<string name="shape_circle">Okrąg</string>
