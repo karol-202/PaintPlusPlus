@@ -1,12 +1,14 @@
 package pl.karol202.paintplus.tool.brush;
 
 import android.graphics.*;
+import android.graphics.Region.Op;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolBrush extends Tool
 {
@@ -73,6 +75,7 @@ public class ToolBrush extends Tool
 		colors = image.getColorsSet();
 		paint.setStrokeWidth(size);
 		updateShader();
+		updateClipping();
 		
 		path.reset();
 		path.moveTo(x, y);
@@ -80,7 +83,23 @@ public class ToolBrush extends Tool
 		lastX = x;
 		lastY = y;
 	}
-
+	
+	private void updateShader()
+	{
+		int color = colors.getFirstColor();
+		int center = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
+		int edge = Color.argb(0, Color.red(color), Color.green(color), Color.blue(color));
+		radialShader = new RadialGradient(0, 0, size / 2, center, edge, Shader.TileMode.CLAMP);
+		paint.setShader(radialShader);
+	}
+	
+	private void updateClipping()
+	{
+		Selection selection = image.getSelection();
+		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		else canvas.clipPath(selection.getPath(), Op.REPLACE);
+	}
+	
 	private void onTouchMove(float x, float y)
 	{
 		path.quadTo(lastX, lastY, x, y);
@@ -131,15 +150,6 @@ public class ToolBrush extends Tool
 	
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
-	
-	private void updateShader()
-	{
-		int color = colors.getFirstColor();
-		int center = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
-		int edge = Color.argb(0, Color.red(color), Color.green(color), Color.blue(color));
-		radialShader = new RadialGradient(0, 0, size / 2, center, edge, Shader.TileMode.CLAMP);
-		paint.setShader(radialShader);
-	}
 	
 	public float getSize()
 	{

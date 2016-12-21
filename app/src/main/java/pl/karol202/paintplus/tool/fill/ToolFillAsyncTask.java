@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Stack;
 
@@ -20,6 +21,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	
 	private OnFillCompleteListener listener;
 	private Bitmap bitmap;
+	private Selection selection;
 	private int destColor;
 	private float threshold;
 	private int x;
@@ -36,6 +38,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		
 		listener = params.getListener();
 		bitmap = image.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+		selection = image.getSelection();
 		destColor = colorsSet.getFirstColor();
 		threshold = params.getThreshold();
 		x = params.getX();
@@ -47,6 +50,8 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	
 	private void fill()
 	{
+		if(!selection.isEmpty() && !selection.containsPoint(x, y)) return;
+		
 		int touchedColor = bitmap.getPixel(x, y);
 		if(touchedColor == destColor) return;
 		
@@ -60,9 +65,10 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		while(!pointsToCheck.isEmpty())
 		{
 			Point point = pointsToCheck.pop();
+			if(!selection.isEmpty() && !selection.containsPoint(point.x, point.y)) continue;
+			
 			int pos = point.y * width + point.x;
 			int color = pixels[pos];
-			
 			if(!checkColor(touchedColor, color)) continue;
 			pixels[pos] = destColor;
 			

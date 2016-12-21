@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.graphics.*;
+import android.graphics.Region.Op;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
@@ -9,12 +10,15 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolShape extends Tool implements OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
+	private Canvas canvas;
 	private ColorsSet colors;
+	private Selection selection;
 	private Shapes shapes;
 	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
@@ -23,7 +27,9 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	public ToolShape(Image image, OnImageChangeListener imageChangeListener)
 	{
 		super(image);
+		this.canvas = image.getEditCanvas();
 		this.colors = image.getColorsSet();
+		this.selection = image.getSelection();
 		this.shapes = new Shapes(colors, imageChangeListener, this);
 		this.imageChangeListener = imageChangeListener;
 		this.maskPaint = new Paint();
@@ -54,24 +60,24 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			canvas = image.getEditCanvas();
+			selection = image.getSelection();
+		}
 		return shape.onTouch(event);
 	}
 	
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
-		int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
-		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
-		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
-		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
-		
-		canvas.save();
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX(), -image.getViewY());
 		shape.onScreenDraw(canvas);
 		
-		canvas.restore();
-		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom, Region.Op.DIFFERENCE);
+		canvas.clipPath(selection.getLimitedPath(), Op.DIFFERENCE);
+		canvas.translate(image.getViewX(), image.getViewY());
+		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
 	}
 	
@@ -83,7 +89,14 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	
 	public void apply()
 	{
-		shape.apply(image.getEditCanvas());
+		updateClipping();
+		shape.apply(canvas);
+	}
+	
+	private void updateClipping()
+	{
+		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		else canvas.clipPath(selection.getPath(), Op.REPLACE);
 	}
 	
 	public void cancel()

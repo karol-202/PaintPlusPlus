@@ -97,4 +97,6 @@
 	<string name="polygon_fill">Wypełnij</string>
 	<string name="polygon_width">Grubość</string>
 	<string name="selection_mode">Tryb zaznaczania</string>
+	<string name="select_all">Zaznacz wszystko</string>
+	<string name="select_nothing">Usuń zaznaczenie</string>
 </resources>

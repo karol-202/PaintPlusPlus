@@ -26,7 +26,7 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	public ToolFill(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
 	{
 		super(image);
-		
+		this.colors = image.getColorsSet();
 		this.listener = listener;
 		this.asyncManager = asyncManager;
 	}
@@ -58,8 +58,6 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 		
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			colors = image.getColorsSet();
-			
 			if(!asyncManager.block(this)) return false;
 			FillParams params = new FillParams(this, image, fillThreshold, (int) event.getX(), (int) event.getY());
 			asyncTask = new ToolFillAsyncTask().execute(params);

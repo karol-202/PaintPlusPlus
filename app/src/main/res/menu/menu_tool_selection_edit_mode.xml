@@ -3,14 +3,14 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 	<group android:id="@+id/group_paint"
 		android:orderInCategory="1">
-		<item android:id="@+id/action_select_all"
-			android:icon="@drawable/ic_select_all_white_24dp"
-			android:title="@string/select_all"
+		<item android:id="@+id/action_apply"
+			android:icon="@drawable/ic_apply_white_24dp"
+			android:title="@string/apply"
 			android:orderInCategory="1"
 			app:showAsAction="ifRoom" />
-		<item android:id="@+id/action_select_nothing"
-			android:icon="@drawable/ic_select_nothing_white_24dp"
-			android:title="@string/select_nothing"
+		<item android:id="@+id/action_cancel"
+			android:icon="@drawable/ic_cancel_white_24dp"
+			android:title="@string/cancel"
 			android:orderInCategory="2"
 			app:showAsAction="ifRoom" />
 	</group>

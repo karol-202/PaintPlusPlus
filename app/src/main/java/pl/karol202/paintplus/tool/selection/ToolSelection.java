@@ -45,6 +45,7 @@ public class ToolSelection extends Tool
 		this.paint = new Paint();
 		this.paint.setColor(Color.BLACK);
 		this.paint.setStyle(Paint.Style.STROKE);
+		this.paint.setStrokeWidth(2f);
 		
 		cleanUp();
 	}
@@ -145,6 +146,7 @@ public class ToolSelection extends Tool
 			rect.bottom = y;
 		}
 		else move(x, y);
+		correctBounds();
 		rectCreated = true;
 	}
 	
@@ -190,29 +192,43 @@ public class ToolSelection extends Tool
 		}
 	}
 	
+	private void correctBounds()
+	{
+		if(rect.left > rect.right)
+		{
+			int temp = rect.left;
+			rect.left = rect.right;
+			rect.right = temp;
+		}
+		if(rect.top > rect.bottom)
+		{
+			int temp = rect.top;
+			rect.top = rect.bottom;
+			rect.bottom = temp;
+		}
+	}
+	
 	public void applySelection()
 	{
-		switch(mode)
-		{
-		case NEW:
-			selection.replace(rect);
-			break;
-		case ADD:
-			selection.add(rect);
-			break;
-		case SUBTRACT:
-			selection.subtract(rect);
-			break;
-		case MULTIPLY:
-			selection.multiply(rect);
-			break;
-		}
+		selection.commitSelection(rect, mode.getOp());
 		cancelSelection();
 	}
 	
 	public void cancelSelection()
 	{
 		cleanUp();
+		imageListener.onImageChanged();
+	}
+	
+	public void selectAll()
+	{
+		selection.selectAll();
+		imageListener.onImageChanged();
+	}
+	
+	public void selectNothing()
+	{
+		selection.selectNothing();
 		imageListener.onImageChanged();
 	}
 	
@@ -230,9 +246,19 @@ public class ToolSelection extends Tool
 	public void onScreenDraw(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX(), -image.getViewY());
-		canvas.drawRect(rect, paint);
+		canvas.drawRect(transformRect(), paint);
+	}
+	
+	private Rect transformRect()
+	{
+		Rect newRect = new Rect(rect);
+		newRect.offset(-image.getViewX(), -image.getViewY());
+		
+		newRect.left *= image.getZoom();
+		newRect.top *= image.getZoom();
+		newRect.right *= image.getZoom();
+		newRect.bottom *= image.getZoom();
+		return newRect;
 	}
 	
 	public void setSelectionListener(OnSelectionEditListener selectionListener)

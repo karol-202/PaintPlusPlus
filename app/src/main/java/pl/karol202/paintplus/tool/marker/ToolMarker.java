@@ -1,15 +1,14 @@
 package pl.karol202.paintplus.tool.marker;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
+import android.graphics.*;
+import android.graphics.Region.Op;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolMarker extends Tool
 {
@@ -80,6 +79,7 @@ public class ToolMarker extends Tool
 		pathPaint.setColor(colors.getFirstColor());
 		pathPaint.setStrokeWidth(size);
 		pathPaint.setAntiAlias(smooth);
+		updateClipping(canvas);
 		
 		path.reset();
 		path.moveTo(x, y);
@@ -116,15 +116,24 @@ public class ToolMarker extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
-		int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
+		canvas.scale(image.getZoom(), image.getZoom());
+		canvas.translate(-image.getViewX(), -image.getViewY());
+		
+		/*int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
 		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
 		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
 		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
-		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
+		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom, Op.REPLACE);*/
 		
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX(), -image.getViewY());
+		updateClipping(canvas);
 		canvas.drawPath(path, pathPaint);
+	}
+	
+	private void updateClipping(Canvas canvas)
+	{
+		Selection selection = image.getSelection();
+		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		else canvas.clipPath(selection.getPath(), Op.REPLACE);
 	}
 	
 	public float getSize()
