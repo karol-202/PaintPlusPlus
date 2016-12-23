@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
@@ -29,6 +30,7 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		seekBrushSize = (SeekBar) view.findViewById(R.id.seekBar_brush_size);
 		seekBrushSize.setProgress((int) (brush.getSize() - 1));
 		seekBrushSize.setOnSeekBarChangeListener(this);
+		seekBrushSize.setOnTouchListener(new SeekBarTouchListener());
 		
 		textBrushSize = (TextView) view.findViewById(R.id.brush_size);
 		textBrushSize.setText(String.valueOf((int) brush.getSize()));
@@ -36,6 +38,7 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		seekBrushShapeOffset = (SeekBar) view.findViewById(R.id.seek_brush_shape_offset);
 		seekBrushShapeOffset.setProgress((int) brush.getShapeOffset());
 		seekBrushShapeOffset.setOnSeekBarChangeListener(this);
+		seekBrushShapeOffset.setOnTouchListener(new SeekBarTouchListener());
 		
 		textBrushShapeOffset = (TextView) view.findViewById(R.id.brush_shape_offset);
 		textBrushShapeOffset.setText(String.valueOf((int) brush.getShapeOffset()));

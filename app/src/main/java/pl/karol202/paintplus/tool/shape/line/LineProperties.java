@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class LineProperties extends ShapeProperties implements SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener
 {
@@ -33,6 +34,7 @@ public class LineProperties extends ShapeProperties implements SeekBar.OnSeekBar
 		seekBarWidth = (SeekBar) view.findViewById(R.id.seekBar_line_width);
 		seekBarWidth.setProgress(line.getLineWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
+		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
 		textWidth = (TextView) view.findViewById(R.id.line_width);
 		textWidth.setText(String.valueOf(line.getLineWidth()));

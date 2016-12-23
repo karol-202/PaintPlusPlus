@@ -13,6 +13,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class PolygonProperties extends ShapeProperties
 							   implements OnClickListener, TextWatcher, OnCheckedChangeListener, OnSeekBarChangeListener
@@ -64,6 +65,7 @@ public class PolygonProperties extends ShapeProperties
 		seekBarWidth = (SeekBar) view.findViewById(R.id.seek_polygon_width);
 		seekBarWidth.setProgress(polygon.getLineWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
+		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
 		textWidth = (TextView) view.findViewById(R.id.polygon_width);
 		textWidth.setText(String.valueOf(polygon.getLineWidth()));

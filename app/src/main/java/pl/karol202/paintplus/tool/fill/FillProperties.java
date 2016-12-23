@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener
 {
@@ -28,6 +29,7 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		seekBarThreshold = (SeekBar) view.findViewById(R.id.seekBar_fill_threshold);
 		seekBarThreshold.setProgress((int) fill.getFillThreshold());
 		seekBarThreshold.setOnSeekBarChangeListener(this);
+		seekBarThreshold.setOnTouchListener(new SeekBarTouchListener());
 		
 		textThreshold = (TextView) view.findViewById(R.id.fill_threshold);
 		textThreshold.setText(String.valueOf((int) fill.getFillThreshold()) + "%");

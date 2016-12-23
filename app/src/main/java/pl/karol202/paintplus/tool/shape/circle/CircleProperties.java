@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class CircleProperties extends ShapeProperties implements CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener
 {
@@ -35,6 +36,7 @@ public class CircleProperties extends ShapeProperties implements CompoundButton.
 		seekBarWidth = (SeekBar) view.findViewById(R.id.seekBar_circle_width);
 		seekBarWidth.setProgress(circle.getCircleWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
+		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
 		textWidth = (TextView) view.findViewById(R.id.circle_width);
 		textWidth.setText(String.valueOf(circle.getCircleWidth()));

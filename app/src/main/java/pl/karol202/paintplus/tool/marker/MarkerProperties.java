@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener
 {
@@ -30,6 +31,7 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 		seekMarkerSize = (SeekBar) view.findViewById(R.id.seekBar_marker_size);
 		seekMarkerSize.setProgress((int) (marker.getSize() - 1));
 		seekMarkerSize.setOnSeekBarChangeListener(this);
+		seekMarkerSize.setOnTouchListener(new SeekBarTouchListener());
 		
 		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
 		textMarkerSize.setText(String.valueOf(seekMarkerSize.getProgress() + 1));
