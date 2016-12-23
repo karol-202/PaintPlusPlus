@@ -3,16 +3,18 @@ package pl.karol202.paintplus;
 import android.app.Fragment;
 import android.os.Bundle;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
 public class AppDataFragment extends Fragment
 {
 	public static final String TAG = "DATA_FRAGMENT";
 	
-	private Image image;
-	private Tools tools;
 	private OnImageChangeListener listener;
 	private AsyncManager asyncManager;
+	private Image image;
+	private Tools tools;
+	private Tool tool;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -24,6 +26,18 @@ public class AppDataFragment extends Fragment
 		image.createBitmap(600, 600);
 		
 		tools = new Tools(image, listener, asyncManager);
+		
+		tool = tools.getTool(1);
+	}
+	
+	public void setOnImageChangeListener(OnImageChangeListener listener)
+	{
+		this.listener = listener;
+	}
+	
+	public void setAsyncManager(AsyncManager asyncManager)
+	{
+		this.asyncManager = asyncManager;
 	}
 	
 	public Image getImage()
@@ -36,13 +50,13 @@ public class AppDataFragment extends Fragment
 		return tools;
 	}
 	
-	public void setOnImageChangeListener(OnImageChangeListener listener)
+	public Tool getTool()
 	{
-		this.listener = listener;
+		return tool;
 	}
 	
-	public void setAsyncManager(AsyncManager asyncManager)
+	public void setTool(Tool tool)
 	{
-		this.asyncManager = asyncManager;
+		this.tool = tool;
 	}
 }

@@ -81,7 +81,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		private void onRightDrawerOpened()
 		{
 			String properties = getResources().getString(R.string.properties);
-			String tool = getResources().getString(paintView.getTool().getName());
+			String tool = getResources().getString(getTool().getName());
 			actionBar.setTitle(properties + ": " + tool);
 		}
 		
@@ -324,10 +324,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		Tool previousTool = paintView.getTool();
+		Tool previousTool = getTool();
 		Tool newTool = getTools().getTool(position);
 		
-		paintView.setTool(newTool);
+		dataFragment.setTool(newTool);
+		paintView.onImageChanged();
 		tryToAttachPropertiesFragment();
 		layoutDrawer.closeDrawer(drawerLeft);
 		
@@ -351,10 +352,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 
 	private void attachPropertiesFragment() throws InstantiationException, IllegalAccessException
 	{
-		Class<? extends ToolProperties> propertiesClass = paintView.getTool().getPropertiesFragmentClass();
+		Class<? extends ToolProperties> propertiesClass = getTool().getPropertiesFragmentClass();
 		Fragment properties = propertiesClass.newInstance();
 		Bundle propArgs = new Bundle();
-		propArgs.putInt("tool", getTools().getToolId(paintView.getTool()));
+		propArgs.putInt("tool", getTools().getToolId(getTool()));
 		properties.setArguments(propArgs);
 		FragmentTransaction propTrans = fragments.beginTransaction();
 		propTrans.replace(R.id.propertiesFragment, properties);
@@ -410,5 +411,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	public Tools getTools()
 	{
 		return dataFragment.getTools();
+	}
+	
+	public Tool getTool()
+	{
+		return dataFragment.getTool();
 	}
 }

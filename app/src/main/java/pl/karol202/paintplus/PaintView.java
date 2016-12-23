@@ -8,18 +8,16 @@ import android.view.SurfaceView;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
 public class PaintView extends SurfaceView implements OnImageChangeListener
 {
 	private final float[] SELECTION_PAINT_DASH = new float[] { 5f, 5f };
 	
+	private ActivityPaint activity;
 	private Image image;
 	private Tools tools;
 	private ColorsSet colors;
-	private Tool tool;
-	private Bitmap toolBitmap;
 	private Paint bitmapPaint;
 	private Paint selectionPaint;
 	private boolean initialized;
@@ -31,14 +29,14 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	
 	public void init(ActivityPaint activity)
 	{
+		this.activity = activity;
+		
 		image = activity.getImage();
 		image.setOnImageChangeListener(this);
 		
 		tools = activity.getTools();
 		
 		colors = image.getColorsSet();
-		
-		tool = tools.getTool(1);
 		
 		bitmapPaint = new Paint();
 		bitmapPaint.setFilterBitmap(false);
@@ -66,9 +64,9 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		selectionPath.transform(image.getImageMatrix());
 		canvas.drawPath(selectionPath, selectionPaint);
 		
-		toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
-		tool.onScreenDraw(toolCanvas);
+		activity.getTool().onScreenDraw(toolCanvas);
 		canvas.drawBitmap(toolBitmap, 0, 0, null);
 	}
 
@@ -79,7 +77,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
 		event.setLocation(x, y);
 		
-		boolean result = tool.onTouch(event);
+		boolean result = activity.getTool().onTouch(event);
 		invalidate();
 		return result;
 	}
@@ -98,16 +96,5 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	public ColorsSet getColors()
 	{
 		return colors;
-	}
-
-	public Tool getTool()
-	{
-		return tool;
-	}
-	
-	public void setTool(Tool tool)
-	{
-		this.tool = tool;
-		invalidate();
 	}
 }

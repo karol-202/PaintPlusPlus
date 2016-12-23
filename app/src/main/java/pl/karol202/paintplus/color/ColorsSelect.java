@@ -37,14 +37,14 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, com.
 		if(!(context instanceof ActivityPaint))
 			throw new RuntimeException("ColorsSelect fragment can only be attached to ActivityPaint.");
 		activityPaint = (ActivityPaint) context;
-		image = activityPaint.getImage();
-		colors = image.getColorsSet();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.colors, container, false);
+		image = activityPaint.getImage();
+		colors = image.getColorsSet();
 		
 		colorFirst = view.findViewById(R.id.view_color_first);
 		colorFirst.setOnClickListener(this);

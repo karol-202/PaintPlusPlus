@@ -11,6 +11,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 public abstract class ToolProperties extends Fragment
 {
 	private int toolId;
+	private ActivityPaint activityPaint;
 	private Tools tools;
 	protected Tool tool;
 	
@@ -20,13 +21,13 @@ public abstract class ToolProperties extends Fragment
 		super.onAttach(context);
 		if(!(context instanceof ActivityPaint))
 			throw new RuntimeException("This fragment can only be attached to ActivityPaint.");
-		ActivityPaint activity = (ActivityPaint) context;
-		tools = activity.getTools();
+		activityPaint = (ActivityPaint) context;
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		tools = activityPaint.getTools();
 		Bundle bundle = getArguments();
 		if(bundle == null) throw new RuntimeException("No arguments found.");
 		this.toolId = bundle.getInt("tool");
