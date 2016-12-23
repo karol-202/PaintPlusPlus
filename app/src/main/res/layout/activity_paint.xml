@@ -32,14 +32,14 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:id="@+id/paint_view"
-			android:background="@color/paintViewBackground" />
+			android:background="@color/paint_view_background" />
 		
 		<ListView
 			android:id="@+id/drawer_left"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="start"
-			android:background="@color/drawerBackground"
+			android:background="@color/drawer_background"
 			android:divider="@android:color/transparent"
 			android:dividerHeight="0dp"
 			android:choiceMode="singleChoice"
@@ -50,7 +50,7 @@
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="end"
-			android:background="@color/drawerBackground"
+			android:background="@color/drawer_background"
 			android:clickable="true">
 			
 			<FrameLayout

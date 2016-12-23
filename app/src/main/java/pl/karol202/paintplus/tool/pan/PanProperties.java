@@ -17,8 +17,8 @@ import java.util.Locale;
 public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher
 {
 	private final double SQRT2 = Math.sqrt(2);
-	private final double MIN_ZOOM = 0.05;
-	private final double MAX_ZOOM = 8;
+	private final double MIN_ZOOM = 0.009;
+	private final double MAX_ZOOM = 16;
 	
 	private ToolPan pan;
 	private double zoom;
@@ -45,7 +45,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		buttonZoomIn.setOnClickListener(this);
 		
 		editTextZoom = (EditText) view.findViewById(R.id.edit_zoom);
-		updateZoom(zoom);
+		updateZoom(zoom, true);
 		editTextZoom.addTextChangedListener(this);
 		
 		buttonCenter = (Button) view.findViewById(R.id.button_center_view);
@@ -59,12 +59,12 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		if(view == buttonZoomOut)
 		{
 			zoom = getLowerZoom();
-			updateZoom(zoom);
+			updateZoom(zoom, true);
 		}
 		else if(view == buttonZoomIn)
 		{
 			zoom = getGreaterZoom();
-			updateZoom(zoom);
+			updateZoom(zoom, true);
 		}
 		else if(view == buttonCenter) pan.centerView();
 	}
@@ -82,23 +82,24 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		String string = s.toString();
 		if(!string.endsWith("%"))
 		{
-			updateZoom(zoom);
+			updateZoom(zoom, true);
+			editTextZoom.setSelection(editTextZoom.getText().length() - 1);
 			return;
 		}
 		
-		if(!string.equals("%")) updateZoom((float) textToZoom(string));
+		if(!string.equals("%")) updateZoom((float) textToZoom(string), false);
 	}
 	
-	private void updateZoom(double zoom)
+	private void updateZoom(double zoom, boolean updateText)
 	{
 		dontFireEvent = true;
 		
-		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM);
-		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM);
+		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM, true);
+		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM, true);
 		else
 		{
 			this.zoom = zoom;
-			editTextZoom.setText(zoomToText(zoom));
+			if(updateText) editTextZoom.setText(zoomToText(zoom));
 			pan.setZoom((float) zoom);
 		}
 		
@@ -107,12 +108,12 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	
 	private String zoomToText(double zoom)
 	{
-		return String.format(Locale.US, "%.2f", zoom * 100) + "%";
+		return String.format(Locale.US, "%d%%", Math.round(zoom * 100));
 	}
 	
 	private double textToZoom(String text)
 	{
-		return Double.parseDouble(text.substring(0, text.length() - 1)) / 100;
+		return Integer.parseInt(text.substring(0, text.length() - 1)) / 100d;
 	}
 	
 	private double getLowerZoom()

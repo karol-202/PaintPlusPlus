@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.shape.polygon;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,11 +21,14 @@ public class PolygonProperties extends ShapeProperties
 	private final int MAX_SIDES = 20;
 	
 	private ShapePolygon polygon;
+	private String errorToFew;
+	private String errorToMany;
 	
 	private View view;
 	private ImageButton buttonMinusSides;
 	private ImageButton buttonPlusSides;
-	private EditText editTextSides;
+	private TextInputLayout editLayoutSides;
+	private EditText editSides;
 	private CheckBox checkFill;
 	private SeekBar seekBarWidth;
 	private TextView textWidth;
@@ -36,6 +40,8 @@ public class PolygonProperties extends ShapeProperties
 		view = inflater.inflate(R.layout.properties_polygon, container, false);
 		
 		polygon = (ShapePolygon) shape;
+		errorToFew = getActivity().getString(R.string.error_polygon_too_few_sides);
+		errorToMany = getActivity().getString(R.string.error_polygon_too_many_sides);
 		
 		buttonMinusSides = (ImageButton) view.findViewById(R.id.button_minus_polygon_sides);
 		buttonMinusSides.setOnClickListener(this);
@@ -43,9 +49,13 @@ public class PolygonProperties extends ShapeProperties
 		buttonPlusSides = (ImageButton) view.findViewById(R.id.button_plus_polygon_sides);
 		buttonPlusSides.setOnClickListener(this);
 		
-		editTextSides = (EditText) view.findViewById(R.id.edit_polygon_sides);
-		editTextSides.setText(String.valueOf(polygon.getSides()));
-		editTextSides.addTextChangedListener(this);
+		editLayoutSides = (TextInputLayout) view.findViewById(R.id.edit_layout_polygon_sides);
+		editLayoutSides.setHintEnabled(false);
+		
+		editSides = editLayoutSides.getEditText();
+		if(editSides == null) throw new RuntimeException("TextInputLayout must contain EditText.");
+		editSides.setText(String.valueOf(polygon.getSides()));
+		editSides.addTextChangedListener(this);
 		
 		checkFill = (CheckBox) view.findViewById(R.id.check_polygon_fill);
 		checkFill.setChecked(polygon.isFill());
@@ -67,18 +77,19 @@ public class PolygonProperties extends ShapeProperties
 		if(v == buttonMinusSides)
 		{
 			if(getSides() <= MIN_SIDES) return;
-			editTextSides.setText(String.valueOf(getSides() - 1));
+			editSides.setText(String.valueOf(getSides() - 1));
 		}
 		else if(v == buttonPlusSides)
 		{
 			if(getSides() >= MAX_SIDES) return;
-			editTextSides.setText(String.valueOf(getSides() + 1));
+			editSides.setText(String.valueOf(getSides() + 1));
 		}
 	}
 	
 	private int getSides()
 	{
-		return Integer.parseInt(editTextSides.getText().toString());
+		if(editSides.getText().length() == 0) return 0;
+		return Integer.parseInt(editSides.getText().toString());
 	}
 	
 	@Override
@@ -90,7 +101,14 @@ public class PolygonProperties extends ShapeProperties
 	@Override
 	public void afterTextChanged(Editable s)
 	{
-		polygon.setSides(getSides());
+		int sides = getSides();
+		if(sides < MIN_SIDES) editLayoutSides.setError(errorToFew);
+		else if(sides > MAX_SIDES) editLayoutSides.setError(errorToMany);
+		else
+		{
+			editLayoutSides.setErrorEnabled(false);
+			polygon.setSides(getSides());
+		}
 	}
 	
 	@Override

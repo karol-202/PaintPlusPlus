@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.fill;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Region;
 import android.os.AsyncTask;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.AsyncBlocker;
@@ -9,16 +10,15 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
-import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
 public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlocker
 {
 	private float fillThreshold;
 	
-	private ColorsSet colors;
+	private Canvas canvas;
 	private OnImageChangeListener listener;
 	private AsyncManager asyncManager;
 	private AsyncTask asyncTask;
@@ -26,7 +26,7 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	public ToolFill(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
 	{
 		super(image);
-		this.colors = image.getColorsSet();
+		this.canvas = image.getEditCanvas();
 		this.listener = listener;
 		this.asyncManager = asyncManager;
 	}
@@ -59,10 +59,17 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
 			if(!asyncManager.block(this)) return false;
+			cancelClipping();
+			
 			FillParams params = new FillParams(this, image, fillThreshold, (int) event.getX(), (int) event.getY());
 			asyncTask = new ToolFillAsyncTask().execute(params);
 		}
 		return false;
+	}
+	
+	private void cancelClipping()
+	{
+		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
 	}
 	
 	@Override

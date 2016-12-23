@@ -75,7 +75,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		canvas.translate(-image.getViewX(), -image.getViewY());
 		shape.onScreenDraw(canvas);
 		
-		canvas.clipPath(selection.getLimitedPath(), Op.DIFFERENCE);
+		updateClipping(canvas, Op.DIFFERENCE);
 		canvas.translate(image.getViewX(), image.getViewY());
 		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
@@ -89,14 +89,14 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	
 	public void apply()
 	{
-		updateClipping();
+		updateClipping(canvas, Op.REPLACE);
 		shape.apply(canvas);
 	}
 	
-	private void updateClipping()
+	private void updateClipping(Canvas canvas, Op op)
 	{
-		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
-		else canvas.clipPath(selection.getPath(), Op.REPLACE);
+		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), op);
+		else canvas.clipPath(selection.getPath(), op);
 	}
 	
 	public void cancel()
