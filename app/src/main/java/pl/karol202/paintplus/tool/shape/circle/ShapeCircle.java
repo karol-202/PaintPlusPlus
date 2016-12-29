@@ -22,9 +22,10 @@ public class ShapeCircle extends Shape
 	private Point center;
 	private float radius;
 	
+	private Point draggingStart;
 	private int draggedIndex;
 	private Point centerAtBeginning;
-	private Point draggingStart;
+	private float radiusAtBeginning;
 	
 	public ShapeCircle(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
@@ -70,53 +71,56 @@ public class ShapeCircle extends Shape
 		{
 			float distanceToCenter = calcDistance(center, x, y);
 			float distanceToRadius = Math.abs(distanceToCenter - radius);
-			if(Math.min(distanceToCenter, distanceToRadius) > MAX_DISTANCE)
-			{
-				draggedIndex = -1;
-				centerAtBeginning = null;
-				draggingStart = null;
-				return;
-			}
-			if(distanceToCenter < distanceToRadius)
-			{
-				draggedIndex = 0;
-				centerAtBeginning = center;
-			}
-			else
-			{
-				draggedIndex = 1;
-				centerAtBeginning = null;
-			}
+			
 			draggingStart = new Point(x, y);
+			centerAtBeginning = center;
+			radiusAtBeginning = radius;
+			
+			if(Math.min(distanceToCenter, distanceToRadius) > MAX_DISTANCE) draggedIndex = -1;
+			else if(distanceToCenter < distanceToRadius) draggedIndex = 0;
+			else draggedIndex = 1;
 		}
 	}
 	
 	private void onTouchMove(int x, int y)
 	{
-		if(!circleCreated) radius = calcDistance(center, x, y);
-		else drag(new Point(x, y));
+		Point current = new Point(x, y);
+		if(!circleCreated) dragRadius(current);
+		else drag(current);
 	}
 	
 	private void onTouchStop(int x, int y)
 	{
-		if(!circleCreated) radius = calcDistance(center, x, y);
-		else drag(new Point(x, y));
+		onTouchMove(x, y);
 		circleCreated = true;
 	}
 	
 	private void drag(Point current)
 	{
-		if(draggedIndex == 0)
+		if(draggedIndex == 0) dragCenter(current);
+		else if(draggedIndex == 1) dragRadius(current);
+	}
+	
+	private void dragCenter(Point current)
+	{
+		Point delta = new Point(current);
+		delta.x -= draggingStart.x;
+		delta.y -= draggingStart.y;
+		
+		Point newCenter = new Point(centerAtBeginning);
+		newCenter.offset(delta.x, delta.y);
+		center = newCenter;
+	}
+	
+	private void dragRadius(Point current)
+	{
+		if(draggingStart != null)
 		{
-			Point delta = new Point(current);
-			delta.x -= draggingStart.x;
-			delta.y -= draggingStart.y;
-			
-			Point newCenter = new Point(centerAtBeginning);
-			newCenter.offset(delta.x, delta.y);
-			center = newCenter;
+			float radiusDelta = calcDistance(center, current.x, current.y);
+			radiusDelta -= calcDistance(center, draggingStart.x, draggingStart.y);
+			radius = radiusAtBeginning + radiusDelta;
 		}
-		else if(draggedIndex == 1) radius = calcDistance(current, center.x, center.y);
+		else radius = calcDistance(center, current.x, current.y);
 	}
 	
 	@Override

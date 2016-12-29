@@ -22,13 +22,15 @@ public class ShapePolygon extends Shape
 	
 	private boolean polygonCreated;
 	private Point center;
-	private float radiusOEC; //Radius of escribed circle
+	private float radiusOCC; //Radius of circumscribed circle
 	private float angle;
 	private Path path;
 	
+	private Point draggingStart;
 	private int draggedIndex;
 	private Point centerAtBeginning;
-	private Point draggingStart;
+	private float radiusOCCAtBeginning;
+	private float angleAtBeginning;
 	
 	public ShapePolygon(ColorsSet colors, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
@@ -69,31 +71,38 @@ public class ShapePolygon extends Shape
 	
 	private void onTouchStart(int x, int y)
 	{
+		Point touchPoint = new Point(x, y);
 		if(!isInEditMode()) enableEditMode();
-		if(!polygonCreated) center = new Point(x, y);
+		if(!polygonCreated) center = touchPoint;
 		else
 		{
+			float side = (float) (2 * radiusOCC * Math.sin(Math.PI / sides));
+			float radiusOIC = (float) (side / (2 * Math.tan(Math.PI / sides)));
+			
+			float centralAngle = 360f / sides;
+			float halfOfCentral = centralAngle / 2;
+			float angle = (float) getAngle(touchPoint) - this.angle;
+			if(angle < 0) angle += 360;
+			float angleMod = angle % centralAngle;
+			float a = Math.abs(angleMod - halfOfCentral);
+			float centerToSide = map(0, halfOfCentral, radiusOIC, radiusOCC, a);
+			
 			float distanceToCenter = calcDistance(center, x, y);
-			float distanceToRadius = Math.abs(distanceToCenter - radiusOEC);
-			if(Math.min(distanceToCenter, distanceToRadius) > MAX_DISTANCE)
-			{
-				draggedIndex = -1;
-				centerAtBeginning = null;
-				draggingStart = null;
-				return;
-			}
-			if(distanceToCenter < distanceToRadius)
-			{
-				draggedIndex = 0;
-				centerAtBeginning = center;
-			}
-			else
-			{
-				draggedIndex = 1;
-				centerAtBeginning = null;
-			}
-			draggingStart = new Point(x, y);
+			float distanceToSide = Math.abs(distanceToCenter - centerToSide);
+			
+			draggingStart = touchPoint;
+			centerAtBeginning = center;
+			radiusOCCAtBeginning = radiusOCC;
+			angleAtBeginning = this.angle;
+			if(Math.min(distanceToCenter, distanceToSide) > MAX_DISTANCE) draggedIndex = -1;
+			else if(distanceToCenter < distanceToSide) draggedIndex = 0;
+			else draggedIndex = 1;
 		}
+	}
+	
+	private float map(float srcMin, float srcMax, float dstMin, float dstMax, float value)
+	{
+		return (value - srcMin) / (srcMax - srcMin) * (dstMax - dstMin) + dstMin;
 	}
 	
 	private void onTouchMove(int x, int y)
@@ -105,9 +114,7 @@ public class ShapePolygon extends Shape
 	
 	private void onTouchStop(int x, int y)
 	{
-		Point current = new Point(x, y);
-		if(!polygonCreated) dragRadius(current);
-		else drag(current);
+		onTouchMove(x, y);
 		polygonCreated = true;
 	}
 	
@@ -132,16 +139,35 @@ public class ShapePolygon extends Shape
 	
 	private void dragRadius(Point current)
 	{
-		radiusOEC = calcDistance(center, current.x, current.y);
-		
-		double deltaX = current.x - center.x;
-		double deltaY = center.y - current.y;
-		double ratio = deltaX / deltaY;
-		double angleRad = Math.atan(ratio);
-		angle = Math.round(Math.toDegrees(angleRad));
-		if(deltaY < 0) angle += 180;
+		if(draggingStart != null)
+		{
+			float radiusDelta = calcDistance(center, current.x, current.y);
+			radiusDelta -= calcDistance(center, draggingStart.x, draggingStart.y);
+			radiusOCC = radiusOCCAtBeginning + radiusDelta;
+			
+			float angleDelta = (float) getAngle(current);
+			angleDelta -= (float) getAngle(draggingStart);
+			angle = angleAtBeginning + angleDelta;
+		}
+		else
+		{
+			radiusOCC = calcDistance(center, current.x, current.y);
+			angle = (float) getAngle(current);
+		}
 		
 		createPath();
+	}
+	
+	private double getAngle(Point point)
+	{
+		double deltaX = point.x - center.x;
+		double deltaY = center.y - point.y;
+		double ratio = deltaX / deltaY;
+		double angleRad = Math.atan(ratio);
+		double angleDeg = Math.toDegrees(angleRad);
+		if(deltaY < 0) angleDeg += 180;
+		if(angleDeg < 0) angleDeg += 360;
+		return angleDeg;
 	}
 	
 	@Override
@@ -181,7 +207,7 @@ public class ShapePolygon extends Shape
 	{
 		polygonCreated = false;
 		center = null;
-		radiusOEC = -1;
+		radiusOCC = -1;
 		angle = 0;
 		path = null;
 		super.cleanUp();
@@ -192,7 +218,7 @@ public class ShapePolygon extends Shape
 	{
 		polygonCreated = false;
 		center = null;
-		radiusOEC = -1;
+		radiusOCC = -1;
 		angle = 0;
 		path = null;
 		super.enableEditMode();
@@ -200,15 +226,15 @@ public class ShapePolygon extends Shape
 	
 	private void createPath()
 	{
-		if(center == null || radiusOEC == -1) return;
+		if(center == null || radiusOCC == -1) return;
 		float central = 360f / sides;
 		
 		path = new Path();
 		for(int i = 0; i < sides; i++)
 		{
 			float angleRad = (float) Math.toRadians((central * i) + angle);
-			float x = center.x + (float) (Math.sin(angleRad) * radiusOEC);
-			float y = center.y - (float) (Math.cos(angleRad) * radiusOEC);
+			float x = center.x + (float) (Math.sin(angleRad) * radiusOCC);
+			float y = center.y - (float) (Math.cos(angleRad) * radiusOCC);
 			if(i == 0) path.moveTo(x, y);
 			else path.lineTo(x, y);
 		}
