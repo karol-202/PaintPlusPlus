@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.pickcolor;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.R;
@@ -12,6 +13,8 @@ import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolColorPick extends Tool
 {
+	private int size;
+	
 	private Bitmap bitmap;
 	private ColorsSet colors;
 	private Selection selection;
@@ -19,6 +22,8 @@ public class ToolColorPick extends Tool
 	public ToolColorPick(Image image)
 	{
 		super(image);
+		this.size = 10;
+		
 		this.bitmap = image.getBitmap();
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
@@ -51,11 +56,57 @@ public class ToolColorPick extends Tool
 	
 	private void pickColor(int x, int y)
 	{
+		if(size == 1) pickPixelColor(x, y);
+		else if(size > 1) pickAverageColor(x, y);
+	}
+	
+	private void pickPixelColor(int x, int y)
+	{
 		if(!selection.isEmpty() && !selection.containsPoint(x, y)) return;
 		int color = bitmap.getPixel(x, y);
 		colors.setFirstColor(color);
 	}
 	
+	private void pickAverageColor(int centerX, int centerY)
+	{
+		int pixels = 0;
+		long redSum = 0;
+		long greenSum = 0;
+		long blueSum = 0;
+		
+		int regionStartX = centerX - (int) Math.floor((size - 1) / 2);
+		int regionStartY = centerY - (int) Math.floor((size - 1) / 2);
+		int regionEndX = centerX + (int) Math.floor(size / 2);
+		int regionEndY = centerY + (int) Math.floor(size / 2);
+		for(int x = regionStartX; x <= regionEndX; x++)
+		{
+			for(int y = regionStartY; y <= regionEndY; y++)
+			{
+				if(!selection.isEmpty() && !selection.containsPoint(x, y)) continue;
+				int color = bitmap.getPixel(x, y);
+				pixels++;
+				redSum += Math.pow(Color.red(color), 2);
+				greenSum += Math.pow(Color.green(color), 2);
+				blueSum += Math.pow(Color.blue(color), 2);
+			}
+		}
+		
+		int red = (int) Math.round(Math.sqrt(redSum / (double) pixels));
+		int green = (int) Math.round(Math.sqrt(greenSum / (double) pixels));
+		int blue = (int) Math.round(Math.sqrt(blueSum / (double) pixels));
+		colors.setFirstColor(Color.rgb(red, green, blue));
+	}
+	
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
+	
+	public int getSize()
+	{
+		return size;
+	}
+	
+	public void setSize(int size)
+	{
+		this.size = size;
+	}
 }

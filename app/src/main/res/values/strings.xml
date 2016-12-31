@@ -102,4 +102,6 @@
 	<string name="select_nothing">Usuń zaznaczenie</string>
 	<string name="error_polygon_too_few_sides">Za mało boków</string>
 	<string name="error_polygon_too_many_sides">Za dużo boków</string>
+	<string name="pick_average">Próbkuj średnią kolorów</string>
+	<string name="pick_average_size">Wielkość</string>
 </resources>
