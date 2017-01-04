@@ -145,11 +145,14 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		resultListeners = new HashMap<>();
 		asyncBlocker = new AsyncManager(this);
 		new GLHelper();
+		String title = null;
+		if(savedInstanceState != null) title = savedInstanceState.getString("title");
+		else title = getString(R.string.activity_paint);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
-		actionBar.setTitle(R.string.activity_paint);
+		actionBar.setTitle(title);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 
@@ -223,7 +226,14 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		tryToAttachPropertiesFragment();
 		tryToAttachColorsFragment();
 	}
-
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		outState.putString("title", toolbar.getTitle().toString());
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
@@ -358,7 +368,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		propArgs.putInt("tool", getTools().getToolId(getTool()));
 		properties.setArguments(propArgs);
 		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.replace(R.id.propertiesFragment, properties);
+		propTrans.replace(R.id.properties_fragment, properties);
 		propTrans.commit();
 	}
 	
@@ -379,9 +389,9 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
 	{
 		colorsSelect = new ColorsSelect();
-		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.replace(R.id.colors_fragment, colorsSelect);
-		propTrans.commit();
+		FragmentTransaction colorTrans = fragments.beginTransaction();
+		colorTrans.replace(R.id.colors_fragment, colorsSelect);
+		colorTrans.commit();
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)

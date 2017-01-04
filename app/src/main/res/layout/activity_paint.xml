@@ -53,14 +53,20 @@
 			android:background="@color/drawer_background"
 			android:clickable="true">
 			
-			<FrameLayout
-				android:id="@+id/propertiesFragment"
+			<ScrollView
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
+				android:id="@+id/scroll_properties"
 				android:layout_alignParentTop="true"
 				android:layout_alignParentEnd="true"
 				android:layout_alignParentStart="true"
-				android:layout_above="@+id/colors_fragment" />
+				android:layout_above="@+id/colors_fragment">
+				
+				<FrameLayout
+					android:id="@+id/properties_fragment"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"/>
+			</ScrollView>
 			
 			<FrameLayout
 				android:id="@+id/colors_fragment"

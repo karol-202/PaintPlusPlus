@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +13,15 @@ public class ShapeProperties extends Fragment
 	protected Shape shape;
 	
 	@Override
-	public void onAttach(Context context)
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		super.onAttach(context);
 		Fragment parent = getParentFragment();
 		if(!(parent instanceof ShapeToolProperties))
 			throw new RuntimeException("This fragment can only be attached to ShapeToolProperties.");
 		ShapeToolProperties shapeProperties = (ShapeToolProperties) parent;
 		shapes = shapeProperties.getShapes();
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
+		if(shapes == null) throw new NullPointerException("Shapes object is null.");
+		
 		Bundle bundle = getArguments();
 		if(bundle == null) throw new RuntimeException("No arguments found.");
 		this.shapeId = bundle.getInt("shape");
