@@ -12,6 +12,8 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
+import java.util.Locale;
+
 public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener
 {
 	private ToolMarker marker;
@@ -19,6 +21,8 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 	private View view;
 	private SeekBar seekMarkerSize;
 	private TextView textMarkerSize;
+	private SeekBar seekMarkerTranslucency;
+	private TextView textMarkerTranslucency;
 	private CheckBox checkSmooth;
 
 	@Override
@@ -36,6 +40,14 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
 		textMarkerSize.setText(String.valueOf(seekMarkerSize.getProgress() + 1));
 		
+		seekMarkerTranslucency = (SeekBar) view.findViewById(R.id.seekBar_marker_translucency);
+		seekMarkerTranslucency.setProgress((int) ((1 - marker.getOpacity()) * 100));
+		seekMarkerTranslucency.setOnSeekBarChangeListener(this);
+		seekMarkerTranslucency.setOnTouchListener(new SeekBarTouchListener());
+		
+		textMarkerTranslucency = (TextView) view.findViewById(R.id.marker_translucency);
+		textMarkerTranslucency.setText(String.format(Locale.US, "%1$d%%", seekMarkerTranslucency.getProgress()));
+		
 		checkSmooth = (CheckBox) view.findViewById(R.id.check_smooth);
 		checkSmooth.setChecked(marker.isSmooth());
 		checkSmooth.setOnCheckedChangeListener(this);
@@ -45,8 +57,20 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		textMarkerSize.setText(String.valueOf(progress + 1));
-		marker.setSize((progress + 1));
+		if(seekBar == seekMarkerSize) setMarkerSize(progress);
+		else if(seekBar == seekMarkerTranslucency) setMarkerTranslucency(progress);
+	}
+	
+	private void setMarkerSize(int size)
+	{
+		marker.setSize(size);
+		textMarkerSize.setText(String.valueOf(size + 1));
+	}
+	
+	private void setMarkerTranslucency(int translucency)
+	{
+		marker.setOpacity(1 - (translucency / 100f));
+		textMarkerTranslucency.setText(String.format(Locale.US, "%1$d%%", translucency));
 	}
 	
 	@Override

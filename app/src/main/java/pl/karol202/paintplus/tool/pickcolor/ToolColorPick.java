@@ -22,7 +22,7 @@ public class ToolColorPick extends Tool
 	public ToolColorPick(Image image)
 	{
 		super(image);
-		this.size = 10;
+		this.size = 1;
 		
 		this.bitmap = image.getBitmap();
 		this.colors = image.getColorsSet();

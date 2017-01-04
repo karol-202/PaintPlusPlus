@@ -8,14 +8,16 @@ public class FillParams
 	private OnFillCompleteListener listener;
 	private Image image;
 	private float threshold;
+	private float translucency;
 	private int x;
 	private int y;
 	
-	public FillParams(OnFillCompleteListener listener, Image image, float threshold, int x, int y)
+	public FillParams(OnFillCompleteListener listener, Image image, float threshold, float translucency, int x, int y)
 	{
 		this.listener = listener;
 		this.image = image;
 		this.threshold = threshold;
+		this.translucency = translucency;
 		this.x = x;
 		this.y = y;
 	}
@@ -33,6 +35,11 @@ public class FillParams
 	public float getThreshold()
 	{
 		return threshold;
+	}
+	
+	public float getTranslucency()
+	{
+		return translucency;
 	}
 	
 	public int getX()

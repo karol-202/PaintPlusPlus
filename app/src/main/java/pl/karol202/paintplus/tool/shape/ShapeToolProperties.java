@@ -4,16 +4,16 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
-public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener, OnCheckedChangeListener
+import java.util.Locale;
+
+public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener, OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener
 {
 	private FragmentManager fragments;
 	private ToolShape shapeTool;
@@ -22,6 +22,8 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	
 	private View view;
 	private Spinner spinnerShape;
+	private SeekBar seekShapeTranslucency;
+	private TextView textShapeTranslucency;
 	private CheckBox checkBoxSmooth;
 	
 	@Override
@@ -41,6 +43,14 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 		spinnerShape.setAdapter(shapeAdapter);
 		spinnerShape.setSelection(getShapeId(shapeTool.getShape()));
 		spinnerShape.setOnItemSelectedListener(this);
+		
+		seekShapeTranslucency = (SeekBar) view.findViewById(R.id.seekBar_shape_translucency);
+		seekShapeTranslucency.setProgress((int) ((1 - shapeTool.getOpacity()) * 100));
+		seekShapeTranslucency.setOnSeekBarChangeListener(this);
+		seekShapeTranslucency.setOnTouchListener(new SeekBarTouchListener());
+		
+		textShapeTranslucency = (TextView) view.findViewById(R.id.shape_translucency);
+		textShapeTranslucency.setText(String.format(Locale.US, "%1$d%%", seekShapeTranslucency.getProgress()));
 		
 		checkBoxSmooth = (CheckBox) view.findViewById(R.id.check_shape_smooth);
 		checkBoxSmooth.setChecked(shapeTool.isSmoothed());
@@ -100,6 +110,19 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	{
 		shapeTool.setSmoothed(isChecked);
 	}
+	
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+	{
+		shapeTool.setOpacity(1 - (progress / 100f));
+		textShapeTranslucency.setText(String.format(Locale.US, "%1$d%%", progress));
+	}
+	
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) { }
+	
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) { }
 	
 	private void tryToUpdateFragment()
 	{

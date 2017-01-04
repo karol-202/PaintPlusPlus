@@ -13,14 +13,13 @@ import pl.karol202.paintplus.tool.selection.Selection;
 public class ToolMarker extends Tool
 {
 	private float size;
+	private float opacity;
 	private boolean smooth;
 	
 	private Canvas canvas;
 	private ColorsSet colors;
 	private Paint pathPaint;
 	private Path path;
-	private Paint ovalPaint;
-	private RectF oval;
 	private float lastX;
 	private float lastY;
 
@@ -28,6 +27,7 @@ public class ToolMarker extends Tool
 	{
 		super(image);
 		this.size = 25;
+		this.opacity = 1;
 		this.smooth = true;
 		
 		this.pathPaint = new Paint();
@@ -37,10 +37,6 @@ public class ToolMarker extends Tool
 
 		this.path = new Path();
 		this.path.setFillType(Path.FillType.EVEN_ODD);
-		
-		this.ovalPaint = new Paint();
-		
-		this.oval = new RectF();
 	}
 	
 	@Override
@@ -74,20 +70,14 @@ public class ToolMarker extends Tool
 	{
 		canvas = image.getEditCanvas();
 		colors = image.getColorsSet();
-		ovalPaint.setColor(colors.getFirstColor());
-		ovalPaint.setAntiAlias(smooth);
 		pathPaint.setColor(colors.getFirstColor());
+		pathPaint.setAlpha((int) (opacity * 255));
 		pathPaint.setStrokeWidth(size);
 		pathPaint.setAntiAlias(smooth);
 		updateClipping(canvas);
 		
 		path.reset();
 		path.moveTo(x, y);
-		
-		oval.left = x - size / 2;
-		oval.top = y - size / 2;
-		oval.right = x + size / 2;
-		oval.bottom = y + size / 2;
 		
 		lastX = x;
 		lastY = y;
@@ -105,7 +95,6 @@ public class ToolMarker extends Tool
 	{
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
-		canvas.drawOval(oval, ovalPaint);
 		canvas.drawPath(path, pathPaint);
 		
 		path.reset();
@@ -118,12 +107,6 @@ public class ToolMarker extends Tool
 	{
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX(), -image.getViewY());
-		
-		/*int clipLeft = Math.max(0, (int) -(image.getViewX() * image.getZoom()));
-		int clipTop = Math.max(0, (int) -(image.getViewY() * image.getZoom()));
-		int clipRight = Math.min(canvas.getWidth(), (int) ((image.getWidth() - image.getViewX()) * image.getZoom()));
-		int clipBottom = Math.min(canvas.getHeight(), (int) ((image.getHeight() - image.getViewY()) * image.getZoom()));
-		canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom, Op.REPLACE);*/
 		
 		updateClipping(canvas);
 		canvas.drawPath(path, pathPaint);
@@ -144,6 +127,16 @@ public class ToolMarker extends Tool
 	public void setSize(float size)
 	{
 		this.size = size;
+	}
+	
+	public float getOpacity()
+	{
+		return opacity;
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		this.opacity = opacity;
 	}
 	
 	public boolean isSmooth()

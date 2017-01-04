@@ -10,6 +10,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 public abstract class Shape
 {
 	private boolean smooth;
+	private float opacity;
 	
 	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
@@ -20,6 +21,7 @@ public abstract class Shape
 	public Shape(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
 		this.smooth = true;
+		this.opacity = 1;
 		
 		this.imageChangeListener = imageChangeListener;
 		this.shapeEditListener = shapeEditListener;
@@ -56,6 +58,7 @@ public abstract class Shape
 	public void updateColor()
 	{
 		paint.setColor(colors.getFirstColor());
+		paint.setAlpha((int) (opacity * 255));
 	}
 	
 	public void cleanUp()
@@ -88,6 +91,17 @@ public abstract class Shape
 	public void setSmooth(boolean smooth)
 	{
 		this.smooth = smooth;
+		update();
+	}
+	
+	public float getOpacity()
+	{
+		return opacity;
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		this.opacity = opacity;
 		update();
 	}
 }

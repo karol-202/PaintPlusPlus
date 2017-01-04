@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.util.ColorRGB;
 
 import java.util.Stack;
 
@@ -23,7 +24,9 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private Bitmap bitmap;
 	private Selection selection;
 	private int destColor;
+	private ColorRGB destColorRGB;
 	private float threshold;
+	private float translucency;
 	private int x;
 	private int y;
 	
@@ -40,7 +43,9 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		bitmap = image.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
 		selection = image.getSelection();
 		destColor = colorsSet.getFirstColor();
+		destColorRGB = new ColorRGB(destColor);
 		threshold = params.getThreshold();
+		translucency = params.getTranslucency();
 		x = params.getX();
 		y = params.getY();
 		
@@ -68,8 +73,10 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 			if(!selection.isEmpty() && !selection.containsPoint(point.x, point.y)) continue;
 			
 			int pos = point.y * width + point.x;
-			int color = pixels[pos];
-			if(!checkColor(touchedColor, color)) continue;
+			int oldColor = pixels[pos];
+			if(!checkColor(touchedColor, oldColor)) continue;
+			//ColorRGB oldColorRGB = new ColorRGB(oldColor);
+			//pixels[pos] = destColorRGB.add(oldColorRGB.multiply(translucency)).getColor();
 			pixels[pos] = destColor;
 			
 			if(point.x > 0)

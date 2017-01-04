@@ -130,16 +130,6 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		imageChangeListener.onImageChanged();
 	}
 	
-	public boolean isInEditMode()
-	{
-		return shape.isInEditMode();
-	}
-	
-	public void setShapeEditListener(OnShapeEditListener listener)
-	{
-		this.shapeEditListener = listener;
-	}
-	
 	public boolean isSmoothed()
 	{
 		return shape.isSmooth();
@@ -148,5 +138,25 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	public void setSmoothed(boolean smooth)
 	{
 		shapes.setSmooth(smooth);
+	}
+	
+	public float getOpacity()
+	{
+		return shape.getOpacity();
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		shapes.setOpacity(opacity);
+	}
+	
+	public boolean isInEditMode()
+	{
+		return shape.isInEditMode();
+	}
+	
+	public void setShapeEditListener(OnShapeEditListener listener)
+	{
+		this.shapeEditListener = listener;
 	}
 }

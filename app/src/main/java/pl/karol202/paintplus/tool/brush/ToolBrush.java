@@ -14,6 +14,7 @@ public class ToolBrush extends Tool
 {
 	private float size;
 	private float shapeOffset;
+	private float opacity;
 	
 	private Canvas canvas;
 	private ColorsSet colors;
@@ -31,6 +32,7 @@ public class ToolBrush extends Tool
 		super(image);
 		this.size = 25;
 		this.shapeOffset = 10;
+		this.opacity = 1;
 		
 		this.shaderMatrix = new Matrix();
 		this.paint = new Paint();
@@ -73,6 +75,7 @@ public class ToolBrush extends Tool
 	{
 		canvas = image.getEditCanvas();
 		colors = image.getColorsSet();
+		paint.setAlpha((int) (opacity * 255));
 		paint.setStrokeWidth(size);
 		updateShader();
 		updateClipping();
@@ -169,5 +172,15 @@ public class ToolBrush extends Tool
 	public void setShapeOffset(float shapeOffset)
 	{
 		this.shapeOffset = shapeOffset;
+	}
+	
+	public float getOpacity()
+	{
+		return opacity;
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		this.opacity = opacity;
 	}
 }

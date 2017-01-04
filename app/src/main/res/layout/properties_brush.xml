@@ -10,7 +10,6 @@
 		android:layout_height="wrap_content"
 		android:text="@string/size_tool"
 		android:id="@+id/text_brush_size"
-		android:paddingBottom="4dp"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toTopOf="parent"
 		android:layout_marginStart="16dp"
@@ -21,9 +20,8 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/seekBar_brush_size"
 		android:max="99"
-		android:paddingBottom="4dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_brush_size"
-		android:layout_marginEnd="32dp"
+		android:layout_marginEnd="34dp"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/text_brush_size"
 		android:layout_marginTop="2dp" />
@@ -51,9 +49,9 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:id="@+id/seek_brush_shape_offset"
-		android:max="50"
+		android:max="49"
 		app:layout_constraintLeft_toRightOf="@+id/text_brush_shape_offset"
-		android:layout_marginEnd="32dp"
+		android:layout_marginEnd="34dp"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/text_brush_shape_offset"
 		android:layout_marginTop="2dp" />
@@ -64,7 +62,35 @@
 		android:id="@+id/brush_shape_offset"
 		app:layout_constraintLeft_toRightOf="@+id/seek_brush_shape_offset"
 		app:layout_constraintTop_toTopOf="@+id/text_brush_shape_offset"
-		android:layout_marginTop="2dp"
 		tools:text="100" />
+	
+	<TextView
+		android:text="@string/translucency"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/text_brush_translucency"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toBottomOf="@+id/text_brush_shape_offset"
+		android:layout_marginStart="16dp"
+		app:layout_constraintLeft_toLeftOf="parent" />
+	
+	<SeekBar
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:id="@+id/seekBar_brush_translucency"
+		app:layout_constraintLeft_toRightOf="@+id/text_brush_translucency"
+		android:layout_marginEnd="34dp"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/text_brush_translucency"
+		android:layout_marginTop="2dp"
+		android:max="100" />
+	
+	<TextView
+		android:text="100%"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/brush_translucency"
+		app:layout_constraintTop_toTopOf="@+id/text_brush_translucency"
+		app:layout_constraintLeft_toRightOf="@+id/seekBar_brush_translucency" />
 
 </android.support.constraint.ConstraintLayout>

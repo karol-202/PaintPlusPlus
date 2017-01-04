@@ -44,4 +44,9 @@ public class Shapes
 	{
 		for(Shape shape : shapes) shape.setSmooth(smooth);
 	}
+	
+	public void setOpacity(float opacity)
+	{
+		for(Shape shape : shapes) shape.setOpacity(opacity);
+	}
 }

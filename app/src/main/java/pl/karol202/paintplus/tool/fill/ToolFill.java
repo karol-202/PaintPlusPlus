@@ -17,6 +17,7 @@ import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlocker
 {
 	private float fillThreshold;
+	private float opacity;
 	
 	private Canvas canvas;
 	private OnImageChangeListener listener;
@@ -26,6 +27,9 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	public ToolFill(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
 	{
 		super(image);
+		this.fillThreshold = 0;
+		this.opacity = 1;
+		
 		this.canvas = image.getEditCanvas();
 		this.listener = listener;
 		this.asyncManager = asyncManager;
@@ -61,7 +65,7 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 			if(!asyncManager.block(this)) return false;
 			cancelClipping();
 			
-			FillParams params = new FillParams(this, image, fillThreshold, (int) event.getX(), (int) event.getY());
+			FillParams params = new FillParams(this, image, fillThreshold, 1 - opacity, (int) event.getX(), (int) event.getY());
 			asyncTask = new ToolFillAsyncTask().execute(params);
 		}
 		return false;
@@ -98,5 +102,15 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	public void setFillThreshold(float fillThreshold)
 	{
 		this.fillThreshold = fillThreshold;
+	}
+	
+	public float getOpacity()
+	{
+		return opacity;
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		this.opacity = opacity;
 	}
 }
