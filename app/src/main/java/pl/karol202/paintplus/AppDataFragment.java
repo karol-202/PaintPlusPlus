@@ -2,7 +2,8 @@ package pl.karol202.paintplus;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
@@ -23,7 +24,7 @@ public class AppDataFragment extends Fragment
 		setRetainInstance(true);
 		
 		image = new Image();
-		image.createBitmap(600, 600);
+		image.newImage(600, 600);
 		
 		tools = new Tools(image, listener, asyncManager);
 		

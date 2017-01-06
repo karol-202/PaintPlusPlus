@@ -3,7 +3,7 @@ package pl.karol202.paintplus.tool.brush;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
@@ -65,15 +65,16 @@ public class ToolBrush extends Tool
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(event.getX(), event.getY());
+		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
 		return true;
 	}
 
-	private void onTouchStart(float x, float y)
+	private boolean onTouchStart(float x, float y)
 	{
-		canvas = image.getEditCanvas();
+		canvas = image.getSelectedCanvas();
+		if(canvas == null) return false;
 		colors = image.getColorsSet();
 		paint.setAlpha((int) (opacity * 255));
 		paint.setStrokeWidth(size);
@@ -85,6 +86,7 @@ public class ToolBrush extends Tool
 		
 		lastX = x;
 		lastY = y;
+		return true;
 	}
 	
 	private void updateShader()

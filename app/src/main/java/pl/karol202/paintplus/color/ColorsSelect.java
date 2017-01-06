@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.color;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.widget.ImageButton;
 import com.pavelsikun.vintagechroma.ChromaDialog;
 import com.pavelsikun.vintagechroma.IndicatorMode;
 import com.pavelsikun.vintagechroma.colormode.ColorMode;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 
@@ -31,9 +32,21 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, com.
 	private int target;
 	
 	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		init(activity);
+	}
+	
+	@Override
 	public void onAttach(Context context)
 	{
 		super.onAttach(context);
+		init(context);
+	}
+	
+	private void init(Context context)
+	{
 		if(!(context instanceof ActivityPaint))
 			throw new RuntimeException("ColorsSelect fragment can only be attached to ActivityPaint.");
 		activityPaint = (ActivityPaint) context;
@@ -78,7 +91,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, com.
 	private void pickColor(int target)
 	{
 		this.target = target;
-		int color = target == 0 ? colors.getFirstColor() : colors.getSecondColor();
+		@ColorInt int color = target == 0 ? colors.getFirstColor() : colors.getSecondColor();
 		new ChromaDialog.Builder().colorMode(ColorMode.RGB)
 								  .initialColor(color)
 								  .indicatorMode(IndicatorMode.DECIMAL)

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.util.GLHelper;
 
@@ -58,7 +58,7 @@ public class OptionFileNew extends Option implements OnClickListener
 			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 			return;
 		}
-		image.createBitmap(x, y);
+		image.newImage(x, y);
 		image.centerView();
 	}
 }

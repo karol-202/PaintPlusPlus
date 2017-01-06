@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;

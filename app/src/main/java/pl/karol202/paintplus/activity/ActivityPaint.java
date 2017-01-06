@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -19,21 +22,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import pl.karol202.paintplus.*;
 import pl.karol202.paintplus.color.ColorsSelect;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LayersAdapter;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
-import pl.karol202.paintplus.tool.OnToolChangeListener;
-import pl.karol202.paintplus.tool.Tool;
-import pl.karol202.paintplus.tool.Tools;
-import pl.karol202.paintplus.tool.ToolsAdapter;
-import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.*;
 import pl.karol202.paintplus.util.GLHelper;
+import pl.karol202.paintplus.util.ItemDivider;
 
 import java.util.HashMap;
 
-public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener
+public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener, View.OnClickListener
 {
 	public interface ActivityResultListener
 	{
@@ -52,6 +55,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		{
 			if(drawerView == drawerLeft) onLeftDrawerOpened(drawerView);
 			else if(drawerView == drawerRight) onRightDrawerOpened();
+			bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 			invalidateOptionsMenu();
 		}
 		
@@ -69,6 +73,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		{
 			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
 			else onRightDrawerMoved();
+			bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 		}
 		
 		private void onLeftDrawerOpened(View drawerView)
@@ -117,12 +122,17 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private AppDataFragment dataFragment;
 	private AsyncManager asyncBlocker;
 	private ColorsSelect colorsSelect;
+	private BottomSheetBehavior bottomSheetBehaviour;
+	private LayersAdapter layersAdapter;
 
 	private Toolbar toolbar;
 	private PaintView paintView;
 	private DrawerLayout layoutDrawer;
 	private ListView drawerLeft;
 	private View drawerRight;
+	private View bottomSheet;
+	private RecyclerView recyclerLayers;
+	private ImageButton buttonAddLayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -148,6 +158,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		String title = null;
 		if(savedInstanceState != null) title = savedInstanceState.getString("title");
 		else title = getString(R.string.activity_paint);
+		layersAdapter = new LayersAdapter(this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -157,6 +168,13 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		actionBar.setHomeButtonEnabled(true);
 
 		paintView = (PaintView) findViewById(R.id.paint_view);
+		paintView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
+			}
+		});
 
 		layoutDrawer = (DrawerLayout) findViewById(R.id.layout_drawer);
 		drawerListener = new DrawerAdapter(this, layoutDrawer, toolbar);
@@ -168,6 +186,18 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 
 		drawerRight = findViewById(R.id.drawer_right);
 		initRightDrawer();
+		
+		bottomSheet = findViewById(R.id.bottom_sheet);
+		bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet);
+		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
+		
+		recyclerLayers = (RecyclerView) findViewById(R.id.recycler_layers);
+		recyclerLayers.setLayoutManager(new LinearLayoutManager(this));
+		recyclerLayers.setAdapter(layersAdapter);
+		recyclerLayers.addItemDecoration(new ItemDivider(this));
+		
+		buttonAddLayer = (ImageButton) findViewById(R.id.button_add_layer);
+		buttonAddLayer.setOnClickListener(this);
 		
 		restoreInstanceState(savedInstanceState);
 	}
@@ -223,6 +253,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		
 		paintView.init(this);
 		drawerLeft.setAdapter(new ToolsAdapter(this, getTools()));
+		layersAdapter.setImage(getImage());
 		tryToAttachPropertiesFragment();
 		tryToAttachColorsFragment();
 	}
@@ -287,6 +318,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		int id = item.getItemId();
 		switch(id)
 		{
+		case R.id.action_layers:
+			if(bottomSheetBehaviour.getState() == BottomSheetBehavior.STATE_HIDDEN)
+				bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
+			else bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
+			return true;
 		case R.id.action_tool:
 			layoutDrawer.closeDrawer(drawerLeft);
 			if(layoutDrawer.isDrawerOpen(drawerRight)) layoutDrawer.closeDrawer(drawerRight);
@@ -392,6 +428,13 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		FragmentTransaction colorTrans = fragments.beginTransaction();
 		colorTrans.replace(R.id.colors_fragment, colorsSelect);
 		colorTrans.commit();
+	}
+	
+	@Override
+	public void onClick(View v)
+	{
+		getImage().newLayer();
+		layersAdapter.notifyDataSetChanged();
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)

@@ -5,10 +5,15 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tools;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class PaintView extends SurfaceView implements OnImageChangeListener
 {
@@ -59,17 +64,41 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			image.centerView();
 			initialized = true;
 		}
-		canvas.drawBitmap(image.getBitmap(), image.getImageMatrix(), bitmapPaint);
+		
+		drawImage(canvas);
+		drawSelection(canvas);
+	}
+	
+	private void drawImage(Canvas canvas)
+	{
+		ArrayList<Layer> layers = new ArrayList<>(image.getLayers());
+		Collections.reverse(layers);
+		for(Layer layer : layers)
+		{
+			if(!layer.isVisible()) continue;
+			Matrix matrix = new Matrix(image.getImageMatrix());
+			matrix.preTranslate(layer.getX(), layer.getY());
+			canvas.drawBitmap(layer.getBitmap(), matrix, bitmapPaint);
+			
+			if(image.isLayerSelected(layer)) drawToolBitmap(canvas);
+		}
+	}
+	
+	private void drawSelection(Canvas canvas)
+	{
 		Path selectionPath = new Path(image.getSelection().getPath());
 		selectionPath.transform(image.getImageMatrix());
 		canvas.drawPath(selectionPath, selectionPaint);
-		
+	}
+	
+	private void drawToolBitmap(Canvas canvas)
+	{
 		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
 		activity.getTool().onScreenDraw(toolCanvas);
 		canvas.drawBitmap(toolBitmap, 0, 0, null);
 	}
-
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{

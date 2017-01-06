@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.*;
 
-public abstract class ActivityFileChoose extends AppCompatActivity implements AdapterFile.OnFileSelectListener
+public abstract class ActivityFileChoose extends AppCompatActivity implements FileAdapter.OnFileSelectListener
 {
 	private class FileFilter implements FilenameFilter
 	{
@@ -43,7 +43,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 		}
 	}
 	
-	private AdapterFile adapter;
+	private FileAdapter adapter;
 	private FileFilter fileFilter;
 	private FileComparator fileComparator;
 	private File currentDirectory;
@@ -59,7 +59,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Ad
 		super.onCreate(state);
 		setContentView(getLayout());
 		
-		adapter = new AdapterFile(this, this);
+		adapter = new FileAdapter(this, this);
 		fileFilter = new FileFilter();
 		fileComparator = new FileComparator();
 		if(state == null) init();

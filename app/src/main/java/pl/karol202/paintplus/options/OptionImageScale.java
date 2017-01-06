@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;

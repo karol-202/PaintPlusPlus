@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.tool.fill;
 
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
 public class FillParams

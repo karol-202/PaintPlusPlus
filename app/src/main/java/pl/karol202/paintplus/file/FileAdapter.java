@@ -13,7 +13,7 @@ import pl.karol202.paintplus.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class AdapterFile extends RecyclerView.Adapter<AdapterFile.ViewHolder>
+public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 {
 	public interface OnFileSelectListener
 	{
@@ -79,7 +79,7 @@ public class AdapterFile extends RecyclerView.Adapter<AdapterFile.ViewHolder>
 	private ArrayList<File> files;
 	private OnFileSelectListener listener;
 	
-	public AdapterFile(Context context, OnFileSelectListener listener)
+	public FileAdapter(Context context, OnFileSelectListener listener)
 	{
 		this.context = context;
 		this.res = context.getResources();

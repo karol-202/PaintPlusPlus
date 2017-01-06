@@ -3,7 +3,7 @@ package pl.karol202.paintplus.tool.marker;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
@@ -20,8 +20,11 @@ public class ToolMarker extends Tool
 	private ColorsSet colors;
 	private Paint pathPaint;
 	private Path path;
+	private Paint ovalPaint;
+	private RectF oval;
 	private float lastX;
 	private float lastY;
+	private boolean pathCreated;
 
 	public ToolMarker(Image image)
 	{
@@ -37,6 +40,10 @@ public class ToolMarker extends Tool
 
 		this.path = new Path();
 		this.path.setFillType(Path.FillType.EVEN_ODD);
+		
+		this.ovalPaint = new Paint();
+		
+		this.oval = new RectF();
 	}
 	
 	@Override
@@ -60,27 +67,35 @@ public class ToolMarker extends Tool
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(event.getX(), event.getY());
+		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
 		return true;
 	}
 	
-	private void onTouchStart(float x, float y)
+	private boolean onTouchStart(float x, float y)
 	{
-		canvas = image.getEditCanvas();
+		canvas = image.getSelectedCanvas();
+		if(canvas == null) return false;
+		
 		colors = image.getColorsSet();
+		updateClipping(canvas);
+		
 		pathPaint.setColor(colors.getFirstColor());
 		pathPaint.setAlpha((int) (opacity * 255));
 		pathPaint.setStrokeWidth(size);
 		pathPaint.setAntiAlias(smooth);
-		updateClipping(canvas);
+		
+		ovalPaint.setColor(colors.getFirstColor());
+		ovalPaint.setAntiAlias(smooth);
 		
 		path.reset();
 		path.moveTo(x, y);
 		
 		lastX = x;
 		lastY = y;
+		pathCreated = false;
+		return true;
 	}
 	
 	private void onTouchMove(float x, float y)
@@ -89,13 +104,22 @@ public class ToolMarker extends Tool
 		
 		lastX = x;
 		lastY = y;
+		pathCreated = true;
 	}
 	
 	private void onTouchStop(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
-		canvas.drawPath(path, pathPaint);
+		if(pathCreated) canvas.drawPath(path, pathPaint);
+		else
+		{
+			oval.left = x - size / 2;
+			oval.top = y - size / 2;
+			oval.right = x + size / 2;
+			oval.bottom = y + size / 2;
+			canvas.drawOval(oval, ovalPaint);
+		}
 		
 		path.reset();
 		lastX = -1;

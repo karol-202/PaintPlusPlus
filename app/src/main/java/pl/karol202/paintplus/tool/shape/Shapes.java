@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.tool.shape;
 
-import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.shape.circle.ShapeCircle;
 import pl.karol202.paintplus.tool.shape.line.ShapeLine;

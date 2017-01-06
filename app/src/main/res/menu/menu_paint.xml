@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 	<group android:id="@+id/group_paint"
-		android:orderInCategory="1">
+		android:orderInCategory="2"
+		app:showAsAction="ifRoom">
+		<item android:id="@+id/action_layers"
+			android:icon="@drawable/ic_layers_white_24dp"
+			android:title="@string/action_layers"
+			android:orderInCategory="3"
+			app:showAsAction="ifRoom"/>
 		<item android:id="@+id/action_tool"
-			android:icon="@drawable/ic_tune_white_24dp"
+			android:icon="@drawable/ic_properties_white_24dp"
 			android:title="@string/action_tool"
-			android:orderInCategory="10"
+			android:orderInCategory="4"
 			app:showAsAction="ifRoom" />
-
+		
 		<item android:id="@+id/action_file"
 			android:icon="@drawable/ic_file_white_24dp"
 			android:title="@string/action_file"
-			android:orderInCategory="11"
+			android:orderInCategory="5"
 			app:showAsAction="never">
 			
 			<menu>
@@ -41,7 +47,7 @@
 		<item android:id="@+id/action_image"
 			android:icon="@drawable/ic_image_white_24dp"
 			android:title="@string/action_image"
-			android:orderInCategory="12"
+			android:orderInCategory="6"
 			app:showAsAction="never">
 
 			<menu>
@@ -71,7 +77,7 @@
 			android:id="@+id/action_settings"
 			android:icon="@drawable/ic_settings_white_24dp"
 			android:title="@string/action_settings"
-			android:orderInCategory="13"
+			android:orderInCategory="7"
 			app:showAsAction="never" />
 	</group>
 </menu>

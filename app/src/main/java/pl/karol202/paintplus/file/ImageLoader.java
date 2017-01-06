@@ -3,7 +3,7 @@ package pl.karol202.paintplus.file;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.GLHelper;
 
 import java.io.File;
@@ -29,9 +29,9 @@ public class ImageLoader
 			int newWidth = (int) Math.floor(photo.getWidth() / higher);
 			int newHeight = (int) Math.floor(photo.getHeight() / higher);
 			Bitmap scaled = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			image.setBitmap(scaled);
+			//image.setBitmap(scaled);
 		}
-		else image.setBitmap(photo);
+		//else image.setBitmap(photo);
 		image.centerView();
 	}
 	
@@ -43,8 +43,8 @@ public class ImageLoader
 			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);
 			CompressFormat format = getExtension(path);
-			Bitmap bitmap = image.getBitmap();
-			bitmap.compress(format, quality, fos);
+			//Bitmap bitmap = image.getBitmap();
+			//bitmap.compress(format, quality, fos);
 			fos.close();
 		}
 		catch(IOException e)

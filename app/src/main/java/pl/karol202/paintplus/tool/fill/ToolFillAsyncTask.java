@@ -4,10 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import pl.karol202.paintplus.Image;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.selection.Selection;
-import pl.karol202.paintplus.util.ColorRGB;
 
 import java.util.Stack;
 
@@ -24,9 +23,9 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private Bitmap bitmap;
 	private Selection selection;
 	private int destColor;
-	private ColorRGB destColorRGB;
+	//private ColorRGB destColorRGB;
 	private float threshold;
-	private float translucency;
+	//private float translucency;
 	private int x;
 	private int y;
 	
@@ -40,12 +39,14 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		ColorsSet colorsSet = image.getColorsSet();
 		
 		listener = params.getListener();
-		bitmap = image.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+		bitmap = image.getSelectedBitmap();
+		if(bitmap == null) throw new NullPointerException("There is no selected layer.");
+		bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		selection = image.getSelection();
 		destColor = colorsSet.getFirstColor();
-		destColorRGB = new ColorRGB(destColor);
+		//destColorRGB = new ColorRGB(destColor);
 		threshold = params.getThreshold();
-		translucency = params.getTranslucency();
+		//translucency = params.getTranslucency();
 		x = params.getX();
 		y = params.getY();
 		

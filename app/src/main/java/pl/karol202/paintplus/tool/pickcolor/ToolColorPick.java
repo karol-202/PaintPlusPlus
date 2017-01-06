@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.Tool;
@@ -24,7 +24,7 @@ public class ToolColorPick extends Tool
 		super(image);
 		this.size = 1;
 		
-		this.bitmap = image.getBitmap();
+		this.bitmap = image.getSelectedBitmap();
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
 	}
@@ -56,7 +56,8 @@ public class ToolColorPick extends Tool
 	
 	private void pickColor(int x, int y)
 	{
-		if(size == 1) pickPixelColor(x, y);
+		if(bitmap == null) colors.setFirstColor(Color.BLACK);
+		else if(size == 1) pickPixelColor(x, y);
 		else if(size > 1) pickAverageColor(x, y);
 	}
 	

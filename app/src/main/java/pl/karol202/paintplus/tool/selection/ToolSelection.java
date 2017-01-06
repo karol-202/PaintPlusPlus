@@ -2,8 +2,8 @@ package pl.karol202.paintplus.tool.selection;
 
 import android.graphics.*;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.Image;
-import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -71,6 +71,11 @@ public class ToolSelection extends Tool
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
+		if(image.getSelectedLayer() == null)
+		{
+			if(editMode) cleanUp();
+			return false;
+		}
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));

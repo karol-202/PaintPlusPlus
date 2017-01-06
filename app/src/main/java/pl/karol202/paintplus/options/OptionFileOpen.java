@@ -1,7 +1,7 @@
 package pl.karol202.paintplus.options;
 
 import android.content.Intent;
-import pl.karol202.paintplus.Image;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.file.ImageLoader;

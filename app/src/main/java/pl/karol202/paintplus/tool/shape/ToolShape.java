@@ -3,8 +3,8 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.Image;
-import pl.karol202.paintplus.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
@@ -27,7 +27,6 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	public ToolShape(Image image, OnImageChangeListener imageChangeListener)
 	{
 		super(image);
-		this.canvas = image.getEditCanvas();
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
 		this.shapes = new Shapes(colors, imageChangeListener, this);
@@ -62,7 +61,8 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			canvas = image.getEditCanvas();
+			canvas = image.getSelectedCanvas();
+			if(canvas == null) return false;
 			selection = image.getSelection();
 		}
 		return shape.onTouch(event);

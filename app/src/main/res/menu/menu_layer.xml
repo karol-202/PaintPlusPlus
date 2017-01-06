@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<item android:id="@+id/action_layer_change_name"
+		android:title="@string/layer_change_name" />
+	<item android:id="@+id/action_layer_delete"
+		android:title="@string/layer_delete" />
+</menu>
