@@ -64,16 +64,20 @@ public class LayersAdapter extends RecyclerView.Adapter<LayersAdapter.ViewHolder
 				setViewBackground(true);
 				imageLayerHandle.setImageResource(R.drawable.ic_drag_handle_white_24dp);
 				textLayerName.setTextColor(Color.WHITE);
+				buttonLayerVisibility.setImageResource(layer.isVisible() ?
+													   R.drawable.ic_visible_white_24dp :
+													   R.drawable.ic_invisible_white_24dp);
 				buttonLayerMenu.setImageResource(R.drawable.ic_menu_white_24dp);
-				buttonLayerVisibility.setImageResource(R.drawable.ic_visible_white_24dp);
 			}
 			else
 			{
 				setViewBackground(false);
 				imageLayerHandle.setImageResource(R.drawable.ic_drag_handle_black_24dp);
 				textLayerName.setTextColor(Color.BLACK);
+				buttonLayerVisibility.setImageResource(layer.isVisible() ?
+													   R.drawable.ic_visible_black_24dp :
+													   R.drawable.ic_invisible_black_24dp);
 				buttonLayerMenu.setImageResource(R.drawable.ic_menu_black_24dp);
-				buttonLayerVisibility.setImageResource(R.drawable.ic_visible_black_24dp);
 			}
 		}
 		
@@ -113,6 +117,14 @@ public class LayersAdapter extends RecyclerView.Adapter<LayersAdapter.ViewHolder
 			return true;
 		}
 		
+		private void select()
+		{
+			if(image.isLayerSelected(layer)) return;
+			notifyItemChanged(image.getSelectedLayerIndex());
+			image.selectLayer(layer);
+			bind(layer);
+		}
+		
 		@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 		private void showRipple(float x, float y)
 		{
@@ -134,16 +146,19 @@ public class LayersAdapter extends RecyclerView.Adapter<LayersAdapter.ViewHolder
 		@Override
 		public void onClick(View v)
 		{
-			if(v == buttonLayerVisibility) layer.setVisible(!layer.isVisible());
+			if(v == buttonLayerVisibility) toggleVisibility();
 			else if(v == buttonLayerMenu) showMenu();
 		}
 		
-		private void select()
+		private void toggleVisibility()
 		{
-			if(image.isLayerSelected(layer)) return;
-			notifyItemChanged(image.getSelectedLayerIndex());
-			image.selectLayer(layer);
-			bind(layer);
+			layer.setVisible(!layer.isVisible());
+			if(image.isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
+																				    R.drawable.ic_visible_white_24dp :
+																				    R.drawable.ic_invisible_white_24dp);
+			else buttonLayerVisibility.setImageResource(layer.isVisible() ?
+														R.drawable.ic_visible_black_24dp :
+														R.drawable.ic_invisible_black_24dp);
 		}
 		
 		private void showMenu()
