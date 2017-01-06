@@ -5,10 +5,10 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tools;
 
@@ -25,6 +25,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	private ColorsSet colors;
 	private Paint bitmapPaint;
 	private Paint selectionPaint;
+	private Paint checkerboardPaint;
+	private Shader checkerboardShader;
 	private boolean initialized;
 
 	public PaintView(Context context, AttributeSet attrs)
@@ -50,6 +52,12 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		selectionPaint.setStyle(Paint.Style.STROKE);
 		selectionPaint.setStrokeWidth(2f);
 		selectionPaint.setPathEffect(new DashPathEffect(SELECTION_PAINT_DASH, 0));
+		
+		Bitmap checkerboard = BitmapFactory.decodeResource(activity.getResources(), R.drawable.checkerboard);
+		checkerboardShader = new BitmapShader(checkerboard, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+		checkerboardPaint = new Paint();
+		checkerboardPaint.setShader(checkerboardShader);
+		checkerboardPaint.setFilterBitmap(false);
 	}
 	
 	@Override
@@ -65,8 +73,22 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			initialized = true;
 		}
 		
+		drawCheckerboard(canvas);
 		drawImage(canvas);
 		drawSelection(canvas);
+	}
+	
+	private void drawCheckerboard(Canvas canvas)
+	{
+		float viewX = -image.getViewX() * image.getZoom();
+		float viewY = -image.getViewY() * image.getZoom();
+		float width = image.getWidth() * image.getZoom();
+		float height = image.getHeight() * image.getZoom();
+		
+		Matrix matrix = new Matrix();
+		matrix.preTranslate(viewX, viewY);
+		checkerboardShader.setLocalMatrix(matrix);
+		canvas.drawRect(viewX, viewY, viewX + width, viewY + height, checkerboardPaint);
 	}
 	
 	private void drawImage(Canvas canvas)

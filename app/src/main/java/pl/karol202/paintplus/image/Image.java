@@ -14,6 +14,8 @@ public class Image
 		void onImageChanged();
 	}
 	
+	private final int MAX_LAYERS = 10;
+	
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
@@ -119,7 +121,8 @@ public class Image
 	{
 		Layer layer = new Layer(0, 0, width, height, "Warstwa", Color.TRANSPARENT);
 		layer.setImageChnageListener(listener);
-		layers.add(layer);
+		layers.add(0, layer);
+		selectedLayer++;
 	}
 	
 	

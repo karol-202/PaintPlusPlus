@@ -24,7 +24,10 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import pl.karol202.paintplus.*;
+import pl.karol202.paintplus.AppDataFragment;
+import pl.karol202.paintplus.AsyncManager;
+import pl.karol202.paintplus.PaintView;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.LayersAdapter;
@@ -33,6 +36,7 @@ import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.*;
 import pl.karol202.paintplus.util.GLHelper;
 import pl.karol202.paintplus.util.ItemDivider;
+import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import java.util.HashMap;
 
@@ -188,6 +192,7 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		initRightDrawer();
 		
 		bottomSheet = findViewById(R.id.bottom_sheet);
+		bottomSheet.setOnTouchListener(new SeekBarTouchListener());
 		bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet);
 		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 		
