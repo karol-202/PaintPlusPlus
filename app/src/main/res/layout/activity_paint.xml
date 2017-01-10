@@ -103,7 +103,7 @@
 			app:layout_constraintBottom_toTopOf="@+id/recycler_layers"
 			app:layout_constraintRight_toRightOf="parent" />
 		
-		<android.support.v7.widget.RecyclerView
+		<pl.karol202.paintplus.image.LayersRecyclerView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:id="@+id/recycler_layers"
@@ -113,6 +113,5 @@
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintLeft_toLeftOf="parent"
 			app:layout_constraintRight_toRightOf="parent"/>
-	
 	</android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

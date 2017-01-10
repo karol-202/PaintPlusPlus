@@ -119,6 +119,7 @@ public class Image
 	
 	public void newLayer()
 	{
+		if(layers.size() >= MAX_LAYERS) return;
 		Layer layer = new Layer(0, 0, width, height, "Warstwa", Color.TRANSPARENT);
 		layer.setImageChnageListener(listener);
 		layers.add(0, layer);

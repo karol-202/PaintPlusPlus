@@ -99,7 +99,6 @@ public class LayersAdapter extends RecyclerView.Adapter<LayersAdapter.ViewHolder
 			return true;
 		}
 		
-		//Handle touch
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
 		{
@@ -107,14 +106,16 @@ public class LayersAdapter extends RecyclerView.Adapter<LayersAdapter.ViewHolder
 			{
 				if(event.getAction() == MotionEvent.ACTION_DOWN)
 				{
-					select();
 					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) showRipple(event.getX(), event.getY());
 				}
-				else if(event.getAction() == MotionEvent.ACTION_UP)
+				else if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_OUTSIDE)
+				{
+					select();
 					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) hideRipple();
+				}
 			}
 			else if(v == imageLayerHandle) onHandleTouch(event);
-			return true;
+			return false;
 		}
 		
 		private void select()
