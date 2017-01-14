@@ -13,12 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -35,7 +35,7 @@ import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.*;
 import pl.karol202.paintplus.util.GLHelper;
-import pl.karol202.paintplus.util.ItemDivider;
+import pl.karol202.paintplus.util.LayersSheetBehavior;
 
 import java.util.HashMap;
 
@@ -125,9 +125,10 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	private AppDataFragment dataFragment;
 	private AsyncManager asyncBlocker;
 	private ColorsSelect colorsSelect;
-	private BottomSheetBehavior bottomSheetBehaviour;
+	private LayersSheetBehavior bottomSheetBehaviour;
 	private LayersAdapter layersAdapter;
 
+	private ViewGroup mainContainer;
 	private Toolbar toolbar;
 	private PaintView paintView;
 	private DrawerLayout layoutDrawer;
@@ -158,9 +159,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		resultListeners = new HashMap<>();
 		asyncBlocker = new AsyncManager(this);
 		new GLHelper();
-		String title = null;
+		String title;
 		if(savedInstanceState != null) title = savedInstanceState.getString("title");
 		else title = getString(R.string.activity_paint);
+		
+		mainContainer = (ViewGroup) findViewById(R.id.main_container);
 		layersAdapter = new LayersAdapter(this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -191,14 +194,12 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		initRightDrawer();
 		
 		bottomSheet = findViewById(R.id.bottom_sheet);
-		bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet);
+		bottomSheetBehaviour = (LayersSheetBehavior) BottomSheetBehavior.from(bottomSheet);
 		bottomSheetBehaviour.setSkipCollapsed(true);
 		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 		
 		recyclerLayers = (LayersRecyclerView) findViewById(R.id.recycler_layers);
-		recyclerLayers.setLayoutManager(new LinearLayoutManager(this));
 		recyclerLayers.setAdapter(layersAdapter);
-		recyclerLayers.addItemDecoration(new ItemDivider(this));
 		
 		buttonAddLayer = (ImageButton) findViewById(R.id.button_add_layer);
 		buttonAddLayer.setOnClickListener(this);
@@ -466,6 +467,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
 	}
 	
+	public DisplayMetrics getDisplayMetrics()
+	{
+		return getResources().getDisplayMetrics();
+	}
+	
 	public Image getImage()
 	{
 		return dataFragment.getImage();
@@ -479,5 +485,16 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	public Tool getTool()
 	{
 		return dataFragment.getTool();
+	}
+	
+	public ViewGroup getMainContainer()
+	{
+		return mainContainer;
+	}
+	
+	public void setLayersBlocked(boolean blocked)
+	{
+		recyclerLayers.setAllowScrolling(!blocked);
+		bottomSheetBehaviour.setAllowDragging(!blocked);
 	}
 }
