@@ -41,6 +41,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	private RippleDrawable rippleDrawable;
 	private float elevationPx;
+	private long animationDuration;
+	private float animationTargetX;
+	private float animationTargetY;
 	
 	public LayerViewHolder(LayersAdapter adapter, View view)
 	{
@@ -50,6 +53,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		this.view.setOnTouchListener(this);
 		this.view.setOnLongClickListener(this);
 		elevationPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ELEVATION_DP, adapter.getContext().getResources().getDisplayMetrics());
+		animationDuration = adapter.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
+		animationTargetX = 0;
+		animationTargetY = 0;
 		
 		imageLayerHandle = (ImageView) view.findViewById(R.id.image_layer_handle);
 		imageLayerHandle.setOnTouchListener(this);
@@ -126,7 +132,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	{
 		if(v == view)
 		{
-			if(view.getVisibility() == View.INVISIBLE) return false;
+			if(ghost) return false;
 			if(event.getAction() == MotionEvent.ACTION_DOWN)
 			{
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) showRipple(event.getX(), event.getY());
@@ -166,31 +172,20 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	private boolean onHandleTouch(MotionEvent event)
 	{
 		LayerHandle handle = adapter.getLayerHandle();
-		float x = event.getX();
-		float y = event.getY();
-		if(ghost)
+		float x = event.getRawX();
+		float y = event.getRawY();
+		
+		if(!ghost && event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			x += view.getTranslationX();
-			y += view.getTranslationY();
-			
-			if(event.getAction() == MotionEvent.ACTION_DOWN)
-			{
-				handle.setViewHolder(this);
-				handle.onTouchStart(x, y);
-			}
-			else if(event.getAction() == MotionEvent.ACTION_MOVE) handle.onTouchMove(x, y);
+			handle.setViewHolder(this);
+			handle.onTouchStart(x, y);
+		}
+		else if(ghost)
+		{
+			if(event.getAction() == MotionEvent.ACTION_MOVE) handle.onTouchMove(x, y);
 			else if(event.getAction() == MotionEvent.ACTION_UP) handle.onTouchStop(x, y);
-			return true;
 		}
-		else
-		{
-			if(event.getAction() == MotionEvent.ACTION_DOWN)
-			{
-				handle.setViewHolder(this);
-				handle.onTouchStart(x, y);
-			}
-			return false;
-		}
+		return true;
 	}
 	
 	@Override
@@ -276,10 +271,27 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		builder.show();
 	}
 	
-	public void setViewOffset(float x, float y)
+	public void setViewOffset(float x, float y, boolean animate)
 	{
-		view.setTranslationX(x);
-		view.setTranslationY(y);
+		if(!animate)
+		{
+			view.setTranslationX(x);
+			view.setTranslationY(y);
+		}
+		else
+		{
+			if(x != animationTargetX || y != animationTargetY)
+			{
+				animationTargetX = x;
+				animationTargetY = y;
+				view.animate().translationX(x).translationY(y).setDuration(animationDuration).start();
+			}
+		}
+	}
+	
+	public void hide()
+	{
+		view.setVisibility(View.INVISIBLE);
 	}
 	
 	public Layer getLayer()

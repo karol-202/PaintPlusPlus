@@ -19,7 +19,6 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	
 	private HashMap<Integer, LayerViewHolder> viewHolders;
 	private LayerHandle layerHandle;
-	private ViewGroup parent;
 	
 	public LayersAdapter(ActivityPaint activity)
 	{
@@ -30,12 +29,6 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	
 	@Override
 	public LayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
-		this.parent = parent;
-		return createViewHolder();
-	}
-	
-	public LayerViewHolder createViewHolder()
 	{
 		View view = LayoutInflater.from(context).inflate(R.layout.item_layer, parent, false);
 		return new LayerViewHolder(this, view);

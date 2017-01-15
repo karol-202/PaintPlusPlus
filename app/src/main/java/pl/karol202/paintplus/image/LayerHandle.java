@@ -19,8 +19,7 @@ public class LayerHandle
 	
 	private Layer layer;
 	private int layerId;
-	private LayerViewHolder originalViewHolder;
-	private LayerViewHolder newViewHolder;
+	private LayerViewHolder viewHolder;
 	private float oldTouchX;
 	private float oldTouchY;
 	private float oldOffsetX;
@@ -38,66 +37,55 @@ public class LayerHandle
 	public void onTouchStart(float x, float y)
 	{
 		if(layer == null) return;
-		if(newViewHolder == null)
-		{
-			View originalView = originalViewHolder.getView();
-			originalView.setVisibility(View.INVISIBLE);
-			PointF originalViewPos = findPointInMainContainer(originalView, new PointF(0, 0));
+		View view = viewHolder.getView();
+		PointF originalViewPos = findPointInMainContainer(view, null);
+		
+		ViewGroup parent = (ViewGroup) view.getParent();
+		parent.removeView(view);
+		
+		viewHolder.bind(layer, true);
+		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y, false);
+		mainContainer.addView(view);
+		activity.setLayersBlocked(true);
 			
-			newViewHolder = adapter.createViewHolder();
-			newViewHolder.bind(layer, true);
-			newViewHolder.setViewOffset(originalViewPos.x, originalViewPos.y);
-			mainContainer.addView(newViewHolder.getView());
-			activity.setLayersBlocked(true);
-			
-			oldOffsetX = originalViewPos.x;
-			oldOffsetY = originalViewPos.y;
-		}
-		else
-		{
-			oldTouchX = x;
-			oldTouchY = y;
-		}
+		oldOffsetX = originalViewPos.x;
+		oldOffsetY = originalViewPos.y;
+
+		oldTouchX = x;
+		oldTouchY = y;
 	}
 	
 	private PointF findPointInMainContainer(View view, PointF point)
 	{
-		point = new PointF(point.x, point.y);
+		if(view == mainContainer) return point;
+		if(point == null) point = new PointF();
+		point.offset(view.getX(), view.getY());
+		
 		ViewParent parent = view.getParent();
 		if(!(parent instanceof View)) throw new RuntimeException("Unexcpected end of hierarchy.");
 		View parentView = (View) parent;
-		point.offset(parentView.getX(), parentView.getY());
-		if(parentView == mainContainer) return point;
-		else return findPointInMainContainer(parentView, point);
+		return findPointInMainContainer(parentView, point);
 	}
 	
 	public void onTouchMove(float x, float y)
 	{
 		if(layer == null) return;
 		
-		if(newViewHolder != null)
-		{
-			float deltaX = Math.round(x - oldTouchX);
-			float deltaY = Math.round(y - oldTouchY);
-			newViewHolder.setViewOffset(oldOffsetX + deltaX, oldOffsetY + deltaY);
-			//System.out.println("DX: " + deltaX + "   DY: " + deltaY + "   X: " + x + "   Y: " + y);
-			moveOtherLayers(getCurrentPosition(y));
-		}
+		float deltaX = Math.round(x - oldTouchX);
+		float deltaY = Math.round(y - oldTouchY);
+		viewHolder.setViewOffset(oldOffsetX + deltaX, oldOffsetY + deltaY, false);
+		moveOtherLayers(getCurrentPosition(y));
 	}
 	
 	public void onTouchStop(float x, float y)
 	{
 		if(layer == null) return;
 		
-		////Tymczasowo
-		//originalViewHolder.getView().setVisibility(View.VISIBLE);
-		//mainContainer.removeView(newViewHolder.getView());
 		
 		activity.setLayersBlocked(false);
 		
 		layer = null;
-		originalViewHolder = null;
-		newViewHolder = null;
+		viewHolder = null;
 	}
 	
 	private int getCurrentPosition(float y)
@@ -112,28 +100,34 @@ public class LayerHandle
 	
 	private void moveOtherLayers(int currentPos)
 	{
-		System.out.println(currentPos);
 		int one = currentPos > layerId ? 1 : -1;
-		int firstIndex = layerId + one;
-		int lastIndex = currentPos;
+		Integer firstIndex = layerId + one;
+		Integer lastIndex = currentPos;
+		
+		if(firstIndex > lastIndex)
+		{
+			int temp = firstIndex;
+			firstIndex = lastIndex;
+			lastIndex = temp;
+		}
+		
 		for(Integer key : viewHolders.keySet())
 		{
 			LayerViewHolder holder = viewHolders.get(key);
-			if(key >= firstIndex && key <= lastIndex) holder.setViewOffset(0, -one * viewHeight);
-			else holder.setViewOffset(0, 0);
+			boolean visible = key != layerId;
+			if(!visible) holder.hide();
+			
+			boolean inRange = key >= firstIndex && key <= lastIndex;
+			if(inRange && currentPos != layerId) holder.setViewOffset(0, -one * viewHeight, true);
+			else holder.setViewOffset(0, 0, true);
 		}
 	}
 	
 	public void setViewHolder(LayerViewHolder viewHolder)
 	{
 		this.layer = viewHolder.getLayer();
-				
-		if(!viewHolder.isGhost())
-		{
-			originalViewHolder = viewHolder;
-			layerId = findViewHolderId(viewHolder);
-		}
-		else newViewHolder = viewHolder;
+		this.viewHolder = viewHolder;
+		layerId = findViewHolderId(viewHolder);
 	}
 	
 	private int findViewHolderId(LayerViewHolder holder)
