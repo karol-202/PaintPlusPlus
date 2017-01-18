@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.image;
 
+import android.animation.Animator;
 import android.graphics.PointF;
 import android.util.TypedValue;
 import android.view.View;
@@ -9,7 +10,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 
 import java.util.HashMap;
 
-public class LayerHandle
+public class LayerHandle implements Animator.AnimatorListener
 {
 	private ActivityPaint activity;
 	private ViewGroup mainContainer;
@@ -24,6 +25,7 @@ public class LayerHandle
 	private float oldTouchY;
 	private float oldOffsetX;
 	private float oldOffsetY;
+	private int currentPos;
 	
 	public LayerHandle(ActivityPaint activity, LayersAdapter adapter)
 	{
@@ -43,8 +45,8 @@ public class LayerHandle
 		ViewGroup parent = (ViewGroup) view.getParent();
 		parent.removeView(view);
 		
-		viewHolder.bind(layer, true);
-		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y, false);
+		viewHolder.setGhost(true);
+		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y);
 		mainContainer.addView(view);
 		activity.setLayersBlocked(true);
 			
@@ -73,7 +75,7 @@ public class LayerHandle
 		
 		float deltaX = Math.round(x - oldTouchX);
 		float deltaY = Math.round(y - oldTouchY);
-		viewHolder.setViewOffset(oldOffsetX + deltaX, oldOffsetY + deltaY, false);
+		viewHolder.setViewOffset(oldOffsetX + deltaX, oldOffsetY + deltaY);
 		moveOtherLayers(getCurrentPosition(y));
 	}
 	
@@ -81,11 +83,12 @@ public class LayerHandle
 	{
 		if(layer == null) return;
 		
+		currentPos = getCurrentPosition(y);
+		float targetGhostPos = oldOffsetY + ((currentPos - layerId) * viewHeight);
+		viewHolder.setViewOffsetWithAnimation(0, targetGhostPos, this);
+		moveOtherLayers(currentPos);
 		
 		activity.setLayersBlocked(false);
-		
-		layer = null;
-		viewHolder = null;
 	}
 	
 	private int getCurrentPosition(float y)
@@ -111,16 +114,42 @@ public class LayerHandle
 			lastIndex = temp;
 		}
 		
+		LayerViewHolder holderReplacement = viewHolders.get(layerId);
+		holderReplacement.hide();
+		
 		for(Integer key : viewHolders.keySet())
 		{
 			LayerViewHolder holder = viewHolders.get(key);
-			boolean visible = key != layerId;
-			if(!visible) holder.hide();
 			
 			boolean inRange = key >= firstIndex && key <= lastIndex;
-			if(inRange && currentPos != layerId) holder.setViewOffset(0, -one * viewHeight, true);
-			else holder.setViewOffset(0, 0, true);
+			if(inRange && currentPos != layerId) holder.setViewOffsetWithAnimation(0, -one * viewHeight, null);
+			else holder.setViewOffsetWithAnimation(0, 0, null);
 		}
+	}
+	
+	@Override
+	public void onAnimationStart(Animator animation) { }
+	
+	@Override
+	public void onAnimationEnd(Animator animation)
+	{
+		dropLayer();
+	}
+	
+	@Override
+	public void onAnimationCancel(Animator animation) { }
+	
+	@Override
+	public void onAnimationRepeat(Animator animation) { }
+	
+	private void dropLayer()
+	{
+		mainContainer.removeView(viewHolder.getView());
+		adapter.moveLayer(layerId, currentPos);
+		adapter.notifyDataSetChanged();
+		
+		layer = null;
+		viewHolder = null;
 	}
 	
 	public void setViewHolder(LayerViewHolder viewHolder)

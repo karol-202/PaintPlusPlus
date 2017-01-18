@@ -73,4 +73,15 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	{
 		return layerHandle;
 	}
+	
+	public void moveLayer(int layerId, int target)
+	{
+		Layer selected = image.getSelectedLayer();
+		
+		Layer layer = layers.remove(layerId);
+		layers.add(target, layer);
+		
+		image.selectLayer(layers.indexOf(selected));
+		image.updateImage();
+	}
 }

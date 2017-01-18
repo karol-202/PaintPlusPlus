@@ -85,7 +85,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, com.
 	{
 		colorFirst.setBackgroundColor(colors.getFirstColor());
 		colorSecond.setBackgroundColor(colors.getSecondColor());
-		image.updateColors();
+		image.updateImage();
 	}
 
 	private void pickColor(int target)

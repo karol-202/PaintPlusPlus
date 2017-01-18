@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.image;
 
+import android.animation.Animator.AnimatorListener;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -69,14 +70,11 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	public void bind(Layer layer)
 	{
-		bind(layer, false);
-	}
-	
-	public void bind(Layer layer, boolean ghost)
-	{
 		this.layer = layer;
-		this.ghost = ghost;
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) setElevation();
+		
+		view.setVisibility(View.VISIBLE);
+		setViewOffset(0, 0);
+		
 		
 		textLayerName.setText(layer.getName());
 		imageLayerPreview.setImageBitmap(layer.getBitmap());
@@ -101,12 +99,6 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 					R.drawable.ic_invisible_black_24dp);
 			buttonLayerMenu.setImageResource(R.drawable.ic_menu_black_24dp);
 		}
-	}
-	
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	private void setElevation()
-	{
-		if(ghost) view.setTranslationZ(elevationPx);
 	}
 	
 	private void setViewBackground(boolean selected)
@@ -271,37 +263,47 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		builder.show();
 	}
 	
-	public void setViewOffset(float x, float y, boolean animate)
-	{
-		if(!animate)
-		{
-			view.setTranslationX(x);
-			view.setTranslationY(y);
-		}
-		else
-		{
-			if(x != animationTargetX || y != animationTargetY)
-			{
-				animationTargetX = x;
-				animationTargetY = y;
-				view.animate().translationX(x).translationY(y).setDuration(animationDuration).start();
-			}
-		}
-	}
-	
 	public void hide()
 	{
 		view.setVisibility(View.INVISIBLE);
 	}
 	
-	public Layer getLayer()
+	public void setViewOffset(float x, float y)
 	{
-		return layer;
+		view.setTranslationX(x);
+		view.setTranslationY(y);
+	}
+	
+	public void setViewOffsetWithAnimation(float x, float y, AnimatorListener listener)
+	{
+		if(x != animationTargetX || y != animationTargetY)
+		{
+			animationTargetX = x;
+			animationTargetY = y;
+			view.animate().translationX(x).translationY(y).setDuration(animationDuration).setListener(listener).start();
+		}
+	}
+	
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	private void setElevation()
+	{
+		if(ghost) view.setTranslationZ(elevationPx);
 	}
 	
 	public boolean isGhost()
 	{
 		return ghost;
+	}
+	
+	public void setGhost(boolean ghost)
+	{
+		this.ghost = ghost;
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) setElevation();
+	}
+	
+	public Layer getLayer()
+	{
+		return layer;
 	}
 	
 	public View getView()

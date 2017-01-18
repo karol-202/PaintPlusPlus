@@ -1,6 +1,9 @@
 package pl.karol202.paintplus.image;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -104,7 +107,7 @@ public class Image
 		if(listener != null) listener.onImageChanged();
 	}
 	
-	public void updateColors()
+	public void updateImage()
 	{
 		if(listener != null) listener.onImageChanged();
 	}
@@ -124,6 +127,45 @@ public class Image
 		layer.setImageChnageListener(listener);
 		layers.add(0, layer);
 		selectedLayer++;
+	}
+	
+	public int getSelectedLayerIndex()
+	{
+		return selectedLayer;
+	}
+	
+	public Layer getSelectedLayer()
+	{
+		if(layers.size() == 0) return null;
+		return layers.get(selectedLayer);
+	}
+	
+	public boolean isLayerSelected(Layer layer)
+	{
+		return layer == getSelectedLayer();
+	}
+	
+	public void selectLayer(int index)
+	{
+		if(index < 0 || index >= layers.size()) throw new IllegalArgumentException("Invalid layer index.");
+		selectedLayer = index;
+	}
+	
+	public void selectLayer(Layer layer)
+	{
+		if(!layers.contains(layer))
+			throw new NoSuchElementException("Layer cannot be selected because it does not exist in the list.");
+		selectedLayer = layers.indexOf(layer);
+	}
+	
+	public void deleteLayer(Layer layer)
+	{
+		if(!layers.contains(layer))
+			throw new NoSuchElementException("Layer cannot be deleted because it does not exist in the list.");
+		int index = layers.indexOf(layer);
+		if(index <= selectedLayer) selectedLayer--;
+		layers.remove(layer);
+		if(layers.size() == 0) selection.selectNothing();
 	}
 	
 	
@@ -148,17 +190,6 @@ public class Image
 		return layers;
 	}
 	
-	public int getSelectedLayerIndex()
-	{
-		return selectedLayer;
-	}
-	
-	public Layer getSelectedLayer()
-	{
-		if(layers.size() == 0) return null;
-		return layers.get(selectedLayer);
-	}
-	
 	public Bitmap getSelectedBitmap()
 	{
 		Layer layer = getSelectedLayer();
@@ -171,28 +202,6 @@ public class Image
 		Layer layer = getSelectedLayer();
 		if(layer == null) return null;
 		return layer.getEditCanvas();
-	}
-	
-	public boolean isLayerSelected(Layer layer)
-	{
-		return layer == getSelectedLayer();
-	}
-	
-	public void selectLayer(Layer layer)
-	{
-		if(!layers.contains(layer))
-			throw new NoSuchElementException("Layer cannot be selected because it does not exist in the list.");
-		selectedLayer = layers.indexOf(layer);
-	}
-	
-	public void deleteLayer(Layer layer)
-	{
-		if(!layers.contains(layer))
-			throw new NoSuchElementException("Layer cannot be deleted because it does not exist in the list.");
-		int index = layers.indexOf(layer);
-		if(index <= selectedLayer && selectedLayer != 0) selectedLayer--;
-		layers.remove(layer);
-		if(layers.size() == 0) selection.selectNothing();
 	}
 	
 	
