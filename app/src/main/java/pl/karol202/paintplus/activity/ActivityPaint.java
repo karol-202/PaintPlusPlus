@@ -1,17 +1,12 @@
 package pl.karol202.paintplus.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.annotation.TargetApi;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -19,132 +14,50 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ListView;
 import pl.karol202.paintplus.AppDataFragment;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.LayersAdapter;
-import pl.karol202.paintplus.image.LayersRecyclerView;
-import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.settings.ActivitySettings;
-import pl.karol202.paintplus.tool.*;
-import pl.karol202.paintplus.util.GLHelper;
-import pl.karol202.paintplus.util.LayersSheetBehavior;
+import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.Tools;
 
 import java.util.HashMap;
 
-public class ActivityPaint extends AppCompatActivity implements ListView.OnItemClickListener, View.OnClickListener
+public class ActivityPaint extends AppCompatActivity
 {
 	public interface ActivityResultListener
 	{
 		void onActivityResult(int resultCode, Intent data);
 	}
 	
-	private class DrawerAdapter extends ActionBarDrawerToggle
-	{
-		public DrawerAdapter(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar)
-		{
-			super(activity, drawerLayout, toolbar, R.string.action_drawer_open, R.string.action_drawer_close);
-		}
-		
-		@Override
-		public void onDrawerOpened(View drawerView)
-		{
-			if(drawerView == drawerLeft) onLeftDrawerOpened(drawerView);
-			else if(drawerView == drawerRight) onRightDrawerOpened();
-			bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
-			invalidateOptionsMenu();
-		}
-		
-		@Override
-		public void onDrawerClosed(View drawerView)
-		{
-			if(drawerView == drawerLeft) onLeftDrawerClosed(drawerView);
-			if(!(layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight)))
-				onAllDrawersClosed();
-			invalidateOptionsMenu();
-		}
-		
-		@Override
-		public void onDrawerSlide(View drawerView, float slideOffset)
-		{
-			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
-			else onRightDrawerMoved();
-			bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
-		}
-		
-		private void onLeftDrawerOpened(View drawerView)
-		{
-			super.onDrawerOpened(drawerView);
-			String toolChoice = getResources().getString(R.string.choice_of_tool);
-			actionBar.setTitle(toolChoice);
-		}
-		
-		private void onRightDrawerOpened()
-		{
-			String properties = getResources().getString(R.string.properties);
-			String tool = getResources().getString(getTool().getName());
-			actionBar.setTitle(properties + ": " + tool);
-		}
-		
-		private void onLeftDrawerClosed(View drawerView)
-		{
-			super.onDrawerClosed(drawerView);
-		}
-		
-		private void onAllDrawersClosed()
-		{
-			actionBar.setTitle(R.string.activity_paint);
-		}
-		
-		private void onLeftDrawerMoved(View drawerView, float slideOffset)
-		{
-			super.onDrawerSlide(drawerView, slideOffset);
-			layoutDrawer.closeDrawer(drawerRight);
-		}
-		
-		private void onRightDrawerMoved()
-		{
-			colorsSelect.updateColors();
-		}
-	}
+	private ActivityPaintActions actions;
+	private ActivityPaintDrawers drawers;
+	private ActivityPaintLayers layers;
 	
 	private View decorView;
 	private FragmentManager fragments;
-	private ActionBarDrawerToggle drawerListener;
-	private ActionBar actionBar;
-	private DisplayMetrics displayMetrics;
-	private float screenWidthDp;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
-	private AppDataFragment dataFragment;
 	private AsyncManager asyncBlocker;
-	private ColorsSelect colorsSelect;
-	private LayersSheetBehavior bottomSheetBehaviour;
-	private LayersAdapter layersAdapter;
+	private AppDataFragment dataFragment;
+	private ActionBar actionBar;
 
 	private ViewGroup mainContainer;
 	private Toolbar toolbar;
 	private PaintView paintView;
-	private DrawerLayout layoutDrawer;
-	private ListView drawerLeft;
-	private View drawerRight;
-	private View bottomSheet;
-	private LayersRecyclerView recyclerLayers;
-	private ImageButton buttonAddLayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		actions = new ActivityPaintActions(this);
+		drawers = new ActivityPaintDrawers(this);
+		layers  = new ActivityPaintLayers(this);
+		
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
-		initSystemUIVisibility();
 		decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
 		{
 			@Override
@@ -153,61 +66,37 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 				initSystemUIVisibility();
 			}
 		});
+		initSystemUIVisibility();
+		
 		fragments = getFragmentManager();
-		displayMetrics = getResources().getDisplayMetrics();
-		screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
 		resultListeners = new HashMap<>();
 		asyncBlocker = new AsyncManager(this);
-		new GLHelper();
-		String title;
-		if(savedInstanceState != null) title = savedInstanceState.getString("title");
-		else title = getString(R.string.activity_paint);
 		
 		mainContainer = (ViewGroup) findViewById(R.id.main_container);
-		layersAdapter = new LayersAdapter(this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
-		actionBar.setTitle(title);
+		actionBar.setTitle(makeTitle(savedInstanceState));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-
+		
 		paintView = (PaintView) findViewById(R.id.paint_view);
-		paintView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
-			}
-		});
-
-		layoutDrawer = (DrawerLayout) findViewById(R.id.layout_drawer);
-		drawerListener = new DrawerAdapter(this, layoutDrawer, toolbar);
-		layoutDrawer.addDrawerListener(drawerListener);
-
-		drawerLeft = (ListView) findViewById(R.id.drawer_left);
-		drawerLeft.setOnItemClickListener(this);
-		initLeftDrawer();
-
-		drawerRight = findViewById(R.id.drawer_right);
-		initRightDrawer();
 		
-		bottomSheet = findViewById(R.id.bottom_sheet);
-		bottomSheetBehaviour = (LayersSheetBehavior) BottomSheetBehavior.from(bottomSheet);
-		bottomSheetBehaviour.setSkipCollapsed(true);
-		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
-		
-		recyclerLayers = (LayersRecyclerView) findViewById(R.id.recycler_layers);
-		recyclerLayers.setAdapter(layersAdapter);
-		
-		buttonAddLayer = (ImageButton) findViewById(R.id.button_add_layer);
-		buttonAddLayer.setOnClickListener(this);
+		drawers.initDrawers();
+		layers.initLayers();
 		
 		restoreInstanceState(savedInstanceState);
 	}
 	
 	private void initSystemUIVisibility()
+	{
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) initSystemUIVisibilityKitkat();
+		else initSystemUIVisibilityPreKitkat();
+	}
+	
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	private void initSystemUIVisibilityKitkat()
 	{
 		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 									  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -217,22 +106,20 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 									  | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 	}
 	
-	private void initLeftDrawer()
+	private void initSystemUIVisibilityPreKitkat()
 	{
-		LayoutParams params1 = drawerLeft.getLayoutParams();
-		
-		int maxWidth = (int) (280 * displayMetrics.density);
-		int preferredWidth = (int) ((screenWidthDp - 112) * displayMetrics.density);
-		params1.width = Math.min(maxWidth, preferredWidth);
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+									  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+									  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+									  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+									  | View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 	
-	private void initRightDrawer()
+	private String makeTitle(Bundle savedInstanceState)
 	{
-		LayoutParams params2 = drawerRight.getLayoutParams();
-		
-		int maxWidth = (int) (320 * displayMetrics.density);
-		int preferredWidth = (int) ((screenWidthDp - 112) * displayMetrics.density);
-		params2.width = Math.min(maxWidth, preferredWidth);
+		String title = getString(R.string.activity_paint);
+		if(savedInstanceState != null) title = savedInstanceState.getString("title");
+		return title;
 	}
 	
 	private void restoreInstanceState(Bundle state)
@@ -254,14 +141,11 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	protected void onPostCreate(Bundle savedInstanceState)
 	{
 		super.onPostCreate(savedInstanceState);
-		drawerListener.syncState();
 		
 		paintView.init(this);
-		drawerLeft.setAdapter(new ToolsAdapter(this, getTools()));
-		layersAdapter.setImage(getImage());
+		layers.postInitLayers();
 		
-		tryToAttachPropertiesFragment();
-		tryToAttachColorsFragment();
+		drawers.postInitDrawers();
 	}
 	
 	@Override
@@ -276,176 +160,34 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		super.onWindowFocusChanged(hasFocus);
 		if(hasFocus) initSystemUIVisibility();
-		
-		int activityWidth = getWindow().getDecorView().getWidth();
-		int activityHeight = getWindow().getDecorView().getHeight();
-		int maxHeight = activityHeight - (int) (activityWidth / (16f / 9f));
-		recyclerLayers.setMaxHeight(maxHeight);
+		layers.updateViews();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_paint, menu);
+		actions.inflateMenu(menu);
 		return true;
 	}
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
-		boolean anyDrawerOpen = layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
-		menu.setGroupVisible(R.id.group_paint, !anyDrawerOpen);
-		
-		preparePhotoCaptureOption(menu);
-		prepareFileOpenOption(menu);
-		prepareFileSaveOption(menu);
-		
+		actions.prepareMenu(menu);
 		return super.onPrepareOptionsMenu(menu);
-	}
-	
-	private void preparePhotoCaptureOption(Menu menu)
-	{
-		boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
-	}
-	
-	private void prepareFileOpenOption(Menu menu)
-	{
-		String state = Environment.getExternalStorageState();
-		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
-		menu.findItem(R.id.action_open_image).setEnabled(enable);
-	}
-	
-	private void prepareFileSaveOption(Menu menu)
-	{
-		String state = Environment.getExternalStorageState();
-		boolean enable = state.equals(Environment.MEDIA_MOUNTED);
-		menu.findItem(R.id.action_save_image).setEnabled(enable);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		int id = item.getItemId();
-		switch(id)
-		{
-		case R.id.action_layers:
-			if(bottomSheetBehaviour.getState() == BottomSheetBehavior.STATE_HIDDEN)
-				bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
-			else bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
-			return true;
-		case R.id.action_tool:
-			layoutDrawer.closeDrawer(drawerLeft);
-			if(layoutDrawer.isDrawerOpen(drawerRight)) layoutDrawer.closeDrawer(drawerRight);
-			else layoutDrawer.openDrawer(drawerRight);
-			return true;
-			
-		case R.id.action_new_image:
-			new OptionFileNew(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_capture_photo:
-			new OptionFileCapturePhoto(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_open_image:
-			new OptionFileOpen(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_save_image:
-			new OptionFileSave(this, paintView.getImage()).execute();
-			return true;
-			
-		case R.id.action_resize_image:
-			new OptionImageResize(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_scale_image:
-			new OptionImageScale(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_flip_image:
-			new OptionImageFlip(this, paintView.getImage()).execute();
-			return true;
-		case R.id.action_rotate_image:
-			new OptionImageRotate(this, paintView.getImage()).execute();
-			return true;
-			
-		case R.id.action_settings:
-			showSettingsActivity();
-		}
-		return super.onOptionsItemSelected(item);
+		if(actions.handleAction(item)) return true;
+		else return super.onOptionsItemSelected(item);
 	}
-
-	private void showSettingsActivity()
+	
+	public void showSettingsActivity()
 	{
 		Intent intent = new Intent(this, ActivitySettings.class);
 		startActivity(intent);
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-	{
-		Tool previousTool = getTool();
-		Tool newTool = getTools().getTool(position);
-		
-		dataFragment.setTool(newTool);
-		paintView.onImageChanged();
-		tryToAttachPropertiesFragment();
-		layoutDrawer.closeDrawer(drawerLeft);
-		
-		if(previousTool instanceof OnToolChangeListener) ((OnToolChangeListener) previousTool).onOtherToolSelected();
-		if(newTool instanceof OnToolChangeListener) ((OnToolChangeListener) newTool).onToolSelected();
-	}
-	
-	private void tryToAttachPropertiesFragment()
-	{
-		try
-		{
-			attachPropertiesFragment();
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-									   "Probably the fragment class does not contain " +
-									   "default constructor.", e);
-		}
-	}
-
-	private void attachPropertiesFragment() throws InstantiationException, IllegalAccessException
-	{
-		Class<? extends ToolProperties> propertiesClass = getTool().getPropertiesFragmentClass();
-		Fragment properties = propertiesClass.newInstance();
-		Bundle propArgs = new Bundle();
-		propArgs.putInt("tool", getTools().getToolId(getTool()));
-		properties.setArguments(propArgs);
-		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.replace(R.id.properties_fragment, properties);
-		propTrans.commit();
-	}
-	
-	private void tryToAttachColorsFragment()
-	{
-		try
-		{
-			attachColorsFragment();
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-									   "Probably the fragment class does not contain " +
-									   "default constructor.", e);
-		}
-	}
-	
-	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
-	{
-		colorsSelect = new ColorsSelect();
-		FragmentTransaction colorTrans = fragments.beginTransaction();
-		colorTrans.replace(R.id.colors_fragment, colorsSelect);
-		colorTrans.commit();
-	}
-	
-	@Override
-	public void onClick(View v)
-	{
-		getImage().newLayer();
-		layersAdapter.notifyDataSetChanged();
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)
@@ -465,6 +207,36 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 	{
 		if(!resultListeners.containsKey(requestCode)) return;
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
+	}
+	
+	public boolean isAnyDrawerOpen()
+	{
+		return drawers.isAnyDrawerOpen();
+	}
+	
+	public void togglePropertiesDrawer()
+	{
+		drawers.togglePropertiesDrawer();
+	}
+	
+	public void toggleLayersSheet()
+	{
+		layers.toggleLayersSheet();
+	}
+	
+	public void closeLayersSheet()
+	{
+		layers.closeLayersSheet();
+	}
+	
+	public void setScrollingBlocked(boolean blocked)
+	{
+		layers.setScrollingBlocked(blocked);
+	}
+	
+	public void setTitle(String title)
+	{
+		actionBar.setTitle(title);
 	}
 	
 	public DisplayMetrics getDisplayMetrics()
@@ -487,14 +259,19 @@ public class ActivityPaint extends AppCompatActivity implements ListView.OnItemC
 		return dataFragment.getTool();
 	}
 	
+	public void setTool(Tool tool)
+	{
+		dataFragment.setTool(tool);
+		paintView.onImageChanged();
+	}
+	
 	public ViewGroup getMainContainer()
 	{
 		return mainContainer;
 	}
 	
-	public void setLayersBlocked(boolean blocked)
+	public Toolbar getToolbar()
 	{
-		recyclerLayers.setAllowScrolling(!blocked);
-		bottomSheetBehaviour.setAllowDragging(!blocked);
+		return toolbar;
 	}
 }

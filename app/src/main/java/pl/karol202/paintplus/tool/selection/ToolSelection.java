@@ -3,7 +3,6 @@ package pl.karol202.paintplus.tool.selection;
 import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -13,16 +12,15 @@ public class ToolSelection extends Tool
 	private enum MoveType
 	{
 		NONE,
-		LEFT_TOP_CORNER, RIGHT_TOP_CORENR, LEFT_BOTTOM_CORNER, RIGHT_BOTTOM_CORNER,
+		LEFT_TOP_CORNER, RIGHT_TOP_CORNER, LEFT_BOTTOM_CORNER, RIGHT_BOTTOM_CORNER,
 		LEFT_SIDE, TOP_SIDE, RIGHT_SIDE, BOTTOM_SIDE,
-		MOVE;
+		MOVE
 	}
 	
 	private final int MAX_DISTANCE = 50;
 	
 	private ToolSelectionMode mode;
 	
-	private OnImageChangeListener imageListener;
 	private OnSelectionEditListener selectionListener;
 	private Selection selection;
 	private Rect rect;
@@ -34,12 +32,11 @@ public class ToolSelection extends Tool
 	private Rect rectAtBeginning;
 	private Point movingStart;
 	
-	public ToolSelection(Image image, OnImageChangeListener imageListener)
+	public ToolSelection(Image image)
 	{
 		super(image);
 		this.mode = ToolSelectionMode.NEW;
 		
-		this.imageListener = imageListener;
 		this.selection = image.getSelection();
 		this.rect = new Rect();
 		this.paint = new Paint();
@@ -128,7 +125,7 @@ public class ToolSelection extends Tool
 		if(bottom && !top && xInside) movingType = MoveType.BOTTOM_SIDE;
 		
 		if(left && top) movingType = MoveType.LEFT_TOP_CORNER;
-		if(right && top) movingType = MoveType.RIGHT_TOP_CORENR;
+		if(right && top) movingType = MoveType.RIGHT_TOP_CORNER;
 		if(right && bottom) movingType = MoveType.RIGHT_BOTTOM_CORNER;
 		if(left && bottom) movingType = MoveType.LEFT_BOTTOM_CORNER;
 	}
@@ -167,7 +164,7 @@ public class ToolSelection extends Tool
 			rect.left += deltaX;
 			rect.top += deltaY;
 			break;
-		case RIGHT_TOP_CORENR:
+		case RIGHT_TOP_CORNER:
 			rect.right += deltaX;
 			rect.top += deltaY;
 			break;
@@ -222,19 +219,19 @@ public class ToolSelection extends Tool
 	public void cancelSelection()
 	{
 		cleanUp();
-		imageListener.onImageChanged();
+		image.updateImage();
 	}
 	
 	public void selectAll()
 	{
 		selection.selectAll();
-		imageListener.onImageChanged();
+		image.updateImage();
 	}
 	
 	public void selectNothing()
 	{
 		selection.selectNothing();
-		imageListener.onImageChanged();
+		image.updateImage();
 	}
 	
 	private void cleanUp()

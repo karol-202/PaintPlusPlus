@@ -14,6 +14,11 @@ public class GLHelper
 		}
 	}
 	
+	static
+	{
+		new GLHelper();
+	}
+	
 	private static int maxTextureSize;
 	
 	private EGLDisplay display;

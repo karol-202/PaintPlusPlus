@@ -48,7 +48,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		viewHolder.setGhost(true);
 		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y);
 		mainContainer.addView(view);
-		activity.setLayersBlocked(true);
+		activity.setScrollingBlocked(true);
 			
 		oldOffsetX = originalViewPos.x;
 		oldOffsetY = originalViewPos.y;
@@ -88,7 +88,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		viewHolder.setViewOffsetWithAnimation(0, targetGhostPos, this);
 		moveOtherLayers(currentPos);
 		
-		activity.setLayersBlocked(false);
+		activity.setScrollingBlocked(false);
 	}
 	
 	private int getCurrentPosition(float y)

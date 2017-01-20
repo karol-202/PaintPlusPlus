@@ -7,9 +7,8 @@ import android.os.AsyncTask;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
-import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
@@ -20,17 +19,15 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	private float opacity;
 	
 	private Canvas canvas;
-	private OnImageChangeListener listener;
 	private AsyncManager asyncManager;
 	private AsyncTask asyncTask;
 	
-	public ToolFill(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
+	public ToolFill(Image image, AsyncManager asyncManager)
 	{
 		super(image);
 		this.fillThreshold = 0;
 		this.opacity = 1;
 		
-		this.listener = listener;
 		this.asyncManager = asyncManager;
 	}
 	
@@ -85,7 +82,7 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	public void onFillComplete(Bitmap bitmap)
 	{
 		canvas.drawBitmap(bitmap, 0, 0, null);
-		listener.onImageChanged();
+		image.updateImage();
 		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
 	

@@ -23,9 +23,9 @@ public class Tools
 		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
-		tools.add(new ToolFill(image, listener, asyncManager));
+		tools.add(new ToolFill(image, asyncManager));
 		tools.add(new ToolShape(image, listener));
-		tools.add(new ToolSelection(image, listener));
+		tools.add(new ToolSelection(image));
 		tools.add(new ToolColorPick(image));
 	}
 	
