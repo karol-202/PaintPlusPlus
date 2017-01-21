@@ -10,7 +10,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.Layer;
-import pl.karol202.paintplus.tool.Tools;
+import pl.karol202.paintplus.tool.Tool;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	
 	private ActivityPaint activity;
 	private Image image;
-	private Tools tools;
 	private ColorsSet colors;
 	private Paint bitmapPaint;
 	private Paint selectionPaint;
@@ -40,9 +39,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		
 		image = activity.getImage();
 		image.setOnImageChangeListener(this);
-		
-		tools = activity.getTools();
-		
 		colors = image.getColorsSet();
 		
 		bitmapPaint = new Paint();
@@ -117,7 +113,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	{
 		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
-		activity.getTool().onScreenDraw(toolCanvas);
+		getTool().onScreenDraw(toolCanvas);
 		canvas.drawBitmap(toolBitmap, 0, 0, null);
 	}
 	
@@ -126,9 +122,14 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	{
 		float x = (event.getX() / image.getZoom()) + image.getViewX();
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
+		if(getTool().isLayerSpace())
+		{
+			x -= image.getSelectedLayerX();
+			y -= image.getSelectedLayerY();
+		}
 		event.setLocation(x, y);
 		
-		boolean result = activity.getTool().onTouch(event);
+		boolean result = getTool().onTouch(event);
 		invalidate();
 		return result;
 	}
@@ -147,5 +148,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	public ColorsSet getColors()
 	{
 		return colors;
+	}
+	
+	private Tool getTool()
+	{
+		return activity.getTool();
 	}
 }

@@ -22,6 +22,9 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private OnFillCompleteListener listener;
 	private Bitmap bitmap;
 	private Selection selection;
+	
+	private int selectedLayerX;
+	private int selectedLayerY;
 	private int destColor;
 	//private ColorRGB destColorRGB;
 	private float threshold;
@@ -43,6 +46,9 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		if(bitmap == null) throw new NullPointerException("There is no selected layer.");
 		bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		selection = image.getSelection();
+		
+		selectedLayerX = image.getSelectedLayerX();
+		selectedLayerY = image.getSelectedLayerY();
 		destColor = colorsSet.getFirstColor();
 		//destColorRGB = new ColorRGB(destColor);
 		threshold = params.getThreshold();
@@ -71,7 +77,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		while(!pointsToCheck.isEmpty())
 		{
 			Point point = pointsToCheck.pop();
-			if(!selection.isEmpty() && !selection.containsPoint(point.x, point.y)) continue;
+			if(!checkSelection(point)) continue;
 			
 			int pos = point.y * width + point.x;
 			int oldColor = pixels[pos];
@@ -90,6 +96,11 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 				pointsToCheck.add(new Point(point.x, point.y + 1));
 		}
 		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+	}
+	
+	private boolean checkSelection(Point point)
+	{
+		return selection.isEmpty() || selection.containsPoint(point.x + selectedLayerX, point.y + selectedLayerY);
 	}
 	
 	private boolean checkColor(int touched, int current)

@@ -50,6 +50,12 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getX() < 0 || event.getY() < 0 ||

@@ -19,7 +19,6 @@ import static android.content.DialogInterface.*;
 public class OptionImageResize extends Option implements OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
 {
 	private AlertDialog dialog;
-
 	private EditText editWidth;
 	private EditText editHeight;
 	private EditText editX;
@@ -93,6 +92,11 @@ public class OptionImageResize extends Option implements OnClickListener, TextWa
 	{
 		if(which == BUTTON_POSITIVE)
 		{
+			if(newWidth == 0 || newHeight == 0)
+			{
+				Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
+				return;
+			}
 			if(newWidth > GLHelper.getMaxTextureSize() ||
 			   newHeight > GLHelper.getMaxTextureSize())
 			{

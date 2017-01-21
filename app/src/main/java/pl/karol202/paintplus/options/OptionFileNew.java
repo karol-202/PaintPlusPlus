@@ -15,8 +15,6 @@ import static android.content.DialogInterface.OnClickListener;
 
 public class OptionFileNew extends Option implements OnClickListener
 {
-	private final int MAX_SIZE = 2048 * 2048;
-	
 	private AlertDialog dialog;
 	private EditText editX;
 	private EditText editY;
@@ -52,6 +50,12 @@ public class OptionFileNew extends Option implements OnClickListener
 		if(which != DialogInterface.BUTTON_POSITIVE) return;
 		int x = Integer.parseInt(editX.getText().toString());
 		int y = Integer.parseInt(editY.getText().toString());
+		
+		if(x == 0 || y == 0)
+		{
+			Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
+			return;
+		}
 		if(x > GLHelper.getMaxTextureSize() ||
 		   y > GLHelper.getMaxTextureSize())
 		{

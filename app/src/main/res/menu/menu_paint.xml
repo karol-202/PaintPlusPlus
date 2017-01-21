@@ -20,7 +20,7 @@
 		<menu>
 			<item android:id="@+id/action_new_image"
 				android:icon="@drawable/ic_add_white_24dp"
-				android:title="@string/action_new"
+				android:title="@string/action_new_image"
 				android:orderInCategory="1"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_capture_photo"
@@ -70,6 +70,22 @@
 				app:showAsAction="never"/>
 		</menu>
 	</item>
+	
+	<item android:id="@+id/action_layer"
+		android:icon="@drawable/ic_layers_white_24dp"
+		android:title="@string/action_layer"
+		android:orderInCategory="7"
+		app:showAsAction="never">
+		
+		<menu>
+			<item android:id="@+id/action_new_layer"
+				android:icon="@drawable/ic_add_white_24dp"
+				android:title="@string/action_new_layer"
+				android:orderInCategory="1"
+				app:showAsAction="never"/>
+		</menu>
+	</item>
+	
 	<item
 		android:id="@+id/action_settings"
 		android:icon="@drawable/ic_settings_white_24dp"

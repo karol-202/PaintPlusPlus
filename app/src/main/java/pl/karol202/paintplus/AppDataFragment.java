@@ -23,7 +23,7 @@ public class AppDataFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-		image = new Image();
+		image = new Image(getActivity());
 		image.newImage(600, 600);
 		
 		tools = new Tools(image, listener, asyncManager);

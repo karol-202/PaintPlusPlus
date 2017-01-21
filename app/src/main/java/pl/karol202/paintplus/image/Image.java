@@ -1,9 +1,11 @@
 package pl.karol202.paintplus.image;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -17,8 +19,9 @@ public class Image
 		void onImageChanged();
 	}
 	
-	private final int MAX_LAYERS = 10;
+	private final String DEFAULT_LAYER_NAME;
 	
+	public final int MAX_LAYERS = 10;
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
@@ -38,8 +41,10 @@ public class Image
 	private int viewportWidth;
 	private int viewportHeight;
 	
-	public Image()
+	public Image(Context context)
 	{
+		this.DEFAULT_LAYER_NAME = context.getString(R.string.new_layer_name);
+		
 		this.layers = new ArrayList<>();
 		this.colorsSet = ColorsSet.getDefault();
 		
@@ -54,7 +59,7 @@ public class Image
 		this.height = height;
 		
 		layers.clear();
-		layers.add(new Layer(0, 0, width, height, "Warstwa", colorsSet.getSecondColor()));
+		layers.add(new Layer(0, 0, width, height, DEFAULT_LAYER_NAME, colorsSet.getSecondColor()));
 		selectedLayer = 0;
 		
 		selection = new Selection(width, height);
@@ -120,13 +125,20 @@ public class Image
 	}
 	
 	
-	public void newLayer()
+	//Will be deleted
+	public Layer newLayer()
 	{
-		if(layers.size() >= MAX_LAYERS) return;
-		Layer layer = new Layer(0, 0, width, height, "Warstwa", Color.TRANSPARENT);
-		layer.setImageChnageListener(listener);
+		return newLayer(width, height, DEFAULT_LAYER_NAME);
+	}
+	
+	public Layer newLayer(int width, int height, String name)
+	{
+		if(layers.size() >= MAX_LAYERS) return null;
+		Layer layer = new Layer(0, 0, width, height, name, Color.TRANSPARENT);
+		layer.setImageChangeListener(listener);
 		layers.add(0, layer);
 		selectedLayer++;
+		return layer;
 	}
 	
 	public int getSelectedLayerIndex()
@@ -168,11 +180,15 @@ public class Image
 		if(layers.size() == 0) selection.selectNothing();
 	}
 	
+	public String getDefaultLayerName()
+	{
+		return DEFAULT_LAYER_NAME;
+	}
 	
 	public void setOnImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
-		for(Layer layer : layers) layer.setImageChnageListener(listener);
+		for(Layer layer : layers) layer.setImageChangeListener(listener);
 	}
 	
 	public ColorsSet getColorsSet()
@@ -202,6 +218,16 @@ public class Image
 		Layer layer = getSelectedLayer();
 		if(layer == null) return null;
 		return layer.getEditCanvas();
+	}
+	
+	public int getSelectedLayerX()
+	{
+		return getSelectedLayer().getX();
+	}
+	
+	public int getSelectedLayerY()
+	{
+		return getSelectedLayer().getY();
 	}
 	
 	

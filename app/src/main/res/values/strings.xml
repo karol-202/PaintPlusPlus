@@ -15,6 +15,7 @@
 	<string name="dialog_scale_image">Skaluj obraz</string>
 	<string name="dialog_flip_image">Odbij</string>
 	<string name="dialog_rotate_image">Obróć</string>
+	<string name="dialog_new_layer">Nowa warstwa</string>
 	<string name="dialog_replace_file">Czy chcesz zamienić?</string>
 	<string name="dialog_fill">Proszę czekać</string>
 	<string name="dialog_fill_message">Trwa wypełnianie…</string>
@@ -26,16 +27,22 @@
 	
 	<string name="action_layers">Warstwy</string>
 	<string name="action_tool">Narzędzie</string>
+	
 	<string name="action_file">Plik</string>
-	<string name="action_new">Nowy obraz</string>
+	<string name="action_new_image">Nowy obraz</string>
 	<string name="action_capture_photo">Zrób zdjęcie</string>
 	<string name="action_open">Otwórz plik</string>
 	<string name="action_save">Zapisz plik</string>
+	
 	<string name="action_image">Obraz</string>
 	<string name="action_resize">Zmień wymiary</string>
 	<string name="action_scale">Skaluj obraz</string>
 	<string name="action_flip">Odbij</string>
 	<string name="action_rotate">Obróć</string>
+	
+	<string name="action_layer">Warstwa</string>
+	<string name="action_new_layer">Nowa warstwa</string>
+	
 	<string name="action_settings">Ustawienia</string>
 
 	<string name="tool_pan">Widok</string>
@@ -112,4 +119,7 @@
 	<string name="pick_average_size">Wielkość</string>
 	<string name="translucency">Przezrocz.</string>
 	<string name="layers">Warstwy</string>
+	<string name="layer_name">Nazwa</string>
+	<string name="message_invalid_bounds">Podane wymiary są nieprawidłowe.</string>
+	<string name="new_layer_name">Nowa warstwa</string>
 </resources>

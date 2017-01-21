@@ -23,8 +23,7 @@ public class ToolColorPick extends Tool
 	{
 		super(image);
 		this.size = 1;
-		
-		this.bitmap = image.getSelectedBitmap();
+
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
 	}
@@ -48,6 +47,12 @@ public class ToolColorPick extends Tool
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_UP) pickColor((int) event.getX(), (int) event.getY());
@@ -56,6 +61,9 @@ public class ToolColorPick extends Tool
 	
 	private void pickColor(int x, int y)
 	{
+		bitmap = image.getSelectedBitmap();
+		if(x < 0 || y < 0 || x >= bitmap.getWidth() || y >= bitmap.getHeight()) return;
+		
 		if(bitmap == null) colors.setFirstColor(Color.BLACK);
 		else if(size == 1) pickPixelColor(x, y);
 		else if(size > 1) pickAverageColor(x, y);
@@ -63,7 +71,7 @@ public class ToolColorPick extends Tool
 	
 	private void pickPixelColor(int x, int y)
 	{
-		if(!selection.isEmpty() && !selection.containsPoint(x, y)) return;
+		if(!checkSelection(x, y)) return;
 		int color = bitmap.getPixel(x, y);
 		colors.setFirstColor(color);
 	}
@@ -83,7 +91,7 @@ public class ToolColorPick extends Tool
 		{
 			for(int y = regionStartY; y <= regionEndY; y++)
 			{
-				if(!selection.isEmpty() && !selection.containsPoint(x, y)) continue;
+				if(!checkSelection(x, y)) continue;
 				int color = bitmap.getPixel(x, y);
 				pixels++;
 				redSum += Math.pow(Color.red(color), 2);
@@ -96,6 +104,11 @@ public class ToolColorPick extends Tool
 		int green = (int) Math.round(Math.sqrt(greenSum / (double) pixels));
 		int blue = (int) Math.round(Math.sqrt(blueSum / (double) pixels));
 		colors.setFirstColor(Color.rgb(red, green, blue));
+	}
+	
+	private boolean checkSelection(int x, int y)
+	{
+		return selection.isEmpty() || selection.containsPoint(x + image.getSelectedLayerX(), y + image.getSelectedLayerY());
 	}
 	
 	@Override

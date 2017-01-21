@@ -66,6 +66,12 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return false;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(image.getSelectedLayer() == null)

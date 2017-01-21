@@ -18,6 +18,8 @@ public class ToolMarker extends Tool
 	
 	private Canvas canvas;
 	private ColorsSet colors;
+	private Path selectionPath;
+	
 	private Paint pathPaint;
 	private Path path;
 	private Paint ovalPaint;
@@ -33,6 +35,7 @@ public class ToolMarker extends Tool
 		this.opacity = 1;
 		this.smooth = true;
 		
+		updateSelectionPath();
 		this.pathPaint = new Paint();
 		this.pathPaint.setStyle(Paint.Style.STROKE);
 		this.pathPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -65,6 +68,12 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
@@ -79,6 +88,8 @@ public class ToolMarker extends Tool
 		if(canvas == null) return false;
 		
 		colors = image.getColorsSet();
+		
+		updateSelectionPath();
 		updateClipping(canvas);
 		
 		pathPaint.setColor(colors.getFirstColor());
@@ -130,17 +141,25 @@ public class ToolMarker extends Tool
 	public void onScreenDraw(Canvas canvas)
 	{
 		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX(), -image.getViewY());
+		canvas.translate(-image.getViewX() + image.getSelectedLayerX(),
+						 -image.getViewY() + image.getSelectedLayerY());
 		
 		updateClipping(canvas);
 		canvas.drawPath(path, pathPaint);
 	}
 	
+	private void updateSelectionPath()
+	{
+		selectionPath = new Path(image.getSelection().getPath());
+		selectionPath.offset(-image.getSelectedLayerX(), -image.getSelectedLayerY());
+	}
+	
 	private void updateClipping(Canvas canvas)
 	{
 		Selection selection = image.getSelection();
-		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
-		else canvas.clipPath(selection.getPath(), Op.REPLACE);
+		
+		canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
 	}
 	
 	public float getSize()

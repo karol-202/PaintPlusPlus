@@ -103,10 +103,15 @@ public class ActivityPaintActions
 			new OptionImageRotate(activity, image).execute();
 			return true;
 		
+		case R.id.action_new_layer:
+			new OptionLayerNew(activity, image).execute();
+			return true;
+			
 		case R.id.action_settings:
 			activity.showSettingsActivity();
 			return true;
 		}
-		return false;
+		return false
+				;
 	}
 }

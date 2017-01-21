@@ -19,6 +19,8 @@ public abstract class Tool
 	
 	public abstract Class<? extends ToolProperties> getPropertiesFragmentClass();
 	
+	public abstract boolean isLayerSpace();
+	
 	public abstract boolean onTouch(MotionEvent event);
 
 	public abstract void onScreenDraw(Canvas canvas);

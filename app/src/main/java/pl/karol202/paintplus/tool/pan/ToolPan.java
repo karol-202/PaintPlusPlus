@@ -38,6 +38,12 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return false;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		float x = event.getX() - image.getViewX();

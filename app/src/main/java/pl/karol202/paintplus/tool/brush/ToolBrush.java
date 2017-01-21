@@ -18,6 +18,7 @@ public class ToolBrush extends Tool
 	
 	private Canvas canvas;
 	private ColorsSet colors;
+	
 	private Shader radialShader;
 	private Matrix shaderMatrix;
 	private Paint paint;
@@ -63,6 +64,12 @@ public class ToolBrush extends Tool
 	}
 	
 	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
@@ -75,11 +82,13 @@ public class ToolBrush extends Tool
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
+		updateClipping();
+		
 		colors = image.getColorsSet();
+		
 		paint.setAlpha((int) (opacity * 255));
 		paint.setStrokeWidth(size);
 		updateShader();
-		updateClipping();
 		
 		path.reset();
 		path.moveTo(x, y);
@@ -102,7 +111,12 @@ public class ToolBrush extends Tool
 	{
 		Selection selection = image.getSelection();
 		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
-		else canvas.clipPath(selection.getPath(), Op.REPLACE);
+		else
+		{
+			Path path = new Path(image.getSelection().getPath());
+			path.offset(-image.getSelectedLayerX(), -image.getSelectedLayerY());
+			canvas.clipPath(path, Op.REPLACE);
+		}
 	}
 	
 	private void onTouchMove(float x, float y)

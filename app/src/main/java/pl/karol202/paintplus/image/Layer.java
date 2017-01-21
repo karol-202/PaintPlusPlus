@@ -25,7 +25,7 @@ public class Layer
 		this.y = y;
 	}
 	
-	public void setImageChnageListener(OnImageChangeListener listener)
+	public void setImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
 	}
@@ -81,5 +81,15 @@ public class Layer
 	{
 		this.y = y;
 		if(listener != null) listener.onImageChanged();
+	}
+	
+	public int getWidth()
+	{
+		return bitmap.getWidth();
+	}
+	
+	public int getHeight()
+	{
+		return bitmap.getHeight();
 	}
 }
