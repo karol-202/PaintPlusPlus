@@ -17,13 +17,14 @@ import java.util.Collections;
 
 public class PaintView extends SurfaceView implements OnImageChangeListener
 {
-	private final float[] SELECTION_PAINT_DASH = new float[] { 5f, 5f };
+	private final float[] PAINT_DASH = new float[] { 5f, 5f };
 	
 	private ActivityPaint activity;
 	private Image image;
 	private ColorsSet colors;
 	private Paint bitmapPaint;
 	private Paint selectionPaint;
+	private Paint layerBoundsPaint;
 	private Paint checkerboardPaint;
 	private Shader checkerboardShader;
 	private boolean initialized;
@@ -47,7 +48,13 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		selectionPaint = new Paint();
 		selectionPaint.setStyle(Paint.Style.STROKE);
 		selectionPaint.setStrokeWidth(2f);
-		selectionPaint.setPathEffect(new DashPathEffect(SELECTION_PAINT_DASH, 0));
+		selectionPaint.setPathEffect(new DashPathEffect(PAINT_DASH, 0));
+		
+		layerBoundsPaint = new Paint();
+		layerBoundsPaint.setStyle(Paint.Style.STROKE);
+		layerBoundsPaint.setColor(Color.GRAY);
+		layerBoundsPaint.setStrokeWidth(2f);
+		layerBoundsPaint.setPathEffect(new DashPathEffect(PAINT_DASH, 0));
 		
 		Bitmap checkerboard = BitmapFactory.decodeResource(activity.getResources(), R.drawable.checkerboard);
 		checkerboardShader = new BitmapShader(checkerboard, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -61,30 +68,43 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	{
 		super.draw(canvas);
 		if(isInEditMode()) return;
-		if(!initialized)
-		{
-			image.setViewportWidth(getWidth());
-			image.setViewportHeight(getHeight());
-			image.centerView();
-			initialized = true;
-		}
+		if(!initialized) initImage();
 		
+		setClipping(canvas);
 		drawCheckerboard(canvas);
 		drawImage(canvas);
+		removeClipping(canvas);
+		drawLayerBounds(canvas);
 		drawSelection(canvas);
 	}
 	
-	private void drawCheckerboard(Canvas canvas)
+	private void initImage()
+	{
+		image.setViewportWidth(getWidth());
+		image.setViewportHeight(getHeight());
+		image.centerView();
+		initialized = true;
+	}
+	
+	private void setClipping(Canvas canvas)
 	{
 		float viewX = -image.getViewX() * image.getZoom();
 		float viewY = -image.getViewY() * image.getZoom();
 		float width = image.getWidth() * image.getZoom();
 		float height = image.getHeight() * image.getZoom();
 		
+		canvas.clipRect(viewX, viewY, viewX + width, viewY + height);
+	}
+	
+	private void drawCheckerboard(Canvas canvas)
+	{
+		float viewX = -image.getViewX() * image.getZoom();
+		float viewY = -image.getViewY() * image.getZoom();
+		
 		Matrix matrix = new Matrix();
 		matrix.preTranslate(viewX, viewY);
 		checkerboardShader.setLocalMatrix(matrix);
-		canvas.drawRect(viewX, viewY, viewX + width, viewY + height, checkerboardPaint);
+		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), checkerboardPaint);
 	}
 	
 	private void drawImage(Canvas canvas)
@@ -100,6 +120,21 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			
 			if(image.isLayerSelected(layer)) drawToolBitmap(canvas);
 		}
+	}
+	
+	private void removeClipping(Canvas canvas)
+	{
+		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+	}
+	
+	private void drawLayerBounds(Canvas canvas)
+	{
+		Layer selected = image.getSelectedLayer();
+		RectF bounds = selected.getBounds();
+		Path boundsPath = new Path();
+		boundsPath.addRect(bounds, Path.Direction.CW);
+		boundsPath.transform(image.getImageMatrix());
+		canvas.drawPath(boundsPath, layerBoundsPaint);
 	}
 	
 	private void drawSelection(Canvas canvas)

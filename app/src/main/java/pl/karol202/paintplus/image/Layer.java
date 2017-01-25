@@ -2,6 +2,7 @@ package pl.karol202.paintplus.image;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 
 public class Layer
@@ -61,6 +62,11 @@ public class Layer
 		if(listener != null) listener.onImageChanged();
 	}
 	
+	public RectF getBounds()
+	{
+		return new RectF(x, y, x + getWidth(), y + getHeight());
+	}
+	
 	public int getX()
 	{
 		return x;
@@ -81,6 +87,12 @@ public class Layer
 	{
 		this.y = y;
 		if(listener != null) listener.onImageChanged();
+	}
+	
+	public void offset(int x, int y)
+	{
+		this.x += x;
+		this.y += y;
 	}
 	
 	public int getWidth()

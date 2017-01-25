@@ -67,9 +67,9 @@ public class Image
 	
 	public void resize(int x, int y, int width, int height)
 	{
-		/*Bitmap source = bitmap;
-		newImage(width, height);
-		editCanvas.drawBitmap(source, -x, -y, null);*/
+		this.width = width;
+		this.height = height;
+		for(Layer layer : layers) layer.offset(-x, -y);
 	}
 	
 	public void scale(int width, int height, boolean bilinear)
@@ -155,6 +155,7 @@ public class Image
 	{
 		if(index < 0 || index >= layers.size()) throw new IllegalArgumentException("Invalid layer index.");
 		selectedLayer = index;
+		updateImage();
 	}
 	
 	public void selectLayer(Layer layer)
@@ -162,6 +163,7 @@ public class Image
 		if(!layers.contains(layer))
 			throw new NoSuchElementException("Layer cannot be selected because it does not exist in the list.");
 		selectedLayer = layers.indexOf(layer);
+		updateImage();
 	}
 	
 	public void deleteLayer(Layer layer)
