@@ -125,12 +125,6 @@ public class Image
 	}
 	
 	
-	//Will be deleted
-	public Layer newLayer()
-	{
-		return newLayer(width, height, DEFAULT_LAYER_NAME);
-	}
-	
 	public Layer newLayer(int width, int height, String name)
 	{
 		if(layers.size() >= MAX_LAYERS) return null;
@@ -175,7 +169,7 @@ public class Image
 		if(!layers.contains(layer))
 			throw new NoSuchElementException("Layer cannot be deleted because it does not exist in the list.");
 		int index = layers.indexOf(layer);
-		if(index <= selectedLayer) selectedLayer--;
+		if(index <= selectedLayer && selectedLayer != 0) selectedLayer--;
 		layers.remove(layer);
 		if(layers.size() == 0) selection.selectNothing();
 	}
@@ -222,12 +216,14 @@ public class Image
 	
 	public int getSelectedLayerX()
 	{
-		return getSelectedLayer().getX();
+		Layer selected = getSelectedLayer();
+		return selected != null ? selected.getX() : 0;
 	}
 	
 	public int getSelectedLayerY()
 	{
-		return getSelectedLayer().getY();
+		Layer selected = getSelectedLayer();
+		return selected != null ? selected.getY() : 0;
 	}
 	
 	

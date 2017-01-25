@@ -20,6 +20,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	private Canvas canvas;
 	private ColorsSet colors;
 	private Selection selection;
+	private Path selectionPath;
 	private Layer layer;
 	
 	private Shapes shapes;
@@ -33,6 +34,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
 		this.layer = image.getSelectedLayer();
+		updateSelectionPath();
 		
 		this.shapes = new Shapes(colors, imageChangeListener, this);
 		this.imageChangeListener = imageChangeListener;
@@ -76,6 +78,9 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 			if(canvas == null) return false;
 			selection = image.getSelection();
 			layer = image.getSelectedLayer();
+			
+			updateSelectionPath();
+			updateClipping(canvas);
 		}
 		return shape.onTouch(event);
 	}
@@ -83,14 +88,15 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
+		layer = image.getSelectedLayer();
+		
 		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + image.getSelectedLayerX(),
-						 -image.getViewY() + image.getSelectedLayerY());
+		canvas.translate(-image.getViewX() + layer.getX(),
+						 -image.getViewY() + layer.getY());
 		shape.onScreenDraw(canvas);
 		
-		canvas.translate(-layer.getX(), -layer.getY());
 		updateClipping(canvas);
-		canvas.translate(image.getViewX(), image.getViewY());
+		canvas.translate(image.getViewX() - layer.getX(), image.getViewY() - layer.getY());
 		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.XOR);
 		
@@ -105,15 +111,19 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	
 	public void apply()
 	{
-		updateClipping(canvas);
 		shape.apply(canvas);
+	}
+	
+	private void updateSelectionPath()
+	{
+		selectionPath = new Path(selection.getPath());
+		selectionPath.offset(-layer.getX(), -layer.getY());
 	}
 	
 	private void updateClipping(Canvas canvas)
 	{
-		canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
-		canvas.clipRect(layer.getX(), layer.getY(), layer.getX() + layer.getWidth(), layer.getY() + layer.getHeight(), Op.INTERSECT);
-		if(!selection.isEmpty()) canvas.clipPath(selection.getPath(), Op.INTERSECT);
+		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Op.REPLACE);
+		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
 	}
 	
 	public void cancel()

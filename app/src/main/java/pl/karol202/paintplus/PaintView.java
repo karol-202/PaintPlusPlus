@@ -120,6 +120,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
+		if(image.getSelectedLayer() == null) return false;
 		float x = (event.getX() / image.getZoom()) + image.getViewX();
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
 		if(getTool().isLayerSpace())

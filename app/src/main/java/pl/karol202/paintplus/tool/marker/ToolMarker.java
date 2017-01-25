@@ -1,11 +1,15 @@
 package pl.karol202.paintplus.tool.marker;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -19,6 +23,7 @@ public class ToolMarker extends Tool
 	private Canvas canvas;
 	private ColorsSet colors;
 	private Path selectionPath;
+	private Layer layer;
 	
 	private Paint pathPaint;
 	private Path path;
@@ -35,7 +40,10 @@ public class ToolMarker extends Tool
 		this.opacity = 1;
 		this.smooth = true;
 		
+		this.colors = image.getColorsSet();
+		this.layer = image.getSelectedLayer();
 		updateSelectionPath();
+		
 		this.pathPaint = new Paint();
 		this.pathPaint.setStyle(Paint.Style.STROKE);
 		this.pathPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -86,8 +94,7 @@ public class ToolMarker extends Tool
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
-		
-		colors = image.getColorsSet();
+		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
 		updateClipping(canvas);
@@ -140,10 +147,13 @@ public class ToolMarker extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + image.getSelectedLayerX(),
-						 -image.getViewY() + image.getSelectedLayerY());
+		layer = image.getSelectedLayer();
 		
+		canvas.scale(image.getZoom(), image.getZoom());
+		canvas.translate(-image.getViewX() + layer.getX(),
+						 -image.getViewY() + layer.getY());
+		
+		updateSelectionPath();
 		updateClipping(canvas);
 		canvas.drawPath(path, pathPaint);
 	}
@@ -151,14 +161,14 @@ public class ToolMarker extends Tool
 	private void updateSelectionPath()
 	{
 		selectionPath = new Path(image.getSelection().getPath());
-		selectionPath.offset(-image.getSelectedLayerX(), -image.getSelectedLayerY());
+		selectionPath.offset(-layer.getX(), -layer.getY());
 	}
 	
 	private void updateClipping(Canvas canvas)
 	{
 		Selection selection = image.getSelection();
 		
-		canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Op.REPLACE);
 		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
 	}
 	

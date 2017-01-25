@@ -110,7 +110,7 @@ public class ToolBrush extends Tool
 	private void updateClipping()
 	{
 		Selection selection = image.getSelection();
-		if(selection.isEmpty()) canvas.clipRect(0, 0, image.getWidth(), image.getHeight(), Op.REPLACE);
+		if(selection.isEmpty()) canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.REPLACE);
 		else
 		{
 			Path path = new Path(image.getSelection().getPath());

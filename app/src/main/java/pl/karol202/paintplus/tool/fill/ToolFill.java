@@ -9,6 +9,7 @@ import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
@@ -58,8 +59,9 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	@Override
 	public boolean onTouch(MotionEvent event)
 	{
+		Layer layer = image.getSelectedLayer();
 		if(event.getX() < 0 || event.getY() < 0 ||
-		   event.getX() > image.getWidth() - 1 || event.getY() > image.getHeight() - 1)
+		   event.getX() > layer.getWidth() - 1 || event.getY() > layer.getHeight() - 1)
 			return false;
 		
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
