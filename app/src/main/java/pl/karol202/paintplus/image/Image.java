@@ -74,13 +74,16 @@ public class Image
 	
 	public void scale(int width, int height, boolean bilinear)
 	{
-		/*Bitmap source = bitmap;
-		newImage(width, height);
-		
-		Rect dst = new Rect(0, 0, width, height);
-		Paint paint = new Paint();
-		paint.setFilterBitmap(bilinear);
-		editCanvas.drawBitmap(source, null, dst, paint);*/
+		double scaleX = ((double) width / this.width);
+		double scaleY = ((double) height / this.height);
+		for(Layer layer : layers)
+		{
+			layer.scale(scaleX, scaleY, bilinear);
+			layer.setX((int) (layer.getX() * scaleX));
+			layer.setY((int) (layer.getY() * scaleY));
+		}
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void flip(int direction)
