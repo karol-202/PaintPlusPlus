@@ -48,8 +48,8 @@ public class OptionFileNew extends Option implements OnClickListener
 	public void onClick(DialogInterface dialog, int which)
 	{
 		if(which != DialogInterface.BUTTON_POSITIVE) return;
-		int x = Integer.parseInt(editX.getText().toString());
-		int y = Integer.parseInt(editY.getText().toString());
+		int x = parseInt(editX.getText().toString());
+		int y = parseInt(editY.getText().toString());
 		
 		if(x == 0 || y == 0)
 		{
@@ -64,5 +64,10 @@ public class OptionFileNew extends Option implements OnClickListener
 		}
 		image.newImage(x, y);
 		image.centerView();
+	}
+	
+	private int parseInt(String text)
+	{
+		return text.equals("") || text.equals("-") ? 0 : Integer.parseInt(text);
 	}
 }

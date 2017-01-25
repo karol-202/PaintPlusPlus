@@ -88,21 +88,12 @@ public class Image
 	
 	public void flip(int direction)
 	{
-		/*Matrix matrix = new Matrix();
-		matrix.preScale(direction == FLIP_HORIZONTALLY ? -1 : 1, direction == FLIP_VERTICALLY ? -1 : 1);
-		
-		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
-		editCanvas.drawBitmap(source, 0, 0, null);*/
-	}
-	
-	public void rotate(float angle)
-	{
-		/*Matrix matrix = new Matrix();
-		matrix.preRotate(angle);
-		
-		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-		newImage(source.getWidth(), source.getHeight());
-		editCanvas.drawBitmap(source, 0, 0, null);*/
+		for(Layer layer : layers)
+		{
+			layer.flip(direction);
+			if(direction == FLIP_HORIZONTALLY) layer.setX(width - layer.getX() - layer.getWidth());
+			else layer.setY(height - layer.getY() - layer.getHeight());
+		}
 	}
 	
 	private void updateMatrix()
@@ -134,7 +125,7 @@ public class Image
 		Layer layer = new Layer(0, 0, width, height, name, Color.TRANSPARENT);
 		layer.setImageChangeListener(listener);
 		layers.add(0, layer);
-		selectedLayer++;
+		selectLayer(0);
 		return layer;
 	}
 	

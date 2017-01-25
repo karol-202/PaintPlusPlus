@@ -45,6 +45,21 @@ public class Layer
 		editCanvas.drawBitmap(source, null, rect, paint);
 	}
 	
+	public void flip(int direction)
+	{
+		Matrix matrix = new Matrix();
+		matrix.preScale(direction == Image.FLIP_HORIZONTALLY ? -1 : 1, direction == Image.FLIP_VERTICALLY ? -1 : 1);
+		
+		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+		bitmap.eraseColor(Color.TRANSPARENT);
+		editCanvas.drawBitmap(source, 0, 0, null);
+	}
+	
+	public void rotate()
+	{
+		//Will be added soon
+	}
+	
 	public void setImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;

@@ -115,8 +115,8 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 			return;
 		}
 		String name = editName.getText().toString();
-		int x = Integer.parseInt(editX.getText().toString());
-		int y = Integer.parseInt(editY.getText().toString());
+		int x = parseInt(editX.getText().toString());
+		int y = parseInt(editY.getText().toString());
 		
 		Layer layer = image.newLayer(layerWidth, layerHeight, name);
 		layer.setX(x);
