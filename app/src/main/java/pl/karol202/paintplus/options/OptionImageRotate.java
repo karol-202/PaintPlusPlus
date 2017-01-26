@@ -30,7 +30,7 @@ public class OptionImageRotate extends Option implements DialogInterface.OnClick
 	public void execute()
 	{
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(R.layout.dialog_rotate_image, null);
+		View view = inflater.inflate(R.layout.dialog_rotate, null);
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 		dialogBuilder.setTitle(R.string.dialog_rotate_image);
 		dialogBuilder.setView(view);

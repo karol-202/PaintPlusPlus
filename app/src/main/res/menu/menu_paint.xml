@@ -88,6 +88,11 @@
 				android:title="@string/action_scale"
 				android:orderInCategory="3"
 				app:showAsAction="never"/>
+			<item android:id="@+id/action_flip_layer"
+				android:icon="@drawable/ic_flip_white_24dp"
+				android:title="@string/action_flip"
+				android:orderInCategory="4"
+				app:showAsAction="never"/>
 		</menu>
 	</item>
 	

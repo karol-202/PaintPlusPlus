@@ -13,11 +13,12 @@
 	<string name="dialog_new_image">Nowy obraz</string>
 	<string name="dialog_resize_image">Zmień wymiary</string>
 	<string name="dialog_scale_image">Skaluj obraz</string>
-	<string name="dialog_flip_image">Odbij</string>
+	<string name="dialog_flip_image">Odbij obraz</string>
 	<string name="dialog_rotate_image">Obróć</string>
 	<string name="dialog_new_layer">Nowa warstwa</string>
 	<string name="dialog_resize_layer">Zmień wymiary</string>
 	<string name="dialog_scale_layer">Skaluj warstwę</string>
+	<string name="dialog_flip_layer">Odbij warstwę</string>
 	<string name="dialog_replace_file">Czy chcesz zamienić?</string>
 	<string name="dialog_fill">Proszę czekać</string>
 	<string name="dialog_fill_message">Trwa wypełnianie…</string>
@@ -124,4 +125,5 @@
 	<string name="layer_name">Nazwa</string>
 	<string name="message_invalid_bounds">Podane wymiary są nieprawidłowe.</string>
 	<string name="new_layer_name">Nowa warstwa</string>
+	<string name="message_flip_direction">Wybierz kierunek, w którym ma nastąpić odbicie.</string>
 </resources>
