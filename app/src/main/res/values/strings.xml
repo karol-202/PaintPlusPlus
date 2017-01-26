@@ -28,6 +28,8 @@
 	
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
+	<string name="preference_view_smooth">Wygładzanie wyświetlanego obrazu</string>
+	<string name="preference_view_smooth_summary">Wygładzanie przy użyciu interpolacji liniowej</string>
 	
 	<string name="action_layers">Warstwy</string>
 	<string name="action_tool">Narzędzie</string>

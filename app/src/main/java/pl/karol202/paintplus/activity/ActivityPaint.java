@@ -149,6 +149,13 @@ public class ActivityPaint extends AppCompatActivity
 	}
 	
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		paintView.updatePreferences();
+	}
+	
+	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		outState.putString("title", toolbar.getTitle().toString());

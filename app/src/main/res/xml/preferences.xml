@@ -6,4 +6,9 @@
 		android:title="@string/preference_jpg_quality"
 		android:dialogTitle="@string/preference_jpg_quality_dialog"
 		android:defaultValue="95"/>
+	<CheckBoxPreference
+		android:key="preference_view_smooth"
+		android:title="@string/preference_view_smooth"
+		android:summary="@string/preference_view_smooth_summary"
+		android:defaultValue="true"/>
 </PreferenceScreen>

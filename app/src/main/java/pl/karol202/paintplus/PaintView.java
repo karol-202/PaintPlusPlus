@@ -1,7 +1,9 @@
 package pl.karol202.paintplus;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.*;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -10,6 +12,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	private Paint checkerboardPaint;
 	private Shader checkerboardShader;
 	private boolean initialized;
+	private boolean smooth;
 
 	public PaintView(Context context, AttributeSet attrs)
 	{
@@ -43,7 +47,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		colors = image.getColorsSet();
 		
 		bitmapPaint = new Paint();
-		bitmapPaint.setFilterBitmap(false);
 		
 		selectionPaint = new Paint();
 		selectionPaint.setStyle(Paint.Style.STROKE);
@@ -61,6 +64,14 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		checkerboardPaint = new Paint();
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
+	}
+	
+	public void updatePreferences()
+	{
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+		smooth = preferences.getBoolean(ActivitySettings.KEY_VIEW_SMOOTH, true);
+		
+		bitmapPaint.setFilterBitmap(smooth);
 	}
 	
 	@Override
