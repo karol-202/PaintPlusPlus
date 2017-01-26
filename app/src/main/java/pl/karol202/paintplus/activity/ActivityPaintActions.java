@@ -112,6 +112,9 @@ public class ActivityPaintActions
 		case R.id.action_flip_layer:
 			new OptionLayerFlip(activity, image).execute();
 			return true;
+		case R.id.action_rotate_layer:
+			new OptionLayerRotate(activity, image).execute();
+			return true;
 			
 		case R.id.action_settings:
 			activity.showSettingsActivity();

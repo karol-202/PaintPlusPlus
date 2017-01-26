@@ -69,9 +69,19 @@ public class Layer
 		editCanvas.drawBitmap(source, 0, 0, null);
 	}
 	
-	public void rotate()
+	public void rotate(float angle)
 	{
-		//Will be added soon
+		int oldWidth = bitmap.getWidth();
+		int oldHeight = bitmap.getHeight();
+		Matrix matrix = new Matrix();
+		matrix.preRotate(angle);
+		
+		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, oldWidth, oldHeight, matrix, true);
+		bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+		editCanvas = new Canvas(bitmap);
+		editCanvas.drawBitmap(source, 0, 0, null);
+		x -= (source.getWidth() - oldWidth) / 2;
+		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
 	public void setImageChangeListener(OnImageChangeListener listener)
