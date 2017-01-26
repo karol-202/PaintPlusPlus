@@ -103,12 +103,14 @@ public class ActivityPaintActions
 		case R.id.action_new_layer:
 			new OptionLayerNew(activity, image).execute();
 			return true;
+		case R.id.action_resize_layer:
+			new OptionLayerResize(activity, image).execute();
+			return true;
 			
 		case R.id.action_settings:
 			activity.showSettingsActivity();
 			return true;
 		}
-		return false
-				;
+		return false;
 	}
 }

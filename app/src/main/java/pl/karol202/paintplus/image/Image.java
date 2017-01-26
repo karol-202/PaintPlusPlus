@@ -79,8 +79,8 @@ public class Image
 		for(Layer layer : layers)
 		{
 			layer.scale(scaleX, scaleY, bilinear);
-			layer.setX((int) (layer.getX() * scaleX));
-			layer.setY((int) (layer.getY() * scaleY));
+			layer.setX((int) Math.round(layer.getX() * scaleX));
+			layer.setY((int) Math.round(layer.getY() * scaleY));
 		}
 		this.width = width;
 		this.height = height;

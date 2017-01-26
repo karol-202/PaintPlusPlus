@@ -14,7 +14,7 @@
 		android:id="@+id/text_width"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_width" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_width" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -24,14 +24,14 @@
 		android:id="@+id/text_height"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_height" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_height" />
 	
 	<EditText
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
-		android:id="@+id/edit_image_width"
+		android:id="@+id/edit_object_width"
 		android:maxLength="9"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
@@ -44,9 +44,9 @@
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
-		android:id="@+id/edit_image_height"
+		android:id="@+id/edit_object_height"
 		android:maxLength="9"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_width"
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_width"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
@@ -57,7 +57,7 @@
 		android:layout_height="wrap_content"
 		android:text="@string/keep_ratio"
 		android:id="@+id/check_keep_ratio"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_height"
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_height"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent" />
 	
@@ -69,7 +69,7 @@
 		android:id="@+id/text_x"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_x" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_x" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -79,14 +79,14 @@
 		android:id="@+id/text_y"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_y" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_y" />
 	
 	<EditText
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number|numberSigned"
 		android:ems="10"
-		android:id="@+id/edit_image_x"
+		android:id="@+id/edit_object_x"
 		android:maxLength="9"
 		app:layout_constraintTop_toBottomOf="@+id/check_keep_ratio"
 		android:layout_marginEnd="16dp"
@@ -99,11 +99,11 @@
 		android:layout_height="wrap_content"
 		android:inputType="number|numberSigned"
 		android:ems="10"
-		android:id="@+id/edit_image_y"
+		android:id="@+id/edit_object_y"
 		android:maxLength="9"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_x"
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_x"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_y" />
 	
@@ -111,7 +111,7 @@
 		android:layout_width="192dp"
 		android:layout_height="192dp"
 		android:id="@+id/image_resize_preview"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_y"
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_y"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent" />
 

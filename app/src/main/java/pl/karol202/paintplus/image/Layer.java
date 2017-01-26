@@ -30,12 +30,26 @@ public class Layer
 		this.y += y;
 	}
 	
-	public void scale(double scaleX, double scaleY, boolean bilinear)
+	public void resize(int x, int y, int width, int height)
 	{
 		Bitmap source = bitmap;
-		int width = (int) (bitmap.getWidth() * scaleX);
-		int height = (int) (bitmap.getHeight() * scaleY);
-		
+		bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		editCanvas = new Canvas(bitmap);
+		editCanvas.drawBitmap(source, -x, -y, null);
+		this.x += x;
+		this.y += y;
+	}
+	
+	public void scale(double scaleX, double scaleY, boolean bilinear)
+	{
+		int width = (int) Math.round(bitmap.getWidth() * scaleX);
+		int height = (int) Math.round(bitmap.getHeight() * scaleY);
+		scale(width, height, bilinear);
+	}
+	
+	public void scale(int width, int height, boolean bilinear)
+	{
+		Bitmap source = bitmap;
 		bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		editCanvas = new Canvas(bitmap);
 		

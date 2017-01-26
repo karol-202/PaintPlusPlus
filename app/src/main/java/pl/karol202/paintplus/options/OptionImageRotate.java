@@ -13,6 +13,7 @@ import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
+@Deprecated
 public class OptionImageRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private AlertDialog dialog;
@@ -53,7 +54,7 @@ public class OptionImageRotate extends Option implements DialogInterface.OnClick
 		if(which == BUTTON_POSITIVE)
 		{
 			float angle = progressToAngle(seekBarAngle.getProgress());
-			image.rotate(angle);
+			//image.rotate(angle);
 		}
 	}
 	

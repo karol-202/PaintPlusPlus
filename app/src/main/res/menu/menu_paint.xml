@@ -78,6 +78,11 @@
 				android:title="@string/action_new_layer"
 				android:orderInCategory="1"
 				app:showAsAction="never"/>
+			<item android:id="@+id/action_resize_layer"
+				android:icon="@drawable/ic_resize_white_24dp"
+				android:title="@string/action_resize"
+				android:orderInCategory="2"
+				app:showAsAction="never"/>
 		</menu>
 	</item>
 	

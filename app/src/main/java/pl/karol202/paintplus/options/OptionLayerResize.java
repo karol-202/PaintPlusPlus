@@ -3,42 +3,46 @@ package pl.karol202.paintplus.options;
 import android.content.Context;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 
-public class OptionImageResize extends OptionResize
+public class OptionLayerResize extends OptionResize
 {
-	public OptionImageResize(Context context, Image image)
+	private Layer layer;
+	
+	public OptionLayerResize(Context context, Image image)
 	{
 		super(context, image);
+		this.layer = image.getSelectedLayer();
 	}
 	
 	@Override
 	protected int getTitle()
 	{
-		return R.string.dialog_resize_image;
+		return R.string.dialog_resize_layer;
 	}
 	
 	@Override
 	protected int getObjectWidth()
 	{
-		return image.getWidth();
+		return layer.getWidth();
 	}
 	
 	@Override
 	protected int getObjectHeight()
 	{
-		return image.getHeight();
+		return layer.getHeight();
 	}
 	
 	@Override
 	protected int getOldObjectWidth()
 	{
-		return image.getWidth();
+		return layer.getWidth();
 	}
 	
 	@Override
 	protected int getOldObjectHeight()
 	{
-		return image.getHeight();
+		return layer.getHeight();
 	}
 	
 	@Override
@@ -56,6 +60,6 @@ public class OptionImageResize extends OptionResize
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
-		image.resize(x, y, width, height);
+		layer.resize(x, y, width, height);
 	}
 }
