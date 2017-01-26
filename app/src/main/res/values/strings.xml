@@ -17,6 +17,7 @@
 	<string name="dialog_rotate_image">Obróć</string>
 	<string name="dialog_new_layer">Nowa warstwa</string>
 	<string name="dialog_resize_layer">Zmień wymiary</string>
+	<string name="dialog_scale_layer">Skaluj warstwę</string>
 	<string name="dialog_replace_file">Czy chcesz zamienić?</string>
 	<string name="dialog_fill">Proszę czekać</string>
 	<string name="dialog_fill_message">Trwa wypełnianie…</string>

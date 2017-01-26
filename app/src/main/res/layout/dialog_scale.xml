@@ -12,7 +12,7 @@
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_height" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_height" />
 	
 	<TextView
 		android:text="@string/image_width"
@@ -22,28 +22,27 @@
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_image_width" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_width" />
 	
 	<EditText
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
-		android:id="@+id/edit_image_width"
+		android:id="@+id/edit_object_width"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginEnd="16dp"
 		android:layout_marginStart="24dp"
-		app:layout_constraintLeft_toRightOf="@+id/text_height"
-		app:layout_constraintHorizontal_bias="0.62" />
+		app:layout_constraintLeft_toRightOf="@+id/text_height" />
 	
 	<EditText
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		android:ems="10"
-		android:id="@+id/edit_image_height"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_width"
+		android:id="@+id/edit_object_height"
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_width"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
@@ -56,7 +55,7 @@
 		android:id="@+id/check_keep_ratio"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/edit_image_height" />
+		app:layout_constraintTop_toBottomOf="@+id/edit_object_height" />
 	
 	<CheckBox
 		android:text="@string/scaling_smooth"

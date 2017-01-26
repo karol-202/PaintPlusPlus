@@ -83,6 +83,11 @@
 				android:title="@string/action_resize"
 				android:orderInCategory="2"
 				app:showAsAction="never"/>
+			<item android:id="@+id/action_scale_layer"
+				android:icon="@drawable/ic_scale_white_24dp"
+				android:title="@string/action_scale"
+				android:orderInCategory="3"
+				app:showAsAction="never"/>
 		</menu>
 	</item>
 	

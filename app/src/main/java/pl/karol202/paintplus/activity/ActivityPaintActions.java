@@ -106,6 +106,9 @@ public class ActivityPaintActions
 		case R.id.action_resize_layer:
 			new OptionLayerResize(activity, image).execute();
 			return true;
+		case R.id.action_scale_layer:
+			new OptionLayerScale(activity, image).execute();
+			return true;
 			
 		case R.id.action_settings:
 			activity.showSettingsActivity();
