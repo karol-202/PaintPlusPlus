@@ -246,6 +246,11 @@ public class ActivityPaint extends AppCompatActivity
 		actionBar.setTitle(title);
 	}
 	
+	public void updateLayersPreview()
+	{
+		layers.getLayersAdapter().notifyDataSetChanged();
+	}
+	
 	public DisplayMetrics getDisplayMetrics()
 	{
 		return getResources().getDisplayMetrics();

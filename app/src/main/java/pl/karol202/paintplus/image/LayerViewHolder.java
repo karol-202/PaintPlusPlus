@@ -75,7 +75,6 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		view.setVisibility(View.VISIBLE);
 		setViewOffset(0, 0);
 		
-		
 		textLayerName.setText(layer.getName());
 		imageLayerPreview.setImageBitmap(layer.getBitmap());
 		

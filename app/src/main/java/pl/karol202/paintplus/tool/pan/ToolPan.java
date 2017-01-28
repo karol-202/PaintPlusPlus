@@ -44,6 +44,18 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
+	public boolean doesScreenDraw()
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		float x = event.getX() - image.getViewX();

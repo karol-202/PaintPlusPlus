@@ -21,6 +21,10 @@ public abstract class Tool
 	
 	public abstract boolean isLayerSpace();
 	
+	public abstract boolean doesScreenDraw();
+	
+	public abstract boolean isImageLimited();
+	
 	public abstract boolean onTouch(MotionEvent event);
 
 	public abstract void onScreenDraw(Canvas canvas);

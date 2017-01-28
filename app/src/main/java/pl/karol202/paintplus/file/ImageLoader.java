@@ -29,9 +29,9 @@ public class ImageLoader
 			int newWidth = (int) Math.floor(photo.getWidth() / higher);
 			int newHeight = (int) Math.floor(photo.getHeight() / higher);
 			Bitmap scaled = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			//image.setBitmap(scaled);
+			image.openImage(scaled);
 		}
-		//else image.setBitmap(photo);
+		else image.openImage(photo);
 		image.centerView();
 	}
 	
@@ -43,8 +43,8 @@ public class ImageLoader
 			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);
 			CompressFormat format = getExtension(path);
-			//Bitmap bitmap = image.getBitmap();
-			//bitmap.compress(format, quality, fos);
+			Bitmap bitmap = image.getFullImage();
+			bitmap.compress(format, quality, fos);
 			fos.close();
 		}
 		catch(IOException e)
@@ -56,7 +56,7 @@ public class ImageLoader
 	private static CompressFormat getExtension(String path)
 	{
 		String[] parts = path.split("\\.");
-		String extension = parts[parts.length - 1];
+		String extension = parts[parts.length - 1].toLowerCase();
 		switch(extension)
 		{
 		case "jpg":

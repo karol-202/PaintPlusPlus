@@ -53,6 +53,18 @@ public class ToolColorPick extends Tool
 	}
 	
 	@Override
+	public boolean doesScreenDraw()
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_UP) pickColor((int) event.getX(), (int) event.getY());

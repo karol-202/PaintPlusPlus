@@ -97,4 +97,9 @@ public class ActivityPaintLayers implements View.OnClickListener
 			}
 		}).execute();
 	}
+	
+	public LayersAdapter getLayersAdapter()
+	{
+		return layersAdapter;
+	}
 }

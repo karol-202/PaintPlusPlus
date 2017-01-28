@@ -17,6 +17,8 @@ public class Image
 	public interface OnImageChangeListener
 	{
 		void onImageChanged();
+		
+		void onLayersChanged();
 	}
 	
 	private final String DEFAULT_LAYER_NAME;
@@ -59,10 +61,19 @@ public class Image
 		this.height = height;
 		
 		layers.clear();
-		layers.add(new Layer(0, 0, width, height, DEFAULT_LAYER_NAME, colorsSet.getSecondColor()));
+		Layer layer = new Layer(0, 0, width, height, DEFAULT_LAYER_NAME, colorsSet.getSecondColor());
+		layer.setImageChangeListener(listener);
+		layers.add(layer);
 		selectedLayer = 0;
+		updateLayersPreview();
 		
 		selection = new Selection(width, height);
+	}
+	
+	public void openImage(Bitmap bitmap)
+	{
+		newImage(bitmap.getWidth(), bitmap.getHeight());
+		getSelectedLayer().setBitmap(bitmap);
 	}
 	
 	public void resize(int x, int y, int width, int height)
@@ -111,11 +122,25 @@ public class Image
 		if(listener != null) listener.onImageChanged();
 	}
 	
+	public void updateLayersPreview()
+	{
+		if(listener != null) listener.onLayersChanged();
+	}
+	
 	public void centerView()
 	{
 		viewX = (int) (((width * zoom / 2) - (viewportWidth / 2)) / zoom);
 		viewY = (int) (((height * zoom / 2) - (viewportHeight / 2)) / zoom);
 		updateMatrix();
+	}
+	
+	public Bitmap getFullImage()
+	{
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		for(Layer layer : layers)
+			if(layer.isVisible()) canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
+		return bitmap;
 	}
 	
 	

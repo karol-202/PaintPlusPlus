@@ -70,6 +70,18 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	}
 	
 	@Override
+	public boolean doesScreenDraw()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return false;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN)

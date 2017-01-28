@@ -72,6 +72,18 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
+	public boolean doesScreenDraw()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return false;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		if(image.getSelectedLayer() == null)

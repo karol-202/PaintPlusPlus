@@ -31,7 +31,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	private Paint checkerboardPaint;
 	private Shader checkerboardShader;
 	private boolean initialized;
-	private boolean smooth;
 
 	public PaintView(Context context, AttributeSet attrs)
 	{
@@ -69,7 +68,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	public void updatePreferences()
 	{
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-		smooth = preferences.getBoolean(ActivitySettings.KEY_VIEW_SMOOTH, true);
+		boolean smooth = preferences.getBoolean(ActivitySettings.KEY_VIEW_SMOOTH, true);
 		
 		bitmapPaint.setFilterBitmap(smooth);
 	}
@@ -89,14 +88,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		drawSelection(canvas);
 	}
 	
-	private void initImage()
-	{
-		image.setViewportWidth(getWidth());
-		image.setViewportHeight(getHeight());
-		image.centerView();
-		initialized = true;
-	}
-	
 	private void setClipping(Canvas canvas)
 	{
 		float viewX = -image.getViewX() * image.getZoom();
@@ -105,6 +96,19 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		float height = image.getHeight() * image.getZoom();
 		
 		canvas.clipRect(viewX, viewY, viewX + width, viewY + height);
+	}
+	
+	private void removeClipping(Canvas canvas)
+	{
+		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+	}
+	
+	private void initImage()
+	{
+		image.setViewportWidth(getWidth());
+		image.setViewportHeight(getHeight());
+		image.centerView();
+		initialized = true;
 	}
 	
 	private void drawCheckerboard(Canvas canvas)
@@ -120,6 +124,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	
 	private void drawImage(Canvas canvas)
 	{
+		Tool tool = getTool();
 		ArrayList<Layer> layers = new ArrayList<>(image.getLayers());
 		Collections.reverse(layers);
 		for(Layer layer : layers)
@@ -129,19 +134,34 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			matrix.preTranslate(layer.getX(), layer.getY());
 			canvas.drawBitmap(layer.getBitmap(), matrix, bitmapPaint);
 			
-			if(image.isLayerSelected(layer)) drawToolBitmap(canvas);
+			if(image.isLayerSelected(layer) && tool.doesScreenDraw())
+			{
+				if(!tool.isImageLimited()) removeClipping(canvas);
+				drawToolBitmap(canvas);
+				if(!tool.isImageLimited()) setClipping(canvas);
+			}
 		}
 	}
 	
-	private void removeClipping(Canvas canvas)
+	private void drawToolBitmap(Canvas canvas)
 	{
-		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas toolCanvas = new Canvas(toolBitmap);
+		getTool().onScreenDraw(toolCanvas);
+		canvas.drawBitmap(toolBitmap, 0, 0, bitmapPaint);
 	}
 	
 	private void drawLayerBounds(Canvas canvas)
 	{
 		Layer selected = image.getSelectedLayer();
+		if(selected == null) return;
+		
 		RectF bounds = selected.getBounds();
+		RectF screen = new RectF(image.getViewX() - 2,
+								 image.getViewY() - 2,
+						        image.getViewX() + (getWidth() / image.getZoom()) + 2,
+							  image.getViewY() + (getHeight() / image.getZoom()) + 2);
+		bounds.intersect(screen);
 		Path boundsPath = new Path();
 		boundsPath.addRect(bounds, Path.Direction.CW);
 		boundsPath.transform(image.getImageMatrix());
@@ -153,14 +173,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		Path selectionPath = new Path(image.getSelection().getPath());
 		selectionPath.transform(image.getImageMatrix());
 		canvas.drawPath(selectionPath, selectionPaint);
-	}
-	
-	private void drawToolBitmap(Canvas canvas)
-	{
-		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-		Canvas toolCanvas = new Canvas(toolBitmap);
-		getTool().onScreenDraw(toolCanvas);
-		canvas.drawBitmap(toolBitmap, 0, 0, null);
 	}
 	
 	@Override
@@ -185,6 +197,12 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	public void onImageChanged()
 	{
 		invalidate();
+	}
+	
+	@Override
+	public void onLayersChanged()
+	{
+		activity.updateLayersPreview();
 	}
 	
 	public Image getImage()

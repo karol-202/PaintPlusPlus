@@ -94,6 +94,12 @@ public class Layer
 		return bitmap;
 	}
 	
+	public void setBitmap(Bitmap bitmap)
+	{
+		this.bitmap = bitmap;
+		editCanvas = new Canvas(bitmap);
+	}
+	
 	public Canvas getEditCanvas()
 	{
 		return editCanvas;

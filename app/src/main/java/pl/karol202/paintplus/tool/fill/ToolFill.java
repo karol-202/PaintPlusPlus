@@ -57,6 +57,18 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
+	public boolean doesScreenDraw()
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return true;
+	}
+	
+	@Override
 	public boolean onTouch(MotionEvent event)
 	{
 		Layer layer = image.getSelectedLayer();
