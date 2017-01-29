@@ -46,12 +46,6 @@ public class ToolDrag extends Tool
 	}
 	
 	@Override
-	public boolean doesScreenDraw()
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean isImageLimited()
 	{
 		return false;
@@ -82,6 +76,12 @@ public class ToolDrag extends Tool
 		int deltaTouchY = Math.round(y - oldTouchY);
 		layer.setX(oldLayerX + deltaTouchX);
 		layer.setY(oldLayerY + deltaTouchY);
+	}
+	
+	@Override
+	public boolean doesScreenDraw(Layer layer)
+	{
+		return false;
 	}
 	
 	@Override

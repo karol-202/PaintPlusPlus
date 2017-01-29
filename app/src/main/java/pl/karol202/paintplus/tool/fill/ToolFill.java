@@ -57,12 +57,6 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean doesScreenDraw()
-	{
-		return false;
-	}
-	
-	@Override
 	public boolean isImageLimited()
 	{
 		return true;
@@ -93,6 +87,12 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	private void cancelClipping()
 	{
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+	}
+	
+	@Override
+	public boolean doesScreenDraw(Layer layer)
+	{
+		return false;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 
 public abstract class Tool
 {
@@ -21,11 +22,11 @@ public abstract class Tool
 	
 	public abstract boolean isLayerSpace();
 	
-	public abstract boolean doesScreenDraw();
-	
 	public abstract boolean isImageLimited();
 	
 	public abstract boolean onTouch(MotionEvent event);
+	
+	public abstract boolean doesScreenDraw(Layer layer);
 
 	public abstract void onScreenDraw(Canvas canvas);
 }

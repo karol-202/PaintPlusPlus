@@ -9,6 +9,7 @@ import pl.karol202.paintplus.tool.fill.ToolFill;
 import pl.karol202.paintplus.tool.marker.ToolMarker;
 import pl.karol202.paintplus.tool.pan.ToolPan;
 import pl.karol202.paintplus.tool.pickcolor.ToolColorPick;
+import pl.karol202.paintplus.tool.rubber.ToolRubber;
 import pl.karol202.paintplus.tool.selection.ToolSelection;
 import pl.karol202.paintplus.tool.shape.ToolShape;
 
@@ -29,6 +30,7 @@ public class Tools
 		tools.add(new ToolSelection(image));
 		tools.add(new ToolColorPick(image));
 		tools.add(new ToolDrag(image));
+		tools.add(new ToolRubber(image));
 	}
 	
 	public Tool getTool(int id)

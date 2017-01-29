@@ -3,9 +3,10 @@ package pl.karol202.paintplus.tool.brush;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -67,12 +68,6 @@ public class ToolBrush extends Tool
 	public boolean isLayerSpace()
 	{
 		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw()
-	{
-		return false;
 	}
 	
 	@Override
@@ -177,6 +172,12 @@ public class ToolBrush extends Tool
 		oval.right = x + size / 2;
 		oval.bottom = y + size / 2;
 		canvas.drawOval(oval, paint);
+	}
+	
+	@Override
+	public boolean doesScreenDraw(Layer layer)
+	{
+		return false;
 	}
 	
 	@Override

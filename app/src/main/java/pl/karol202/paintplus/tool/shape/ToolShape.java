@@ -70,12 +70,6 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	}
 	
 	@Override
-	public boolean doesScreenDraw()
-	{
-		return true;
-	}
-	
-	@Override
 	public boolean isImageLimited()
 	{
 		return false;
@@ -95,6 +89,12 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 			updateClipping(canvas);
 		}
 		return shape.onTouch(event);
+	}
+	
+	@Override
+	public boolean doesScreenDraw(Layer layer)
+	{
+		return layer.isVisible();
 	}
 	
 	@Override

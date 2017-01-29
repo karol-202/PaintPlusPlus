@@ -59,6 +59,7 @@
 	<string name="tool_selection">Zaznaczenie</string>
 	<string name="tool_color_pick">Pobierz kolor</string>
 	<string name="tool_drag">Przesunięcie warstwy</string>
+	<string name="tool_rubber">Gumka</string>
 	
 	<string name="shape_line">Linia</string>
 	<string name="shape_circle">Okrąg</string>
@@ -130,4 +131,6 @@
 	<string name="message_invalid_bounds">Podane wymiary są nieprawidłowe.</string>
 	<string name="new_layer_name">Nowa warstwa</string>
 	<string name="message_flip_direction">Wybierz kierunek, w którym ma nastąpić odbicie.</string>
+	<string name="rubber_strength">Siła</string>
+	<string name="rubber_smooth">Wygładź</string>
 </resources>

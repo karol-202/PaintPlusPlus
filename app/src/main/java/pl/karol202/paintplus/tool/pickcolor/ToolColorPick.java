@@ -4,9 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -50,12 +51,6 @@ public class ToolColorPick extends Tool
 	public boolean isLayerSpace()
 	{
 		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw()
-	{
-		return false;
 	}
 	
 	@Override
@@ -121,6 +116,12 @@ public class ToolColorPick extends Tool
 	private boolean checkSelection(int x, int y)
 	{
 		return selection.isEmpty() || selection.containsPoint(x + image.getSelectedLayerX(), y + image.getSelectedLayerY());
+	}
+	
+	@Override
+	public boolean doesScreenDraw(Layer layer)
+	{
+		return false;
 	}
 	
 	@Override

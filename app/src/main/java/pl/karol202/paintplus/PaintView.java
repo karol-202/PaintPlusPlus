@@ -129,12 +129,13 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		Collections.reverse(layers);
 		for(Layer layer : layers)
 		{
-			if(!layer.isVisible()) continue;
-			Matrix matrix = new Matrix(image.getImageMatrix());
-			matrix.preTranslate(layer.getX(), layer.getY());
-			canvas.drawBitmap(layer.getBitmap(), matrix, bitmapPaint);
-			
-			if(image.isLayerSelected(layer) && tool.doesScreenDraw())
+			if(layer.isVisible())
+			{
+				Matrix matrix = new Matrix(image.getImageMatrix());
+				matrix.preTranslate(layer.getX(), layer.getY());
+				canvas.drawBitmap(layer.getBitmap(), matrix, bitmapPaint);
+			}
+			if(image.isLayerSelected(layer) && tool.doesScreenDraw(layer))
 			{
 				if(!tool.isImageLimited()) removeClipping(canvas);
 				drawToolBitmap(canvas);
