@@ -67,7 +67,8 @@ public class Image
 		selectedLayer = 0;
 		updateLayersPreview();
 		
-		selection = new Selection(width, height);
+		if(selection == null) selection = new Selection(width, height);
+		else selection.init(width, height);
 	}
 	
 	public void openImage(Bitmap bitmap)

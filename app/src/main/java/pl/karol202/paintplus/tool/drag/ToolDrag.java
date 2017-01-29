@@ -1,20 +1,22 @@
-package pl.karol202.paintplus.tool.pan;
+package pl.karol202.paintplus.tool.drag;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
-public class ToolPan extends Tool
+public class ToolDrag extends Tool
 {
-	private int oldImageX;
-	private int oldImageY;
+	private Layer layer;
+	private int oldLayerX;
+	private int oldLayerY;
 	private float oldTouchX;
 	private float oldTouchY;
 	
-	public ToolPan(Image image)
+	public ToolDrag(Image image)
 	{
 		super(image);
 	}
@@ -22,19 +24,19 @@ public class ToolPan extends Tool
 	@Override
 	public int getName()
 	{
-		return R.string.tool_pan;
+		return R.string.tool_drag;
 	}
 	
 	@Override
 	public int getIcon()
 	{
-		return R.drawable.ic_tool_pan_black_24dp;
+		return R.drawable.ic_tool_drag_black_24dp;
 	}
 	
 	@Override
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
-		return PanProperties.class;
+		return DragProperties.class;
 	}
 	
 	@Override
@@ -67,8 +69,9 @@ public class ToolPan extends Tool
 	
 	private void onTouchStart(float x, float y)
 	{
-		oldImageX = image.getViewX();
-		oldImageY = image.getViewY();
+		layer = image.getSelectedLayer();
+		oldLayerX = layer.getX();
+		oldLayerY = layer.getY();
 		oldTouchX = x;
 		oldTouchY = y;
 	}
@@ -77,40 +80,10 @@ public class ToolPan extends Tool
 	{
 		int deltaTouchX = Math.round(x - oldTouchX);
 		int deltaTouchY = Math.round(y - oldTouchY);
-		image.setViewX(oldImageX - deltaTouchX);
-		image.setViewY(oldImageY - deltaTouchY);
-		
-		checkLimits();
-	}
-	
-	private void checkLimits()
-	{
-		int xMin = (int) (-image.getViewportWidth() / image.getZoom());
-		int xMax = image.getWidth();
-		if(image.getViewX() < xMin) image.setViewX(xMin);
-		else if(image.getViewX() > xMax) image.setViewX(xMax);
-		
-		int yMin = (int) (-image.getViewportHeight() / image.getZoom());
-		int yMax = image.getHeight();
-		if(image.getViewY() < yMin) image.setViewY(yMin);
-		else if(image.getViewY() > yMax) image.setViewY(yMax);
+		layer.setX(oldLayerX + deltaTouchX);
+		layer.setY(oldLayerY + deltaTouchY);
 	}
 	
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
-	
-	public float getZoom()
-	{
-		return image.getZoom();
-	}
-	
-	public void setZoom(float zoom)
-	{
-		image.setZoom(zoom);
-	}
-	
-	public void centerView()
-	{
-		image.centerView();
-	}
 }

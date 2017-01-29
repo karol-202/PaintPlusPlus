@@ -15,6 +15,11 @@ public class Selection
 	
 	public Selection(int width, int height)
 	{
+		init(width, height);
+	}
+	
+	public void init(int width, int height)
+	{
 		this.imageRect = new Rect(0, 0, width, height);
 		this.region = new Region();
 		this.path = new Path();
