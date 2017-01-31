@@ -188,7 +188,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	private void toggleVisibility()
 	{
-		layer.setVisible(!layer.isVisible());
+		layer.setVisibility(!layer.isVisible());
 		if(adapter.getImage().isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
 				R.drawable.ic_visible_white_24dp :
 				R.drawable.ic_invisible_white_24dp);

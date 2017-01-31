@@ -1,12 +1,15 @@
 package pl.karol202.paintplus.options;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import pl.karol202.paintplus.image.Image;
+import android.widget.Toast;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.file.ImageLoader;
+import pl.karol202.paintplus.image.Image;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +47,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		}
 		catch(IOException ex)
 		{
-			throw new RuntimeException("Cannot create temporary file for photo.");
+			throw new RuntimeException("Cannot create temporary file for photo.", ex);
 		}
 		
 		Uri photoUri = FileProvider.getUriForFile(context, "pl.karol202.paintplus", photoFile);
@@ -66,7 +69,15 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	{
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
-		ImageLoader.openImageFromFile(image, photoFile.getAbsolutePath());
+		
+		Bitmap bitmap = ImageLoader.openBitmap(photoFile.getAbsolutePath());
+		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
+		else
+		{
+			image.openImage(bitmap);
+			image.centerView();
+		}
+		
 		photoFile.delete();
 		
 	}

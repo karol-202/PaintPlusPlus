@@ -30,12 +30,12 @@
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_open_image"
 				android:icon="@drawable/ic_folder_white_24dp"
-				android:title="@string/action_open"
+				android:title="@string/action_open_image"
 				android:orderInCategory="3"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_save_image"
 				android:icon="@drawable/ic_save_white_24dp"
-				android:title="@string/action_save"
+				android:title="@string/action_save_image"
 				android:orderInCategory="4"
 				app:showAsAction="never"/>
 		</menu>
@@ -50,17 +50,17 @@
 		<menu>
 			<item android:id="@+id/action_resize_image"
 				android:icon="@drawable/ic_resize_white_24dp"
-				android:title="@string/action_resize"
+				android:title="@string/action_resize_image"
 				android:orderInCategory="1"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_scale_image"
 				android:icon="@drawable/ic_scale_white_24dp"
-				android:title="@string/action_scale"
+				android:title="@string/action_scale_image"
 				android:orderInCategory="2"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_flip_image"
 				android:icon="@drawable/ic_flip_white_24dp"
-				android:title="@string/action_flip"
+				android:title="@string/action_flip_image"
 				android:orderInCategory="3"
 				app:showAsAction="never"/>
 		</menu>
@@ -78,25 +78,30 @@
 				android:title="@string/action_new_layer"
 				android:orderInCategory="1"
 				app:showAsAction="never"/>
+			<item android:id="@+id/action_open_layer"
+				android:icon="@drawable/ic_folder_white_24dp"
+				android:title="@string/action_open_layer"
+				android:orderInCategory="2"
+				app:showAsAction="never"/>
 			<item android:id="@+id/action_resize_layer"
 				android:icon="@drawable/ic_resize_white_24dp"
-				android:title="@string/action_resize"
-				android:orderInCategory="2"
+				android:title="@string/action_resize_layer"
+				android:orderInCategory="3"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_scale_layer"
 				android:icon="@drawable/ic_scale_white_24dp"
-				android:title="@string/action_scale"
-				android:orderInCategory="3"
+				android:title="@string/action_scale_layer"
+				android:orderInCategory="4"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_flip_layer"
 				android:icon="@drawable/ic_flip_white_24dp"
-				android:title="@string/action_flip"
-				android:orderInCategory="4"
+				android:title="@string/action_flip_layer"
+				android:orderInCategory="5"
 				app:showAsAction="never"/>
 			<item android:id="@+id/action_rotate_layer"
 				android:icon="@drawable/ic_rotate_white_24dp"
-				android:title="@string/action_rotate"
-				android:orderInCategory="5"
+				android:title="@string/action_rotate_layer"
+				android:orderInCategory="6"
 				app:showAsAction="never"/>
 		</menu>
 	</item>

@@ -96,6 +96,7 @@ public class Layer
 	
 	public void setBitmap(Bitmap bitmap)
 	{
+		if(!bitmap.isMutable()) bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		this.bitmap = bitmap;
 		editCanvas = new Canvas(bitmap);
 	}
@@ -120,7 +121,7 @@ public class Layer
 		return visible;
 	}
 	
-	public void setVisible(boolean visible)
+	public void setVisibility(boolean visible)
 	{
 		this.visible = visible;
 		if(listener != null) listener.onImageChanged();

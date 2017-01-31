@@ -155,6 +155,13 @@ public class Image
 		return layer;
 	}
 	
+	public void addLayer(Layer layer)
+	{
+		layer.setImageChangeListener(listener);
+		layers.add(0, layer);
+		updateLayersPreview();
+	}
+	
 	public int getSelectedLayerIndex()
 	{
 		return selectedLayer;

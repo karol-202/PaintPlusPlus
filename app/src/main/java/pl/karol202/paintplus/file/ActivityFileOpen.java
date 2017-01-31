@@ -19,6 +19,7 @@ public class ActivityFileOpen extends ActivityFileChoose
 		if(!super.onFileSelected(file)) return false;
 		Intent data = new Intent();
 		data.putExtra("filePath", file.getAbsolutePath());
+		data.putExtra("fileName", file.getName());
 		setResult(RESULT_OK, data);
 		finish();
 		return true;

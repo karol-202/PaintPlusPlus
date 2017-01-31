@@ -183,6 +183,13 @@ public class ActivityPaint extends AppCompatActivity
 	}
 	
 	@Override
+	public boolean onMenuOpened(int featureId, Menu menu)
+	{
+		actions.fixMenuIcons(featureId, menu);
+		return super.onMenuOpened(featureId, menu);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		if(actions.handleAction(item)) return true;

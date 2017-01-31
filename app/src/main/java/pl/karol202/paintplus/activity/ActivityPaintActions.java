@@ -5,9 +5,12 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
+
+import java.lang.reflect.Method;
 
 public class ActivityPaintActions
 {
@@ -39,6 +42,23 @@ public class ActivityPaintActions
 		prepareFileSaveOption(menu);
 	}
 	
+	public void fixMenuIcons(int featureId, Menu menu)
+	{
+		if(featureId == Window.FEATURE_ACTION_BAR && menu != null && menu.getClass().getSimpleName().equals("MenuBuilder"))
+		{
+			try
+			{
+				Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+				m.setAccessible(true);
+				m.invoke(menu, true);
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
 	private void setItemsVisibility(Menu menu, boolean visible)
 	{
 		for(int i = 0; i < menu.size(); i++)
@@ -56,6 +76,7 @@ public class ActivityPaintActions
 		String state = Environment.getExternalStorageState();
 		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
 		menu.findItem(R.id.action_open_image).setEnabled(enable);
+		menu.findItem(R.id.action_open_layer).setEnabled(enable);
 	}
 	
 	private void prepareFileSaveOption(Menu menu)
@@ -102,6 +123,9 @@ public class ActivityPaintActions
 		
 		case R.id.action_new_layer:
 			new OptionLayerNew(activity, image).execute();
+			return true;
+		case R.id.action_open_layer:
+			new OptionLayerOpen(activity, image).execute();
 			return true;
 		case R.id.action_resize_layer:
 			new OptionLayerResize(activity, image).execute();

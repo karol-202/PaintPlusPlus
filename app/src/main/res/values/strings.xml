@@ -36,17 +36,22 @@
 	<string name="action_file">Plik</string>
 	<string name="action_new_image">Nowy obraz</string>
 	<string name="action_capture_photo">Zrób zdjęcie</string>
-	<string name="action_open">Otwórz plik</string>
-	<string name="action_save">Zapisz plik</string>
+	<string name="action_open_image">Otwórz plik</string>
+	<string name="action_save_image">Zapisz plik</string>
 	
 	<string name="action_image">Obraz</string>
-	<string name="action_resize">Zmień wymiary</string>
-	<string name="action_scale">Skaluj obraz</string>
-	<string name="action_flip">Odbij</string>
-	<string name="action_rotate">Obróć</string>
+	<string name="action_resize_image">Zmień wymiary obrazu</string>
+	<string name="action_scale_image">Skaluj obraz</string>
+	<string name="action_flip_image">Odbij obraz</string>
+	<string name="action_rotate_image">Obróć obraz</string>
 	
 	<string name="action_layer">Warstwa</string>
 	<string name="action_new_layer">Nowa warstwa</string>
+	<string name="action_open_layer">Otwórz warstwę z pliku</string>
+	<string name="action_resize_layer">Zmień wymiary warstwy</string>
+	<string name="action_scale_layer">Skaluj warstwę</string>
+	<string name="action_flip_layer">Odbij obraz</string>
+	<string name="action_rotate_layer">Obróć warstwę</string>
 	
 	<string name="action_settings">Ustawienia</string>
 
@@ -132,4 +137,5 @@
 	<string name="message_flip_direction">Wybierz kierunek, w którym ma nastąpić odbicie.</string>
 	<string name="rubber_strength">Siła</string>
 	<string name="rubber_smooth">Wygładź</string>
+	<string name="message_cannot_open_file">Nie można otworzyć pliku.</string>
 </resources>

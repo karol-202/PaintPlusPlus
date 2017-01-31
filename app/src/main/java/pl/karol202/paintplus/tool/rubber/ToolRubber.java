@@ -25,6 +25,8 @@ public class ToolRubber extends Tool
 	private float lastX;
 	private float lastY;
 	private boolean pathCreated;
+	private boolean editStarted;
+	private boolean oldVisibility;
 	
 	public ToolRubber(Image image)
 	{
@@ -112,6 +114,9 @@ public class ToolRubber extends Tool
 		lastX = x;
 		lastY = y;
 		pathCreated = false;
+		editStarted = true;
+		oldVisibility = layer.isVisible();
+		layer.setVisibility(false);
 		return true;
 	}
 	
@@ -135,7 +140,6 @@ public class ToolRubber extends Tool
 		lastX = x;
 		lastY = y;
 		pathCreated = true;
-		layer.setVisible(false);
 	}
 	
 	private void onTouchStop(float x, float y)
@@ -156,7 +160,9 @@ public class ToolRubber extends Tool
 		path.reset();
 		lastX = -1;
 		lastY = -1;
-		layer.setVisible(true);
+		pathCreated = false;
+		editStarted = false;
+		layer.setVisibility(oldVisibility);
 	}
 	
 	@Override
@@ -168,7 +174,7 @@ public class ToolRubber extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
-		if(!pathCreated) return;
+		if(!editStarted || !oldVisibility) return;
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX() + layer.getX(),
 				-image.getViewY() + layer.getY());

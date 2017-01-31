@@ -15,10 +15,10 @@ public class ImageLoader
 	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
 	
-	public static void openImageFromFile(Image image, String path)
+	public static Bitmap openBitmap(String path)
 	{
 		Bitmap photo = BitmapFactory.decodeFile(path);
-		if(photo == null) return;
+		if(photo == null) return null;
 		
 		float maxSize = GLHelper.getMaxTextureSize();
 		if(photo.getWidth() > maxSize || photo.getHeight() > maxSize)
@@ -29,10 +29,10 @@ public class ImageLoader
 			int newWidth = (int) Math.floor(photo.getWidth() / higher);
 			int newHeight = (int) Math.floor(photo.getHeight() / higher);
 			Bitmap scaled = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			image.openImage(scaled);
+			return scaled;
 		}
-		else image.openImage(photo);
-		image.centerView();
+		else return photo;
+		
 	}
 	
 	public static void saveImageToFile(Image image, String path, int quality)
