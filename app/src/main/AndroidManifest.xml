@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name=".activity.ActivityPaint"
-            android:label="" />
+            android:label="@string/activity_main" />
 		<activity
 			android:name=".file.ActivityFileOpen"
 			android:label="@string/activity_file_open" />

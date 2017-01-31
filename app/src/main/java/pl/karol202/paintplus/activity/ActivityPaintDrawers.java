@@ -77,8 +77,7 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		
 		private void onAllDrawersClosed()
 		{
-			String title = resources.getString(R.string.activity_paint);
-			activity.setTitle(title);
+			activity.setTitle(null);
 		}
 		
 		private void onLeftDrawerMoved(View drawerView, float slideOffset)

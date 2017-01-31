@@ -77,7 +77,6 @@ public class ActivityPaint extends AppCompatActivity
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
-		actionBar.setTitle(makeTitle(savedInstanceState));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
@@ -117,9 +116,8 @@ public class ActivityPaint extends AppCompatActivity
 	
 	private String makeTitle(Bundle savedInstanceState)
 	{
-		String title = getString(R.string.activity_paint);
-		if(savedInstanceState != null) title = savedInstanceState.getString("title");
-		return title;
+		if(savedInstanceState != null) return savedInstanceState.getString("title");
+		else return null;
 	}
 	
 	private void restoreInstanceState(Bundle state)
@@ -142,9 +140,9 @@ public class ActivityPaint extends AppCompatActivity
 	{
 		super.onPostCreate(savedInstanceState);
 		
+		setTitle(makeTitle(savedInstanceState));
 		paintView.init(this);
 		layers.postInitLayers();
-		
 		drawers.postInitDrawers();
 	}
 	
@@ -243,6 +241,8 @@ public class ActivityPaint extends AppCompatActivity
 	
 	public void setTitle(String title)
 	{
+		if(getTool() == null) title = getString(R.string.activity_main);
+		else if(title == null) title = getString(getTool().getName());
 		actionBar.setTitle(title);
 	}
 	
@@ -268,6 +268,7 @@ public class ActivityPaint extends AppCompatActivity
 	
 	public Tool getTool()
 	{
+		if(dataFragment == null) return null;
 		return dataFragment.getTool();
 	}
 	
