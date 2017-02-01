@@ -3,7 +3,6 @@ package pl.karol202.paintplus.file;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.GLHelper;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class ImageLoader
 		
 	}
 	
-	public static void saveImageToFile(Image image, String path, int quality)
+	public static void saveBitmap(Bitmap bitmap, String path, int quality)
 	{
 		try
 		{
@@ -43,13 +42,12 @@ public class ImageLoader
 			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);
 			CompressFormat format = getExtension(path);
-			Bitmap bitmap = image.getFullImage();
 			bitmap.compress(format, quality, fos);
 			fos.close();
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException("Cannot save image to file.", e);
+			throw new RuntimeException("Cannot save bitmap to file.", e);
 		}
 	}
 	

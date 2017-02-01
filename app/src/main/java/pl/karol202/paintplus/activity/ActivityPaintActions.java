@@ -5,12 +5,9 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
-
-import java.lang.reflect.Method;
 
 public class ActivityPaintActions
 {
@@ -40,23 +37,6 @@ public class ActivityPaintActions
 		preparePhotoCaptureOption(menu);
 		prepareFileOpenOption(menu);
 		prepareFileSaveOption(menu);
-	}
-	
-	public void fixMenuIcons(int featureId, Menu menu)
-	{
-		if(featureId == Window.FEATURE_ACTION_BAR && menu != null && menu.getClass().getSimpleName().equals("MenuBuilder"))
-		{
-			try
-			{
-				Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-				m.setAccessible(true);
-				m.invoke(menu, true);
-			}
-			catch(Exception e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
 	}
 	
 	private void setItemsVisibility(Menu menu, boolean visible)
@@ -126,6 +106,9 @@ public class ActivityPaintActions
 			return true;
 		case R.id.action_open_layer:
 			new OptionLayerOpen(activity, image).execute();
+			return true;
+		case R.id.action_save_layer:
+			new OptionLayerSave(activity, image).execute();
 			return true;
 		case R.id.action_resize_layer:
 			new OptionLayerResize(activity, image).execute();
