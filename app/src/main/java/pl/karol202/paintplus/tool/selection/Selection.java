@@ -38,6 +38,11 @@ public class Selection
 		updatePath();
 	}
 	
+	public void revert()
+	{
+		commitSelection(imageRect, Op.XOR);
+	}
+	
 	public void commitSelection(Rect rect, Op op)
 	{
 		region.op(rect, op);

@@ -112,9 +112,35 @@
 	</item>
 	
 	<item
+		android:id="@+id/action_selection"
+		android:icon="@drawable/ic_select_all_white_24dp"
+		android:title="@string/action_selection"
+		android:orderInCategory="7"
+		app:showAsAction="never">
+		
+		<menu>
+			<item android:id="@+id/action_select_all"
+				android:icon="@drawable/ic_select_all_white_24dp"
+				android:title="@string/action_select_all"
+				android:orderInCategory="1"
+				app:showAsAction="never" />
+			<item android:id="@+id/action_select_nothing"
+				android:icon="@drawable/ic_select_nothing_white_24dp"
+				android:title="@string/action_select_nothing"
+				android:orderInCategory="2"
+				app:showAsAction="never" />
+			<item android:id="@+id/action_revert_selection"
+				android:icon="@drawable/ic_revert_selection_white_24dp"
+				android:title="@string/action_revert_selection"
+				android:orderInCategory="3"
+				app:showAsAction="never"/>
+		</menu>
+	</item>
+		
+	<item
 		android:id="@+id/action_settings"
 		android:icon="@drawable/ic_settings_white_24dp"
 		android:title="@string/action_settings"
-		android:orderInCategory="7"
+		android:orderInCategory="8"
 		app:showAsAction="never" />
 </menu>

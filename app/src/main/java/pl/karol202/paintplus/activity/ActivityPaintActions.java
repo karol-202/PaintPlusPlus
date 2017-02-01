@@ -123,6 +123,16 @@ public class ActivityPaintActions
 			new OptionLayerRotate(activity, image).execute();
 			return true;
 			
+		case R.id.action_select_all:
+			image.selectAll();
+			return true;
+		case R.id.action_select_nothing:
+			image.selectNothing();
+			return true;
+		case R.id.action_revert_selection:
+			image.revertSelection();
+			return true;
+			
 		case R.id.action_settings:
 			activity.showSettingsActivity();
 			return true;

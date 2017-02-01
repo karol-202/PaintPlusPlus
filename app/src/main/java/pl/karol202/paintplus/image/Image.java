@@ -208,22 +208,6 @@ public class Image
 		return DEFAULT_LAYER_NAME;
 	}
 	
-	public void setOnImageChangeListener(OnImageChangeListener listener)
-	{
-		this.listener = listener;
-		for(Layer layer : layers) layer.setImageChangeListener(listener);
-	}
-	
-	public ColorsSet getColorsSet()
-	{
-		return colorsSet;
-	}
-	
-	public Selection getSelection()
-	{
-		return selection;
-	}
-	
 	public ArrayList<Layer> getLayers()
 	{
 		return layers;
@@ -255,6 +239,37 @@ public class Image
 		return selected != null ? selected.getY() : 0;
 	}
 	
+	
+	public void setOnImageChangeListener(OnImageChangeListener listener)
+	{
+		this.listener = listener;
+		for(Layer layer : layers) layer.setImageChangeListener(listener);
+	}
+	
+	public ColorsSet getColorsSet()
+	{
+		return colorsSet;
+	}
+	
+	public Selection getSelection()
+	{
+		return selection;
+	}
+	
+	public void selectAll()
+	{
+		selection.selectAll();
+	}
+	
+	public void selectNothing()
+	{
+		selection.selectNothing();
+	}
+	
+	public void revertSelection()
+	{
+		selection.revert();
+	}
 	
 	public int getWidth()
 	{

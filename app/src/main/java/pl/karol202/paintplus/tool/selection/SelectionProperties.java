@@ -38,8 +38,7 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		if(selection.isInEditMode()) inflater.inflate(R.menu.menu_tool_selection_edit_mode, menu);
-		else inflater.inflate(R.menu.menu_tool_selection, menu);
+		if(selection.isInEditMode()) inflater.inflate(R.menu.menu_tool_selection, menu);
 	}
 	
 	@Override
@@ -57,22 +56,10 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 				selection.cancelSelection();
 				break;
 			}
+			getActivity().invalidateOptionsMenu();
+			return true;
 		}
-		else
-		{
-			switch(id)
-			{
-			case R.id.action_select_all:
-				selection.selectAll();
-				break;
-			case R.id.action_select_nothing:
-				selection.selectNothing();
-				break;
-			}
-		}
-		getActivity().invalidateOptionsMenu();
-		return true;
-		//return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
