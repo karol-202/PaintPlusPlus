@@ -202,6 +202,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		PopupMenu menu = new PopupMenu(adapter.getContext(), buttonLayerMenu);
 		menu.setOnMenuItemClickListener(this);
 		menu.inflate(R.menu.menu_layer);
+		if(adapter.isLastLayer(layer)) menu.getMenu().findItem(R.id.action_join).setEnabled(false);
 		menu.show();
 	}
 	
@@ -215,6 +216,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			return true;
 		case R.id.action_layer_duplicate:
 			adapter.duplicateLayer(layer);
+			return true;
+		case R.id.action_join:
+			adapter.joinWithNextLayer(layer);
 			return true;
 		case R.id.action_layer_delete:
 			delete();

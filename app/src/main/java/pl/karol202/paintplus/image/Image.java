@@ -24,7 +24,7 @@ public class Image
 	
 	private final String DEFAULT_LAYER_NAME;
 	
-	public final int MAX_LAYERS = 10;
+	public static final int MAX_LAYERS = 8;
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
@@ -218,6 +218,11 @@ public class Image
 	public ArrayList<Layer> getLayers()
 	{
 		return layers;
+	}
+	
+	public int getLayersAmount()
+	{
+		return layers.size();
 	}
 	
 	public Bitmap getSelectedBitmap()

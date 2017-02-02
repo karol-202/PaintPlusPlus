@@ -85,7 +85,7 @@ public class ActivityPaintActions
 		menu.findItem(R.id.action_copy).setEnabled(!selection.isEmpty());
 		
 		Clipboard clipboard = image.getClipboard();
-		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty());
+		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty() || image.getLayersAmount() < Image.MAX_LAYERS);
 	}
 	
 	public boolean handleAction(MenuItem item)

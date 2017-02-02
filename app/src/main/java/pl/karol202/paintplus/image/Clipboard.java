@@ -48,6 +48,7 @@ public class Clipboard
 	public void paste()
 	{
 		Layer layer = image.newLayer(bitmap.getWidth(), bitmap.getHeight(), defaultLayerName);
+		if(layer == null) return;
 		layer.setX(left);
 		layer.setY(top);
 		layer.setBitmap(bitmap);

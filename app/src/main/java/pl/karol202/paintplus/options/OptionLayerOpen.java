@@ -47,7 +47,8 @@ public class OptionLayerOpen extends Option implements ActivityPaint.ActivityRes
 		{
 			Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), fileName, Color.TRANSPARENT);
 			layer.setBitmap(bitmap);
-			image.addLayer(layer, 0);
+			if(!image.addLayer(layer, 0))
+				Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

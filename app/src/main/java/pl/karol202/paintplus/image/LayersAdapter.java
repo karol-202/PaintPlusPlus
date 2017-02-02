@@ -2,16 +2,21 @@ package pl.karol202.paintplus.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.graphics.Bitmap.Config.ARGB_8888;
 
 public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
@@ -80,6 +85,11 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		return layerHandle;
 	}
 	
+	public boolean isLastLayer(Layer layer)
+	{
+		return layers.indexOf(layer) == layers.size() - 1;
+	}
+	
 	public void moveLayer(int layerId, int target)
 	{
 		Layer selected = image.getSelectedLayer();
@@ -98,7 +108,29 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		Layer newLayer = new Layer(layer.getX(), layer.getY(), layer.getWidth(), layer.getHeight(), newName, Color.BLACK);
 		Bitmap newBitmap = Bitmap.createBitmap(layer.getBitmap());
 		newLayer.setBitmap(newBitmap);
-		image.addLayer(newLayer, layerIndex);
-		image.selectLayer(layerIndex);
+		if(!image.addLayer(newLayer, layerIndex))
+			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void joinWithNextLayer(Layer firstLayer)
+	{
+		int firstIndex = layers.indexOf(firstLayer);
+		Layer secondLayer = layers.get(firstIndex + 1);
+		RectF resultBounds = firstLayer.getBounds();
+		resultBounds.union(secondLayer.getBounds());
+		Layer resultLayer = new Layer((int) resultBounds.left, (int) resultBounds.top,
+									  (int) resultBounds.width(), (int) resultBounds.height(),
+									  firstLayer.getName(), Color.TRANSPARENT);
+		Bitmap resultBitmap = Bitmap.createBitmap((int) resultBounds.width(), (int) resultBounds.height(), ARGB_8888);
+		Canvas canvas = new Canvas(resultBitmap);
+		canvas.drawBitmap(secondLayer.getBitmap(), secondLayer.getX() - resultBounds.left,
+												   secondLayer.getY() - resultBounds.top, null);
+		canvas.drawBitmap(firstLayer.getBitmap(), firstLayer.getX() - resultBounds.left,
+												  firstLayer.getY() - resultBounds.top, null);
+		resultLayer.setBitmap(resultBitmap);
+		
+		image.deleteLayer(firstLayer);
+		image.deleteLayer(secondLayer);
+		image.addLayer(resultLayer, firstIndex);
 	}
 }

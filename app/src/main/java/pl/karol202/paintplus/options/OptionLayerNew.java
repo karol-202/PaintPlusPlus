@@ -119,9 +119,13 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		int y = parseInt(editY.getText().toString());
 		
 		Layer layer = image.newLayer(layerWidth, layerHeight, name);
-		layer.setX(x);
-		layer.setY(y);
-		if(listener != null) listener.onLayerAdded();
+		if(layer == null) Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+		else
+		{
+			layer.setX(x);
+			layer.setY(y);
+			if(listener != null) listener.onLayerAdded();
+		}
 	}
 	
 	@Override

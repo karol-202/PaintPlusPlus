@@ -5,6 +5,8 @@
 		android:title="@string/layer_change_name" />
 	<item android:id="@+id/action_layer_duplicate"
 		android:title="@string/layer_duplicate" />
+	<item android:id="@+id/action_join"
+		android:title="@string/layer_join" />
 	<item android:id="@+id/action_layer_delete"
 		android:title="@string/layer_delete" />
 </menu>
