@@ -6,8 +6,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Clipboard;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
+import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 
 public class ActivityPaintActions
 {
@@ -27,6 +30,14 @@ public class ActivityPaintActions
 	{
 		menuInflater.inflate(R.menu.menu_paint, menu);
 		image = activity.getImage();
+		image.setOnSelectionChangeListener(new OnSelectionChangeListener()
+		{
+			@Override
+			public void onSelectionChanged()
+			{
+				activity.invalidateOptionsMenu();
+			}
+		});
 	}
 	
 	public void prepareMenu(Menu menu)
@@ -37,6 +48,7 @@ public class ActivityPaintActions
 		preparePhotoCaptureOption(menu);
 		prepareFileOpenOption(menu);
 		prepareFileSaveOption(menu);
+		prepareClipboardOptions(menu);
 	}
 	
 	private void setItemsVisibility(Menu menu, boolean visible)
@@ -66,6 +78,16 @@ public class ActivityPaintActions
 		menu.findItem(R.id.action_save_image).setEnabled(enable);
 	}
 	
+	private void prepareClipboardOptions(Menu menu)
+	{
+		Selection selection = image.getSelection();
+		menu.findItem(R.id.action_cut).setEnabled(!selection.isEmpty());
+		menu.findItem(R.id.action_copy).setEnabled(!selection.isEmpty());
+		
+		Clipboard clipboard = image.getClipboard();
+		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty());
+	}
+	
 	public boolean handleAction(MenuItem item)
 	{
 		int id = item.getItemId();
@@ -91,6 +113,18 @@ public class ActivityPaintActions
 			new OptionFileSave(activity, image).execute();
 			return true;
 		
+		case R.id.action_cut:
+			image.cut();
+			activity.invalidateOptionsMenu();
+			return true;
+		case R.id.action_copy:
+			image.copy();
+			activity.invalidateOptionsMenu();
+			return true;
+		case R.id.action_paste:
+			image.paste();
+			return true;
+			
 		case R.id.action_resize_image:
 			new OptionImageResize(activity, image).execute();
 			return true;

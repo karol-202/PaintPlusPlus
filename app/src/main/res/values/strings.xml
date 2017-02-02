@@ -39,6 +39,11 @@
 	<string name="action_open_image">Otwórz plik</string>
 	<string name="action_save_image">Zapisz plik</string>
 	
+	<string name="action_edit">Edycja</string>
+	<string name="action_cut">Wytnij</string>
+	<string name="action_copy">Kopiuj</string>
+	<string name="action_paste">Wklej</string>
+	
 	<string name="action_image">Obraz</string>
 	<string name="action_resize_image">Zmień wymiary obrazu</string>
 	<string name="action_scale_image">Skaluj obraz</string>
@@ -142,4 +147,5 @@
 	<string name="rubber_strength">Siła</string>
 	<string name="rubber_smooth">Wygładź</string>
 	<string name="message_cannot_open_file">Nie można otworzyć pliku.</string>
+	<string name="pasted_layer">Wklejona warstwa</string>
 </resources>

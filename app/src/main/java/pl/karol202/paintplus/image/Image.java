@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -29,12 +30,13 @@ public class Image
 	
 	private ArrayList<Layer> layers;
 	private int selectedLayer;
+	private int width;
+	private int height;
 	
 	private OnImageChangeListener listener;
 	private ColorsSet colorsSet;
 	private Selection selection;
-	private int width;
-	private int height;
+	private Clipboard clipboard;
 	
 	private int viewX;
 	private int viewY;
@@ -49,6 +51,8 @@ public class Image
 		
 		this.layers = new ArrayList<>();
 		this.colorsSet = ColorsSet.getDefault();
+		this.selection = new Selection();
+		this.clipboard = new Clipboard(this, context.getString(R.string.pasted_layer));
 		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
@@ -67,8 +71,7 @@ public class Image
 		selectedLayer = 0;
 		updateLayersPreview();
 		
-		if(selection == null) selection = new Selection(width, height);
-		else selection.init(width, height);
+		selection.init(width, height);
 	}
 	
 	public void openImage(Bitmap bitmap)
@@ -152,6 +155,7 @@ public class Image
 		layer.setImageChangeListener(listener);
 		layers.add(0, layer);
 		selectLayer(0);
+		updateLayersPreview();
 		return layer;
 	}
 	
@@ -239,11 +243,44 @@ public class Image
 		return selected != null ? selected.getY() : 0;
 	}
 	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	
+	public void cut()
+	{
+		if(selection.isEmpty()) return;
+		clipboard.cut(getSelectedLayer());
+	}
+	
+	public void copy()
+	{
+		if(selection.isEmpty()) return;
+		clipboard.copy(getSelectedLayer());
+	}
+	
+	public void paste()
+	{
+		if(clipboard.isEmpty()) return;
+		clipboard.paste();
+	}
 	
 	public void setOnImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
 		for(Layer layer : layers) layer.setImageChangeListener(listener);
+	}
+	
+	public void setOnSelectionChangeListener(OnSelectionChangeListener listener)
+	{
+		selection.setListener(listener);
 	}
 	
 	public ColorsSet getColorsSet()
@@ -271,14 +308,9 @@ public class Image
 		selection.revert();
 	}
 	
-	public int getWidth()
+	public Clipboard getClipboard()
 	{
-		return width;
-	}
-	
-	public int getHeight()
-	{
-		return height;
+		return clipboard;
 	}
 	
 	public int getViewX()
