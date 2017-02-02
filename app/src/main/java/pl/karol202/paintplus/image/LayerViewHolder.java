@@ -213,6 +213,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		case R.id.action_layer_change_name:
 			showNameDialog();
 			return true;
+		case R.id.action_layer_duplicate:
+			adapter.duplicateLayer(layer);
+			return true;
 		case R.id.action_layer_delete:
 			delete();
 			return true;

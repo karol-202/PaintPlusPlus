@@ -1,6 +1,8 @@
 package pl.karol202.paintplus.image;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import java.util.HashMap;
 
 public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
+	private final String DUPLICATE_INDICATOR;
+	
 	private Context context;
 	private Image image;
 	private ArrayList<Layer> layers;
@@ -25,6 +29,8 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		this.context = activity;
 		this.viewHolders = new HashMap<>();
 		this.layerHandle = new LayerHandle(activity, this);
+		
+		DUPLICATE_INDICATOR = context.getString(R.string.duplicate);
 	}
 	
 	@Override
@@ -83,5 +89,16 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		
 		image.selectLayer(layers.indexOf(selected));
 		image.updateImage();
+	}
+	
+	public void duplicateLayer(Layer layer)
+	{
+		int layerIndex = layers.indexOf(layer);
+		String newName = layer.getName() + DUPLICATE_INDICATOR;
+		Layer newLayer = new Layer(layer.getX(), layer.getY(), layer.getWidth(), layer.getHeight(), newName, Color.BLACK);
+		Bitmap newBitmap = Bitmap.createBitmap(layer.getBitmap());
+		newLayer.setBitmap(newBitmap);
+		image.addLayer(newLayer, layerIndex);
+		image.selectLayer(layerIndex);
 	}
 }

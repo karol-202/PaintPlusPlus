@@ -159,11 +159,14 @@ public class Image
 		return layer;
 	}
 	
-	public void addLayer(Layer layer)
+	public boolean addLayer(Layer layer, int index)
 	{
+		if(layers.size() >= MAX_LAYERS) return false;
 		layer.setImageChangeListener(listener);
-		layers.add(0, layer);
+		layers.add(index, layer);
+		selectLayer(index);
 		updateLayersPreview();
+		return true;
 	}
 	
 	public int getSelectedLayerIndex()
