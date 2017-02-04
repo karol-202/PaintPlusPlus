@@ -3,7 +3,7 @@ package pl.karol202.paintplus.options;
 import android.content.Context;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
 
 public class OptionLayerResize extends OptionResize
 {

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.image;
+package pl.karol202.paintplus.image.layer;
 
 import android.animation.Animator.AnimatorListener;
 import android.annotation.TargetApi;
@@ -211,6 +211,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	{
 		switch(item.getItemId())
 		{
+		case R.id.action_layer_properties:
+			new LayerPropertiesDialog(adapter.getContext(), layer).show();
+			return true;
 		case R.id.action_layer_change_name:
 			showNameDialog();
 			return true;

@@ -3,7 +3,7 @@ package pl.karol202.paintplus.tool;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
 
 public abstract class Tool
 {

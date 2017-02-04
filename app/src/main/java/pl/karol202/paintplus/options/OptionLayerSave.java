@@ -8,7 +8,7 @@ import pl.karol202.paintplus.activity.ActivityPaint.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileSave;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.settings.ActivitySettings;
 
 import static android.app.Activity.RESULT_OK;

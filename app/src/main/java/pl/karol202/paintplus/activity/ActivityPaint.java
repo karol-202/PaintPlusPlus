@@ -19,6 +19,7 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.layer.mode.LayerModes;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
@@ -51,6 +52,7 @@ public class ActivityPaint extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		LayerModes.init(this);
 		
 		actions = new ActivityPaintActions(this);
 		drawers = new ActivityPaintDrawers(this);

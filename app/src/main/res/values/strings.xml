@@ -24,6 +24,7 @@
 	<string name="dialog_fill_message">Trwa wypełnianie…</string>
 	<string name="dialog_layer_name">Podaj nazwę warstwy</string>
 	<string name="dialog_layer_delete">Czy na pewno chcesz usunąć warstwę?</string>
+	<string name="dialog_layer_properties">Właściwości warstwy</string>
 	
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
@@ -89,10 +90,14 @@
 	<string name="selection_mode_subtract">Odejmij</string>
 	<string name="selection_mode_multiply">Część wspólna</string>
 	
+	<string name="layer_properties">Właściwości</string>
 	<string name="layer_change_name">Zmień nazwę</string>
 	<string name="layer_duplicate">Duplikuj</string>
 	<string name="layer_join">Połącz w dół</string>
 	<string name="layer_delete">Usuń</string>
+	
+	<string name="layer_mode_standard">Standardowy</string>
+	<string name="layer_mode_add">Suma</string>
 	
 	<string name="choice_of_tool">Wybór narzędzia</string>
 	<string name="size_tool">Wielkość</string>
@@ -152,4 +157,6 @@
 	<string name="pasted_layer">Wklejona warstwa</string>
 	<string name="duplicate">\u0020Duplikat</string>
 	<string name="too_many_layers">Za dużo warstw!</string>
+	<string name="layer_mode">Tryb</string>
+	<string name="layer_opacity">Widoczność</string>
 </resources>

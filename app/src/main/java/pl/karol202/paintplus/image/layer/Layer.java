@@ -1,27 +1,36 @@
-package pl.karol202.paintplus.image;
+package pl.karol202.paintplus.image.layer;
 
 import android.graphics.*;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
+import pl.karol202.paintplus.image.layer.mode.LayerMode;
+import pl.karol202.paintplus.image.layer.mode.LayerModes;
 
 public class Layer
 {
 	private OnImageChangeListener listener;
 	private Bitmap bitmap;
 	private Canvas editCanvas;
+	
 	private String name;
 	private boolean visible;
 	private int x;
 	private int y;
+	private LayerMode mode;
+	private float opacity;
 	
 	public Layer(int x, int y, int width, int height, String name, int color)
 	{
 		this.bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		this.bitmap.eraseColor(color);
 		this.editCanvas = new Canvas(bitmap);
+		
 		this.name = name;
 		this.visible = true;
 		this.x = x;
 		this.y = y;
+		this.mode = LayerModes.MODE_STANDARD;
+		this.opacity = 1f;
 	}
 	
 	public void offset(int x, int y)
@@ -84,6 +93,17 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
+	public void draw(Canvas canvas)
+	{
+		draw(canvas, new Matrix());
+	}
+	
+	public void draw(Canvas canvas, Matrix matrix)
+	{
+		matrix.preTranslate(x, y);
+		mode.drawLayer(canvas, this, matrix);
+	}
+	
 	public void setImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
@@ -106,6 +126,21 @@ public class Layer
 		return editCanvas;
 	}
 	
+	public int getWidth()
+	{
+		return bitmap.getWidth();
+	}
+	
+	public int getHeight()
+	{
+		return bitmap.getHeight();
+	}
+	
+	public RectF getBounds()
+	{
+		return new RectF(x, y, x + getWidth(), y + getHeight());
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -125,11 +160,6 @@ public class Layer
 	{
 		this.visible = visible;
 		if(listener != null) listener.onImageChanged();
-	}
-	
-	public RectF getBounds()
-	{
-		return new RectF(x, y, x + getWidth(), y + getHeight());
 	}
 	
 	public int getX()
@@ -154,13 +184,23 @@ public class Layer
 		if(listener != null) listener.onImageChanged();
 	}
 	
-	public int getWidth()
+	public LayerMode getMode()
 	{
-		return bitmap.getWidth();
+		return mode;
 	}
 	
-	public int getHeight()
+	public void setMode(LayerMode mode)
 	{
-		return bitmap.getHeight();
+		this.mode = mode;
+	}
+	
+	public float getOpacity()
+	{
+		return opacity;
+	}
+	
+	public void setOpacity(float opacity)
+	{
+		this.opacity = opacity;
 	}
 }

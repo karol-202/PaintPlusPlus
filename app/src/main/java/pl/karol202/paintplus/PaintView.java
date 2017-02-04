@@ -11,7 +11,8 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.image.layer.mode.LayerModes;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
 
@@ -25,7 +26,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 	private ActivityPaint activity;
 	private Image image;
 	private ColorsSet colors;
-	private Paint bitmapPaint;
 	private Paint selectionPaint;
 	private Paint layerBoundsPaint;
 	private Paint checkerboardPaint;
@@ -45,7 +45,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		image.setOnImageChangeListener(this);
 		colors = image.getColorsSet();
 		
-		bitmapPaint = new Paint();
+		
 		
 		selectionPaint = new Paint();
 		selectionPaint.setStyle(Paint.Style.STROKE);
@@ -70,7 +70,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 		boolean smooth = preferences.getBoolean(ActivitySettings.KEY_VIEW_SMOOTH, true);
 		
-		bitmapPaint.setFilterBitmap(smooth);
+		LayerModes.setAntialiasing(smooth);
 	}
 	
 	@Override
@@ -132,8 +132,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 			if(layer.isVisible())
 			{
 				Matrix matrix = new Matrix(image.getImageMatrix());
-				matrix.preTranslate(layer.getX(), layer.getY());
-				canvas.drawBitmap(layer.getBitmap(), matrix, bitmapPaint);
+				layer.draw(canvas, matrix);
 			}
 			if(image.isLayerSelected(layer) && tool.doesScreenDraw(layer))
 			{
@@ -149,7 +148,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		Bitmap toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas toolCanvas = new Canvas(toolBitmap);
 		getTool().onScreenDraw(toolCanvas);
-		canvas.drawBitmap(toolBitmap, 0, 0, bitmapPaint);
+		//canvas.drawBitmap(toolBitmap, 0, 0, bitmapPaint);
 	}
 	
 	private void drawLayerBounds(Canvas canvas)

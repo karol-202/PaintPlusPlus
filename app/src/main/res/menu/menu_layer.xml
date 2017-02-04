@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	
+	<item android:id="@+id/action_layer_properties"
+		android:title="@string/layer_properties" />
 	<item android:id="@+id/action_layer_change_name"
 		android:title="@string/layer_change_name" />
 	<item android:id="@+id/action_layer_duplicate"

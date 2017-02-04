@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 public class Image
@@ -142,8 +144,11 @@ public class Image
 	{
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
-		for(Layer layer : layers)
-			if(layer.isVisible()) canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
+		
+		ArrayList<Layer> reversed = new ArrayList<>(layers);
+		Collections.reverse(reversed);
+		for(Layer layer : reversed)
+			if(layer.isVisible()) layer.draw(canvas);
 		return bitmap;
 	}
 	

@@ -104,7 +104,7 @@
 			app:layout_constraintBottom_toTopOf="@+id/recycler_layers"
 			app:layout_constraintRight_toRightOf="parent" />
 		
-		<pl.karol202.paintplus.image.LayersRecyclerView
+		<pl.karol202.paintplus.image.layer.LayersRecyclerView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:id="@+id/recycler_layers"

@@ -4,7 +4,7 @@ import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 

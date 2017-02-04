@@ -9,7 +9,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Layer;
+import pl.karol202.paintplus.image.layer.Layer;
 
 import static android.app.Activity.RESULT_OK;
 

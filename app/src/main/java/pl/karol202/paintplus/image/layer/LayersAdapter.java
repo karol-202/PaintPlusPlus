@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.image;
+package pl.karol202.paintplus.image.layer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.image.Image;
 
 import java.util.ArrayList;
 import java.util.HashMap;

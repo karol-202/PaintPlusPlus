@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.image;
 
 import android.graphics.*;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 public class Clipboard

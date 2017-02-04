@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.image;
+package pl.karol202.paintplus.image.layer;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
