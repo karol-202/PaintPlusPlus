@@ -9,18 +9,20 @@ public class LayerModeDefault implements LayerMode
 	
 	private Paint paint;
 	
-	public LayerModeDefault(int name, PorterDuff.Mode mode)
+	public LayerModeDefault(int name)
 	{
 		this.name = name;
 		this.paint = new Paint();
-		this.paint.setXfermode(new PorterDuffXfermode(mode));
 	}
 	
 	@Override
-	public void drawLayer(Canvas canvas, Layer layer, Matrix matrix)
+	public Bitmap drawLayer(Bitmap dst, Layer layer, Matrix matrix)
 	{
 		paint.setAlpha((int) (layer.getOpacity() * 255f));
+		
+		Canvas canvas = new Canvas(dst);
 		canvas.drawBitmap(layer.getBitmap(), matrix, paint);
+		return dst;
 	}
 	
 	@Override

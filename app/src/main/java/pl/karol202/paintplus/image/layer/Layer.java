@@ -93,15 +93,15 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
-	public void draw(Canvas canvas)
+	public Bitmap draw(Bitmap dst)
 	{
-		draw(canvas, new Matrix());
+		return draw(dst, new Matrix());
 	}
 	
-	public void draw(Canvas canvas, Matrix matrix)
+	public Bitmap draw(Bitmap dst, Matrix matrix)
 	{
 		matrix.preTranslate(x, y);
-		mode.drawLayer(canvas, this, matrix);
+		return mode.drawLayer(dst, this, matrix);
 	}
 	
 	public void setImageChangeListener(OnImageChangeListener listener)

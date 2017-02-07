@@ -25,19 +25,24 @@ public class LayerModeSum implements LayerMode
 	}
 	
 	@Override
-	public void drawLayer(Canvas canvas, Layer layer, Matrix matrix)
+	public Bitmap drawLayer(Bitmap bitmapDst, Layer layer, Matrix matrix)
 	{
-		Bitmap bitmapIn = layer.getBitmap();
-		Bitmap bitmapOut = Bitmap.createBitmap(layer.getWidth(), layer.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap bitmapSrc = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap bitmapOut = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
 		
-		Allocation allocationIn = Allocation.createFromBitmap(rs, bitmapIn);
+		Canvas canvasSrc = new Canvas(bitmapSrc);
+		canvasSrc.drawBitmap(layer.getBitmap(), matrix, paint);
+		
+		Allocation allocationDst = Allocation.createFromBitmap(rs, bitmapDst);
+		Allocation allocationSrc = Allocation.createFromBitmap(rs, bitmapSrc);
 		Allocation allocationOut = Allocation.createFromBitmap(rs, bitmapOut);
 		
-		script.forEach_sum(allocationIn, allocationOut);
+		script.set_dstAlloc(allocationDst);
+		script.set_opacity(layer.getOpacity());
+		script.forEach_sum(allocationSrc, allocationOut);
 		allocationOut.copyTo(bitmapOut);
 		
-		paint.setAlpha((int) (layer.getOpacity() * 255f));
-		canvas.drawBitmap(bitmapOut, matrix, paint);
+		return bitmapOut;
 	}
 	
 	@Override

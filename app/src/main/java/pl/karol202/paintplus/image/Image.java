@@ -143,12 +143,11 @@ public class Image
 	public Bitmap getFullImage()
 	{
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
 		
 		ArrayList<Layer> reversed = new ArrayList<>(layers);
 		Collections.reverse(reversed);
 		for(Layer layer : reversed)
-			if(layer.isVisible()) layer.draw(canvas);
+			if(layer.isVisible()) layer.draw(bitmap);
 		return bitmap;
 	}
 	

@@ -127,20 +127,24 @@ public class PaintView extends SurfaceView implements OnImageChangeListener
 		Tool tool = getTool();
 		ArrayList<Layer> layers = new ArrayList<>(image.getLayers());
 		Collections.reverse(layers);
+		
+		Bitmap bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+		
 		for(Layer layer : layers)
 		{
 			if(layer.isVisible())
 			{
 				Matrix matrix = new Matrix(image.getImageMatrix());
-				layer.draw(canvas, matrix);
+				bitmap = layer.draw(bitmap, matrix);
 			}
-			if(image.isLayerSelected(layer) && tool.doesScreenDraw(layer))
+			/*if(image.isLayerSelected(layer) && tool.doesScreenDraw(layer))
 			{
 				if(!tool.isImageLimited()) removeClipping(canvas);
 				drawToolBitmap(canvas);
 				if(!tool.isImageLimited()) setClipping(canvas);
-			}
+			}*/
 		}
+		canvas.drawBitmap(bitmap, 0, 0, null);
 	}
 	
 	private void drawToolBitmap(Canvas canvas)
