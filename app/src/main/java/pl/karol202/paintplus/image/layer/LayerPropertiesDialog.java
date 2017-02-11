@@ -11,7 +11,7 @@ import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter;
-import pl.karol202.paintplus.image.layer.mode.LayerModes;
+import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 
 import java.util.Locale;
 
@@ -61,7 +61,7 @@ public class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener
 	
 	private int indexOf(LayerMode mode)
 	{
-		return LayerModes.getModes().indexOf(mode);
+		return LayerModeType.getIndexOfType(mode);
 	}
 	
 	public void show()
@@ -72,8 +72,16 @@ public class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
-		LayerMode mode = adapter.getItem(position);
-		layer.setMode(mode);
+		try
+		{
+			LayerModeType type = adapter.getItem(position);
+			LayerMode mode = type.getLayerModeClass().newInstance();
+			layer.setMode(mode);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

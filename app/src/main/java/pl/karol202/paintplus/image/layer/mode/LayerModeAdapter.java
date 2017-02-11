@@ -8,11 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-public class LayerModeAdapter extends ArrayAdapter<LayerMode>
+public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
 {
 	public LayerModeAdapter(Context context)
 	{
-		super(context, R.layout.spinner_item_layer_mode, LayerModes.getModes());
+		super(context, R.layout.spinner_item_layer_mode, LayerModeType.values());
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class LayerModeAdapter extends ArrayAdapter<LayerMode>
 			view = inflater.inflate(R.layout.spinner_item_layer_mode, parent, false);
 		}
 		else view = convertView;
-		LayerMode mode = getItem(position);
+		LayerModeType mode = getItem(position);
 		
 		TextView textView = (TextView) view.findViewById(R.id.text_layer_mode_name);
 		textView.setText(mode.getName());

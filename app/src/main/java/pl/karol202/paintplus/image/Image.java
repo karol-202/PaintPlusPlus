@@ -147,7 +147,7 @@ public class Image
 		ArrayList<Layer> reversed = new ArrayList<>(layers);
 		Collections.reverse(reversed);
 		for(Layer layer : reversed)
-			if(layer.isVisible()) layer.draw(bitmap);
+			if(layer.isVisible()) layer.drawLayer(bitmap);
 		return bitmap;
 	}
 	
@@ -194,6 +194,7 @@ public class Image
 		if(index < 0 || index >= layers.size()) throw new IllegalArgumentException("Invalid layer index.");
 		selectedLayer = index;
 		updateImage();
+		updateLayersPreview();
 	}
 	
 	public void selectLayer(Layer layer)
@@ -202,6 +203,7 @@ public class Image
 			throw new NoSuchElementException("Layer cannot be selected because it does not exist in the list.");
 		selectedLayer = layers.indexOf(layer);
 		updateImage();
+		updateLayersPreview();
 	}
 	
 	public void deleteLayer(Layer layer)
@@ -212,6 +214,7 @@ public class Image
 		if(index <= selectedLayer && selectedLayer != 0) selectedLayer--;
 		layers.remove(layer);
 		if(layers.size() == 0) selection.selectNothing();
+		updateLayersPreview();
 	}
 	
 	public String getDefaultLayerName()
@@ -290,9 +293,9 @@ public class Image
 		for(Layer layer : layers) layer.setImageChangeListener(listener);
 	}
 	
-	public void setOnSelectionChangeListener(OnSelectionChangeListener listener)
+	public void addOnSelectionChangeListener(OnSelectionChangeListener listener)
 	{
-		selection.setListener(listener);
+		selection.addListener(listener);
 	}
 	
 	public ColorsSet getColorsSet()

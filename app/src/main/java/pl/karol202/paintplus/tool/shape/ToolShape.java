@@ -92,9 +92,15 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
 	{
-		return layer.isVisible();
+		return layerVisible;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
+	{
+		return false;
 	}
 	
 	@Override

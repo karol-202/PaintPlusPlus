@@ -152,9 +152,15 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
 	{
-		return layer.isVisible();
+		return layerVisible;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
+	{
+		return false;
 	}
 	
 	@Override

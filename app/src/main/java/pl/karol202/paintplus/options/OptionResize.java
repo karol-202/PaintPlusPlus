@@ -121,6 +121,7 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 			int x = parseInt(editX.getText().toString());
 			int y = parseInt(editY.getText().toString());
 			applySize(x, y, newWidth, newHeight);
+			image.updateImage();
 		}
 	}
 	

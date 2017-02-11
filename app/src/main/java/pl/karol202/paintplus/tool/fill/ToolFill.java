@@ -90,7 +90,13 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
 	{
 		return false;
 	}

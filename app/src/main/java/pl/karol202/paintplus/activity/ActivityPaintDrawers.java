@@ -88,7 +88,7 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		
 		private void onRightDrawerMoved()
 		{
-			colorsSelect.updateColors();
+			//colorsSelect.updateColors();
 		}
 	}
 	

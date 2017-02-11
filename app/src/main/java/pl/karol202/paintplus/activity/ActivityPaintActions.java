@@ -30,7 +30,7 @@ public class ActivityPaintActions
 	{
 		menuInflater.inflate(R.menu.menu_paint, menu);
 		image = activity.getImage();
-		image.setOnSelectionChangeListener(new OnSelectionChangeListener()
+		image.addOnSelectionChangeListener(new OnSelectionChangeListener()
 		{
 			@Override
 			public void onSelectionChanged()

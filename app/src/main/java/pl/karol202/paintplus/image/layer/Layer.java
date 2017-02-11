@@ -4,7 +4,7 @@ import android.graphics.*;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
-import pl.karol202.paintplus.image.layer.mode.LayerModes;
+import pl.karol202.paintplus.image.layer.mode.LayerModeDefault;
 
 public class Layer
 {
@@ -29,7 +29,7 @@ public class Layer
 		this.visible = true;
 		this.x = x;
 		this.y = y;
-		this.mode = LayerModes.MODE_STANDARD;
+		this.mode = new LayerModeDefault(this);
 		this.opacity = 1f;
 	}
 	
@@ -93,15 +93,26 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
-	public Bitmap draw(Bitmap dst)
+	public Bitmap drawLayer(Bitmap dst)
 	{
-		return draw(dst, new Matrix());
+		return drawLayer(dst, new Matrix());
 	}
 	
-	public Bitmap draw(Bitmap dst, Matrix matrix)
+	public Bitmap drawLayer(Bitmap dst, Matrix matrix)
 	{
 		matrix.preTranslate(x, y);
-		return mode.drawLayer(dst, this, matrix);
+		return mode.drawLayer(dst, matrix);
+	}
+	
+	public Bitmap drawLayerAndTool(Bitmap dst, Matrix matrix, Bitmap toolBitmap)
+	{
+		matrix.preTranslate(x, y);
+		return mode.drawLayerAndTool(dst, matrix, toolBitmap);
+	}
+	
+	public Bitmap drawTool(Bitmap dst, Bitmap toolBitmap)
+	{
+		return mode.drawTool(dst, toolBitmap);
 	}
 	
 	public void setImageChangeListener(OnImageChangeListener listener)
@@ -192,6 +203,7 @@ public class Layer
 	public void setMode(LayerMode mode)
 	{
 		this.mode = mode;
+		mode.setLayer(this);
 	}
 	
 	public float getOpacity()

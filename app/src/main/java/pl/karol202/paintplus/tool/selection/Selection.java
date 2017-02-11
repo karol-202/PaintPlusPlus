@@ -5,6 +5,8 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Region.Op;
 
+import java.util.ArrayList;
+
 public class Selection
 {
 	public interface OnSelectionChangeListener
@@ -12,19 +14,18 @@ public class Selection
 		void onSelectionChanged();
 	}
 	
-	private OnSelectionChangeListener listener;
+	private ArrayList<OnSelectionChangeListener> listeners;
 	private Rect imageRect;
 	private Region region;
 	private Path path;
-	private Path limitedPath;
 	private boolean empty;
 	
 	public void init(int width, int height)
 	{
+		this.listeners = new ArrayList<>();
 		this.imageRect = new Rect(0, 0, width, height);
 		this.region = new Region();
 		this.path = new Path();
-		this.limitedPath = new Path();
 		updatePath();
 	}
 	
@@ -54,12 +55,8 @@ public class Selection
 	{
 		path = region.getBoundaryPath();
 		
-		Region limitedRegion = new Region(region);
-		limitedRegion.op(imageRect, Op.INTERSECT);
-		limitedPath = limitedRegion.getBoundaryPath();
-		
 		empty = region.isEmpty();
-		if(listener != null) listener.onSelectionChanged();
+		for(OnSelectionChangeListener listener : listeners) listener.onSelectionChanged();
 	}
 	
 	public boolean isEmpty()
@@ -77,18 +74,18 @@ public class Selection
 		return region.getBounds();
 	}
 	
+	public Region getRegion()
+	{
+		return region;
+	}
+	
 	public Path getPath()
 	{
 		return path;
 	}
 	
-	public Path getLimitedPath()
+	public void addListener(OnSelectionChangeListener listener)
 	{
-		return limitedPath;
-	}
-	
-	public void setListener(OnSelectionChangeListener listener)
-	{
-		this.listener = listener;
+		listeners.add(listener);
 	}
 }

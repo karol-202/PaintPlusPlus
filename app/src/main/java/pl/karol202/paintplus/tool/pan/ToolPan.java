@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -92,7 +91,13 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
 	{
 		return false;
 	}

@@ -6,9 +6,11 @@ import pl.karol202.paintplus.image.layer.Layer;
 
 public interface LayerMode
 {
-	Bitmap drawLayer(Bitmap bitmap, Layer layer, Matrix matrix);
+	Bitmap drawLayer(Bitmap bitmap, Matrix matrix);
 	
-	void setAntialiasing(boolean antialiasing);
+	Bitmap drawLayerAndTool(Bitmap bitmap, Matrix matrix, Bitmap toolBitmap);
 	
-	int getName();
+	Bitmap drawTool(Bitmap bitmap, Bitmap toolBitmap);
+	
+	void setLayer(Layer layer);
 }

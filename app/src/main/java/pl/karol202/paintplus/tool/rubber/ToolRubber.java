@@ -166,15 +166,20 @@ public class ToolRubber extends Tool
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
 	{
-		return true;
+		return editStarted && oldVisibility;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
+	{
+		return false;
 	}
 	
 	@Override
 	public void onScreenDraw(Canvas canvas)
 	{
-		if(!editStarted || !oldVisibility) return;
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX() + layer.getX(),
 				-image.getViewY() + layer.getY());

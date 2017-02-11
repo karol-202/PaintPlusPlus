@@ -176,7 +176,6 @@ public class ShapePolygon extends Shape
 		if(path == null) return;
 		updateColor();
 		canvas.drawPath(path, getPaint());
-		System.out.println(getPaint().getAlpha());
 	}
 	
 	@Override

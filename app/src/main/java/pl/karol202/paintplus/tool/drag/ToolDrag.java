@@ -79,7 +79,13 @@ public class ToolDrag extends Tool
 	}
 	
 	@Override
-	public boolean doesScreenDraw(Layer layer)
+	public boolean doesScreenDraw(boolean layerVisible)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isDrawingOnTop()
 	{
 		return false;
 	}

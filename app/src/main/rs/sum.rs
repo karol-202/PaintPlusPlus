@@ -8,10 +8,13 @@ uchar4 RS_KERNEL sum(uchar4 in, uint32_t x, uint32_t y)
 {
 	uchar4 dst = rsGetElementAt_uchar4(dstAlloc, x, y);
 	uchar4 out = in;
-	in.r *= opacity;
-	in.g *= opacity;
-	in.b *= opacity;
-	in.a *= opacity;
+	if(opacity != 1)
+	{
+		in.r *= opacity;
+		in.g *= opacity;
+		in.b *= opacity;
+		in.a *= opacity;
+	}
 	
 	out.r = min(in.r + dst.r, 255);
 	out.g = min(in.g + dst.g, 255);

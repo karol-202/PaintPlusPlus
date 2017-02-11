@@ -1,39 +1,66 @@
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class LayerModeDefault implements LayerMode
 {
-	private int name;
-	
+	private Layer layer;
 	private Paint paint;
+	private Bitmap lastBitmap;
+	private Canvas canvas;
 	
-	public LayerModeDefault(int name)
+	public LayerModeDefault()
 	{
-		this.name = name;
 		this.paint = new Paint();
 	}
 	
-	@Override
-	public Bitmap drawLayer(Bitmap dst, Layer layer, Matrix matrix)
+	public LayerModeDefault(Layer layer)
 	{
-		paint.setAlpha((int) (layer.getOpacity() * 255f));
-		
-		Canvas canvas = new Canvas(dst);
-		canvas.drawBitmap(layer.getBitmap(), matrix, paint);
+		this();
+		this.layer = layer;
+	}
+	
+	@Override
+	public Bitmap drawLayer(Bitmap dst, Matrix matrix)
+	{
+		if(layer == null) throw new NullPointerException("Layer is null");
+		return drawBitmap(dst, layer.getBitmap(), matrix);
+	}
+	
+	@Override
+	public Bitmap drawLayerAndTool(Bitmap dst, Matrix matrix, Bitmap toolBitmap)
+	{
+		drawLayer(dst, matrix);
+		canvas.drawBitmap(toolBitmap, 0, 0, paint);
 		return dst;
 	}
 	
 	@Override
-	public void setAntialiasing(boolean antialiasing)
+	public Bitmap drawTool(Bitmap dst, Bitmap toolBitmap)
 	{
-		paint.setFilterBitmap(antialiasing);
+		return drawBitmap(dst, toolBitmap, null);
+	}
+	
+	private Bitmap drawBitmap(Bitmap dst, Bitmap src, Matrix matrix)
+	{
+		paint.setFilterBitmap(LayerModeType.isAntialiasing());
+		paint.setAlpha((int) (layer.getOpacity() * 255f));
+		
+		if(dst != lastBitmap || canvas == null) canvas = new Canvas(dst);
+		if(matrix != null) canvas.drawBitmap(src, matrix, paint);
+		else canvas.drawBitmap(src, 0, 0, paint);
+		
+		lastBitmap = dst;
+		return dst;
 	}
 	
 	@Override
-	public int getName()
+	public void setLayer(Layer layer)
 	{
-		return name;
+		this.layer = layer;
 	}
 }
