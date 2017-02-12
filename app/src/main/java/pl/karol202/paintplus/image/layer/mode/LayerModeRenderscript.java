@@ -8,23 +8,25 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class LayerModeSum implements LayerMode
+public abstract class LayerModeRenderscript<S extends LayerScript> implements LayerMode
 {
 	private Layer layer;
 	private Paint paint;
 	private RenderScript rs;
-	private ScriptC_sum script;
+	private LayerScript script;
 	
 	private Canvas canvasSrc;
 	private Bitmap bitmapOut;
 	private Allocation allocationOut;
 	
-	public LayerModeSum()
+	public LayerModeRenderscript()
 	{
 		paint = new Paint();
 		rs = LayerModeType.getRenderScript();
-		script = new ScriptC_sum(rs);
+		script = getNewScript(rs);
 	}
+	
+	protected abstract LayerScript getNewScript(RenderScript renderScript);
 	
 	@Override
 	public Bitmap drawLayer(Bitmap bitmapDst, Matrix matrix)
@@ -51,9 +53,9 @@ public class LayerModeSum implements LayerMode
 		Allocation allocationDst = Allocation.createFromBitmap(rs, bitmapDst);
 		Allocation allocationSrc = Allocation.createFromBitmap(rs, bitmapSrc);
 		
-		script.set_dstAlloc(allocationDst);
-		script.set_opacity(layer.getOpacity());
-		script.forEach_sum(allocationSrc, allocationOut);
+		script.setDstAllocation(allocationDst);
+		script.setOpacity(layer.getOpacity());
+		script.run(allocationSrc, allocationOut);
 		allocationOut.copyTo(bitmapOut);
 		
 		return bitmapOut;

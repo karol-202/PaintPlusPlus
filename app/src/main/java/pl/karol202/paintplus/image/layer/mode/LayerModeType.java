@@ -7,7 +7,8 @@ import pl.karol202.paintplus.R;
 public enum LayerModeType
 {
 	MODE_STANDARD(R.string.layer_mode_standard, LayerModeDefault.class),
-	MODE_ADD(R.string.layer_mode_add, LayerModeSum.class);
+	MODE_ADD(R.string.layer_mode_add, LayerModeAdd.class),
+	MODE_MULTIPLY(R.string.layer_mode_multiply, LayerModeMultiply.class);
 	
 	private static RenderScript renderScript;
 	private static boolean antialiasing;
