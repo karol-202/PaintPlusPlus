@@ -170,6 +170,9 @@ public class ActivityPaintActions
 		case R.id.action_colors_invert:
 			new OptionColorsInvert(activity, image).execute();
 			return true;
+		case R.id.action_color_curves:
+			new OptionColorCurves(activity, image).execute();
+			return true;
 			
 		case R.id.action_settings:
 			activity.showSettingsActivity();

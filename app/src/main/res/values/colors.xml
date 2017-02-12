@@ -15,4 +15,11 @@
 	<color name="layer_view_selected">#1E88E5</color>
 	<color name="layer_view_ripple">#42000000</color>
 	<color name="layer_view_unselected">#F8F8F8</color>
+	
+	<color name="red">#FF0000</color>
+	<color name="green">#00FF00</color>
+	<color name="blue">#0000FF</color>
+	<color name="turquoise">#00FFFF</color>
+	<color name="white">#FFFFFF</color>
+	<color name="black">#000000</color>
 </resources>

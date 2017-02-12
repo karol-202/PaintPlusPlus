@@ -25,6 +25,7 @@
 	<string name="dialog_layer_name">Podaj nazwę warstwy</string>
 	<string name="dialog_layer_delete">Czy na pewno chcesz usunąć warstwę?</string>
 	<string name="dialog_layer_properties">Właściwości warstwy</string>
+	<string name="dialog_color_curves">Krzywe kolorów</string>
 	
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
@@ -67,6 +68,7 @@
 	
 	<string name="action_colors">Kolory</string>
 	<string name="action_colors_invert">Odwróć kolory</string>
+	<string name="action_color_curves">Krzywe kolorów</string>
 	
 	<string name="action_settings">Ustawienia</string>
 
@@ -163,4 +165,12 @@
 	<string name="too_many_layers">Za dużo warstw!</string>
 	<string name="layer_mode">Tryb</string>
 	<string name="layer_opacity">Widoczność</string>
+	<string name="curves_channel">Kanał</string>
+	<string name="preview">Podgląd</string>
+	<string name="channel_red">Czerwony</string>
+	<string name="channel_green">Zielony</string>
+	<string name="channel_blue">Niebieski</string>
+	<string name="channel_hue">Barwa</string>
+	<string name="channel_saturation">Nasycenie</string>
+	<string name="channel_value">Jasność</string>
 </resources>

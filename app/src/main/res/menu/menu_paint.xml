@@ -170,11 +170,15 @@
 		app:showAsAction="never">
 		
 		<menu>
-			<item
-				android:id="@+id/action_colors_invert"
+			<item android:id="@+id/action_colors_invert"
 				android:icon="@drawable/ic_colors_invert_white_24dp"
 				android:title="@string/action_colors_invert"
 				android:orderInCategory="1"
+				app:showAsAction="never"/>
+			<item android:id="@+id/action_color_curves"
+				android:icon="@drawable/ic_color_curves_white_24dp"
+				android:title="@string/action_color_curves"
+				android:orderInCategory="2"
 				app:showAsAction="never"/>
 		</menu>
 	</item>
