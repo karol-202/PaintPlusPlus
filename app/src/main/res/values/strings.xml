@@ -65,6 +65,9 @@
 	<string name="action_select_nothing">Usuń zaznaczenie</string>
 	<string name="action_revert_selection">Odwróć zazanaczenie</string>
 	
+	<string name="action_colors">Kolory</string>
+	<string name="action_colors_invert">Odwróć kolory</string>
+	
 	<string name="action_settings">Ustawienia</string>
 
 	<string name="tool_pan">Widok</string>

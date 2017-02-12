@@ -1,7 +1,5 @@
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.content.Context;
-import android.renderscript.RenderScript;
 import pl.karol202.paintplus.R;
 
 public enum LayerModeType
@@ -10,7 +8,6 @@ public enum LayerModeType
 	MODE_ADD(R.string.layer_mode_add, LayerModeAdd.class),
 	MODE_MULTIPLY(R.string.layer_mode_multiply, LayerModeMultiply.class);
 	
-	private static RenderScript renderScript;
 	private static boolean antialiasing;
 	
 	private int name;
@@ -37,21 +34,6 @@ public enum LayerModeType
 		for(int i = 0; i < values().length; i++)
 			if(mode.getClass() == values()[i].getLayerModeClass()) return i;
 		return -1;
-	}
-	
-	public static void createContext(Context context)
-	{
-		renderScript = RenderScript.create(context);
-	}
-	
-	public static void destroyContext()
-	{
-		renderScript.destroy();
-	}
-
-	public static RenderScript getRenderScript()
-	{
-		return renderScript;
 	}
 	
 	public static boolean isAntialiasing()

@@ -1,12 +1,14 @@
 package pl.karol202.paintplus.util;
 
+import android.content.Context;
 import android.opengl.*;
+import android.renderscript.RenderScript;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class GLHelper
+public class GraphicsHelper
 {
-	private class GLException extends Exception
+	private class GLException extends RuntimeException
 	{
 		public GLException(String message)
 		{
@@ -14,32 +16,35 @@ public class GLHelper
 		}
 	}
 	
-	static
-	{
-		new GLHelper();
-	}
-	
+	private static RenderScript renderScript;
 	private static int maxTextureSize;
 	
 	private EGLDisplay display;
 	private EGLSurface surface;
 	private EGLContext context;
 	
-	public GLHelper()
+	public GraphicsHelper()
 	{
 		try
 		{
 			initGL();
 			initVariables();
 		}
-		catch(GLException ex)
-		{
-			throw new RuntimeException("GLException: " + ex.getMessage());
-		}
 		finally
 		{
 			stopGL();
 		}
+	}
+	
+	public static void init(Context context)
+	{
+		new GraphicsHelper();
+		renderScript = RenderScript.create(context);
+	}
+	
+	public static void destroy()
+	{
+		renderScript.destroy();
 	}
 	
 	private void initGL() throws GLException
@@ -83,6 +88,11 @@ public class GLHelper
 		EGL14.eglDestroySurface(display, surface);
 		EGL14.eglDestroyContext(display, context);
 		EGL14.eglTerminate(display);
+	}
+	
+	public static RenderScript getRenderScript()
+	{
+		return renderScript;
 	}
 	
 	public static int getMaxTextureSize()

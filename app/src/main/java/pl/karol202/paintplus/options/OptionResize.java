@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.util.GLHelper;
+import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
@@ -113,7 +113,7 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 				Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
 				return;
 			}
-			if(newWidth > GLHelper.getMaxTextureSize() || newHeight > GLHelper.getMaxTextureSize())
+			if(newWidth > GraphicsHelper.getMaxTextureSize() || newHeight > GraphicsHelper.getMaxTextureSize())
 			{
 				Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 				return;

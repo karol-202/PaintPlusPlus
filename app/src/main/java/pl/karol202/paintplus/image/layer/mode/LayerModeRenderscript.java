@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.util.GraphicsHelper;
 
 public abstract class LayerModeRenderscript<S extends LayerScript> implements LayerMode
 {
@@ -22,7 +23,7 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 	public LayerModeRenderscript()
 	{
 		paint = new Paint();
-		rs = LayerModeType.getRenderScript();
+		rs = GraphicsHelper.getRenderScript();
 		script = getNewScript(rs);
 	}
 	

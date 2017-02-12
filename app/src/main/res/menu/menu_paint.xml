@@ -163,9 +163,26 @@
 	</item>
 		
 	<item
+		android:id="@+id/action_colors"
+		android:icon="@drawable/ic_colors_white_24dp"
+		android:title="@string/action_colors"
+		android:orderInCategory="10"
+		app:showAsAction="never">
+		
+		<menu>
+			<item
+				android:id="@+id/action_colors_invert"
+				android:icon="@drawable/ic_colors_invert_white_24dp"
+				android:title="@string/action_colors_invert"
+				android:orderInCategory="1"
+				app:showAsAction="never"/>
+		</menu>
+	</item>
+	
+	<item
 		android:id="@+id/action_settings"
 		android:icon="@drawable/ic_settings_white_24dp"
 		android:title="@string/action_settings"
-		android:orderInCategory="10"
+		android:orderInCategory="11"
 		app:showAsAction="never" />
 </menu>

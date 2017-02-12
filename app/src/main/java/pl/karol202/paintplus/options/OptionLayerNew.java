@@ -14,7 +14,7 @@ import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.util.GLHelper;
+import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.Utils;
 
 public class OptionLayerNew extends Option implements DialogInterface.OnClickListener, TextWatcher
@@ -108,8 +108,8 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 			Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
 			return;
 		}
-		if(layerWidth > GLHelper.getMaxTextureSize() ||
-		   layerHeight > GLHelper.getMaxTextureSize())
+		if(layerWidth > GraphicsHelper.getMaxTextureSize() ||
+		   layerHeight > GraphicsHelper.getMaxTextureSize())
 		{
 			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
 			return;

@@ -3,7 +3,7 @@ package pl.karol202.paintplus.file;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import pl.karol202.paintplus.util.GLHelper;
+import pl.karol202.paintplus.util.GraphicsHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,7 +19,7 @@ public class ImageLoader
 		Bitmap photo = BitmapFactory.decodeFile(path);
 		if(photo == null) return null;
 		
-		float maxSize = GLHelper.getMaxTextureSize();
+		float maxSize = GraphicsHelper.getMaxTextureSize();
 		if(photo.getWidth() > maxSize || photo.getHeight() > maxSize)
 		{
 			float widthRatio = photo.getWidth() / maxSize;
