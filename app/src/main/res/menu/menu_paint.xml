@@ -175,10 +175,15 @@
 				android:title="@string/action_colors_invert"
 				android:orderInCategory="1"
 				app:showAsAction="never"/>
-			<item android:id="@+id/action_color_curves"
+			<item android:id="@+id/action_color_curves_rgb"
 				android:icon="@drawable/ic_color_curves_white_24dp"
-				android:title="@string/action_color_curves"
+				android:title="@string/action_color_curves_rgb"
 				android:orderInCategory="2"
+				app:showAsAction="never"/>
+			<item android:id="@+id/action_color_curves_hsv"
+				android:icon="@drawable/ic_color_curves_white_24dp"
+				android:title="@string/action_color_curves_hsv"
+				android:orderInCategory="3"
 				app:showAsAction="never"/>
 		</menu>
 	</item>

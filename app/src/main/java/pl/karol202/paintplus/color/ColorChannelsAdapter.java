@@ -8,12 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 
 public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 {
-	public ColorChannelsAdapter(Context context)
+	public ColorChannelsAdapter(Context context, ColorChannelType channelType)
 	{
-		super(context, R.layout.spinner_item_color_channel, ColorChannel.values());
+		super(context, R.layout.spinner_item_color_channel, ColorChannel.filterByType(channelType));
 	}
 	
 	@Override

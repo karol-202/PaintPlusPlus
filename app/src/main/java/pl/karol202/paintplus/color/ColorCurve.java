@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.color;
 
 import android.graphics.Point;
+import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,14 +18,24 @@ public class ColorCurve
 		sorted = true;
 	}
 	
-	public void addPoint(int x, int y)
+	public void addPoint(Point newPoint)
 	{
-		points.add(new Point(x, y));
+		for(Point point : points)
+		{
+			if(point.x == newPoint.x) return;
+		}
+		
+		points.add(newPoint);
 		sorted = false;
 	}
 	
 	public void movePoint(Point oldPoint, Point newPoint)
 	{
+		for(Point point : points)
+		{
+			if(point.x == newPoint.x && point != oldPoint) return;
+		}
+		
 		points.remove(oldPoint);
 		points.add(newPoint);
 		sorted = false;
@@ -68,11 +79,44 @@ public class ColorCurve
 		points = new ArrayList<>(Arrays.asList(array));
 	}
 	
+	public byte[] createColorsMap()
+	{
+		byte[] map = new byte[256];
+		for(int i = 0; i < 256; i++)
+			map[i] = (byte) Math.round(evaluate(i));
+		return map;
+	}
+	
+	private float evaluate(int x)
+	{
+		sort();
+		int pos = 0;
+		for(int i = 0; i < points.size(); i++)
+		{
+			int currentX = points.get(i).x;
+			if(currentX < x) pos = i + 1;
+		}
+		
+		if(pos == 0) return points.get(0).y;
+		if(pos == points.size()) return points.get(pos - 1).y;
+		Point lower = points.get(pos - 1);
+		Point higher = points.get(pos);
+		return Utils.map(x, lower.x, higher.x, lower.y, higher.y);
+	}
+	
 	public static ColorCurve defaultCurve()
 	{
 		ColorCurve curve = new ColorCurve();
-		curve.addPoint(0, 0);
-		curve.addPoint(255, 255);
+		curve.addPoint(new Point(0, 0));
+		curve.addPoint(new Point(255, 255));
+		return curve;
+	}
+	
+	public static ColorCurve zeroCurve()
+	{
+		ColorCurve curve = new ColorCurve();
+		curve.addPoint(new Point(0, 0));
+		curve.addPoint(new Point(255, 0));
 		return curve;
 	}
 }

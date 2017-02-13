@@ -5,6 +5,8 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.manipulators.CurveManipulatorParams;
 import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
@@ -26,10 +28,12 @@ public class ColorCurvesView extends View
 	private final int POINT_RADIUS = 8;
 	private final int POINT_INNER_RADIUS = 3;
 	
-	private final int MAX_TOUCH_DISTANCE = 50;
+	private final int MAX_TOUCH_DISTANCE = 65;
 	
-	private ColorChannel channel;
-	private HashMap<ColorChannel, ColorCurve> curves;
+	private ColorChannelType channelType;
+	private ColorChannel channelIn;
+	private ColorChannel channelOut;
+	private HashMap<ChannelInOutSet, ColorCurve> curves;
 	
 	private Point viewSize;
 	private float[] grid;
@@ -53,9 +57,9 @@ public class ColorCurvesView extends View
 	{
 		super(context, attrs);
 		
-		channel = ColorChannel.VALUE;
-		curves = new HashMap<>();
-		for(ColorChannel channel : ColorChannel.values()) curves.put(channel, ColorCurve.defaultCurve());
+		channelType = null;
+		channelIn = null;
+		channelOut = null;
 		
 		gridPaint = new Paint();
 		gridPaint.setColor(Color.LTGRAY);
@@ -75,6 +79,23 @@ public class ColorCurvesView extends View
 		curvePaint.setAntiAlias(true);
 	}
 	
+	private void initChannels(ColorChannelType type)
+	{
+		if(channelType != null) throw new RuntimeException("Channel settings are already set!");
+		channelType = type;
+		
+		curves = new HashMap<>();
+		for(ColorChannel channelIn : ColorChannel.filterByType(channelType))
+		{
+			for(ColorChannel channelOut : ColorChannel.filterByType(channelType))
+			{
+				ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
+				if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve());
+				else curves.put(set, ColorCurve.zeroCurve());
+			}
+		}
+	}
+	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
@@ -88,6 +109,7 @@ public class ColorCurvesView extends View
 	{
 		super.onDraw(canvas);
 		viewSize = new Point(canvas.getWidth(), canvas.getHeight());
+		if(channelType == null) return;
 		
 		drawGrid(canvas);
 		drawScale(canvas);
@@ -105,7 +127,7 @@ public class ColorCurvesView extends View
 	
 	private void drawScale(Canvas canvas)
 	{
-		if(horizontalScaleShader == null || verticalScaleShader == null) createScalePaints(canvas);
+		if(horizontalScaleShader == null || verticalScaleShader == null) createScalePaints();
 		canvas.drawRect(LEFT_GRID_MARGIN, canvas.getHeight() - HORIZONTAL_SCALE_HEIGHT - 1,
 						canvas.getWidth() - RIGHT_GRID_MARGIN, canvas.getHeight() - 1, horizontalScalePaint);
 		canvas.drawRect(0, TOP_GRID_MARGIN, VERTICAL_SCALE_WIDTH,
@@ -122,16 +144,17 @@ public class ColorCurvesView extends View
 	private void drawCurve(Canvas canvas, Point[] curvePoints)
 	{
 		if(points == null) createPoints(curvePoints);
-		float lastX = -1;
-		float lastY = -1;
+		float lastX = LEFT_GRID_MARGIN;
+		float lastY = points.get(0).centerY();
 		for(RectF rect : points)
 		{
 			float x = rect.centerX();
 			float y = rect.centerY();
-			if(lastX != -1 && lastY != -1) canvas.drawLine(lastX, lastY, x, y, curvePaint);
+			canvas.drawLine(lastX, lastY, x, y, curvePaint);
 			lastX = x;
 			lastY = y;
 		}
+		canvas.drawLine(lastX, lastY, canvas.getWidth() - RIGHT_GRID_MARGIN, lastY, curvePaint);
 	}
 	
 	private void createGrid(int width, int height)
@@ -163,37 +186,63 @@ public class ColorCurvesView extends View
 		System.arraycopy(linesVertical, 0, grid, linesHorizontal.length, linesVertical.length);
 	}
 	
-	private void createScalePaints(Canvas canvas)
+	private void createScalePaints()
 	{
-		if(channel != ColorChannel.HUE)
+		createHorizontalScalePaints();
+		createVerticalScalePaints();
+	}
+	
+	private void createHorizontalScalePaints()
+	{
+		if(channelIn != ColorChannel.HUE)
 		{
 			int firstColor = Color.BLACK;
 			int secondColor = Color.WHITE;
-			if(channel == ColorChannel.RED) secondColor = Color.RED;
-			else if(channel == ColorChannel.GREEN) secondColor = Color.GREEN;
-			else if(channel == ColorChannel.BLUE) secondColor = Color.BLUE;
-			else if(channel == ColorChannel.SATURATION)
+			if(channelIn == ColorChannel.RED) secondColor = Color.RED;
+			else if(channelIn == ColorChannel.GREEN) secondColor = Color.GREEN;
+			else if(channelIn == ColorChannel.BLUE) secondColor = Color.BLUE;
+			else if(channelIn == ColorChannel.SATURATION)
 			{
 				firstColor = Color.WHITE;
 				secondColor = Color.RED;
 			}
-			horizontalScaleShader = new LinearGradient(LEFT_GRID_MARGIN, 0, canvas.getWidth() - RIGHT_GRID_MARGIN,
+			horizontalScaleShader = new LinearGradient(LEFT_GRID_MARGIN, 0, viewSize.x - RIGHT_GRID_MARGIN,
 					0, firstColor, secondColor, Shader.TileMode.CLAMP);
-			verticalScaleShader = new LinearGradient(0, canvas.getHeight() - BOTTOM_GRID_MARGIN, 0,
+		}
+		else
+		{
+			int[] colors = new int[] { Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED };
+			horizontalScaleShader = new LinearGradient(LEFT_GRID_MARGIN, 0, viewSize.x - RIGHT_GRID_MARGIN,
+					0, colors, null, Shader.TileMode.CLAMP);
+		}
+		horizontalScalePaint = new Paint();
+		horizontalScalePaint.setShader(horizontalScaleShader);
+		horizontalScalePaint.setStyle(Paint.Style.FILL);
+	}
+	
+	private void createVerticalScalePaints()
+	{
+		if(channelOut != ColorChannel.HUE)
+		{
+			int firstColor = Color.BLACK;
+			int secondColor = Color.WHITE;
+			if(channelOut == ColorChannel.RED) secondColor = Color.RED;
+			else if(channelOut == ColorChannel.GREEN) secondColor = Color.GREEN;
+			else if(channelOut == ColorChannel.BLUE) secondColor = Color.BLUE;
+			else if(channelOut == ColorChannel.SATURATION)
+			{
+				firstColor = Color.WHITE;
+				secondColor = Color.RED;
+			}
+			verticalScaleShader = new LinearGradient(0, viewSize.y - BOTTOM_GRID_MARGIN, 0,
 					TOP_GRID_MARGIN, firstColor, secondColor, Shader.TileMode.CLAMP);
 		}
 		else
 		{
 			int[] colors = new int[] { Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED };
-			horizontalScaleShader = new LinearGradient(LEFT_GRID_MARGIN, 0, canvas.getWidth() - RIGHT_GRID_MARGIN,
-					0, colors, null, Shader.TileMode.CLAMP);
-			verticalScaleShader = new LinearGradient(0, canvas.getHeight() - BOTTOM_GRID_MARGIN, 0,
+			verticalScaleShader = new LinearGradient(0, viewSize.y - BOTTOM_GRID_MARGIN, 0,
 					TOP_GRID_MARGIN, colors, null, Shader.TileMode.CLAMP);
 		}
-		horizontalScalePaint = new Paint();
-		horizontalScalePaint.setShader(horizontalScaleShader);
-		horizontalScalePaint.setStyle(Paint.Style.FILL);
-		
 		verticalScalePaint = new Paint();
 		verticalScalePaint.setShader(verticalScaleShader);
 		verticalScalePaint.setStyle(Paint.Style.FILL);
@@ -245,15 +294,34 @@ public class ColorCurvesView extends View
 				shortestDistance = distance;
 			}
 		}
+		
+		ColorCurve curve = getCurrentCurve();
 		if(nearest != null)
 		{
 			draggedScreenPoint = nearest;
 			draggedPointIndex = nearestIndex;
 			
-			Point[] points = getCurrentCurve().getPoints();
-			draggedCurvePoint = points[draggedPointIndex];
+			draggedCurvePoint = curve.getPoints()[draggedPointIndex];
 			
 			touchStartPoint = touch;
+		}
+		else
+		{
+			draggedScreenPoint = new Point(touch);
+			draggedCurvePoint = screenToCurve(draggedScreenPoint);
+			touchStartPoint = touch;
+			curve.addPoint(draggedCurvePoint);
+			
+			Point[] curvePoints = curve.getPoints();
+			createPoints(curvePoints);
+			for(int i = 0; i < curvePoints.length; i++)
+			{
+				if(curvePoints[i].equals(draggedCurvePoint))
+				{
+					draggedPointIndex = i;
+					break;
+				}
+			}
 		}
 	}
 	
@@ -263,6 +331,7 @@ public class ColorCurvesView extends View
 		{
 			Point newScreenPoint = new Point(draggedScreenPoint);
 			newScreenPoint.offset(x - touchStartPoint.x, y - touchStartPoint.y);
+			checkBounds(newScreenPoint);
 			
 			RectF oval = new RectF(newScreenPoint.x - POINT_RADIUS, newScreenPoint.y - POINT_RADIUS,
 					newScreenPoint.x + POINT_RADIUS, newScreenPoint.y + POINT_RADIUS);
@@ -279,6 +348,7 @@ public class ColorCurvesView extends View
 		{
 			Point newScreenPoint = new Point(draggedScreenPoint);
 			newScreenPoint.offset(x - touchStartPoint.x, y - touchStartPoint.y);
+			checkBounds(newScreenPoint);
 			
 			Point newCurvePoint = screenToCurve(newScreenPoint);
 			getCurrentCurve().movePoint(draggedCurvePoint, newCurvePoint);
@@ -289,6 +359,14 @@ public class ColorCurvesView extends View
 			touchStartPoint = null;
 			points = null;
 		}
+	}
+	
+	private void checkBounds(Point point)
+	{
+		if(point.x < LEFT_GRID_MARGIN) point.x = LEFT_GRID_MARGIN;
+		else if(point.x >= viewSize.x - RIGHT_GRID_MARGIN) point.x = viewSize.x - RIGHT_GRID_MARGIN - 1;
+		if(point.y < TOP_GRID_MARGIN) point.y = TOP_GRID_MARGIN;
+		else if(point.y >= viewSize.y - BOTTOM_GRID_MARGIN) point.y = viewSize.y - BOTTOM_GRID_MARGIN - 1;
 	}
 	
 	private float distance(Point first, Point second)
@@ -321,14 +399,48 @@ public class ColorCurvesView extends View
 		this.points = null;
 	}
 	
-	private ColorCurve getCurrentCurve()
+	public void attachCurvesToParamsObject(CurveManipulatorParams params)
 	{
-		return curves.get(channel);
+		for(ChannelInOutSet set : curves.keySet())
+		{
+			ColorCurve curve = curves.get(set);
+			params.addCurve(set, curve);
+		}
 	}
 	
-	public void setChannel(ColorChannel channel)
+	private ColorCurve getCurrentCurve()
 	{
-		this.channel = channel;
+		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
+		return curves.get(set);
+	}
+	
+	public void setChannelType(ColorChannelType channelType)
+	{
+		initChannels(channelType);
+	}
+	
+	public ColorChannel getChannelIn()
+	{
+		return channelIn;
+	}
+	
+	public void setChannelIn(ColorChannel channelIn)
+	{
+		this.channelIn = channelIn;
+		this.horizontalScaleShader = null;
+		this.verticalScaleShader = null;
+		updatePoints();
+		invalidate();
+	}
+	
+	public ColorChannel getChannelOut()
+	{
+		return channelOut;
+	}
+	
+	public void setChannelOut(ColorChannel channelOut)
+	{
+		this.channelOut = channelOut;
 		this.horizontalScaleShader = null;
 		this.verticalScaleShader = null;
 		updatePoints();

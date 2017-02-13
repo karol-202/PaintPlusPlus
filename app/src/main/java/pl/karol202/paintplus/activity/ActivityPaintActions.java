@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.image.Clipboard;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
@@ -170,8 +171,11 @@ public class ActivityPaintActions
 		case R.id.action_colors_invert:
 			new OptionColorsInvert(activity, image).execute();
 			return true;
-		case R.id.action_color_curves:
-			new OptionColorCurves(activity, image).execute();
+		case R.id.action_color_curves_rgb:
+			new OptionColorCurves(activity, image, ColorChannelType.RGB).execute();
+			return true;
+		case R.id.action_color_curves_hsv:
+			new OptionColorCurves(activity, image, ColorChannelType.HSV).execute();
 			return true;
 			
 		case R.id.action_settings:

@@ -5,10 +5,8 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
-public class ColorsInvert implements ColorsManipulator
+public class ColorsInvert implements ColorsManipulator<InvertParams>
 {
-	public static class InvertParams implements ColorsManipulatorParams { }
-	
 	private RenderScript renderScript;
 	
 	public ColorsInvert()
@@ -17,7 +15,7 @@ public class ColorsInvert implements ColorsManipulator
 	}
 	
 	@Override
-	public Bitmap run(Bitmap in, ColorsManipulatorParams params)
+	public Bitmap run(Bitmap in, InvertParams params)
 	{
 		Bitmap out = Bitmap.createBitmap(in.getWidth(), in.getHeight(), Bitmap.Config.ARGB_8888);
 		
