@@ -9,22 +9,24 @@ import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
 
 public enum ColorChannel
 {
-	RED(R.string.channel__red, R.drawable.ic_channel_red, RGB),
-	GREEN(R.string.channel__green, R.drawable.ic_channel_green, RGB),
-	BLUE(R.string.channel__blue, R.drawable.ic_channel_blue, RGB),
-	HUE(R.string.channel_hue, R.drawable.ic_channel_hue, HSV),
-	SATURATION(R.string.channel_saturation, R.drawable.ic_channel_saturation, HSV),
-	VALUE(R.string.channel_value, R.drawable.ic_channel_value, HSV);
+	RED(R.string.channel__red, R.drawable.ic_channel_red, RGB, 255),
+	GREEN(R.string.channel__green, R.drawable.ic_channel_green, RGB, 255),
+	BLUE(R.string.channel__blue, R.drawable.ic_channel_blue, RGB, 255),
+	HUE(R.string.channel_hue, R.drawable.ic_channel_hue, HSV, 359),
+	SATURATION(R.string.channel_saturation, R.drawable.ic_channel_saturation, HSV, 100),
+	VALUE(R.string.channel_value, R.drawable.ic_channel_value, HSV, 100);
 	
 	private int name;
 	private int icon;
 	private ColorChannelType type;
+	private int maxValue;
 	
-	ColorChannel(int name, int icon, ColorChannelType type)
+	ColorChannel(int name, int icon, ColorChannelType type, int maxValue)
 	{
 		this.name = name;
 		this.icon = icon;
 		this.type = type;
+		this.maxValue = maxValue;
 	}
 	
 	public int getName()
@@ -55,6 +57,16 @@ public enum ColorChannel
 	public void setType(ColorChannelType type)
 	{
 		this.type = type;
+	}
+	
+	public int getMaxValue()
+	{
+		return maxValue;
+	}
+	
+	public void setMaxValue(int maxValue)
+	{
+		this.maxValue = maxValue;
 	}
 	
 	public static ColorChannel[] filterByType(ColorChannelType type)

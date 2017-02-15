@@ -23,7 +23,7 @@ public class ToolColorPick extends Tool
 	{
 		super(image);
 		this.size = 1;
-
+		
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
 	}

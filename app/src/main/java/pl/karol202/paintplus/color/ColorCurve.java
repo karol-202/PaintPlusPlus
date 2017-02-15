@@ -9,13 +9,15 @@ import java.util.Comparator;
 
 public class ColorCurve
 {
+	private ChannelInOutSet channels;
 	private ArrayList<Point> points;
 	private boolean sorted;
 	
-	public ColorCurve()
+	public ColorCurve(ChannelInOutSet channels)
 	{
-		points = new ArrayList<>();
-		sorted = true;
+		this.channels = channels;
+		this.points = new ArrayList<>();
+		this.sorted = true;
 	}
 	
 	public void addPoint(Point newPoint)
@@ -79,11 +81,21 @@ public class ColorCurve
 		points = new ArrayList<>(Arrays.asList(array));
 	}
 	
-	public byte[] createColorsMap()
+	public byte[] createByteColorsMap()
 	{
-		byte[] map = new byte[256];
-		for(int i = 0; i < 256; i++)
+		ColorChannel inChannel = channels.getIn();
+		byte[] map = new byte[inChannel.getMaxValue() + 1];
+		for(int i = 0; i < inChannel.getMaxValue() + 1; i++)
 			map[i] = (byte) Math.round(evaluate(i));
+		return map;
+	}
+	
+	public short[] createShortColorsMap()
+	{
+		ColorChannel inChannel = channels.getIn();
+		short[] map = new short[inChannel.getMaxValue() + 1];
+		for(int i = 0; i < inChannel.getMaxValue() + 1; i++)
+			map[i] = (short) Math.round(evaluate(i));
 		return map;
 	}
 	
@@ -104,19 +116,19 @@ public class ColorCurve
 		return Utils.map(x, lower.x, higher.x, lower.y, higher.y);
 	}
 	
-	public static ColorCurve defaultCurve()
+	public static ColorCurve defaultCurve(ChannelInOutSet channels)
 	{
-		ColorCurve curve = new ColorCurve();
+		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));
-		curve.addPoint(new Point(255, 255));
+		curve.addPoint(new Point(channels.getIn().getMaxValue(), channels.getOut().getMaxValue()));
 		return curve;
 	}
 	
-	public static ColorCurve zeroCurve()
+	public static ColorCurve zeroCurve(ChannelInOutSet channels)
 	{
-		ColorCurve curve = new ColorCurve();
+		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));
-		curve.addPoint(new Point(255, 0));
+		curve.addPoint(new Point(channels.getIn().getMaxValue(), 0));
 		return curve;
 	}
 }

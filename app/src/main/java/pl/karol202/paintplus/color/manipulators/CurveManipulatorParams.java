@@ -1,19 +1,27 @@
 package pl.karol202.paintplus.color.manipulators;
 
 import pl.karol202.paintplus.color.ChannelInOutSet;
+import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.ColorCurve;
 
 import java.util.ArrayList;
 
 public class CurveManipulatorParams implements ColorsManipulator.ColorsManipulatorParams
 {
+	private ColorChannelType channelType;
 	private ArrayList<ChannelInOutSet> channels;
 	private ArrayList<ColorCurve> curves;
 	
-	public CurveManipulatorParams()
+	public CurveManipulatorParams(ColorChannelType channelType)
 	{
-		channels = new ArrayList<>();
-		curves = new ArrayList<>();
+		this.channelType = channelType;
+		this.channels = new ArrayList<>();
+		this.curves = new ArrayList<>();
+	}
+	
+	public ColorChannelType getChannelType()
+	{
+		return channelType;
 	}
 	
 	public void addCurve(ChannelInOutSet channel, ColorCurve curve)

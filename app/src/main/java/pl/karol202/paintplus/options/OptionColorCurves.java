@@ -86,7 +86,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		Layer layer = image.getSelectedLayer();
 		Bitmap bitmapIn = layer.getBitmap();
 		
-		CurveManipulatorParams params = new CurveManipulatorParams();
+		CurveManipulatorParams params = new CurveManipulatorParams(channelType);
 		curvesView.attachCurvesToParamsObject(params);
 		
 		ColorsCurveManipulator curves = new ColorsCurveManipulator();

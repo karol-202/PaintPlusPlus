@@ -90,8 +90,8 @@ public class ColorCurvesView extends View
 			for(ColorChannel channelOut : ColorChannel.filterByType(channelType))
 			{
 				ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
-				if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve());
-				else curves.put(set, ColorCurve.zeroCurve());
+				if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve(set));
+				else curves.put(set, ColorCurve.zeroCurve(set));
 			}
 		}
 	}
@@ -377,9 +377,9 @@ public class ColorCurvesView extends View
 	private Point curveToScreen(Point point)
 	{
 		Point newPoint = new Point(point);
-		newPoint.x = Math.round(Utils.map(point.x, 0, 255,
+		newPoint.x = Math.round(Utils.map(point.x, 0, channelIn.getMaxValue(),
 										  LEFT_GRID_MARGIN, viewSize.x - RIGHT_GRID_MARGIN));
-		newPoint.y = Math.round(Utils.map(point.y, 255, 0,
+		newPoint.y = Math.round(Utils.map(point.y, channelOut.getMaxValue(), 0,
 										  TOP_GRID_MARGIN, viewSize.y - BOTTOM_GRID_MARGIN));
 		return newPoint;
 	}
@@ -388,9 +388,9 @@ public class ColorCurvesView extends View
 	{
 		Point newPoint = new Point(point);
 		newPoint.x = Math.round(Utils.map(point.x, LEFT_GRID_MARGIN, viewSize.x - RIGHT_GRID_MARGIN,
-										  0, 255));
+										  0, channelIn.getMaxValue()));
 		newPoint.y = Math.round(Utils.map(point.y, TOP_GRID_MARGIN, viewSize.y - BOTTOM_GRID_MARGIN,
-									  	  255, 0));
+									  	  channelOut.getMaxValue(), 0));
 		return newPoint;
 	}
 	
