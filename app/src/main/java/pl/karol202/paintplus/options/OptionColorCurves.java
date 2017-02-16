@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorChannel;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
@@ -25,7 +26,9 @@ import pl.karol202.paintplus.util.SeekBarTouchListener;
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
 
-public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener, View.OnTouchListener, View.OnClickListener
+public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener,
+														 View.OnTouchListener, View.OnClickListener,
+														 ColorCurvesView.OnCurveEditListener
 {
 	private ColorChannelType channelType;
 	private ColorChannelsAdapter adapterIn;
@@ -38,6 +41,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	private Spinner spinnerChannelIn;
 	private Spinner spinnerChannelOut;
 	private ColorCurvesView curvesView;
+	private TextView textPoint;
 	private Button buttonPreview;
 	private Button buttonRestore;
 	
@@ -78,9 +82,13 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		
 		curvesView = (ColorCurvesView) view.findViewById(R.id.color_curves_view);
 		curvesView.setOnTouchListener(new SeekBarTouchListener());
+		curvesView.setOnCurveEditListener(this);
 		curvesView.setChannelType(channelType);
 		curvesView.setChannelIn((ColorChannel) spinnerChannelIn.getSelectedItem());
 		curvesView.setChannelOut((ColorChannel) spinnerChannelOut.getSelectedItem());
+		
+		textPoint = (TextView) view.findViewById(R.id.text_curve_point);
+		textPoint.setText(curvesView.getInfoText());
 		
 		buttonPreview = (Button) view.findViewById(R.id.button_curves_preview);
 		buttonPreview.setOnTouchListener(this);
@@ -146,5 +154,11 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	public void onClick(View v)
 	{
 		curvesView.restoreCurrentCurve();
+	}
+	
+	@Override
+	public void onCurveEdited()
+	{
+		textPoint.setText(curvesView.getInfoText());
 	}
 }

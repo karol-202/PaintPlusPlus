@@ -11,9 +11,15 @@ import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class ColorCurvesView extends View
 {
+	public interface OnCurveEditListener
+	{
+		void onCurveEdited();
+	}
+	
 	private final int HORIZONTAL_GRID_LINES = 7;
 	private final int VERTICAL_GRID_LINES = 7;
 	
@@ -30,6 +36,7 @@ public class ColorCurvesView extends View
 	
 	private final int MAX_TOUCH_DISTANCE = 65;
 	
+	private OnCurveEditListener listener;
 	private ColorChannelType channelType;
 	private ColorChannel channelIn;
 	private ColorChannel channelOut;
@@ -52,6 +59,7 @@ public class ColorCurvesView extends View
 	private Point draggedCurvePoint;
 	private int draggedPointIndex;
 	private Point touchStartPoint;
+	private Point draggedCurvePointCurrentPos;
 	
 	public ColorCurvesView(Context context, AttributeSet attrs)
 	{
@@ -60,6 +68,8 @@ public class ColorCurvesView extends View
 		channelType = null;
 		channelIn = null;
 		channelOut = null;
+		
+		viewSize = new Point();
 		
 		gridPaint = new Paint();
 		gridPaint.setColor(Color.LTGRAY);
@@ -108,7 +118,15 @@ public class ColorCurvesView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		viewSize = new Point(canvas.getWidth(), canvas.getHeight());
+		if(isInEditMode() && channelType == null)
+		{
+			initChannels(ColorChannelType.HSV);
+			setChannelIn(ColorChannel.VALUE);
+			setChannelOut(ColorChannel.VALUE);
+		}
+		
+		viewSize.x = getWidth();
+		viewSize.y = getHeight();
 		if(channelType == null) return;
 		
 		drawGrid(canvas);
@@ -121,17 +139,17 @@ public class ColorCurvesView extends View
 	
 	private void drawGrid(Canvas canvas)
 	{
-		if(grid == null) createGrid(canvas.getWidth(), canvas.getHeight());
+		if(grid == null) createGrid();
 		canvas.drawLines(grid, gridPaint);
 	}
 	
 	private void drawScale(Canvas canvas)
 	{
 		if(horizontalScaleShader == null || verticalScaleShader == null) createScalePaints();
-		canvas.drawRect(LEFT_GRID_MARGIN, canvas.getHeight() - HORIZONTAL_SCALE_HEIGHT - 1,
-						canvas.getWidth() - RIGHT_GRID_MARGIN, canvas.getHeight() - 1, horizontalScalePaint);
+		canvas.drawRect(LEFT_GRID_MARGIN, viewSize.y - HORIZONTAL_SCALE_HEIGHT - 1,
+				viewSize.x - RIGHT_GRID_MARGIN, viewSize.y - 1, horizontalScalePaint);
 		canvas.drawRect(0, TOP_GRID_MARGIN, VERTICAL_SCALE_WIDTH,
-						canvas.getHeight() - BOTTOM_GRID_MARGIN, verticalScalePaint);
+				viewSize.y - BOTTOM_GRID_MARGIN, verticalScalePaint);
 	}
 	
 	private void drawPoints(Canvas canvas, Point[] curvePoints)
@@ -157,16 +175,16 @@ public class ColorCurvesView extends View
 		canvas.drawLine(lastX, lastY, canvas.getWidth() - RIGHT_GRID_MARGIN, lastY, curvePaint);
 	}
 	
-	private void createGrid(int width, int height)
+	private void createGrid()
 	{
 		float[] linesHorizontal = new float[HORIZONTAL_GRID_LINES * 4];
 		for(int i = 0; i < HORIZONTAL_GRID_LINES; i++)
 		{
 			int verticalMargins = TOP_GRID_MARGIN + BOTTOM_GRID_MARGIN;
-			float y = (height - verticalMargins) * (i / (HORIZONTAL_GRID_LINES - 1f)) + TOP_GRID_MARGIN;
+			float y = (viewSize.y - verticalMargins) * (i / (HORIZONTAL_GRID_LINES - 1f)) + TOP_GRID_MARGIN;
 			linesHorizontal[i * 4] = LEFT_GRID_MARGIN;
 			linesHorizontal[i * 4 + 1] = y;
-			linesHorizontal[i * 4 + 2] = width - RIGHT_GRID_MARGIN;
+			linesHorizontal[i * 4 + 2] = viewSize.x - RIGHT_GRID_MARGIN;
 			linesHorizontal[i * 4 + 3] = y;
 		}
 		
@@ -174,11 +192,11 @@ public class ColorCurvesView extends View
 		for(int i = 0; i < VERTICAL_GRID_LINES; i++)
 		{
 			int horizontalMargins = LEFT_GRID_MARGIN + RIGHT_GRID_MARGIN;
-			float x = (width - horizontalMargins) * (i / (VERTICAL_GRID_LINES - 1f)) + LEFT_GRID_MARGIN;
+			float x = (viewSize.x - horizontalMargins) * (i / (VERTICAL_GRID_LINES - 1f)) + LEFT_GRID_MARGIN;
 			linesVertical[i * 4] = x;
 			linesVertical[i * 4 + 1] = TOP_GRID_MARGIN;
 			linesVertical[i * 4 + 2] = x;
-			linesVertical[i * 4 + 3] = height - BOTTOM_GRID_MARGIN;
+			linesVertical[i * 4 + 3] = viewSize.y - BOTTOM_GRID_MARGIN;
 		}
 		
 		grid = new float[linesHorizontal.length + linesVertical.length];
@@ -299,17 +317,14 @@ public class ColorCurvesView extends View
 		if(nearest != null)
 		{
 			draggedScreenPoint = nearest;
+			draggedCurvePoint = curve.getPoints()[nearestIndex];
 			draggedPointIndex = nearestIndex;
 			
-			draggedCurvePoint = curve.getPoints()[draggedPointIndex];
-			
-			touchStartPoint = touch;
 		}
 		else
 		{
 			draggedScreenPoint = new Point(touch);
 			draggedCurvePoint = screenToCurve(draggedScreenPoint);
-			touchStartPoint = touch;
 			curve.addPoint(draggedCurvePoint);
 			
 			Point[] curvePoints = curve.getPoints();
@@ -323,6 +338,10 @@ public class ColorCurvesView extends View
 				}
 			}
 		}
+		touchStartPoint = touch;
+		draggedCurvePointCurrentPos = draggedCurvePoint;
+		
+		if(listener != null) listener.onCurveEdited();
 	}
 	
 	private void onTouchMove(int x, int y)
@@ -333,12 +352,16 @@ public class ColorCurvesView extends View
 			newScreenPoint.offset(x - touchStartPoint.x, y - touchStartPoint.y);
 			checkBounds(newScreenPoint);
 			
+			draggedCurvePointCurrentPos = screenToCurve(newScreenPoint);
+			
 			RectF oval = new RectF(newScreenPoint.x - POINT_RADIUS, newScreenPoint.y - POINT_RADIUS,
 					newScreenPoint.x + POINT_RADIUS, newScreenPoint.y + POINT_RADIUS);
 			RectF innerOval = new RectF(newScreenPoint.x - POINT_INNER_RADIUS, newScreenPoint.y - POINT_INNER_RADIUS,
 					newScreenPoint.x + POINT_INNER_RADIUS, newScreenPoint.y + POINT_INNER_RADIUS);
 			points.set(draggedPointIndex, oval);
 			innerPoints.set(draggedPointIndex, innerOval);
+			
+			if(listener != null) listener.onCurveEdited();
 		}
 	}
 	
@@ -357,7 +380,9 @@ public class ColorCurvesView extends View
 			draggedPointIndex = -1;
 			draggedCurvePoint = null;
 			touchStartPoint = null;
+			draggedCurvePointCurrentPos = null;
 			points = null;
+			if(listener != null) listener.onCurveEdited();
 		}
 	}
 	
@@ -417,6 +442,12 @@ public class ColorCurvesView extends View
 		invalidate();
 	}
 	
+	public String getInfoText()
+	{
+		if(draggedCurvePointCurrentPos == null) return "";
+		return String.format(Locale.US, "X: %1$d   Y: %2$d", draggedCurvePointCurrentPos.x, draggedCurvePointCurrentPos.y);
+	}
+	
 	private ColorCurve getCurrentCurve()
 	{
 		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
@@ -428,9 +459,9 @@ public class ColorCurvesView extends View
 		initChannels(channelType);
 	}
 	
-	public ColorChannel getChannelIn()
+	public void setOnCurveEditListener(OnCurveEditListener listener)
 	{
-		return channelIn;
+		this.listener = listener;
 	}
 	
 	public void setChannelIn(ColorChannel channelIn)
@@ -440,11 +471,6 @@ public class ColorCurvesView extends View
 		this.verticalScaleShader = null;
 		updatePoints();
 		invalidate();
-	}
-	
-	public ColorChannel getChannelOut()
-	{
-		return channelOut;
 	}
 	
 	public void setChannelOut(ColorChannel channelOut)

@@ -56,7 +56,7 @@ public class ActivityPaint extends AppCompatActivity
 		
 		actions = new ActivityPaintActions(this);
 		drawers = new ActivityPaintDrawers(this);
-		layers  = new ActivityPaintLayers(this);
+		layers  = new ActivityPaintLayers (this);
 		
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
