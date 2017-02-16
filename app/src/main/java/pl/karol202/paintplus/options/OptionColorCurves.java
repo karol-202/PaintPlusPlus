@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,7 +25,7 @@ import pl.karol202.paintplus.util.SeekBarTouchListener;
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
 
-public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener, View.OnClickListener
+public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener, View.OnTouchListener, View.OnClickListener
 {
 	private ColorChannelType channelType;
 	private ColorChannelsAdapter adapterIn;
@@ -35,6 +36,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	private Spinner spinnerChannelOut;
 	private ColorCurvesView curvesView;
 	private Button buttonPreview;
+	private Button buttonRestore;
 	
 	public OptionColorCurves(Context context, Image image, ColorChannelType type)
 	{
@@ -75,11 +77,15 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		curvesView.setChannelOut((ColorChannel) spinnerChannelOut.getSelectedItem());
 		
 		buttonPreview = (Button) view.findViewById(R.id.button_curves_preview);
-		buttonPreview.setOnClickListener(this);
+		//buttonPreview.setOnTouchListener(this);
+		
+		buttonRestore = (Button) view.findViewById(R.id.button_curves_restore);
+		buttonRestore.setOnClickListener(this);
 		
 		alertDialog = builder.show();
 	}
 	
+	//OK
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
@@ -104,9 +110,27 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) { }
 	
+	//Preview
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		/*if(event.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			alertDialog.hide();
+			v.getParent().requestDisallowInterceptTouchEvent(true);
+		}
+		else if(event.getAction() == MotionEvent.ACTION_UP)
+		{
+			alertDialog.show();
+			v.getParent().requestDisallowInterceptTouchEvent(false);
+		}*/
+		return true;
+	}
+	
+	//Restore
 	@Override
 	public void onClick(View v)
 	{
-		
+		curvesView.restoreCurrentCurve();
 	}
 }

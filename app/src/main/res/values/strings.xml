@@ -178,6 +178,7 @@
 	<string name="channel_hue">Barwa</string>
 	<string name="channel_saturation">Nasycenie</string>
 	<string name="channel_value">Jasność</string>
+	<string name="restore">Przywróć</string>
 	
 	<string-array name="color_modes">
 		<item>RGB</item>

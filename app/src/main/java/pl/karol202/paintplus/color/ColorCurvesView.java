@@ -408,6 +408,15 @@ public class ColorCurvesView extends View
 		}
 	}
 	
+	public void restoreCurrentCurve()
+	{
+		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
+		if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve(set));
+		else curves.put(set, ColorCurve.zeroCurve(set));
+		updatePoints();
+		invalidate();
+	}
+	
 	private ColorCurve getCurrentCurve()
 	{
 		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
