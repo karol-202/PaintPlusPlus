@@ -12,6 +12,7 @@ public class ActivitySettings extends AppCompatActivity
 {
 	public static final String KEY_JPG_QUALITY = "preference_jpg_quality";
 	public static final String KEY_VIEW_SMOOTH = "preference_view_smooth";
+	public static final String KEY_COLOR_MODE = "preference_color_mode";
 	
 	private FragmentManager fragments;
 	

@@ -32,6 +32,8 @@
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
 	<string name="preference_view_smooth">Wygładzanie wyświetlanego obrazu</string>
 	<string name="preference_view_smooth_summary">Wygładzanie przy użyciu interpolacji liniowej</string>
+	<string name="preference_color_mode">Sposób wyboru koloru</string>
+	<string name="preference_color_mode_dialog">Sposób wyboru koloru</string>
 	
 	<string name="action_layers">Warstwy</string>
 	<string name="action_tool">Narzędzie</string>
@@ -176,4 +178,10 @@
 	<string name="channel_hue">Barwa</string>
 	<string name="channel_saturation">Nasycenie</string>
 	<string name="channel_value">Jasność</string>
+	
+	<string-array name="color_modes">
+		<item>RGB</item>
+		<item>HSV</item>
+	</string-array>
+	<string name="color_mode_default">RGB</string>
 </resources>

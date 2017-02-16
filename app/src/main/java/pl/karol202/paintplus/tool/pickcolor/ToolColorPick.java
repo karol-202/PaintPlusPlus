@@ -73,6 +73,7 @@ public class ToolColorPick extends Tool
 		if(bitmap == null) colors.setFirstColor(Color.BLACK);
 		else if(size == 1) pickPixelColor(x, y);
 		else if(size > 1) pickAverageColor(x, y);
+		
 	}
 	
 	private void pickPixelColor(int x, int y)
