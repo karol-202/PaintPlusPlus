@@ -30,6 +30,9 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	private ColorChannelType channelType;
 	private ColorChannelsAdapter adapterIn;
 	private ColorChannelsAdapter adapterOut;
+	private Layer layer;
+	private Bitmap oldBitmap;
+	private ColorsCurveManipulator manipulator;
 	
 	private AlertDialog alertDialog;
 	private Spinner spinnerChannelIn;
@@ -42,6 +45,9 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	{
 		super(context, image);
 		this.channelType = type;
+		this.layer = image.getSelectedLayer();
+		this.oldBitmap = Bitmap.createBitmap(layer.getBitmap());
+		this.manipulator = new ColorsCurveManipulator();
 	}
 	
 	@Override
@@ -53,7 +59,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		builder.setTitle(channelType == RGB ? R.string.dialog_color_curves_rgb : R.string.dialog_color_curves_hsv);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, this);
-		builder.setNegativeButton(R.string.cancel, null);
+		builder.setNegativeButton(R.string.cancel, this);
 		
 		adapterIn = new ColorChannelsAdapter(context, channelType);
 		adapterOut = new ColorChannelsAdapter(context, channelType);
@@ -77,7 +83,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		curvesView.setChannelOut((ColorChannel) spinnerChannelOut.getSelectedItem());
 		
 		buttonPreview = (Button) view.findViewById(R.id.button_curves_preview);
-		//buttonPreview.setOnTouchListener(this);
+		buttonPreview.setOnTouchListener(this);
 		
 		buttonRestore = (Button) view.findViewById(R.id.button_curves_restore);
 		buttonRestore.setOnClickListener(this);
@@ -89,15 +95,22 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		Layer layer = image.getSelectedLayer();
-		Bitmap bitmapIn = layer.getBitmap();
-		
+		if(which == DialogInterface.BUTTON_POSITIVE) applyChanges();
+		else if(which == DialogInterface.BUTTON_NEGATIVE) revertChanges();
+	}
+	
+	private void applyChanges()
+	{
 		CurveManipulatorParams params = new CurveManipulatorParams(channelType);
 		curvesView.attachCurvesToParamsObject(params);
 		
-		ColorsCurveManipulator curves = new ColorsCurveManipulator();
-		Bitmap bitmapOut = curves.run(bitmapIn, params);
+		Bitmap bitmapOut = manipulator.run(oldBitmap, params);
 		layer.setBitmap(bitmapOut);
+	}
+	
+	private void revertChanges()
+	{
+		layer.setBitmap(oldBitmap);
 	}
 	
 	@Override
@@ -114,8 +127,9 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
-		/*if(event.getAction() == MotionEvent.ACTION_DOWN)
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
+			applyChanges();
 			alertDialog.hide();
 			v.getParent().requestDisallowInterceptTouchEvent(true);
 		}
@@ -123,7 +137,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		{
 			alertDialog.show();
 			v.getParent().requestDisallowInterceptTouchEvent(false);
-		}*/
+		}
 		return true;
 	}
 	
