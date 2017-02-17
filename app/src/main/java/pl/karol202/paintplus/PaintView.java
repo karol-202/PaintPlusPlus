@@ -132,7 +132,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		screenBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		
 		Bitmap toolBitmap = null;
-		if(tool.doesScreenDraw(true))
+		if(tool.doesScreenDraw(image.getSelectedLayer() != null))
 		{
 			toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 			Canvas toolCanvas = new Canvas(toolBitmap);
@@ -158,7 +158,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 			if(tool.isDrawingOnTop())
 			{
 				if(!tool.isImageLimited()) removeClipping(canvas);
-				tool.onScreenDraw(canvas);
+				canvas.drawBitmap(toolBitmap, 0, 0, null);
 				if(!tool.isImageLimited()) setClipping(canvas);
 			}
 			else if(!tool.isImageLimited())

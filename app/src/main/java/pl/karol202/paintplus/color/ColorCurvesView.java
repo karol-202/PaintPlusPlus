@@ -33,8 +33,10 @@ public class ColorCurvesView extends View
 	
 	private final int POINT_RADIUS = 8;
 	private final int POINT_INNER_RADIUS = 3;
+	private final int ADDITIONAL_MARGIN_SPACING = 9;
 	
 	private final int MAX_TOUCH_DISTANCE = 65;
+	private final int REMOVE_LIMIT = 100;
 	
 	private OnCurveEditListener listener;
 	private ColorChannelType channelType;
@@ -55,11 +57,10 @@ public class ColorCurvesView extends View
 	private Paint pointInnerPaint;
 	private Paint curvePaint;
 	
-	private Point draggedScreenPoint;
-	private Point draggedCurvePoint;
-	private int draggedPointIndex;
-	private Point touchStartPoint;
-	private Point draggedCurvePointCurrentPos;
+	private Point oldTouchPoint;
+	private Point oldDraggedScreenPoint;
+	private Point newDraggedCurvePoint;
+	private boolean draggedPointRemoved;
 	
 	public ColorCurvesView(Context context, AttributeSet attrs)
 	{
@@ -132,9 +133,8 @@ public class ColorCurvesView extends View
 		drawGrid(canvas);
 		drawScale(canvas);
 		
-		Point[] points = getCurrentCurve().getPoints();
-		drawCurve(canvas, points);
-		drawPoints(canvas, points);
+		drawCurve(canvas);
+		drawPoints(canvas);
 	}
 	
 	private void drawGrid(Canvas canvas)
@@ -152,16 +152,26 @@ public class ColorCurvesView extends View
 				viewSize.y - BOTTOM_GRID_MARGIN, verticalScalePaint);
 	}
 	
-	private void drawPoints(Canvas canvas, Point[] curvePoints)
+	private void drawPoints(Canvas canvas)
 	{
-		if(points == null) createPoints(curvePoints);
+		if(points == null) createPoints();
+		canvas.clipRect(LEFT_GRID_MARGIN - ADDITIONAL_MARGIN_SPACING,
+				TOP_GRID_MARGIN - ADDITIONAL_MARGIN_SPACING,
+				canvas.getWidth() - RIGHT_GRID_MARGIN + ADDITIONAL_MARGIN_SPACING,
+				canvas.getHeight() - BOTTOM_GRID_MARGIN + ADDITIONAL_MARGIN_SPACING,
+				Region.Op.REPLACE);
+		
 		for(RectF point : points) canvas.drawOval(point, pointPaint);
 		for(RectF point : innerPoints) canvas.drawOval(point, pointInnerPaint);
 	}
 	
-	private void drawCurve(Canvas canvas, Point[] curvePoints)
+	private void drawCurve(Canvas canvas)
 	{
-		if(points == null) createPoints(curvePoints);
+		if(points == null) createPoints();
+		canvas.clipRect(LEFT_GRID_MARGIN, TOP_GRID_MARGIN,
+						canvas.getWidth() - RIGHT_GRID_MARGIN, canvas.getHeight() - BOTTOM_GRID_MARGIN,
+						Region.Op.REPLACE);
+		
 		float lastX = LEFT_GRID_MARGIN;
 		float lastY = points.get(0).centerY();
 		for(RectF rect : points)
@@ -266,8 +276,9 @@ public class ColorCurvesView extends View
 		verticalScalePaint.setStyle(Paint.Style.FILL);
 	}
 	
-	private void createPoints(Point[] curvePoints)
+	private void createPoints()
 	{
+		Point[] curvePoints = getCurrentCurve().getPoints();
 		points = new ArrayList<>();
 		innerPoints = new ArrayList<>();
 		for(Point point : curvePoints)
@@ -295,7 +306,7 @@ public class ColorCurvesView extends View
 	
 	private void onTouchDown(int x, int y)
 	{
-		Point touch = new Point(x, y);
+		oldTouchPoint = new Point(x, y);
 		
 		Point nearest = null;
 		int nearestIndex = -1;
@@ -304,7 +315,7 @@ public class ColorCurvesView extends View
 		{
 			RectF rect = points.get(i);
 			Point point = new Point((int) rect.centerX(), (int) rect.centerY());
-			float distance = distance(point, touch);
+			float distance = distance(point, oldTouchPoint);
 			if((nearest == null || distance < shortestDistance) && distance < MAX_TOUCH_DISTANCE)
 			{
 				nearest = point;
@@ -316,82 +327,84 @@ public class ColorCurvesView extends View
 		ColorCurve curve = getCurrentCurve();
 		if(nearest != null)
 		{
-			draggedScreenPoint = nearest;
-			draggedCurvePoint = curve.getPoints()[nearestIndex];
-			draggedPointIndex = nearestIndex;
-			
+			oldDraggedScreenPoint = nearest;
+			newDraggedCurvePoint = curve.getPoints()[nearestIndex];
 		}
 		else
 		{
-			draggedScreenPoint = new Point(touch);
-			draggedCurvePoint = screenToCurve(draggedScreenPoint);
-			curve.addPoint(draggedCurvePoint);
-			
-			Point[] curvePoints = curve.getPoints();
-			createPoints(curvePoints);
-			for(int i = 0; i < curvePoints.length; i++)
-			{
-				if(curvePoints[i].equals(draggedCurvePoint))
-				{
-					draggedPointIndex = i;
-					break;
-				}
-			}
+			oldDraggedScreenPoint = new Point(oldTouchPoint);
+			newDraggedCurvePoint = screenToCurve(oldDraggedScreenPoint);
+			curve.addPoint(newDraggedCurvePoint);
+			createPoints();
 		}
-		touchStartPoint = touch;
-		draggedCurvePointCurrentPos = draggedCurvePoint;
 		
 		if(listener != null) listener.onCurveEdited();
 	}
 	
 	private void onTouchMove(int x, int y)
 	{
-		if(draggedScreenPoint != null)
+		if(oldDraggedScreenPoint != null)
 		{
-			Point newScreenPoint = new Point(draggedScreenPoint);
-			newScreenPoint.offset(x - touchStartPoint.x, y - touchStartPoint.y);
-			checkBounds(newScreenPoint);
+			Point newScreenPoint = new Point(oldDraggedScreenPoint);
+			newScreenPoint.offset(x - oldTouchPoint.x, y - oldTouchPoint.y);
+			boolean shouldRemove = !checkBounds(newScreenPoint);
+			if(shouldRemove && !draggedPointRemoved && getCurrentCurve().removePoint(newDraggedCurvePoint))
+				draggedPointRemoved = true;
+			if(!shouldRemove && draggedPointRemoved)
+			{
+				getCurrentCurve().addPoint(newDraggedCurvePoint);
+				draggedPointRemoved = false;
+			}
 			
-			draggedCurvePointCurrentPos = screenToCurve(newScreenPoint);
+			Point newCurvePoint = screenToCurve(newScreenPoint);
+			boolean moved = getCurrentCurve().movePoint(newDraggedCurvePoint, newCurvePoint);
 			
-			RectF oval = new RectF(newScreenPoint.x - POINT_RADIUS, newScreenPoint.y - POINT_RADIUS,
-					newScreenPoint.x + POINT_RADIUS, newScreenPoint.y + POINT_RADIUS);
-			RectF innerOval = new RectF(newScreenPoint.x - POINT_INNER_RADIUS, newScreenPoint.y - POINT_INNER_RADIUS,
-					newScreenPoint.x + POINT_INNER_RADIUS, newScreenPoint.y + POINT_INNER_RADIUS);
-			points.set(draggedPointIndex, oval);
-			innerPoints.set(draggedPointIndex, innerOval);
-			
+			createPoints();
+			if(moved) newDraggedCurvePoint = newCurvePoint;
 			if(listener != null) listener.onCurveEdited();
 		}
 	}
 	
 	private void onTouchUp(int x, int y)
 	{
-		if(draggedScreenPoint != null)
+		if(oldDraggedScreenPoint != null)
 		{
-			Point newScreenPoint = new Point(draggedScreenPoint);
-			newScreenPoint.offset(x - touchStartPoint.x, y - touchStartPoint.y);
-			checkBounds(newScreenPoint);
+			Point newScreenPoint = new Point(oldDraggedScreenPoint);
+			newScreenPoint.offset(x - oldTouchPoint.x, y - oldTouchPoint.y);
+			boolean shouldRemove = !checkBounds(newScreenPoint);
+			boolean removed = false;
+			if(shouldRemove && !draggedPointRemoved && getCurrentCurve().removePoint(newDraggedCurvePoint))
+				removed = true;
 			
-			Point newCurvePoint = screenToCurve(newScreenPoint);
-			getCurrentCurve().movePoint(draggedCurvePoint, newCurvePoint);
+			if(!removed)
+			{
+				Point newCurvePoint = screenToCurve(newScreenPoint);
+				getCurrentCurve().movePoint(newDraggedCurvePoint, newCurvePoint);
+			}
 			
-			draggedScreenPoint = null;
-			draggedPointIndex = -1;
-			draggedCurvePoint = null;
-			touchStartPoint = null;
-			draggedCurvePointCurrentPos = null;
-			points = null;
+			createPoints();
+			oldTouchPoint = null;
+			oldDraggedScreenPoint = null;
+			newDraggedCurvePoint = null;
+			draggedPointRemoved = false;
 			if(listener != null) listener.onCurveEdited();
 		}
 	}
 	
-	private void checkBounds(Point point)
+	private boolean checkBounds(Point point)
 	{
-		if(point.x < LEFT_GRID_MARGIN) point.x = LEFT_GRID_MARGIN;
-		else if(point.x >= viewSize.x - RIGHT_GRID_MARGIN) point.x = viewSize.x - RIGHT_GRID_MARGIN - 1;
-		if(point.y < TOP_GRID_MARGIN) point.y = TOP_GRID_MARGIN;
-		else if(point.y >= viewSize.y - BOTTOM_GRID_MARGIN) point.y = viewSize.y - BOTTOM_GRID_MARGIN - 1;
+		int left = point.x - LEFT_GRID_MARGIN;
+		int top = point.y - TOP_GRID_MARGIN;
+		int right = point.x - (viewSize.x - RIGHT_GRID_MARGIN);
+		int bottom = point.y - (viewSize.y - BOTTOM_GRID_MARGIN);
+		
+		boolean shouldRemove = left <= -REMOVE_LIMIT || top <= -REMOVE_LIMIT ||
+							   right >= REMOVE_LIMIT || bottom >= REMOVE_LIMIT;
+		if(left < 0) point.x = LEFT_GRID_MARGIN;
+		else if(right > 0) point.x = viewSize.x - RIGHT_GRID_MARGIN;
+		if(top < 0) point.y = TOP_GRID_MARGIN;
+		else if(bottom > 0) point.y = viewSize.y - BOTTOM_GRID_MARGIN;
+		return !shouldRemove;
 	}
 	
 	private float distance(Point first, Point second)
@@ -444,8 +457,8 @@ public class ColorCurvesView extends View
 	
 	public String getInfoText()
 	{
-		if(draggedCurvePointCurrentPos == null) return "";
-		return String.format(Locale.US, "X: %1$d   Y: %2$d", draggedCurvePointCurrentPos.x, draggedCurvePointCurrentPos.y);
+		if(newDraggedCurvePoint == null || draggedPointRemoved) return "";
+		return String.format(Locale.US, "X: %1$d   Y: %2$d", newDraggedCurvePoint.x, newDraggedCurvePoint.y);
 	}
 	
 	private ColorCurve getCurrentCurve()

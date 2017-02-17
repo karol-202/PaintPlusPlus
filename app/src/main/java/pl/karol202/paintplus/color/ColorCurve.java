@@ -23,30 +23,31 @@ public class ColorCurve
 	public void addPoint(Point newPoint)
 	{
 		for(Point point : points)
-		{
 			if(point.x == newPoint.x) return;
-		}
 		
 		points.add(newPoint);
 		sorted = false;
 	}
 	
-	public void movePoint(Point oldPoint, Point newPoint)
+	public boolean movePoint(Point oldPoint, Point newPoint)
 	{
 		for(Point point : points)
-		{
-			if(point.x == newPoint.x && point != oldPoint) return;
-		}
+			if(point.x == newPoint.x && point != oldPoint) return false;
 		
+		if(!points.contains(oldPoint)) return false;
 		points.remove(oldPoint);
 		points.add(newPoint);
 		sorted = false;
+		return true;
 	}
 	
-	public void removePoint(Point point)
+	public boolean removePoint(Point point)
 	{
+		if(!points.contains(point)) return false;
+		if(points.size() <= 2) return false;
 		points.remove(point);
 		sorted = false;
+		return true;
 	}
 	
 	public Point[] getPoints()
