@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import com.kunzisoft.androidclearchroma.ChromaDialog;
 import com.kunzisoft.androidclearchroma.IndicatorMode;
-import com.kunzisoft.androidclearchroma.OnColorSelectedListener;
 import com.kunzisoft.androidclearchroma.colormode.ColorMode;
+import com.kunzisoft.androidclearchroma.listener.OnColorSelectedListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.image.Image;
@@ -103,7 +103,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 		new ChromaDialog.Builder().colorMode(getColorMode())
 								  .initialColor(color)
 								  .indicatorMode(IndicatorMode.DECIMAL)
-								  .onColorSelected(this)
+								  .setOnColorSelectedListener(this)
 								  .create()
 								  .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), "ColorPicker");
 	}
@@ -115,18 +115,22 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 		{
 		case "RGB": return ColorMode.RGB;
 		case "HSV": return ColorMode.HSV;
-		case "CMYK": return ColorMode.CMYK;
+		case "HSL": return ColorMode.HSL;
+		case "CMYK255": return ColorMode.CMYK255;
 		}
 		throw new RuntimeException("Unknown color mode: " + value);
 	}
 	
 	@Override
-	public void onColorSelected(@ColorInt int color)
+	public void onPositiveButtonClick(@ColorInt int color)
 	{
 		if(target == TARGET_FIRST) colors.setFirstColor(color);
 		else if(target == TARGET_SECOND) colors.setSecondColor(color);
 		updateColors();
 	}
+	
+	@Override
+	public void onNegativeButtonClick(@ColorInt int color) { }
 	
 	@Override
 	public void onColorsChanged()
