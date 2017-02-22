@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.color.manipulators;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -8,11 +9,20 @@ import pl.karol202.paintplus.color.ChannelInOutSet;
 import pl.karol202.paintplus.color.ColorChannel;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.ColorCurve;
+import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
+import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
 public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulatorParams>
 {
 	private RenderScript renderScript;
+	private CurveManipulatorParams params;
+	private Allocation allocationSelection;
+	private Allocation allocationIn;
+	private Allocation allocationOut;
+	private int width;
+	private byte[] selectionData;
+	private Rect selectionBounds;
 	
 	public ColorsCurveManipulator()
 	{
@@ -22,23 +32,49 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 	@Override
 	public Bitmap run(Bitmap in, CurveManipulatorParams params)
 	{
+		this.params = params;
+		width = in.getWidth();
+		prepareSelection();
+		
 		Bitmap out = Bitmap.createBitmap(in.getWidth(), in.getHeight(), Bitmap.Config.ARGB_8888);
 		
-		Allocation allocationIn = Allocation.createFromBitmap(renderScript, in);
-		Allocation allocationOut = Allocation.createFromBitmap(renderScript, out);
+		allocationIn = Allocation.createFromBitmap(renderScript, in);
+		allocationOut = Allocation.createFromBitmap(renderScript, out);
 		
-		if(params.getChannelType() == ColorChannelType.RGB) runRGB(params, allocationIn, allocationOut);
-		else if(params.getChannelType() == ColorChannelType.HSV) runHSV(params, allocationIn, allocationOut);
+		if(params.getChannelType() == ColorChannelType.RGB) runRGB();
+		else if(params.getChannelType() == ColorChannelType.HSV) runHSV();
 		allocationOut.copyTo(out);
 		
 		return out;
 	}
 	
-	private void runRGB(CurveManipulatorParams params, Allocation in, Allocation out)
+	private void prepareSelection()
+	{
+		ManipulatorSelection selection = params.getSelection();
+		if(selection == null) return;
+		selectionData = selection.getData();
+		selectionBounds = selection.getBounds();
+		
+		allocationSelection = Allocation.createSized(renderScript, Element.U8(renderScript), selectionData.length);
+		allocationSelection.copyFrom(selectionData);
+	}
+	
+	private void runRGB()
 	{
 		ScriptC_cm_curves_rgb script = new ScriptC_cm_curves_rgb(renderScript);
+		
+		if(allocationSelection != null)
+		{
+			script.bind_selectionData(allocationSelection);
+			script.set_selectionWidth(selectionBounds.width());
+			script.set_selectionLeft(selectionBounds.left);
+			script.set_selectionTop(selectionBounds.top);
+			script.set_selectionRight(selectionBounds.right);
+			script.set_selectionBottom(selectionBounds.bottom);
+		}
+		
 		attachCurvesRGB(script, params);
-		script.forEach_transform(in, out);
+		script.forEach_transform(allocationIn, allocationOut);
 	}
 	
 	private void attachCurvesRGB(ScriptC_cm_curves_rgb script, CurveManipulatorParams params)
@@ -72,11 +108,22 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 		}
 	}
 	
-	private void runHSV(CurveManipulatorParams params, Allocation in, Allocation out)
+	private void runHSV()
 	{
 		ScriptC_cm_curves_hsv script = new ScriptC_cm_curves_hsv(renderScript);
+		
+		if(allocationSelection != null)
+		{
+			script.bind_selectionData(allocationSelection);
+			script.set_selectionWidth(selectionBounds.width());
+			script.set_selectionLeft(selectionBounds.left);
+			script.set_selectionTop(selectionBounds.top);
+			script.set_selectionRight(selectionBounds.right);
+			script.set_selectionBottom(selectionBounds.bottom);
+		}
+		
 		attachCurvesHSV(script, params);
-		script.forEach_transform(in, out);
+		script.forEach_transform(allocationIn, allocationOut);
 	}
 	
 	private void attachCurvesHSV(ScriptC_cm_curves_hsv script, CurveManipulatorParams params)

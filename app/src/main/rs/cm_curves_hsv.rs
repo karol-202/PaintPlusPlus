@@ -8,6 +8,13 @@ typedef struct HSV
 	float v;
 } float3_hsv;
 
+bool* selectionData;
+uint16_t selectionWidth;
+uint16_t selectionLeft;
+uint16_t selectionTop;
+uint16_t selectionRight;
+uint16_t selectionBottom;
+
 ushort* curve_hth;
 ushort* curve_hts;
 ushort* curve_htv;
@@ -128,23 +135,34 @@ static ushort3 hsv_to_rgb(ushort3 in)
     return convert_ushort3(out);
 }
 
-uchar4 RS_KERNEL transform(uchar4 in)
+static bool isSelected(uint32_t x, uint32_t y)
 {
+	if(selectionData == NULL) return true;
+	if(x < selectionLeft || y < selectionTop || x >= selectionRight || y >= selectionBottom) return false;
+	uint16_t selectionX = x - selectionLeft;
+	uint16_t selectionY = y - selectionTop;
+	return selectionData[selectionY * selectionWidth + selectionX];
+}
+
+uchar4 RS_KERNEL transform(uchar4 in, uint32_t x, uint32_t y)
+{
+	if(!isSelected(x, y)) return in;
+
 	ushort3 in_rgb = { (ushort) in.r, (ushort) in.g, (ushort) in.b };
 	ushort3 in_hsv = rgb_to_hsv(in_rgb);
 	ushort in_h = in_hsv.r;
 	ushort in_s = in_hsv.g;
 	ushort in_v = in_hsv.b;
 	ushort out_h, out_s, out_v;
-	if(curve_hth != NULL) out_h += curve_hth[in_h];
-	if(curve_hts != NULL) out_s += curve_hts[in_h];
+	if(curve_hth != NULL) out_h += curve_hth[in_h]; else out_h += in_h;
+	//if(curve_hts != NULL) out_s += curve_hts[in_h];
 	if(curve_htv != NULL) out_v += curve_htv[in_h];
 	if(curve_sth != NULL) out_h += curve_sth[in_s];
-	if(curve_sts != NULL) out_s += curve_sts[in_s];
+	if(curve_sts != NULL) out_s += curve_sts[in_s]; else out_s += in_s;
 	if(curve_stv != NULL) out_v += curve_stv[in_s];
 	if(curve_vth != NULL) out_h += curve_vth[in_v];
 	if(curve_vts != NULL) out_s += curve_vts[in_v];
-	if(curve_vtv != NULL) out_v += curve_vtv[in_v];
+	if(curve_vtv != NULL) out_v += curve_vtv[in_v]; else out_v += in_v;
 	
 	out_h = min((float) out_h, (float) 360);
 	out_s = min((float) out_s, (float) 100);

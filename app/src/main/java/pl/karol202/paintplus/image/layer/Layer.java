@@ -147,9 +147,9 @@ public class Layer
 		return bitmap.getHeight();
 	}
 	
-	public RectF getBounds()
+	public Rect getBounds()
 	{
-		return new RectF(x, y, x + getWidth(), y + getHeight());
+		return new Rect(x, y, x + getWidth(), y + getHeight());
 	}
 	
 	public String getName()

@@ -18,9 +18,11 @@ import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.ColorChannelsAdapter;
 import pl.karol202.paintplus.color.ColorCurvesView;
 import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator;
-import pl.karol202.paintplus.color.manipulators.CurveManipulatorParams;
+import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
+import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
@@ -109,7 +111,11 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	
 	private void applyChanges()
 	{
-		CurveManipulatorParams params = new CurveManipulatorParams(channelType);
+		Layer layer = image.getSelectedLayer();
+		Selection selection = image.getSelection();
+		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
+		
+		CurveManipulatorParams params = new CurveManipulatorParams(manipulatorSelection, channelType);
 		curvesView.attachCurvesToParamsObject(params);
 		
 		Bitmap bitmapOut = manipulator.run(oldBitmap, params);

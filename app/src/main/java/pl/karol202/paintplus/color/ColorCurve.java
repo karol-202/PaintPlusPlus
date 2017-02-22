@@ -82,6 +82,26 @@ public class ColorCurve
 		points = new ArrayList<>(Arrays.asList(array));
 	}
 	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		ColorCurve that = (ColorCurve) o;
+		
+		if(channels != null ? !channels.equals(that.channels) : that.channels != null) return false;
+		return points.equals(that.points);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = channels != null ? channels.hashCode() : 0;
+		result = 31 * result + points.hashCode();
+		return result;
+	}
+	
 	public byte[] createByteColorsMap()
 	{
 		ColorChannel inChannel = channels.getIn();

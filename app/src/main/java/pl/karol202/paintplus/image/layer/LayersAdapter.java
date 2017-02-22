@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.RectF;
+import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,12 +117,12 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	{
 		int firstIndex = layers.indexOf(firstLayer);
 		Layer secondLayer = layers.get(firstIndex + 1);
-		RectF resultBounds = firstLayer.getBounds();
+		Rect resultBounds = firstLayer.getBounds();
 		resultBounds.union(secondLayer.getBounds());
-		Layer resultLayer = new Layer((int) resultBounds.left, (int) resultBounds.top,
-									  (int) resultBounds.width(), (int) resultBounds.height(),
+		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top,
+									  resultBounds.width(), resultBounds.height(),
 									  firstLayer.getName(), Color.TRANSPARENT);
-		Bitmap resultBitmap = Bitmap.createBitmap((int) resultBounds.width(), (int) resultBounds.height(), ARGB_8888);
+		Bitmap resultBitmap = Bitmap.createBitmap(resultBounds.width(), resultBounds.height(), ARGB_8888);
 		Canvas canvas = new Canvas(resultBitmap);
 		canvas.drawBitmap(secondLayer.getBitmap(), secondLayer.getX() - resultBounds.left,
 												   secondLayer.getY() - resultBounds.top, null);

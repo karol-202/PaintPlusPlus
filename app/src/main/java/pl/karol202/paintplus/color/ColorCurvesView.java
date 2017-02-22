@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
-import pl.karol202.paintplus.color.manipulators.CurveManipulatorParams;
+import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
@@ -97,14 +97,20 @@ public class ColorCurvesView extends View
 		
 		curves = new HashMap<>();
 		for(ColorChannel channelIn : ColorChannel.filterByType(channelType))
-		{
 			for(ColorChannel channelOut : ColorChannel.filterByType(channelType))
-			{
-				ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
-				if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve(set));
-				else curves.put(set, ColorCurve.zeroCurve(set));
-			}
-		}
+				initChannel(channelIn, channelOut);
+	}
+	
+	private void initChannel(ColorChannel in, ColorChannel out)
+	{
+		ChannelInOutSet set = new ChannelInOutSet(in, out);
+		curves.put(set, getDefaultCurve(set));
+	}
+	
+	private ColorCurve getDefaultCurve(ChannelInOutSet set)
+	{
+		if(set.getIn() == set.getOut()) return ColorCurve.defaultCurve(set);
+		else return ColorCurve.zeroCurve(set);
 	}
 	
 	@Override
@@ -442,15 +448,14 @@ public class ColorCurvesView extends View
 		for(ChannelInOutSet set : curves.keySet())
 		{
 			ColorCurve curve = curves.get(set);
-			params.addCurve(set, curve);
+			ColorCurve defaultCurve = getDefaultCurve(set);
+			if(!curve.equals(defaultCurve)) params.addCurve(set, curve);
 		}
 	}
 	
 	public void restoreCurrentCurve()
 	{
-		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
-		if(channelIn == channelOut) curves.put(set, ColorCurve.defaultCurve(set));
-		else curves.put(set, ColorCurve.zeroCurve(set));
+		initChannel(channelIn, channelOut);
 		updatePoints();
 		invalidate();
 	}

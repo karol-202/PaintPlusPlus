@@ -242,7 +242,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		Layer selected = image.getSelectedLayer();
 		if(selected == null) return;
 		
-		RectF bounds = selected.getBounds();
+		RectF bounds = new RectF(selected.getBounds());
 		bounds.intersect(getScreenRect());
 		boundsPath = new Path();
 		boundsPath.addRect(bounds, Path.Direction.CW);

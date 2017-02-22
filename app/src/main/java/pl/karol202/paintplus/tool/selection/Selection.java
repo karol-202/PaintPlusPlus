@@ -20,9 +20,13 @@ public class Selection
 	private Path path;
 	private boolean empty;
 	
-	public void init(int width, int height)
+	public Selection()
 	{
 		this.listeners = new ArrayList<>();
+	}
+	
+	public void init(int width, int height)
+	{
 		this.imageRect = new Rect(0, 0, width, height);
 		this.region = new Region();
 		this.path = new Path();
