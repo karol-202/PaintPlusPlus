@@ -32,7 +32,7 @@ public class OptionFileNew extends Option implements OnClickListener
 		dialogBuilder.setTitle(R.string.dialog_new_image);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
-		dialogBuilder.setNegativeButton(R.string.cancel, this);
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
 
 		editX = (EditText) view.findViewById(R.id.edit_image_x);
 		editX.setText(String.valueOf(image.getWidth()));
@@ -47,7 +47,6 @@ public class OptionFileNew extends Option implements OnClickListener
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which != DialogInterface.BUTTON_POSITIVE) return;
 		int x = parseInt(editX.getText().toString());
 		int y = parseInt(editY.getText().toString());
 		

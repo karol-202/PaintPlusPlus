@@ -12,9 +12,9 @@ public enum ColorChannel
 	RED(R.string.channel__red, R.drawable.ic_channel_red, RGB, 255),
 	GREEN(R.string.channel__green, R.drawable.ic_channel_green, RGB, 255),
 	BLUE(R.string.channel__blue, R.drawable.ic_channel_blue, RGB, 255),
-	HUE(R.string.channel_hue, R.drawable.ic_channel_hue, HSV, 359),
-	SATURATION(R.string.channel_saturation, R.drawable.ic_channel_saturation, HSV, 100),
-	VALUE(R.string.channel_value, R.drawable.ic_channel_value, HSV, 100);
+	HUE(R.string.channel__hue, R.drawable.ic_channel_hue, HSV, 359),
+	SATURATION(R.string.channel__saturation, R.drawable.ic_channel_saturation, HSV, 100),
+	VALUE(R.string.channel__value, R.drawable.ic_channel_value, HSV, 100);
 	
 	private int name;
 	private int icon;

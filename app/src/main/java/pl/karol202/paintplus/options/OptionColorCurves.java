@@ -101,7 +101,6 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		alertDialog = builder.show();
 	}
 	
-	//OK
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
@@ -111,7 +110,6 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	
 	private void applyChanges()
 	{
-		Layer layer = image.getSelectedLayer();
 		Selection selection = image.getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 		

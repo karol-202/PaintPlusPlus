@@ -27,6 +27,7 @@
 	<string name="dialog_layer_properties">Właściwości warstwy</string>
 	<string name="dialog_color_curves_rgb">Krzywe kolorów RGB</string>
 	<string name="dialog_color_curves_hsv">Krzywe kolorów HSV</string>
+	<string name="dialog_colors_brightness">Ustawienia jasności</string>
 	
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
@@ -71,6 +72,7 @@
 	
 	<string name="action_colors">Kolory</string>
 	<string name="action_colors_invert">Odwróć kolory</string>
+	<string name="action_colors_brightness">Jasność</string>
 	<string name="action_color_curves_rgb">Krzywe kolorów RGB</string>
 	<string name="action_color_curves_hsv">Krzywe kolorów HSV</string>
 	
@@ -179,6 +181,8 @@
 	<string name="channel__saturation">Nasycenie</string>
 	<string name="channel__value">Jasność</string>
 	<string name="restore">Przywróć</string>
+	<string name="brightness">Jasność</string>
+	<string name="contrast">Kontrast</string>
 	
 	<string-array name="color_modes">
 		<item>RGB</item>
