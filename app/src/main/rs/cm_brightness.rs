@@ -20,9 +20,10 @@ static bool isSelected(uint32_t x, uint32_t y)
 	return selectionData[selectionY * selectionWidth + selectionX];
 }
 	
-static float map(float src, int srcMin, int srcMax, int dstMin, int dstMax)
+static float map(float src, float srcMin, float srcMax, float dstMin, float dstMax)
 {
-	return dstMin + ((src - srcMin) / (srcMax - srcMin) * (dstMax - dstMin));
+	float result =  dstMin + ((src - srcMin) / (srcMax - srcMin) * (dstMax - dstMin));
+	return max(min(result, (float) 255), (float) 0);
 }
 
 uchar4 RS_KERNEL invert(uchar4 in, uint32_t x, uint32_t y)
@@ -31,25 +32,28 @@ uchar4 RS_KERNEL invert(uchar4 in, uint32_t x, uint32_t y)
 
 	uchar4 out = in;
 	
-    int srcMin;
-    int srcMax;
+    float srcMin;
+    float srcMax;
     if(contrast > 0)
     {
         srcMin = contrast / 2 * 255;
         srcMax = (1 - contrast / 2) * 255;
     }
+    else if(contrast == -1)
+    {
+        out.r = 128;
+        out.g = 128;
+        out.b = 128;
+        return out;
+    }
     else
     {
-        srcMin = 0; //Must be changed
-        srcMax = 1 / (contrast + 1) * 255;
+		srcMax = 1 / (contrast + 1) * 255;
+		srcMin = 255 - srcMax;
     }
     
-    int dstMin = brightness > 0 ? 255 * brightness : 0;
-    int dstMax = brightness < 0 ? 255 * (brightness + 1) : 255;
-    //rsDebug("smin", srcMin);
-    //rsDebug("smax", srcMax);
-    //rsDebug("dmin", dstMin);
-    //rsDebug("dmax", dstMax);
+    float dstMin = brightness > 0 ? 255 * brightness : 0;
+    float dstMax = brightness < 0 ? 255 * (brightness + 1) : 255;
 	
 	out.r = map(in.r, srcMin, srcMax, dstMin, dstMax);
 	out.g = map(in.g, srcMin, srcMax, dstMin, dstMax);

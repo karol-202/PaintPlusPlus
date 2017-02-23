@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
@@ -18,7 +20,7 @@ import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Locale;
 
-public class OptionColorsBrightness extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class OptionColorsBrightness extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener
 {
 	private ColorsBrightness manipulator;
 	private Layer layer;
@@ -29,6 +31,7 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	private SeekBar seekBarContrast;
 	private TextView textBrightness;
 	private TextView textContrast;
+	private Button buttonPreview;
 	
 	public OptionColorsBrightness(Context context, Image image)
 	{
@@ -60,6 +63,9 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		
 		textContrast = (TextView) view.findViewById(R.id.contrast);
 		textContrast.setText(getText(seekBarContrast));
+		
+		buttonPreview = (Button) view.findViewById(R.id.button_preview);
+		buttonPreview.setOnTouchListener(this);
 		
 		dialog = dialogBuilder.create();
 		dialog.show();
@@ -117,5 +123,22 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	private void revertChanges()
 	{
 		layer.setBitmap(oldBitmap);
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			applyChanges();
+			dialog.hide();
+			v.getParent().requestDisallowInterceptTouchEvent(true);
+		}
+		else if(event.getAction() == MotionEvent.ACTION_UP)
+		{
+			dialog.show();
+			v.getParent().requestDisallowInterceptTouchEvent(false);
+		}
+		return true;
 	}
 }

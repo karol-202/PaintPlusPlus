@@ -153,10 +153,12 @@ uchar4 RS_KERNEL transform(uchar4 in, uint32_t x, uint32_t y)
 	ushort in_h = in_hsv.r;
 	ushort in_s = in_hsv.g;
 	ushort in_v = in_hsv.b;
-	ushort out_h, out_s, out_v;
+	ushort out_h = 0;
+	ushort out_s = 0;
+	ushort out_v = 0;
 	if(curve_hth != NULL) out_h += curve_hth[in_h]; else out_h += in_h;
-	//if(curve_hts != NULL) out_s += curve_hts[in_h];
-	//if(curve_htv != NULL) out_v += curve_htv[in_h];
+	if(curve_hts != NULL) out_s += curve_hts[in_h];
+	if(curve_htv != NULL) out_v += curve_htv[in_h];
 	if(curve_sth != NULL) out_h += curve_sth[in_s];
 	if(curve_sts != NULL) out_s += curve_sts[in_s]; else out_s += in_s;
 	if(curve_stv != NULL) out_v += curve_stv[in_s];
