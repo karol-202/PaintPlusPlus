@@ -40,7 +40,7 @@ public class ActivityPaint extends AppCompatActivity
 	private View decorView;
 	private FragmentManager fragments;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
-	private AsyncManager asyncBlocker;
+	private AsyncManager asyncManager;
 	private AppDataFragment dataFragment;
 	private ActionBar actionBar;
 
@@ -72,7 +72,7 @@ public class ActivityPaint extends AppCompatActivity
 		
 		fragments = getFragmentManager();
 		resultListeners = new HashMap<>();
-		asyncBlocker = new AsyncManager(this);
+		asyncManager = new AsyncManager(this);
 		
 		mainContainer = (ViewGroup) findViewById(R.id.main_container);
 		
@@ -130,7 +130,7 @@ public class ActivityPaint extends AppCompatActivity
 		{
 			dataFragment = new AppDataFragment();
 			dataFragment.setOnImageChangeListener(paintView);
-			dataFragment.setAsyncManager(asyncBlocker);
+			dataFragment.setAsyncManager(asyncManager);
 			FragmentTransaction transaction = fragments.beginTransaction();
 			transaction.add(dataFragment, AppDataFragment.TAG);
 			transaction.commit();
@@ -285,6 +285,11 @@ public class ActivityPaint extends AppCompatActivity
 	{
 		dataFragment.setTool(tool);
 		paintView.onImageChanged();
+	}
+	
+	public AsyncManager getAsyncManager()
+	{
+		return asyncManager;
 	}
 	
 	public ViewGroup getMainContainer()

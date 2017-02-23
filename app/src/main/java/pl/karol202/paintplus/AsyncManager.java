@@ -11,7 +11,7 @@ public class AsyncManager implements DialogInterface.OnCancelListener
 {
 	private final int PROGRESS_BAR_DELAY = 50;
 	
-	private class ProgressBarToggle extends AsyncTask<Void, Void, Void>
+	private class ProgressDialogExecutor extends AsyncTask<Void, Void, Void>
 	{
 		@Override
 		protected Void doInBackground(Void... params)
@@ -50,7 +50,7 @@ public class AsyncManager implements DialogInterface.OnCancelListener
 		if(blocker != null) return false;
 		
 		blocker = newBlocker;
-		new ProgressBarToggle().executeOnExecutor(THREAD_POOL_EXECUTOR);
+		new ProgressDialogExecutor().executeOnExecutor(THREAD_POOL_EXECUTOR);
 		return true;
 	}
 	

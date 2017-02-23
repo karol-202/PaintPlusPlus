@@ -111,7 +111,7 @@ public class ActivityPaintActions
 			new OptionFileOpen(activity, image).execute();
 			return true;
 		case R.id.action_save_image:
-			new OptionFileSave(activity, image).execute();
+			new OptionFileSave(activity, image, activity.getAsyncManager()).execute();
 			return true;
 		
 		case R.id.action_cut:
