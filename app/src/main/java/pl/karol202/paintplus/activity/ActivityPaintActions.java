@@ -13,7 +13,7 @@ import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 
-public class ActivityPaintActions
+class ActivityPaintActions
 {
 	private ActivityPaint activity;
 	private Image image;
@@ -27,7 +27,7 @@ public class ActivityPaintActions
 		packageManager = activity.getPackageManager();
 	}
 	
-	public void inflateMenu(Menu menu)
+	void inflateMenu(Menu menu)
 	{
 		menuInflater.inflate(R.menu.menu_paint, menu);
 		image = activity.getImage();
@@ -41,7 +41,7 @@ public class ActivityPaintActions
 		});
 	}
 	
-	public void prepareMenu(Menu menu)
+	void prepareMenu(Menu menu)
 	{
 		boolean anyDrawerOpen = activity.isAnyDrawerOpen();
 		setItemsVisibility(menu, !anyDrawerOpen);
@@ -54,8 +54,7 @@ public class ActivityPaintActions
 	
 	private void setItemsVisibility(Menu menu, boolean visible)
 	{
-		for(int i = 0; i < menu.size(); i++)
-			menu.getItem(i).setVisible(visible);
+		for(int i = 0; i < menu.size(); i++) menu.getItem(i).setVisible(visible);
 	}
 	
 	private void preparePhotoCaptureOption(Menu menu)
@@ -89,7 +88,7 @@ public class ActivityPaintActions
 		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty() || image.getLayersAmount() < Image.MAX_LAYERS);
 	}
 	
-	public boolean handleAction(MenuItem item)
+	boolean handleAction(MenuItem item)
 	{
 		int id = item.getItemId();
 		switch(id)

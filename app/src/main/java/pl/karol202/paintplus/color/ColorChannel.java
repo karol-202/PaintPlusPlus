@@ -16,6 +16,11 @@ public enum ColorChannel
 	SATURATION(R.string.channel__saturation, R.drawable.ic_channel_saturation, HSV, 100),
 	VALUE(R.string.channel__value, R.drawable.ic_channel_value, HSV, 100);
 	
+	public enum ColorChannelType
+	{
+		RGB, HSV
+	}
+	
 	private int name;
 	private int icon;
 	private ColorChannelType type;
@@ -34,19 +39,9 @@ public enum ColorChannel
 		return name;
 	}
 	
-	public void setName(int name)
-	{
-		this.name = name;
-	}
-	
 	public int getIcon()
 	{
 		return icon;
-	}
-	
-	public void setIcon(int icon)
-	{
-		this.icon = icon;
 	}
 	
 	public ColorChannelType getType()
@@ -54,19 +49,9 @@ public enum ColorChannel
 		return type;
 	}
 	
-	public void setType(ColorChannelType type)
-	{
-		this.type = type;
-	}
-	
 	public int getMaxValue()
 	{
 		return maxValue;
-	}
-	
-	public void setMaxValue(int maxValue)
-	{
-		this.maxValue = maxValue;
 	}
 	
 	public static ColorChannel[] filterByType(ColorChannelType type)
@@ -77,10 +62,5 @@ public enum ColorChannel
 		ColorChannel[] result = new ColorChannel[filteredChannels.size()];
 		filteredChannels.toArray(result);
 		return result;
-	}
-	
-	public enum ColorChannelType
-	{
-		RGB, HSV
 	}
 }

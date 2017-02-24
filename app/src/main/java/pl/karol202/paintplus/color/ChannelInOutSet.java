@@ -5,7 +5,7 @@ public class ChannelInOutSet
 	private ColorChannel in;
 	private ColorChannel out;
 	
-	public ChannelInOutSet(ColorChannel in, ColorChannel out)
+	ChannelInOutSet(ColorChannel in, ColorChannel out)
 	{
 		this.in = in;
 		this.out = out;
@@ -19,8 +19,7 @@ public class ChannelInOutSet
 		
 		ChannelInOutSet that = (ChannelInOutSet) o;
 		
-		if(in != that.in) return false;
-		return out == that.out;
+		return in == that.in && out == that.out;
 	}
 	
 	@Override

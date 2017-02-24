@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.activity;
 
 import android.support.design.widget.BottomSheetBehavior;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
@@ -11,8 +10,9 @@ import pl.karol202.paintplus.image.layer.LayersRecyclerView;
 import pl.karol202.paintplus.options.OptionLayerNew;
 import pl.karol202.paintplus.options.OptionLayerNew.OnLayerAddListener;
 import pl.karol202.paintplus.util.LayersSheetBehavior;
+import pl.karol202.paintplus.util.Utils;
 
-public class ActivityPaintLayers implements View.OnClickListener
+class ActivityPaintLayers implements View.OnClickListener
 {
 	private final float KEYLINE = 16f / 9f;
 	private final int SHEET_PANEL_SIZE_DP = 56;
@@ -33,10 +33,10 @@ public class ActivityPaintLayers implements View.OnClickListener
 		this.activity = activity;
 		
 		decorView = activity.getWindow().getDecorView();
-		sheetPanelSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SHEET_PANEL_SIZE_DP, activity.getDisplayMetrics());
+		sheetPanelSizePx = Utils.dpToPixels(activity.getDisplayMetrics(), SHEET_PANEL_SIZE_DP);
 	}
 	
-	public void initLayers()
+	void initLayers()
 	{
 		layersAdapter = new LayersAdapter(activity);
 		
@@ -52,13 +52,13 @@ public class ActivityPaintLayers implements View.OnClickListener
 		buttonAddLayer.setOnClickListener(this);
 	}
 	
-	public void postInitLayers()
+	void postInitLayers()
 	{
 		image = activity.getImage();
 		layersAdapter.setImage(image);
 	}
 	
-	public void updateViews()
+	void updateView()
 	{
 		int activityWidth = decorView.getWidth();
 		int activityHeight = decorView.getHeight();
@@ -67,19 +67,24 @@ public class ActivityPaintLayers implements View.OnClickListener
 		recyclerLayers.setMaxHeight(maxRecyclerHeight);
 	}
 	
-	public void toggleLayersSheet()
+	void updateData()
+	{
+		layersAdapter.notifyDataSetChanged();
+	}
+	
+	void toggleLayersSheet()
 	{
 		if(bottomSheetBehaviour.getState() == BottomSheetBehavior.STATE_HIDDEN)
 			bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
 		else bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 	}
 	
-	public void closeLayersSheet()
+	void closeLayersSheet()
 	{
 		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 	}
 	
-	public void setScrollingBlocked(boolean blocked)
+	void setScrollingBlocked(boolean blocked)
 	{
 		recyclerLayers.setAllowScrolling(!blocked);
 		bottomSheetBehaviour.setAllowDragging(!blocked);
@@ -96,10 +101,5 @@ public class ActivityPaintLayers implements View.OnClickListener
 				layersAdapter.notifyDataSetChanged();
 			}
 		}).execute();
-	}
-	
-	public LayersAdapter getLayersAdapter()
-	{
-		return layersAdapter;
 	}
 }

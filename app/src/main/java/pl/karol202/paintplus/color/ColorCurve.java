@@ -13,14 +13,14 @@ public class ColorCurve
 	private ArrayList<Point> points;
 	private boolean sorted;
 	
-	public ColorCurve(ChannelInOutSet channels)
+	private ColorCurve(ChannelInOutSet channels)
 	{
 		this.channels = channels;
 		this.points = new ArrayList<>();
 		this.sorted = true;
 	}
 	
-	public void addPoint(Point newPoint)
+	void addPoint(Point newPoint)
 	{
 		for(Point point : points)
 			if(point.x == newPoint.x) return;
@@ -29,7 +29,7 @@ public class ColorCurve
 		sorted = false;
 	}
 	
-	public boolean movePoint(Point oldPoint, Point newPoint)
+	boolean movePoint(Point oldPoint, Point newPoint)
 	{
 		for(Point point : points)
 			if(point.x == newPoint.x && point != oldPoint) return false;
@@ -41,7 +41,7 @@ public class ColorCurve
 		return true;
 	}
 	
-	public boolean removePoint(Point point)
+	boolean removePoint(Point point)
 	{
 		if(!points.contains(point)) return false;
 		if(points.size() <= 2) return false;
@@ -50,7 +50,7 @@ public class ColorCurve
 		return true;
 	}
 	
-	public Point[] getPoints()
+	Point[] getPoints()
 	{
 		sort();
 		return convertToArray();
@@ -90,8 +90,7 @@ public class ColorCurve
 		
 		ColorCurve that = (ColorCurve) o;
 		
-		if(channels != null ? !channels.equals(that.channels) : that.channels != null) return false;
-		return points.equals(that.points);
+		return (channels != null ? channels.equals(that.channels) : that.channels == null) && points.equals(that.points);
 	}
 	
 	@Override
@@ -131,13 +130,13 @@ public class ColorCurve
 		}
 		
 		if(pos == 0) return points.get(0).y;
-		if(pos == points.size()) return points.get(pos - 1).y;
+		else if(pos == points.size()) return points.get(pos - 1).y;
 		Point lower = points.get(pos - 1);
 		Point higher = points.get(pos);
 		return Utils.map(x, lower.x, higher.x, lower.y, higher.y);
 	}
 	
-	public static ColorCurve defaultCurve(ChannelInOutSet channels)
+	static ColorCurve defaultCurve(ChannelInOutSet channels)
 	{
 		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));
@@ -145,7 +144,7 @@ public class ColorCurve
 		return curve;
 	}
 	
-	public static ColorCurve zeroCurve(ChannelInOutSet channels)
+	static ColorCurve zeroCurve(ChannelInOutSet channels)
 	{
 		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));

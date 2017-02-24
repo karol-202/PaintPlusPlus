@@ -15,11 +15,6 @@ import java.util.Locale;
 
 public class ColorCurvesView extends View
 {
-	public interface OnCurveEditListener
-	{
-		void onCurveEdited();
-	}
-	
 	private final int HORIZONTAL_GRID_LINES = 7;
 	private final int VERTICAL_GRID_LINES = 7;
 	
@@ -132,9 +127,9 @@ public class ColorCurvesView extends View
 			setChannelOut(ColorChannel.VALUE);
 		}
 		
+		if(channelType == null) return;
 		viewSize.x = getWidth();
 		viewSize.y = getHeight();
-		if(channelType == null) return;
 		
 		drawGrid(canvas);
 		drawScale(canvas);

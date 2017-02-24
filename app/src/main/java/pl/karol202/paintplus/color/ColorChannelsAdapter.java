@@ -20,13 +20,12 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View view;
+		View view = convertView;
 		if(convertView == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.spinner_item_color_channel, parent, false);
 		}
-		else view = convertView;
 		ColorChannel channel = getItem(position);
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.image_color_channel);

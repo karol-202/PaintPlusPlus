@@ -28,11 +28,6 @@ import java.util.HashMap;
 
 public class ActivityPaint extends AppCompatActivity
 {
-	public interface ActivityResultListener
-	{
-		void onActivityResult(int resultCode, Intent data);
-	}
-	
 	private ActivityPaintActions actions;
 	private ActivityPaintDrawers drawers;
 	private ActivityPaintLayers layers;
@@ -79,6 +74,7 @@ public class ActivityPaint extends AppCompatActivity
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
+		if(actionBar == null) throw new RuntimeException("Cannot set action bar of activity.");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
@@ -126,15 +122,17 @@ public class ActivityPaint extends AppCompatActivity
 	{
 		if(state != null) super.onRestoreInstanceState(state);
 		dataFragment = (AppDataFragment) fragments.findFragmentByTag(AppDataFragment.TAG);
-		if(dataFragment == null)
-		{
-			dataFragment = new AppDataFragment();
-			dataFragment.setOnImageChangeListener(paintView);
-			dataFragment.setAsyncManager(asyncManager);
-			FragmentTransaction transaction = fragments.beginTransaction();
-			transaction.add(dataFragment, AppDataFragment.TAG);
-			transaction.commit();
-		}
+		if(dataFragment == null) createNewDataFragment();
+	}
+	
+	private void createNewDataFragment()
+	{
+		dataFragment = new AppDataFragment();
+		dataFragment.setOnImageChangeListener(paintView);
+		dataFragment.setAsyncManager(asyncManager);
+		FragmentTransaction transaction = fragments.beginTransaction();
+		transaction.add(dataFragment, AppDataFragment.TAG);
+		transaction.commit();
 	}
 	
 	@Override
@@ -163,9 +161,9 @@ public class ActivityPaint extends AppCompatActivity
 	}
 	
 	@Override
-	protected void onStop()
+	protected void onDestroy()
 	{
-		super.onStop();
+		super.onDestroy();
 		GraphicsHelper.destroy();
 	}
 	
@@ -174,7 +172,7 @@ public class ActivityPaint extends AppCompatActivity
 	{
 		super.onWindowFocusChanged(hasFocus);
 		if(hasFocus) initSystemUIVisibility();
-		layers.updateViews();
+		layers.updateView();
 	}
 	
 	@Override
@@ -194,11 +192,10 @@ public class ActivityPaint extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if(actions.handleAction(item)) return true;
-		else return super.onOptionsItemSelected(item);
+		return actions.handleAction(item) || super.onOptionsItemSelected(item);
 	}
 	
-	public void showSettingsActivity()
+	void showSettingsActivity()
 	{
 		Intent intent = new Intent(this, ActivitySettings.class);
 		startActivity(intent);
@@ -206,13 +203,15 @@ public class ActivityPaint extends AppCompatActivity
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)
 	{
-		if(resultListeners.containsKey(requestCode)) throw new RuntimeException("requestCode is already used.");
+		if(resultListeners.containsKey(requestCode))
+			throw new RuntimeException("requestCode is already used: " + requestCode);
 		resultListeners.put(requestCode, listener);
 	}
 	
 	public void unregisterActivityResultListener(int requestCode)
 	{
-		if(!resultListeners.containsKey(requestCode)) throw new RuntimeException("requestCode isn't registered yet.");
+		if(!resultListeners.containsKey(requestCode))
+			throw new RuntimeException("requestCode isn't registered yet: " + requestCode);
 		resultListeners.remove(requestCode);
 	}
 	
@@ -223,22 +222,22 @@ public class ActivityPaint extends AppCompatActivity
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
 	}
 	
-	public boolean isAnyDrawerOpen()
+	boolean isAnyDrawerOpen()
 	{
 		return drawers.isAnyDrawerOpen();
 	}
 	
-	public void togglePropertiesDrawer()
+	void togglePropertiesDrawer()
 	{
 		drawers.togglePropertiesDrawer();
 	}
 	
-	public void toggleLayersSheet()
+	void toggleLayersSheet()
 	{
 		layers.toggleLayersSheet();
 	}
 	
-	public void closeLayersSheet()
+	void closeLayersSheet()
 	{
 		layers.closeLayersSheet();
 	}
@@ -257,7 +256,7 @@ public class ActivityPaint extends AppCompatActivity
 	
 	public void updateLayersPreview()
 	{
-		layers.getLayersAdapter().notifyDataSetChanged();
+		layers.updateData();
 	}
 	
 	public DisplayMetrics getDisplayMetrics()
@@ -287,7 +286,7 @@ public class ActivityPaint extends AppCompatActivity
 		paintView.onImageChanged();
 	}
 	
-	public AsyncManager getAsyncManager()
+	AsyncManager getAsyncManager()
 	{
 		return asyncManager;
 	}

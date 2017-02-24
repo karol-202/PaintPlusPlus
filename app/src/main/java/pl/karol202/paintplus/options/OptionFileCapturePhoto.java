@@ -8,6 +8,7 @@ import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
 
@@ -20,7 +21,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static android.provider.MediaStore.EXTRA_OUTPUT;
 
-public class OptionFileCapturePhoto extends Option implements ActivityPaint.ActivityResultListener
+public class OptionFileCapturePhoto extends Option implements ActivityResultListener
 {
 	private static final int REQUEST_CAPTURE_PHOTO = 0;
 	
@@ -31,7 +32,6 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 	{
 		super(activity, image);
 		this.activity = activity;
-		this.activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
 	}
 	
 	@Override
@@ -52,6 +52,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		
 		Uri photoUri = FileProvider.getUriForFile(context, "pl.karol202.paintplus", photoFile);
 		intent.putExtra(EXTRA_OUTPUT, photoUri);
+		activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
 		activity.startActivityForResult(intent, REQUEST_CAPTURE_PHOTO);
 	}
 	
@@ -79,6 +80,5 @@ public class OptionFileCapturePhoto extends Option implements ActivityPaint.Acti
 		}
 		
 		photoFile.delete();
-		
 	}
 }

@@ -33,12 +33,18 @@ public class ActivityMain extends AppCompatActivity
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if(id == R.id.action_new)
+		switch(id)
 		{
-			Intent intent = new Intent(this, ActivityPaint.class);
-			startActivity(intent);
+		case R.id.action_new:
+			newImage();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void newImage()
+	{
+		Intent intent = new Intent(this, ActivityPaint.class);
+		startActivity(intent);
 	}
 }

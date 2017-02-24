@@ -6,8 +6,8 @@
 	<string name="activity_file_save">Zapisz plik</string>
 	<string name="activity_settings">Ustawienia</string>
 	
-	<string name="action_drawer_open">Panel narzędzi otwarty</string>
-	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
+	<string name="action_drawer_open">Otwórz panel narzędzi</string>
+	<string name="action_drawer_close">Zamknij panel narzędzi</string>
 	<string name="properties">Właściwości</string>
 	
 	<string name="dialog_new_image">Nowy obraz</string>

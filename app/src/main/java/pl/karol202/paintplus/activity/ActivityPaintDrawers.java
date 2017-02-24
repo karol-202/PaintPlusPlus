@@ -21,11 +21,11 @@ import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.ToolsAdapter;
 
-public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
+class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 {
 	private class DrawerAdapter extends ActionBarDrawerToggle
 	{
-		public DrawerAdapter(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar)
+		DrawerAdapter(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar)
 		{
 			super(activity, drawerLayout, toolbar, R.string.action_drawer_open, R.string.action_drawer_close);
 		}
@@ -52,7 +52,6 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		public void onDrawerSlide(View drawerView, float slideOffset)
 		{
 			if(drawerView == drawerLeft) onLeftDrawerMoved(drawerView, slideOffset);
-			else onRightDrawerMoved();
 			activity.closeLayersSheet();
 		}
 		
@@ -85,18 +84,13 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 			super.onDrawerSlide(drawerView, slideOffset);
 			layoutDrawer.closeDrawer(drawerRight);
 		}
-		
-		private void onRightDrawerMoved()
-		{
-			//colorsSelect.updateColors();
-		}
 	}
 	
 	private final int LEFT_DRAWER_WIDTH = 280;
 	private final int RIGHT_DRAWER_WIDTH = 320;
 	
 	private ActivityPaint activity;
-	private ActionBarDrawerToggle drawerListener;
+	private DrawerAdapter drawerAdapter;
 	private FragmentManager fragments;
 	private DisplayMetrics displayMetrics;
 	private Resources resources;
@@ -116,21 +110,23 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		screenWidthDp = (int) (displayMetrics.widthPixels / displayMetrics.density);
 	}
 	
-	public void initDrawers()
+	void initDrawers()
 	{
 		layoutDrawer = (DrawerLayout) activity.findViewById(R.id.layout_drawer);
-		drawerListener = new DrawerAdapter(activity, layoutDrawer, activity.getToolbar());
-		layoutDrawer.addDrawerListener(drawerListener);
+		drawerAdapter = new DrawerAdapter(activity, layoutDrawer, activity.getToolbar());
+		layoutDrawer.addDrawerListener(drawerAdapter);
 		
 		drawerLeft = (ListView) activity.findViewById(R.id.drawer_left);
 		drawerLeft.setOnItemClickListener(this);
-		initLeftDrawer();
+		setLeftDrawerWidth();
 		
 		drawerRight = activity.findViewById(R.id.drawer_right);
-		initRightDrawer();
+		setRightDrawerWidth();
+		
+		colorsSelect = new ColorsSelect();
 	}
 	
-	private void initLeftDrawer()
+	private void setLeftDrawerWidth()
 	{
 		ViewGroup.LayoutParams params1 = drawerLeft.getLayoutParams();
 		
@@ -138,7 +134,7 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		params1.width = (int) (Math.min(maxWidth, LEFT_DRAWER_WIDTH) * displayMetrics.density);
 	}
 	
-	private void initRightDrawer()
+	private void setRightDrawerWidth()
 	{
 		ViewGroup.LayoutParams params2 = drawerRight.getLayoutParams();
 		
@@ -146,9 +142,9 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		params2.width = (int) (Math.min(maxWidth, RIGHT_DRAWER_WIDTH) * displayMetrics.density);
 	}
 	
-	public void postInitDrawers()
+	void postInitDrawers()
 	{
-		drawerListener.syncState();
+		drawerAdapter.syncState();
 		drawerLeft.setAdapter(new ToolsAdapter(activity, activity.getTools()));
 		
 		tryToAttachPropertiesFragment();
@@ -164,21 +160,27 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		catch(Exception e)
 		{
 			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-					"Probably the fragment class does not contain " +
-					"default constructor.", e);
+									   "Probably the fragment class does not contain " +
+									   "default constructor.", e);
 		}
 	}
 	
 	private void attachPropertiesFragment() throws InstantiationException, IllegalAccessException
 	{
-		Class<? extends ToolProperties> propertiesClass = activity.getTool().getPropertiesFragmentClass();
-		Fragment properties = propertiesClass.newInstance();
+		FragmentTransaction propTrans = fragments.beginTransaction();
+		propTrans.replace(R.id.properties_fragment, createPropertiesFragment());
+		propTrans.commit();
+	}
+	
+	private Fragment createPropertiesFragment() throws InstantiationException, IllegalAccessException
+	{
 		Bundle propArgs = new Bundle();
 		propArgs.putInt("tool", activity.getTools().getToolId(activity.getTool()));
+		
+		Class<? extends ToolProperties> propertiesClass = activity.getTool().getPropertiesFragmentClass();
+		Fragment properties = propertiesClass.newInstance();
 		properties.setArguments(propArgs);
-		FragmentTransaction propTrans = fragments.beginTransaction();
-		propTrans.replace(R.id.properties_fragment, properties);
-		propTrans.commit();
+		return properties;
 	}
 	
 	private void tryToAttachColorsFragment()
@@ -190,27 +192,26 @@ public class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		catch(Exception e)
 		{
 			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-					"Probably the fragment class does not contain " +
-					"default constructor.", e);
+									   "Probably the fragment class does not contain " +
+									   "default constructor.", e);
 		}
 	}
 	
 	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
 	{
-		colorsSelect = new ColorsSelect();
 		FragmentTransaction colorTrans = fragments.beginTransaction();
 		colorTrans.replace(R.id.colors_fragment, colorsSelect);
 		colorTrans.commit();
 	}
 	
-	public void togglePropertiesDrawer()
+	void togglePropertiesDrawer()
 	{
 		layoutDrawer.closeDrawer(drawerLeft);
 		if(layoutDrawer.isDrawerOpen(drawerRight)) layoutDrawer.closeDrawer(drawerRight);
 		else layoutDrawer.openDrawer(drawerRight);
 	}
 	
-	public boolean isAnyDrawerOpen()
+	boolean isAnyDrawerOpen()
 	{
 		return layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
 	}

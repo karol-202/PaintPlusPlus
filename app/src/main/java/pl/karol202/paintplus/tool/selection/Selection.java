@@ -90,6 +90,7 @@ public class Selection
 	
 	public void addListener(OnSelectionChangeListener listener)
 	{
+		if(listeners.contains(listener)) return;
 		listeners.add(listener);
 	}
 }
