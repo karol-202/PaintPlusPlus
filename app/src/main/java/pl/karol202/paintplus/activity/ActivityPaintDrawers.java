@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
@@ -159,9 +160,9 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-									   "Probably the fragment class does not contain " +
-									   "default constructor.", e);
+			FirebaseCrash.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
+													  "Probably the fragment class does not contain " +
+													  "default constructor.", e));
 		}
 	}
 	
@@ -191,9 +192,9 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-									   "Probably the fragment class does not contain " +
-									   "default constructor.", e);
+			FirebaseCrash.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
+													  "Probably the fragment class does not contain " +
+													  "default constructor.", e));
 		}
 	}
 	

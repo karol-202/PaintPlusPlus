@@ -3,11 +3,11 @@ package pl.karol202.paintplus.file;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ImageLoader
 {
@@ -34,7 +34,7 @@ public class ImageLoader
 		
 	}
 	
-	public static void saveBitmap(Bitmap bitmap, String path, int quality)
+	public static boolean saveBitmap(Bitmap bitmap, String path, int quality)
 	{
 		try
 		{
@@ -44,10 +44,12 @@ public class ImageLoader
 			CompressFormat format = getExtension(path);
 			bitmap.compress(format, quality, fos);
 			fos.close();
+			return true;
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
-			throw new RuntimeException("Cannot save bitmap to file.", e);
+			FirebaseCrash.report(new RuntimeException("Cannot save bitmap to file.", e));
+			return false;
 		}
 	}
 	

@@ -2,28 +2,27 @@ package pl.karol202.paintplus.file;
 
 import android.os.AsyncTask;
 
-public class BitmapSaveAsyncTask extends AsyncTask<BitmapSaveParams, Void, Void>
+public class BitmapSaveAsyncTask extends AsyncTask<BitmapSaveParams, Void, Boolean>
 {
 	public interface OnBitmapSaveListener
 	{
-		void onBitmapSaved();
+		void onBitmapSaved(boolean saved);
 	}
 	
 	private OnBitmapSaveListener listener;
 	
 	@Override
-	protected Void doInBackground(BitmapSaveParams... params)
+	protected Boolean doInBackground(BitmapSaveParams... params)
 	{
 		listener = params[0].getListener();
 		
-		ImageLoader.saveBitmap(params[0].getBitmap(), params[0].getFilePath(), params[0].getQuality());
-		return null;
+		return ImageLoader.saveBitmap(params[0].getBitmap(), params[0].getFilePath(), params[0].getQuality());
 	}
 	
 	@Override
-	protected void onPostExecute(Void aVoid)
+	protected void onPostExecute(Boolean result)
 	{
-		super.onPostExecute(aVoid);
-		listener.onBitmapSaved();
+		super.onPostExecute(result);
+		listener.onBitmapSaved(result);
 	}
 }

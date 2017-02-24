@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import com.google.firebase.crash.FirebaseCrash;
 import com.kunzisoft.androidclearchroma.ChromaDialog;
 import com.kunzisoft.androidclearchroma.IndicatorMode;
 import com.kunzisoft.androidclearchroma.colormode.ColorMode;
@@ -116,9 +117,10 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 		case "RGB": return ColorMode.RGB;
 		case "HSV": return ColorMode.HSV;
 		case "HSL": return ColorMode.HSL;
-		case "CMYK255": return ColorMode.CMYK255;
+		case "CMYK": return ColorMode.CMYK255;
 		}
-		throw new RuntimeException("Unknown color mode: " + value);
+		FirebaseCrash.report(new RuntimeException("Unknown color mode: " + value));
+		return ColorMode.RGB;
 	}
 	
 	@Override

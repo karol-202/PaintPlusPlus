@@ -20,8 +20,6 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 	private Allocation allocationSelection;
 	private Allocation allocationIn;
 	private Allocation allocationOut;
-	private int width;
-	private byte[] selectionData;
 	private Rect selectionBounds;
 	
 	public ColorsCurveManipulator()
@@ -33,7 +31,6 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 	public Bitmap run(Bitmap in, CurveManipulatorParams params)
 	{
 		this.params = params;
-		width = in.getWidth();
 		prepareSelection();
 		
 		Bitmap out = Bitmap.createBitmap(in.getWidth(), in.getHeight(), Bitmap.Config.ARGB_8888);
@@ -52,7 +49,7 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 	{
 		ManipulatorSelection selection = params.getSelection();
 		if(selection == null) return;
-		selectionData = selection.getData();
+		byte[] selectionData = selection.getData();
 		selectionBounds = selection.getBounds();
 		
 		allocationSelection = Allocation.createSized(renderScript, Element.U8(renderScript), selectionData.length);

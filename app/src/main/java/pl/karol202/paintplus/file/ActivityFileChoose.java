@@ -2,11 +2,13 @@ package pl.karol202.paintplus.file;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.util.ItemDivider;
 
@@ -67,8 +69,10 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+		ActionBar actionBar = getSupportActionBar();
+		if(actionBar == null) throw new RuntimeException("Cannot set action bar of activity.");
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
 		
 		recyclerFiles = (RecyclerView) findViewById(R.id.recycler_files);
 		recyclerFiles.setLayoutManager(new LinearLayoutManager(this));
@@ -129,7 +133,11 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 	
 	private void navigateTo(File file)
 	{
-		if(!file.exists() || !file.isDirectory()) throw new RuntimeException("The specified path must be a directory.");
+		if(!file.exists() || !file.isDirectory())
+		{
+			FirebaseCrash.report(new RuntimeException("The specified path must be a directory."));
+			return;
+		}
 		previousDirectories.push(currentDirectory);
 		currentDirectory = file;
 		updateItems();

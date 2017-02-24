@@ -2,8 +2,8 @@ package pl.karol202.paintplus.options;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
@@ -26,7 +26,7 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 	private AsyncManager asyncManager;
 	private int quality;
 	
-	private AsyncTask asyncTask;
+	private BitmapSaveAsyncTask asyncTask;
 	
 	public OptionFileSave(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
@@ -60,7 +60,8 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 		asyncManager.block(this);
 		
 		BitmapSaveParams params = new BitmapSaveParams(this, image.getFullImage(), filePath, quality);
-		asyncTask = new BitmapSaveAsyncTask().execute(params);
+		asyncTask = new BitmapSaveAsyncTask();
+		asyncTask.execute(params);
 	}
 	
 	@Override
@@ -77,8 +78,9 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 	}
 	
 	@Override
-	public void onBitmapSaved()
+	public void onBitmapSaved(boolean saved)
 	{
 		asyncManager.unblock(this);
+		Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
 	}
 }

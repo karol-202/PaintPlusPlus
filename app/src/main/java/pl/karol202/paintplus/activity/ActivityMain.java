@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
 
 public class ActivityMain extends AppCompatActivity
 {
+	private FirebaseAnalytics firebaseAnalytics;
+	
 	private Toolbar toolbar;
 
 	@Override
@@ -17,6 +20,8 @@ public class ActivityMain extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);

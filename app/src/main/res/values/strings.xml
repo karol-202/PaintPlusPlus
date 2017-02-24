@@ -183,4 +183,5 @@
 	<string name="contrast">Contrast</string>
 	
 	<string name="color_mode_default" translatable="false">RGB</string>
+	<string name="message_cannot_save_file">Can\'t save file</string>
 </resources>

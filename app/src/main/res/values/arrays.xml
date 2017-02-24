@@ -4,6 +4,6 @@
 		<item>RGB</item>
 		<item>HSV</item>
 		<item>HSL</item>
-		<item>CMYK255</item>
+		<item>CMYK</item>
 	</string-array>
 </resources>
