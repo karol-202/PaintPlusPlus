@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/size_tool"
+		android:text="@string/tool_size"
 		android:id="@+id/text_marker_size"
 		android:paddingBottom="4dp"
 		android:layout_marginStart="16dp"

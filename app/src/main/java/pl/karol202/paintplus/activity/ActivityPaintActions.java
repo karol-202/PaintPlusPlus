@@ -143,7 +143,7 @@ public class ActivityPaintActions
 			new OptionLayerOpen(activity, image).execute();
 			return true;
 		case R.id.action_save_layer:
-			new OptionLayerSave(activity, image).execute();
+			new OptionLayerSave(activity, image, activity.getAsyncManager()).execute();
 			return true;
 		case R.id.action_resize_layer:
 			new OptionLayerResize(activity, image).execute();

@@ -119,6 +119,12 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
 	
+	@Override
+	public int getMessage()
+	{
+		return R.string.dialog_fill_message;
+	}
+	
 	public float getFillThreshold()
 	{
 		return fillThreshold;

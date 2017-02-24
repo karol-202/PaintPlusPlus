@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityPaint.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileSave;
@@ -67,6 +68,12 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 	{
 		asyncTask.cancel(true);
 		asyncManager.unblock(this);
+	}
+	
+	@Override
+	public int getMessage()
+	{
+		return R.string.dialog_save_message;
 	}
 	
 	@Override

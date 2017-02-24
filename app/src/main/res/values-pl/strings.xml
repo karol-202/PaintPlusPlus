@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Paint++</string>
+	<string name="activity_main">Paint++</string>
+	<string name="activity_file_open">Otwórz plik</string>
+	<string name="activity_file_save">Zapisz plik</string>
+	<string name="activity_settings">Ustawienia</string>
+	
+	<string name="action_drawer_open">Panel narzędzi otwarty</string>
+	<string name="action_drawer_close">Panel narzędzi zamknięty</string>
+	<string name="properties">Właściwości</string>
+	
+	<string name="dialog_new_image">Nowy obraz</string>
+	<string name="dialog_resize_image">Zmień wymiary</string>
+	<string name="dialog_scale_image">Skaluj obraz</string>
+	<string name="dialog_flip_image">Odbij obraz</string>
+	<string name="dialog_rotate_image">Obróć obraz</string>
+	<string name="dialog_new_layer">Nowa warstwa</string>
+	<string name="dialog_resize_layer">Zmień wymiary</string>
+	<string name="dialog_scale_layer">Skaluj warstwę</string>
+	<string name="dialog_flip_layer">Odbij warstwę</string>
+	<string name="dialog_rotate_layer">Obróć warstwę</string>
+	<string name="dialog_replace_file">Zamienić plik?</string>
+	<string name="dialog_wait">Proszę czekać</string>
+	<string name="dialog_fill_message">Trwa wypełnianie…</string>
+	<string name="dialog_layer_name">Podaj nazwę warstwy</string>
+	<string name="dialog_layer_delete">Usunąć warstwę?</string>
+	<string name="dialog_layer_properties">Właściwości warstwy</string>
+	<string name="dialog_color_curves_rgb">Krzywe kolorów RGB</string>
+	<string name="dialog_color_curves_hsv">Krzywe kolorów HSV</string>
+	<string name="dialog_colors_brightness">Ustawienia jasności</string>
+	
+	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
+	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
+	<string name="preference_view_smooth">Wygładzanie wyświetlanego obrazu</string>
+	<string name="preference_view_smooth_summary">Wygładzanie powiększanych obrazów</string>
+	<string name="preference_color_mode">Sposób wyboru koloru</string>
+	<string name="preference_color_mode_dialog">Sposób wyboru koloru</string>
+	
+	<string name="action_layers">Warstwy</string>
+	<string name="action_tool">Narzędzie</string>
+	
+	<string name="action_file">Plik</string>
+	<string name="action_new_image">Nowy obraz</string>
+	<string name="action_capture_photo">Zrób zdjęcie</string>
+	<string name="action_open_image">Otwórz plik</string>
+	<string name="action_save_image">Zapisz plik</string>
+	
+	<string name="action_edit">Edycja</string>
+	<string name="action_cut">Wytnij</string>
+	<string name="action_copy">Kopiuj</string>
+	<string name="action_paste">Wklej</string>
+	
+	<string name="action_image">Obraz</string>
+	<string name="action_resize_image">Zmień wymiary obrazu</string>
+	<string name="action_scale_image">Skaluj obraz</string>
+	<string name="action_flip_image">Odbij obraz</string>
+	<string name="action_rotate_image">Obróć obraz</string>
+	
+	<string name="action_layer">Warstwa</string>
+	<string name="action_new_layer">Nowa warstwa</string>
+	<string name="action_open_layer">Otwórz warstwę</string>
+	<string name="action_save_layer">Zapisz warstwę</string>
+	<string name="action_resize_layer">Zmień wymiary warstwy</string>
+	<string name="action_scale_layer">Skaluj warstwę</string>
+	<string name="action_flip_layer">Odbij warstwę</string>
+	<string name="action_rotate_layer">Obróć warstwę</string>
+	
+	<string name="action_selection">Zaznaczenie</string>
+	<string name="action_select_all">Zaznacz wszystko</string>
+	<string name="action_select_nothing">Usuń zaznaczenie</string>
+	<string name="action_revert_selection">Odwróć zazanaczenie</string>
+	
+	<string name="action_colors">Kolory</string>
+	<string name="action_colors_invert">Odwróć kolory</string>
+	<string name="action_colors_brightness">Jasność</string>
+	<string name="action_color_curves_rgb">Krzywe kolorów RGB</string>
+	<string name="action_color_curves_hsv">Krzywe kolorów HSV</string>
+	
+	<string name="action_settings">Ustawienia</string>
+	
+	<string name="tool_pan">Widok</string>
+	<string name="tool_marker">Pisak</string>
+	<string name="tool_brush">Pędzel</string>
+	<string name="tool_fill">Wypełnienie</string>
+	<string name="tool_shape">Figury geometryczne</string>
+	<string name="tool_selection">Zaznaczenie</string>
+	<string name="tool_color_pick">Pobierz kolor</string>
+	<string name="tool_drag">Przesunięcie warstwy</string>
+	<string name="tool_rubber">Gumka</string>
+	
+	<string name="shape_line">Linia</string>
+	<string name="shape_circle">Okrąg</string>
+	<string name="shape_polygon">Wielokąt foremny</string>
+	
+	<string name="line_cap_round">Zaokrąglone</string>
+	<string name="line_cap_square">Kwadratowe</string>
+	<string name="line_cap_butt">Ucięte</string>
+	
+	<string name="selection_mode_new">Zastąp</string>
+	<string name="selection_mode_add">Dodaj</string>
+	<string name="selection_mode_subtract">Odejmij</string>
+	<string name="selection_mode_multiply">Część wspólna</string>
+	
+	<string name="layer_properties">Właściwości</string>
+	<string name="layer_change_name">Zmień nazwę</string>
+	<string name="layer_duplicate">Duplikuj</string>
+	<string name="layer_join">Połącz w dół</string>
+	<string name="layer_delete">Usuń</string>
+	
+	<string name="layer_mode_standard">Standardowy</string>
+	<string name="layer_mode_add">Suma</string>
+	<string name="layer_mode_multiply">Iloczyn</string>
+	
+	<string name="choice_of_tool">Wybór narzędzia</string>
+	<string name="tool_size">Wielkość</string>
+	<string name="image_x">X</string>
+	<string name="image_y">Y</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Anuluj</string>
+	<string name="keep_ratio">Zachowaj współczynnik proporcji</string>
+	<string name="image_width">Szerokość</string>
+	<string name="image_height">Wysokość</string>
+	<string name="brush_shape_offset">Odstęp</string>
+	<string name="message_too_big">Podane wymiary są za duże, aby utworzyć obraz</string>
+	<string name="scaling_smooth">Wygładź</string>
+	<string name="direction">Kierunek</string>
+	<string name="direction_horizontal">Poziomo</string>
+	<string name="direction_vertical">Pionowo</string>
+	<string name="angle">Kąt</string>
+	<string name="zoom">Zoom</string>
+	<string name="center_view">Wyśrodkuj</string>
+	<string name="unknown">Nieznany</string>
+	<string name="file_back">Powrót</string>
+	<string name="save">Zapisz</string>
+	<string name="save_file_name">Wpisz nazwę</string>
+	<string name="unsupported_file_format">Ten format pliku nie jest obsługiwany</string>
+	<string name="replace_file_text">Plik o podanej nazwie już istnieje. Czy chcesz go zamienić?</string>
+	<string name="replace">Zamień</string>
+	<string name="fill_threshold">Progowanie</string>
+	<string name="marker_smooth">Wygładź</string>
+	<string name="fill_warning">Wypełnianie dużych obszarów może chwilę potrwać.</string>
+	<string name="shape">Kształt</string>
+	<string name="line_width">Grubość</string>
+	<string name="line_cap">Zakończenie</string>
+	<string name="apply">Zatwierdź</string>
+	<string name="circle_fill">Wypełnij</string>
+	<string name="circle_width">Grubość</string>
+	<string name="shapes_smooth">Wygładź</string>
+	<string name="polygon_sides">Ilość boków</string>
+	<string name="polygon_fill">Wypełnij</string>
+	<string name="polygon_width">Grubość</string>
+	<string name="selection_mode">Tryb zaznaczania</string>
+	<string name="error_polygon_too_few_sides">Za mało boków</string>
+	<string name="error_polygon_too_many_sides">Za dużo boków</string>
+	<string name="pick_average">Próbkuj średnią kolorów</string>
+	<string name="pick_average_size">Wielkość</string>
+	<string name="translucency">Przezrocz.</string>
+	<string name="layers">Warstwy</string>
+	<string name="layer_name">Nazwa</string>
+	<string name="message_invalid_bounds">Podane wymiary są nieprawidłowe</string>
+	<string name="new_layer_name">Nowa warstwa</string>
+	<string name="message_flip_direction">Wybierz kierunek, w którym ma nastąpić odbicie</string>
+	<string name="rubber_strength">Siła</string>
+	<string name="rubber_smooth">Wygładź</string>
+	<string name="message_cannot_open_file">Nie można otworzyć pliku</string>
+	<string name="pasted_layer">Wklejona warstwa</string>
+	<string name="duplicate">\u0020Duplikat</string>
+	<string name="too_many_layers">Za dużo warstw!</string>
+	<string name="layer_mode">Tryb mieszania</string>
+	<string name="layer_opacity">Widoczność</string>
+	<string name="curves_channel_in">Kanał wejściowy</string>
+	<string name="curves_channel_out">Kanał wyjściowy</string>
+	<string name="preview">Podgląd</string>
+	<string name="channel__red">Czerwony</string>
+	<string name="channel__green">Zielony</string>
+	<string name="channel__blue">Niebieski</string>
+	<string name="channel__hue">Barwa</string>
+	<string name="channel__saturation">Nasycenie</string>
+	<string name="channel__value">Jasność</string>
+	<string name="restore">Przywróć</string>
+	<string name="brightness">Jasność</string>
+	<string name="contrast">Kontrast</string>
+	
+	<string name="color_mode_default">RGB</string>
+	<string name="dialog_save_message">Trwa zapisywanie…</string>
+</resources>

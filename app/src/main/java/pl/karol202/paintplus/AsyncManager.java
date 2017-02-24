@@ -31,7 +31,7 @@ public class AsyncManager implements DialogInterface.OnCancelListener
 		protected void onPostExecute(Void result)
 		{
 			super.onPostExecute(result);
-			if(blocker != null) showProgressDialog();
+			if(blocker != null) showProgressDialog(blocker.getMessage());
 		}
 	}
 	
@@ -64,10 +64,10 @@ public class AsyncManager implements DialogInterface.OnCancelListener
 		return true;
 	}
 	
-	private void showProgressDialog()
+	private void showProgressDialog(int messageId)
 	{
-		String title = context.getString(R.string.dialog_fill);
-		String message = context.getString(R.string.dialog_fill_message);
+		String title = context.getString(R.string.dialog_wait);
+		String message = context.getString(messageId);
 		dialog = ProgressDialog.show(context, title, message, true, true, this);
 	}
 	

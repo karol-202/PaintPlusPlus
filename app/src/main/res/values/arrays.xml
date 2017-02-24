@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="color_modes">
+		<item>RGB</item>
+		<item>HSV</item>
+		<item>HSL</item>
+		<item>CMYK255</item>
+	</string-array>
+</resources>
