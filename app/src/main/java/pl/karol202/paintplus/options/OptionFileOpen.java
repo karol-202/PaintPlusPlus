@@ -5,13 +5,14 @@ import android.graphics.Bitmap;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
 
 import static android.app.Activity.RESULT_OK;
 
-public class OptionFileOpen extends Option implements ActivityPaint.ActivityResultListener
+public class OptionFileOpen extends Option implements ActivityResultListener
 {
 	private static final int REQUEST_OPEN_FILE = 1;
 	

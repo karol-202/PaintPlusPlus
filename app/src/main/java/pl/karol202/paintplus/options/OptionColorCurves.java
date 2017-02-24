@@ -17,6 +17,7 @@ import pl.karol202.paintplus.color.ColorChannel;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.ColorChannelsAdapter;
 import pl.karol202.paintplus.color.ColorCurvesView;
+import pl.karol202.paintplus.color.OnCurveEditListener;
 import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
@@ -29,8 +30,7 @@ import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
 import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
 
 public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener,
-														 View.OnTouchListener, View.OnClickListener,
-														 ColorCurvesView.OnCurveEditListener
+														 View.OnTouchListener, View.OnClickListener, OnCurveEditListener
 {
 	private ColorChannelType channelType;
 	private ColorChannelsAdapter adapterIn;

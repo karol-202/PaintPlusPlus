@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
@@ -13,7 +14,7 @@ import pl.karol202.paintplus.image.layer.Layer;
 
 import static android.app.Activity.RESULT_OK;
 
-public class OptionLayerOpen extends Option implements ActivityPaint.ActivityResultListener
+public class OptionLayerOpen extends Option implements ActivityResultListener
 {
 	private static final int REQUEST_OPEN_LAYER = 3;
 	
