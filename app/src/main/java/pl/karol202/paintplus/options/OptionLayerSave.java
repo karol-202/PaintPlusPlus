@@ -15,6 +15,7 @@ import pl.karol202.paintplus.file.BitmapSaveAsyncTask;
 import pl.karol202.paintplus.file.BitmapSaveParams;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.recent.OnFileEditListener;
 import pl.karol202.paintplus.settings.ActivitySettings;
 
 import static android.app.Activity.RESULT_OK;
@@ -24,20 +25,23 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	private static final int REQUEST_SAVE_LAYER = 4;
 	
 	private ActivityPaint activity;
+	private OnFileEditListener listener;
 	private AsyncManager asyncManager;
 	private int quality;
 	
 	private AsyncTask asyncTask;
 	
-	public OptionLayerSave(ActivityPaint activity, Image image, AsyncManager asyncManager)
+	public OptionLayerSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
 		super(activity, image);
 		this.activity = activity;
-		this.activity.registerActivityResultListener(REQUEST_SAVE_LAYER, this);
 		this.asyncManager = asyncManager;
+		this.listener = listener;
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 		this.quality = preferences.getInt(ActivitySettings.KEY_JPG_QUALITY, 100);
+		
+		this.activity.registerActivityResultListener(REQUEST_SAVE_LAYER, this);
 	}
 	
 	@Override
@@ -80,9 +84,10 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	}
 	
 	@Override
-	public void onBitmapSaved(boolean saved)
+	public void onBitmapSaved(boolean saved, String filePath)
 	{
 		asyncManager.unblock(this);
-		Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
+		if(!saved) Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
+		else if(listener != null) listener.onFileEdited(filePath);
 	}
 }

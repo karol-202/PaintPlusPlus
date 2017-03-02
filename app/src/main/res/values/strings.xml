@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name" translatable="false">Paint++</string>
+	<string name="app_name">Paint++</string>
 	<string name="activity_main">Paint++</string>
 	<string name="activity_file_open">Open file</string>
 	<string name="activity_file_save">Save file</string>
@@ -182,6 +182,7 @@
 	<string name="brightness">Brightness</string>
 	<string name="contrast">Contrast</string>
 	
-	<string name="color_mode_default" translatable="false">RGB</string>
+	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Can\'t save file</string>
+	<string name="open">Open</string>
 </resources>

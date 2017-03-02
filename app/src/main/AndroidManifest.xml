@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
 	    android:largeHeap="true">
 		<activity
-            android:name=".activity.ActivityMain"
+            android:name=".recent.ActivityRecent"
             android:label="@string/activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".activity.ActivityPaint"
-            android:label="@string/activity_main" />
+            android:label="@string/activity_main"/>
 		<activity
 			android:name=".file.ActivityFileOpen"
 			android:label="@string/activity_file_open" />

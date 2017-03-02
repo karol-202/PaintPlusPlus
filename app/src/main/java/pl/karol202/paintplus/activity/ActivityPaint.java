@@ -19,6 +19,9 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.options.OptionFileOpen;
+import pl.karol202.paintplus.recent.OnFileEditListener;
+import pl.karol202.paintplus.recent.RecentImageCreator;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
@@ -38,6 +41,8 @@ public class ActivityPaint extends AppCompatActivity
 	private AsyncManager asyncManager;
 	private AppDataFragment dataFragment;
 	private ActionBar actionBar;
+	private String initPath;
+	private RecentImageCreator recentImageCreator;
 
 	private ViewGroup mainContainer;
 	private Toolbar toolbar;
@@ -47,6 +52,7 @@ public class ActivityPaint extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		readArguments(savedInstanceState);
 		GraphicsHelper.init(this);
 		
 		actions = new ActivityPaintActions(this);
@@ -68,6 +74,7 @@ public class ActivityPaint extends AppCompatActivity
 		fragments = getFragmentManager();
 		resultListeners = new HashMap<>();
 		asyncManager = new AsyncManager(this);
+		recentImageCreator = new RecentImageCreator(this);
 		
 		mainContainer = (ViewGroup) findViewById(R.id.main_container);
 		
@@ -84,6 +91,11 @@ public class ActivityPaint extends AppCompatActivity
 		layers.initLayers();
 		
 		restoreInstanceState(savedInstanceState);
+	}
+	
+	private void readArguments(Bundle bundle)
+	{
+		if(bundle != null) initPath = bundle.getString("path");
 	}
 	
 	private void initSystemUIVisibility()
@@ -144,6 +156,13 @@ public class ActivityPaint extends AppCompatActivity
 		paintView.init(this);
 		layers.postInitLayers();
 		drawers.postInitDrawers();
+		
+		loadImageIfPathIsPresent();
+	}
+	
+	private void loadImageIfPathIsPresent()
+	{
+		if(initPath != null) new OptionFileOpen(this, getImage(), recentImageCreator).execute(initPath);
 	}
 	
 	@Override
@@ -289,6 +308,11 @@ public class ActivityPaint extends AppCompatActivity
 	AsyncManager getAsyncManager()
 	{
 		return asyncManager;
+	}
+	
+	OnFileEditListener getFileEditListener()
+	{
+		return recentImageCreator;
 	}
 	
 	public ViewGroup getMainContainer()

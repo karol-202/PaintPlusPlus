@@ -48,6 +48,7 @@ public class ImageLoader
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			FirebaseCrash.report(new RuntimeException("Cannot save bitmap to file.", e));
 			return false;
 		}
@@ -63,7 +64,11 @@ public class ImageLoader
 		case "jpeg": return CompressFormat.JPEG;
 		case "png": return CompressFormat.PNG;
 		case "webp": return CompressFormat.WEBP;
-		default: throw new RuntimeException("Unsupported format: " + extension);
+		default:
+			Exception e =  new IllegalArgumentException("Unsupported format: " + extension);
+			e.printStackTrace();
+			FirebaseCrash.report(e);
+			return null;
 		}
 	}
 }

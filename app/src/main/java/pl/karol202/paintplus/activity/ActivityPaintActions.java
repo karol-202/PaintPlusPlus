@@ -107,10 +107,10 @@ class ActivityPaintActions
 			new OptionFileCapturePhoto(activity, image).execute();
 			return true;
 		case R.id.action_open_image:
-			new OptionFileOpen(activity, image).execute();
+			new OptionFileOpen(activity, image, activity.getFileEditListener()).execute();
 			return true;
 		case R.id.action_save_image:
-			new OptionFileSave(activity, image, activity.getAsyncManager()).execute();
+			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
 			return true;
 		
 		case R.id.action_cut:
@@ -142,7 +142,7 @@ class ActivityPaintActions
 			new OptionLayerOpen(activity, image).execute();
 			return true;
 		case R.id.action_save_layer:
-			new OptionLayerSave(activity, image, activity.getAsyncManager()).execute();
+			new OptionLayerSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
 			return true;
 		case R.id.action_resize_layer:
 			new OptionLayerResize(activity, image).execute();

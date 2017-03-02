@@ -9,6 +9,7 @@ import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.recent.OnFileEditListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -17,11 +18,13 @@ public class OptionFileOpen extends Option implements ActivityResultListener
 	private static final int REQUEST_OPEN_FILE = 1;
 	
 	private ActivityPaint activity;
+	private OnFileEditListener listener;
 	
-	public OptionFileOpen(ActivityPaint activity, Image image)
+	public OptionFileOpen(ActivityPaint activity, Image image, OnFileEditListener listener)
 	{
 		super(activity, image);
 		this.activity = activity;
+		this.listener = listener;
 		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
 	}
 	
@@ -32,19 +35,31 @@ public class OptionFileOpen extends Option implements ActivityResultListener
 		activity.startActivityForResult(intent, REQUEST_OPEN_FILE);
 	}
 	
-	@Override
-	public void onActivityResult(int resultCode, Intent data)
+	public void execute(String filePath)
 	{
-		activity.unregisterActivityResultListener(REQUEST_OPEN_FILE);
-		if(resultCode != RESULT_OK) return;
-		String filePath = data.getStringExtra("filePath");
-		
+		openFile(filePath);
+	}
+	
+	private void openFile(String filePath)
+	{
 		Bitmap bitmap = ImageLoader.openBitmap(filePath);
 		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 		else
 		{
 			image.openImage(bitmap);
 			image.centerView();
+			
+			if(listener != null)
+				listener.onFileEdited(filePath);
 		}
+	}
+	
+	@Override
+	public void onActivityResult(int resultCode, Intent data)
+	{
+		activity.unregisterActivityResultListener(REQUEST_OPEN_FILE);
+		if(resultCode != RESULT_OK) return;
+		String filePath = data.getStringExtra("filePath");
+		openFile(filePath);
 	}
 }
