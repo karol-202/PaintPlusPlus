@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class RecentLoader
 {
@@ -46,6 +47,8 @@ class RecentLoader
 			
 			createParser(inputStream);
 			readImages();
+			
+			inputStream.close();
 		}
 		catch(XmlPullParserException | IOException | ParseException e)
 		{
@@ -70,7 +73,7 @@ class RecentLoader
 	private File getFile() throws IOException
 	{
 		File file = new File(context.getFilesDir(), FILENAME);
-		if(file.exists()) file.createNewFile();
+		file.createNewFile();
 		return file;
 	}
 	
@@ -85,7 +88,7 @@ class RecentLoader
 	private void readImages() throws IOException, XmlPullParserException, ParseException
 	{
 		parser.require(XmlPullParser.START_TAG, null, "images");
-		while(parser.next() != XmlPullParser.END_TAG)
+		while(parser.next() != XmlPullParser.END_DOCUMENT)
 		{
 			if(parser.getEventType() != XmlPullParser.START_TAG) continue;
 			String name = parser.getName();
@@ -152,11 +155,16 @@ class RecentLoader
 			OutputStream outputStream = createOutputStream();
 			createSerializer(outputStream);
 			saveImages();
+			
+			outputStream.close();
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
+		
+		load();
+		System.out.println("u");
 	}
 	
 	private OutputStream createOutputStream() throws IOException
@@ -188,8 +196,21 @@ class RecentLoader
 		serializer.endTag(null, "image");
 	}
 	
-	public void addRecentImage(RecentImage image)
+	void addOrUpdateRecentImage(RecentImage image)
 	{
-		images.add(image);
+		if(!images.contains(image)) images.add(image);
+		else
+		{
+			int indexOfExisting = images.indexOf(image);
+			RecentImage existing = images.get(indexOfExisting);
+			existing.setDate(image.getDate());
+		}
+		Collections.sort(images);
+		Collections.reverse(images);
+	}
+	
+	void removeRecentImage(int imageId)
+	{
+		images.remove(imageId);
 	}
 }

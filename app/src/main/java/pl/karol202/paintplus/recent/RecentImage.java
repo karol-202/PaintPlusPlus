@@ -23,6 +23,26 @@ class RecentImage implements Comparable<RecentImage>
 	}
 	
 	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		RecentImage that = (RecentImage) o;
+		
+		if(path != null ? !path.equals(that.path) : that.path != null) return false;
+		return name != null ? name.equals(that.name) : that.name == null;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = path != null ? path.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
+	}
+	
+	@Override
 	public int compareTo(RecentImage o)
 	{
 		if(date == o.date) return 0;
@@ -47,5 +67,10 @@ class RecentImage implements Comparable<RecentImage>
 	long getDate()
 	{
 		return date;
+	}
+	
+	void setDate(long date)
+	{
+		this.date = date;
 	}
 }

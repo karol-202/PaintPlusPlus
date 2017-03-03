@@ -16,7 +16,7 @@ public class RecentImageCreator implements OnFileEditListener
 	{
 		RecentLoader loader = new RecentLoader(context);
 		loader.load();
-		loader.addRecentImage(createRecentImage(path));
+		loader.addOrUpdateRecentImage(createRecentImage(path));
 		loader.save();
 	}
 	

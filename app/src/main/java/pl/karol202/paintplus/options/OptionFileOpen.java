@@ -25,12 +25,13 @@ public class OptionFileOpen extends Option implements ActivityResultListener
 		super(activity, image);
 		this.activity = activity;
 		this.listener = listener;
-		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
 	}
 	
 	@Override
 	public void execute()
 	{
+		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
+		
 		Intent intent = new Intent(context, ActivityFileOpen.class);
 		activity.startActivityForResult(intent, REQUEST_OPEN_FILE);
 	}

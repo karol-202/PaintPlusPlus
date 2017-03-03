@@ -6,15 +6,45 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.image.layer.LayersLayoutManager;
 
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
+
 public class ActivityRecent extends AppCompatActivity implements OnImageSelectListener, View.OnClickListener
 {
+	private class SwipeCallback extends ItemTouchHelper.SimpleCallback
+	{
+		public SwipeCallback()
+		{
+			super(0, LEFT | RIGHT);
+		}
+		
+		@Override
+		public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+		                      RecyclerView.ViewHolder target)
+		{
+			return false;
+		}
+		
+		@Override
+		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+		{
+			RecentAdapter.ViewHolder holder = (RecentAdapter.ViewHolder) viewHolder;
+			int imageId = holder.getAdapterPosition();
+			loader.removeRecentImage(imageId);
+			loader.save();
+			adapter.notifyItemRemoved(imageId);
+		}
+	}
+	
 	private RecentAdapter adapter;
+	private RecentLoader loader;
 	
 	private Toolbar toolbar;
 	private RecyclerView recyclerRecent;
@@ -24,10 +54,10 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_recent);
 		
 		FirebaseAnalytics.getInstance(this);
-		RecentLoader loader = new RecentLoader(this);
+		loader = new RecentLoader(this);
 		adapter = new RecentAdapter(this, loader.load(), this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -36,15 +66,23 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		recyclerRecent = (RecyclerView) findViewById(R.id.recycler_recent);
 		recyclerRecent.setAdapter(adapter);
 		recyclerRecent.setLayoutManager(new LayersLayoutManager(this));
+		attachSwipingFeature();
 		
 		buttonNewImage = (FloatingActionButton) findViewById(R.id.button_new_image);
 		buttonNewImage.setOnClickListener(this);
+	}
+	
+	private void attachSwipingFeature()
+	{
+		ItemTouchHelper helper = new ItemTouchHelper(new SwipeCallback());
+		helper.attachToRecyclerView(recyclerRecent);
 	}
 	
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
+		loader.load();
 		adapter.notifyDataSetChanged();
 	}
 	

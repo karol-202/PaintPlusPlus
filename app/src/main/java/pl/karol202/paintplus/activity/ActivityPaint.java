@@ -52,7 +52,7 @@ public class ActivityPaint extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		readArguments(savedInstanceState);
+		readArguments(getIntent().getExtras());
 		GraphicsHelper.init(this);
 		
 		actions = new ActivityPaintActions(this);
