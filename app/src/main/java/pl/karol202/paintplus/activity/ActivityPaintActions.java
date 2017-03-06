@@ -74,8 +74,12 @@ class ActivityPaintActions
 	private void prepareFileSaveOption(Menu menu)
 	{
 		String state = Environment.getExternalStorageState();
-		boolean enable = state.equals(Environment.MEDIA_MOUNTED);
-		menu.findItem(R.id.action_save_image).setEnabled(enable);
+		boolean savingAs = state.equals(Environment.MEDIA_MOUNTED);
+		menu.findItem(R.id.action_save_image_as).setEnabled(savingAs);
+		menu.findItem(R.id.action_save_layer).setEnabled(savingAs);
+		
+		boolean knownPath = image.getLastPath() != null;
+		menu.findItem(R.id.action_save_image).setEnabled(savingAs && knownPath);
 	}
 	
 	private void prepareClipboardOptions(Menu menu)
@@ -110,6 +114,10 @@ class ActivityPaintActions
 			new OptionFileOpen(activity, image, activity.getFileEditListener()).execute();
 			return true;
 		case R.id.action_save_image:
+			String path = image.getLastPath();
+			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(path);
+			return true;
+		case R.id.action_save_image_as:
 			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
 			return true;
 		

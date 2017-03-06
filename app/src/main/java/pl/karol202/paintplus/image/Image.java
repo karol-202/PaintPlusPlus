@@ -30,6 +30,7 @@ public class Image
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
+	private String lastPath;
 	private ArrayList<Layer> layers;
 	private int selectedLayer;
 	private int width;
@@ -63,6 +64,7 @@ public class Image
 	
 	public void newImage(int width, int height)
 	{
+		this.lastPath = null;
 		this.width = width;
 		this.height = height;
 		
@@ -220,6 +222,16 @@ public class Image
 	public String getDefaultLayerName()
 	{
 		return DEFAULT_LAYER_NAME;
+	}
+	
+	public String getLastPath()
+	{
+		return lastPath;
+	}
+	
+	public void setLastPath(String lastPath)
+	{
+		this.lastPath = lastPath;
 	}
 	
 	public ArrayList<Layer> getLayers()

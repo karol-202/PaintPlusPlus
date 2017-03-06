@@ -185,4 +185,5 @@
 	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Can\'t save file</string>
 	<string name="open">Open</string>
+    <string name="action_save_image_as">Save image as</string>
 </resources>

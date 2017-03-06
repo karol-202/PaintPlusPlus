@@ -48,6 +48,7 @@ public class OptionFileOpen extends Option implements ActivityResultListener
 		else
 		{
 			image.openImage(bitmap);
+			image.setLastPath(filePath);
 			image.centerView();
 			
 			if(listener != null)

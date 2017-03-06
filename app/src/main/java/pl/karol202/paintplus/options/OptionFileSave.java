@@ -50,6 +50,11 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 		activity.startActivityForResult(intent, REQUEST_SAVE_FILE);
 	}
 	
+	public void execute(String filePath)
+	{
+		saveBitmapAsynchronously(filePath);
+	}
+	
 	@Override
 	public void onActivityResult(int resultCode, Intent data)
 	{
@@ -61,6 +66,7 @@ public class OptionFileSave extends Option implements ActivityResultListener, As
 	
 	private void saveBitmapAsynchronously(String filePath)
 	{
+		image.setLastPath(filePath);
 		asyncManager.block(this);
 		
 		BitmapSaveParams params = new BitmapSaveParams(this, image.getFullImage(), filePath, quality);
