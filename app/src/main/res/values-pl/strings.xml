@@ -102,6 +102,9 @@
 	<string name="selection_mode_subtract">Odejmij</string>
 	<string name="selection_mode_multiply">Część wspólna</string>
 	
+	<string name="selection_shape_rectangle">Prostokąt</string>
+	<string name="selection_shape_oval">Koło</string>
+	
 	<string name="layer_properties">Właściwości</string>
 	<string name="layer_change_name">Zmień nazwę</string>
 	<string name="layer_duplicate">Duplikuj</string>
@@ -187,4 +190,5 @@
 	<string name="message_cannot_save_file">Nie można zapisać pliku</string>
 	<string name="open">Otwórz</string>
     <string name="action_save_image_as">Zapisz jako</string>
+	<string name="selection_shape">Kształt</string>
 </resources>

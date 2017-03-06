@@ -102,6 +102,9 @@
 	<string name="selection_mode_subtract">Subtract</string>
 	<string name="selection_mode_multiply">Intersect</string>
 	
+	<string name="selection_shape_rectangle">Rectangle</string>
+	<string name="selection_shape_oval">Oval</string>
+	
 	<string name="layer_properties">Properties</string>
 	<string name="layer_change_name">Change name</string>
 	<string name="layer_duplicate">Duplicate</string>
@@ -186,4 +189,5 @@
 	<string name="message_cannot_save_file">Can\'t save file</string>
 	<string name="open">Open</string>
     <string name="action_save_image_as">Save image as</string>
+	<string name="selection_shape">Shape</string>
 </resources>

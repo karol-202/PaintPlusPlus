@@ -7,6 +7,9 @@ import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
+import static pl.karol202.paintplus.tool.selection.ToolSelectionShape.OVAL;
+import static pl.karol202.paintplus.tool.selection.ToolSelectionShape.RECTANGLE;
+
 public class ToolSelection extends Tool
 {
 	private enum MoveType
@@ -19,6 +22,7 @@ public class ToolSelection extends Tool
 	
 	private final int MAX_DISTANCE = 50;
 	
+	private ToolSelectionShape shape;
 	private ToolSelectionMode mode;
 	
 	private OnSelectionEditListener selectionListener;
@@ -35,11 +39,13 @@ public class ToolSelection extends Tool
 	public ToolSelection(Image image)
 	{
 		super(image);
+		this.shape = RECTANGLE;
 		this.mode = ToolSelectionMode.NEW;
 		
 		this.selection = image.getSelection();
 		this.rect = new Rect();
 		this.paint = new Paint();
+		this.paint.setAntiAlias(true);
 		this.paint.setColor(Color.BLACK);
 		this.paint.setStyle(Paint.Style.STROKE);
 		this.paint.setStrokeWidth(2f);
@@ -222,27 +228,16 @@ public class ToolSelection extends Tool
 		}
 	}
 	
-	public void applySelection()
+	void applySelection()
 	{
-		selection.commitSelection(rect, mode.getOp());
+		if(shape == RECTANGLE) selection.commitSelectionRectangle(rect, mode.getOp());
+		else if(shape == OVAL) selection.commitSelectionOval(rect, mode.getOp());
 		cancelSelection();
 	}
 	
-	public void cancelSelection()
+	void cancelSelection()
 	{
 		cleanUp();
-		image.updateImage();
-	}
-	
-	public void selectAll()
-	{
-		selection.selectAll();
-		image.updateImage();
-	}
-	
-	public void selectNothing()
-	{
-		selection.selectNothing();
 		image.updateImage();
 	}
 	
@@ -272,7 +267,8 @@ public class ToolSelection extends Tool
 	public void onScreenDraw(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
-		canvas.drawRect(transformRect(), paint);
+		if(shape == RECTANGLE) canvas.drawRect(transformRect(), paint);
+		else if(shape == OVAL) canvas.drawOval(new RectF(transformRect()), paint);
 	}
 	
 	private Rect transformRect()
@@ -287,7 +283,7 @@ public class ToolSelection extends Tool
 		return newRect;
 	}
 	
-	public void setSelectionListener(OnSelectionEditListener selectionListener)
+	void setSelectionListener(OnSelectionEditListener selectionListener)
 	{
 		this.selectionListener = selectionListener;
 	}
@@ -295,6 +291,16 @@ public class ToolSelection extends Tool
 	public boolean isInEditMode()
 	{
 		return editMode;
+	}
+	
+	public ToolSelectionShape getShape()
+	{
+		return shape;
+	}
+	
+	public void setShape(ToolSelectionShape shape)
+	{
+		this.shape = shape;
 	}
 	
 	public ToolSelectionMode getMode()

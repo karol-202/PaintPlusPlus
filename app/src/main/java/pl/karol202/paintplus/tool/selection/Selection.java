@@ -2,10 +2,13 @@ package pl.karol202.paintplus.tool.selection;
 
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Region.Op;
 
 import java.util.ArrayList;
+
+import static android.graphics.Path.Direction.CW;
 
 public class Selection
 {
@@ -35,7 +38,7 @@ public class Selection
 	
 	public void selectAll()
 	{
-		commitSelection(imageRect, Op.REPLACE);
+		commitSelectionRectangle(imageRect, Op.REPLACE);
 	}
 	
 	public void selectNothing()
@@ -46,12 +49,25 @@ public class Selection
 	
 	public void revert()
 	{
-		commitSelection(imageRect, Op.XOR);
+		commitSelectionRectangle(imageRect, Op.XOR);
 	}
 	
-	public void commitSelection(Rect rect, Op op)
+	void commitSelectionRectangle(Rect rect, Op op)
 	{
 		region.op(rect, op);
+		updatePath();
+	}
+	
+	void commitSelectionOval(Rect rect, Op op)
+	{
+		RectF rectF = new RectF(rect);
+		Path ovalPath = new Path();
+		ovalPath.addOval(rectF, CW);
+		
+		Region ovalRegion = new Region();
+		ovalRegion.setPath(ovalPath, new Region(0, 0, imageRect.right, imageRect.bottom));
+		
+		region.op(ovalRegion, op);
 		updatePath();
 	}
 	

@@ -11,10 +11,12 @@ import pl.karol202.paintplus.tool.ToolProperties;
 public class SelectionProperties extends ToolProperties implements OnItemSelectedListener, OnSelectionEditListener
 {
 	private ToolSelection selection;
-	private SelectionModeAdapter adapter;
+	private SelectionShapeAdapter adapterShape;
+	private SelectionModeAdapter adapterMode;
 	
 	private View view;
-	private Spinner spinner;
+	private Spinner spinnerShape;
+	private Spinner spinnerMode;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -25,12 +27,18 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 		
 		selection = (ToolSelection) tool;
 		selection.setSelectionListener(this);
-		adapter = new SelectionModeAdapter(getActivity());
+		adapterShape = new SelectionShapeAdapter(getActivity());
+		adapterMode = new SelectionModeAdapter(getActivity());
 		
-		spinner = (Spinner) view.findViewById(R.id.spinner_selection_mode);
-		spinner.setAdapter(adapter);
-		spinner.setSelection(selection.getMode().ordinal());
-		spinner.setOnItemSelectedListener(this);
+		spinnerShape = (Spinner) view.findViewById(R.id.spinner_selection_shape);
+		spinnerShape.setAdapter(adapterShape);
+		spinnerShape.setSelection(selection.getShape().ordinal());
+		spinnerShape.setOnItemSelectedListener(this);
+		
+		spinnerMode = (Spinner) view.findViewById(R.id.spinner_selection_mode);
+		spinnerMode.setAdapter(adapterMode);
+		spinnerMode.setSelection(selection.getMode().ordinal());
+		spinnerMode.setOnItemSelectedListener(this);
 		
 		return view;
 	}
@@ -64,6 +72,18 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 	
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+	{
+		if(parent == spinnerShape) onShapeSelected(position);
+		else if(parent == spinnerMode) onModeSelected(position);
+	}
+	
+	private void onShapeSelected(int position)
+	{
+		ToolSelectionShape shape = ToolSelectionShape.values()[position];
+		selection.setShape(shape);
+	}
+	
+	private void onModeSelected(int position)
 	{
 		ToolSelectionMode mode = ToolSelectionMode.values()[position];
 		selection.setMode(mode);
