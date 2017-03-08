@@ -29,6 +29,8 @@
 	<string name="dialog_color_curves_rgb">Krzywe kolorów RGB</string>
 	<string name="dialog_color_curves_hsv">Krzywe kolorów HSV</string>
 	<string name="dialog_colors_brightness">Ustawienia jasności</string>
+	<string name="dialog_set_zoom">Ustaw powiększenie</string>
+	<string name="dialog_save_message">Trwa zapisywanie…</string>
 	
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
@@ -45,6 +47,7 @@
 	<string name="action_capture_photo">Zrób zdjęcie</string>
 	<string name="action_open_image">Otwórz plik</string>
 	<string name="action_save_image">Zapisz plik</string>
+	<string name="action_save_image_as">Zapisz jako</string>
 	
 	<string name="action_edit">Edycja</string>
 	<string name="action_cut">Wytnij</string>
@@ -52,6 +55,9 @@
 	<string name="action_paste">Wklej</string>
 	
 	<string name="action_view">Widok</string>
+	<string name="action_set_zoom">Ustaw powiększenie</string>
+	<string name="action_zoom_default">Domyślne powiększenie</string>
+	<string name="action_image_center">Wyśrodkuj</string>
 	<string name="action_grid">Siatka</string>
 	
 	<string name="action_image">Obraz</string>
@@ -187,11 +193,8 @@
 	<string name="restore">Przywróć</string>
 	<string name="brightness">Jasność</string>
 	<string name="contrast">Kontrast</string>
-	
 	<string name="color_mode_default">RGB</string>
-	<string name="dialog_save_message">Trwa zapisywanie…</string>
 	<string name="message_cannot_save_file">Nie można zapisać pliku</string>
 	<string name="open">Otwórz</string>
-    <string name="action_save_image_as">Zapisz jako</string>
 	<string name="selection_shape">Kształt</string>
 </resources>

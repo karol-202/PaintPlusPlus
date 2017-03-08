@@ -1,41 +1,45 @@
-package pl.karol202.paintplus.tool.pan;
+package pl.karol202.paintplus.options;
 
-import android.os.Bundle;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.tool.pan.PanProperties;
 
 import java.util.Locale;
 
-public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher
+public class OptionSetZoom extends Option implements View.OnClickListener, TextWatcher
 {
-	public static final double SQRT2 = Math.sqrt(2);
-	public static final double MIN_ZOOM = 0.009;
-	public static final double MAX_ZOOM = 16;
-	
-	private ToolPan pan;
 	private double zoom;
 	private boolean dontFireEvent;
 	
+	private AlertDialog alertDialog;
 	private ImageButton buttonZoomOut;
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
-	private Button buttonCenter;
+	
+	public OptionSetZoom(Context context, Image image)
+	{
+		super(context, image);
+	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public void execute()
 	{
-		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.properties_pan, container, false);
-		pan = (ToolPan) tool;
-		zoom = pan.getZoom();
+		LayoutInflater inflater = LayoutInflater.from(context);
+		View view = inflater.inflate(R.layout.dialog_set_zoom, null);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		dialogBuilder.setTitle(R.string.dialog_set_zoom);
+		dialogBuilder.setView(view);
+		dialogBuilder.setPositiveButton(R.string.ok, null);
+		
+		zoom = image.getZoom();
 		
 		buttonZoomOut = (ImageButton) view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
@@ -47,9 +51,8 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		updateZoom(zoom, true);
 		editTextZoom.addTextChangedListener(this);
 		
-		buttonCenter = (Button) view.findViewById(R.id.button_center_view);
-		buttonCenter.setOnClickListener(this);
-		return view;
+		alertDialog = dialogBuilder.create();
+		alertDialog.show();
 	}
 	
 	@Override
@@ -65,7 +68,6 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			zoom = getGreaterZoom();
 			updateZoom(zoom, true);
 		}
-		else if(view == buttonCenter) pan.centerView();
 	}
 	
 	@Override
@@ -93,13 +95,13 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	{
 		dontFireEvent = true;
 		
-		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM, true);
-		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM, true);
+		if(zoom < PanProperties.MIN_ZOOM) updateZoom(PanProperties.MIN_ZOOM, true);
+		else if(zoom > PanProperties.MAX_ZOOM) updateZoom(PanProperties.MAX_ZOOM, true);
 		else
 		{
 			this.zoom = zoom;
 			if(updateText) editTextZoom.setText(zoomToText(zoom));
-			pan.setZoom((float) zoom);
+			image.setZoom((float) zoom);
 		}
 		
 		dontFireEvent = false;
@@ -164,7 +166,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	private double calculateZoomRatio(int position)
 	{
 		int posAbs = Math.abs(position);
-		double fract = Math.pow(SQRT2, posAbs);
+		double fract = Math.pow(PanProperties.SQRT2, posAbs);
 		double round = Math.round(fract * 2) / 2f;
 		if(position >= 0) return round;
 		else return 1 / round;

@@ -77,10 +77,22 @@
 	    app:showAsAction="never">
 	    
 	    <menu>
+		    <item android:id="@+id/action_set_zoom"
+			    android:icon="@drawable/ic_zoom_in_white_24dp"
+			    android:title="@string/action_set_zoom"
+			    android:orderInCategory="1"/>
+		    <item android:id="@+id/action_zoom_default"
+			    android:icon="@drawable/ic_zoom_default_white_24dp"
+			    android:title="@string/action_zoom_default"
+			    android:orderInCategory="2"/>
+		    <item android:id="@+id/action_image_center"
+			    android:icon="@drawable/ic_center_white_24dp"
+			    android:title="@string/action_image_center"
+			    android:orderInCategory="3"/>
 		    <item android:id="@+id/action_grid"
 			    android:icon="@drawable/ic_grid_white_24dp"
 			    android:title="@string/action_grid"
-			    android:orderInCategory="1"
+			    android:orderInCategory="4"
 			    android:checkable="true"
 			    android:checked="true"/>
 	    </menu>

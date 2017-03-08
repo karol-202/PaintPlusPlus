@@ -133,6 +133,15 @@ class ActivityPaintActions
 			image.paste();
 			return true;
 			
+		case R.id.action_set_zoom:
+			new OptionSetZoom(activity, image).execute();
+			return true;
+		case R.id.action_zoom_default:
+			image.setZoom(1f);
+			return true;
+		case R.id.action_image_center:
+			image.centerView();
+			return true;
 		case R.id.action_grid:
 			item.setChecked(!item.isChecked());
 			activity.getPaintView().setGridEnabled(item.isChecked());

@@ -29,6 +29,7 @@
 	<string name="dialog_color_curves_hsv">HSV color curves</string>
 	<string name="dialog_colors_brightness">Brightness settings</string>
 	<string name="dialog_save_message">Saving…</string>
+	<string name="dialog_set_zoom">Set zoom</string>
 	
 	<string name="preference_jpg_quality">JPG save quality</string>
 	<string name="preference_jpg_quality_dialog">JPG save quality</string>
@@ -45,6 +46,7 @@
 	<string name="action_capture_photo">Capture photo</string>
 	<string name="action_open_image">Open image</string>
 	<string name="action_save_image">Save image</string>
+	<string name="action_save_image_as">Save image as</string>
 	
 	<string name="action_edit">Edit</string>
 	<string name="action_cut">Cut</string>
@@ -52,6 +54,9 @@
 	<string name="action_paste">Paste</string>
 	
 	<string name="action_view">View</string>
+	<string name="action_set_zoom">Set zoom</string>
+	<string name="action_zoom_default">Default zoom</string>
+	<string name="action_image_center">Image center</string>
 	<string name="action_grid">Grid</string>
 	
 	<string name="action_image">Image</string>
@@ -187,10 +192,8 @@
 	<string name="restore">Restore</string>
 	<string name="brightness">Brightness</string>
 	<string name="contrast">Contrast</string>
-	
+	<string name="selection_shape">Shape</string>
 	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Can\'t save file</string>
 	<string name="open">Open</string>
-    <string name="action_save_image_as">Save image as</string>
-	<string name="selection_shape">Shape</string>
 </resources>

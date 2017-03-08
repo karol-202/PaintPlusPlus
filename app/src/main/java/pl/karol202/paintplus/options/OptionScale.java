@@ -11,10 +11,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
-
-import static android.content.DialogInterface.BUTTON_POSITIVE;
+import pl.karol202.paintplus.image.Image;
 
 public abstract class OptionScale extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
 {
@@ -32,7 +30,7 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	private float ratio;
 	private boolean dontFireEvent;
 	
-	public OptionScale(Context context, Image image)
+	OptionScale(Context context, Image image)
 	{
 		super(context, image);
 	}
@@ -45,7 +43,7 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
-		dialogBuilder.setNegativeButton(R.string.cancel, this);
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		
 		width = getObjectWidth();
 		height = getObjectHeight();
@@ -77,16 +75,13 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which == BUTTON_POSITIVE)
+		if(which * height > MAX_SIZE)
 		{
-			if(which * height > MAX_SIZE)
-			{
-				Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
-				return;
-			}
-			boolean smooth = checkSmooth.isChecked();
-			applySize(width, height, smooth);
+			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
+			return;
 		}
+		boolean smooth = checkSmooth.isChecked();
+		applySize(width, height, smooth);
 	}
 	
 	protected abstract void applySize(int width, int height, boolean smooth);
