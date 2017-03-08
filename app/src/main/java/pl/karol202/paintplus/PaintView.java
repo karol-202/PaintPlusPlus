@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
@@ -32,10 +33,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private Paint checkerboardPaint;
 	private Shader checkerboardShader;
 	private boolean initialized;
+	private HelpersManager helpersManager;
 	
 	private Matrix checkerboardMatrix;
 	private ArrayList<Layer> reversedLayers;
-	private Bitmap screenBitmap;
 	private Path boundsPath;
 	private Path selectionPath;
 
@@ -69,6 +70,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardPaint = new Paint();
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
+		
+		helpersManager = new HelpersManager(image, getResources());
 	}
 	
 	public void updatePreferences()
@@ -92,6 +95,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		removeClipping(canvas);
 		drawLayerBounds(canvas);
 		drawSelection(canvas);
+		
+		helpersManager.onScreenDraw(canvas);
 	}
 	
 	private void initImage()
@@ -129,7 +134,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private void drawImage(Canvas canvas)
 	{
 		Tool tool = getTool();
-		screenBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap screenBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 		
 		Bitmap toolBitmap = null;
 		if(tool.doesScreenDraw(image.getSelectedLayer() != null))
@@ -270,5 +275,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private Tool getTool()
 	{
 		return activity.getTool();
+	}
+	
+	public void setGridEnabled(boolean enabled)
+	{
+		helpersManager.setGridEnabled(enabled);
 	}
 }

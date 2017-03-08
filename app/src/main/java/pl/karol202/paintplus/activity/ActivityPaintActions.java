@@ -133,6 +133,11 @@ class ActivityPaintActions
 			image.paste();
 			return true;
 			
+		case R.id.action_grid:
+			item.setChecked(!item.isChecked());
+			activity.getPaintView().setGridEnabled(item.isChecked());
+			return true;
+			
 		case R.id.action_resize_image:
 			new OptionImageResize(activity, image).execute();
 			return true;

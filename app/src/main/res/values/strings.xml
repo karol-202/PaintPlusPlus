@@ -51,6 +51,9 @@
 	<string name="action_copy">Copy</string>
 	<string name="action_paste">Paste</string>
 	
+	<string name="action_view">View</string>
+	<string name="action_grid">Grid</string>
+	
 	<string name="action_image">Image</string>
 	<string name="action_resize_image">Resize image</string>
 	<string name="action_scale_image">Scale image</string>

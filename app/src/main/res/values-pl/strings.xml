@@ -51,6 +51,9 @@
 	<string name="action_copy">Kopiuj</string>
 	<string name="action_paste">Wklej</string>
 	
+	<string name="action_view">Widok</string>
+	<string name="action_grid">Siatka</string>
+	
 	<string name="action_image">Obraz</string>
 	<string name="action_resize_image">Zmień wymiary obrazu</string>
 	<string name="action_scale_image">Skaluj obraz</string>

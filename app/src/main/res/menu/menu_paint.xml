@@ -70,10 +70,26 @@
         </menu>
     </item>
 
+    <item android:id="@+id/action_view"
+	    android:icon="@drawable/ic_grid_white_24dp"
+	    android:title="@string/action_view"
+	    android:orderInCategory="7"
+	    app:showAsAction="never">
+	    
+	    <menu>
+		    <item android:id="@+id/action_grid"
+			    android:icon="@drawable/ic_grid_white_24dp"
+			    android:title="@string/action_grid"
+			    android:orderInCategory="1"
+			    android:checkable="true"
+			    android:checked="true"/>
+	    </menu>
+    </item>
+    
     <item android:id="@+id/action_image"
           android:icon="@drawable/ic_image_white_24dp"
           android:title="@string/action_image"
-          android:orderInCategory="7"
+          android:orderInCategory="8"
           app:showAsAction="never">
 
         <menu>
@@ -98,7 +114,7 @@
     <item android:id="@+id/action_layer"
           android:icon="@drawable/ic_layers_white_24dp"
           android:title="@string/action_layer"
-          android:orderInCategory="8"
+          android:orderInCategory="9"
           app:showAsAction="never">
 
         <menu>
@@ -144,7 +160,7 @@
             android:id="@+id/action_selection"
             android:icon="@drawable/ic_select_all_white_24dp"
             android:title="@string/action_selection"
-            android:orderInCategory="9"
+            android:orderInCategory="10"
             app:showAsAction="never">
 
         <menu>
@@ -170,7 +186,7 @@
             android:id="@+id/action_colors"
             android:icon="@drawable/ic_colors_white_24dp"
             android:title="@string/action_colors"
-            android:orderInCategory="10"
+            android:orderInCategory="11"
             app:showAsAction="never">
 
         <menu>
@@ -201,6 +217,6 @@
             android:id="@+id/action_settings"
             android:icon="@drawable/ic_settings_white_24dp"
             android:title="@string/action_settings"
-            android:orderInCategory="11"
+            android:orderInCategory="12"
             app:showAsAction="never"/>
 </menu>
