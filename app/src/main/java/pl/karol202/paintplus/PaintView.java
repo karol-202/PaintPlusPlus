@@ -191,6 +191,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		if(image.getSelectedLayer() == null) return false;
 		float x = (event.getX() / image.getZoom()) + image.getViewX();
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
+		
 		if(getTool().isLayerSpace())
 		{
 			x -= image.getSelectedLayerX();
@@ -198,7 +199,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		}
 		event.setLocation(x, y);
 		
-		boolean result = getTool().onTouch(event);
+		boolean result = getTool().onTouch(event, helpersManager);
 		invalidate();
 		return result;
 	}
@@ -279,6 +280,11 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	public void setGridEnabled(boolean enabled)
 	{
-		helpersManager.setGridEnabled(enabled);
+		helpersManager.getGrid().setEnabled(enabled);
+	}
+	
+	public void setSnapToGrid(boolean enabled)
+	{
+		helpersManager.getGrid().setSnapToGrid(enabled);
 	}
 }

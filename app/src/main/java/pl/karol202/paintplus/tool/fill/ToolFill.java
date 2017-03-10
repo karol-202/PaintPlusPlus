@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.Tool;
@@ -57,14 +58,15 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean isUsingSnapping()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		super.onTouch(event, manager);
 		Layer layer = image.getSelectedLayer();
 		if(event.getX() < 0 || event.getY() < 0 ||
 		   event.getX() > layer.getWidth() - 1 || event.getY() > layer.getHeight() - 1)
@@ -87,6 +89,12 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	private void cancelClipping()
 	{
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return true;
 	}
 	
 	@Override

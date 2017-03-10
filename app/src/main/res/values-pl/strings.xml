@@ -59,6 +59,7 @@
 	<string name="action_zoom_default">Domyślne powiększenie</string>
 	<string name="action_image_center">Wyśrodkuj</string>
 	<string name="action_grid">Siatka</string>
+	<string name="action_snap_to_grid">Przyciąganie do siatki</string>
 	
 	<string name="action_image">Obraz</string>
 	<string name="action_resize_image">Zmień wymiary obrazu</string>

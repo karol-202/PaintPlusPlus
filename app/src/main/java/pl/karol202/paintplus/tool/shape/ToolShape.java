@@ -5,6 +5,7 @@ import android.graphics.Region.Op;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
@@ -64,7 +65,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isUsingSnapping()
 	{
 		return true;
 	}
@@ -76,8 +77,9 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		super.onTouch(event, manager);
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
 			canvas = image.getSelectedCanvas();
@@ -89,6 +91,12 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 			updateClipping(canvas);
 		}
 		return shape.onTouch(event);
+	}
+	
+	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
 	}
 	
 	@Override

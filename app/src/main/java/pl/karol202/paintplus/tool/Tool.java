@@ -1,7 +1,9 @@
 package pl.karol202.paintplus.tool;
 
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.view.MotionEvent;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 
 public abstract class Tool
@@ -21,9 +23,20 @@ public abstract class Tool
 	
 	public abstract boolean isLayerSpace();
 	
-	public abstract boolean isImageLimited();
+	public abstract boolean isUsingSnapping();
 	
-	public abstract boolean onTouch(MotionEvent event);
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
+	{
+		if(isUsingSnapping())
+		{
+			PointF point = new PointF(event.getX(), event.getY());
+			manager.snapPoint(point);
+			event.setLocation(point.x, point.y);
+		}
+		return false;
+	}
+	
+	public abstract boolean isImageLimited();
 	
 	public abstract boolean doesScreenDraw(boolean layerVisible);
 	

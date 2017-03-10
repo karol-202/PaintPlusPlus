@@ -50,6 +50,7 @@ class ActivityPaintActions
 		prepareFileOpenOption(menu);
 		prepareFileSaveOption(menu);
 		prepareClipboardOptions(menu);
+		prepareSnapOptions(menu);
 	}
 	
 	private void setItemsVisibility(Menu menu, boolean visible)
@@ -90,6 +91,14 @@ class ActivityPaintActions
 		
 		Clipboard clipboard = image.getClipboard();
 		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty() || image.getLayersAmount() < Image.MAX_LAYERS);
+	}
+	
+	private void prepareSnapOptions(Menu menu)
+	{
+		boolean grid = menu.findItem(R.id.action_grid).isChecked();
+		MenuItem snapToGrid = menu.findItem(R.id.action_snap_to_grid);
+		snapToGrid.setEnabled(grid);
+		if(!grid) snapToGrid.setChecked(false);
 	}
 	
 	boolean handleAction(MenuItem item)
@@ -145,6 +154,10 @@ class ActivityPaintActions
 		case R.id.action_grid:
 			item.setChecked(!item.isChecked());
 			activity.getPaintView().setGridEnabled(item.isChecked());
+			return true;
+		case R.id.action_snap_to_grid:
+			item.setChecked(!item.isChecked());
+			activity.getPaintView().setSnapToGrid(item.isChecked());
 			return true;
 			
 		case R.id.action_resize_image:

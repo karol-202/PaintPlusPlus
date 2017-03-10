@@ -58,6 +58,7 @@
 	<string name="action_zoom_default">Default zoom</string>
 	<string name="action_image_center">Image center</string>
 	<string name="action_grid">Grid</string>
+	<string name="action_snap_to_grid">Snap to grid</string>
 	
 	<string name="action_image">Image</string>
 	<string name="action_resize_image">Resize image</string>

@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.drag;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.Tool;
@@ -46,13 +47,13 @@ public class ToolDrag extends Tool
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean isUsingSnapping()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
 		float x = event.getX() - image.getViewX();
 		float y = event.getY() - image.getViewY();
@@ -76,6 +77,12 @@ public class ToolDrag extends Tool
 		int deltaTouchY = Math.round(y - oldTouchY);
 		layer.setX(oldLayerX + deltaTouchX);
 		layer.setY(oldLayerY + deltaTouchY);
+	}
+	
+	@Override
+	public boolean isImageLimited()
+	{
+		return false;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.rubber;
 import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.Tool;
@@ -68,7 +69,7 @@ public class ToolRubber extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isUsingSnapping()
 	{
 		return true;
 	}
@@ -80,8 +81,9 @@ public class ToolRubber extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		super.onTouch(event, manager);
 		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
@@ -163,6 +165,12 @@ public class ToolRubber extends Tool
 		pathCreated = false;
 		editStarted = false;
 		layer.setVisibility(oldVisibility);
+	}
+	
+	@Override
+	public boolean isLayerSpace()
+	{
+		return true;
 	}
 	
 	@Override

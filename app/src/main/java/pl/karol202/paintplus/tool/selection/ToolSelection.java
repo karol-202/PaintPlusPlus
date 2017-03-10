@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.selection;
 import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -26,6 +27,7 @@ public class ToolSelection extends Tool
 	private ToolSelectionMode mode;
 	
 	private OnSelectionEditListener selectionListener;
+	private HelpersManager helpersManager;
 	private Selection selection;
 	private Rect rect;
 	private boolean editMode;
@@ -72,7 +74,7 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isUsingSnapping()
 	{
 		return false;
 	}
@@ -84,8 +86,11 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		super.onTouch(event, manager);
+		helpersManager = manager;
+		
 		if(image.getSelectedLayer() == null)
 		{
 			if(editMode) cleanUp();
@@ -102,8 +107,8 @@ public class ToolSelection extends Tool
 		if(!editMode) enableEditMode();
 		if(!rectCreated)
 		{
-			rect.left = x;
-			rect.top = y;
+			setLeft(x);
+			setTop(y);
 		}
 		else
 		{
@@ -152,8 +157,8 @@ public class ToolSelection extends Tool
 	{
 		if(!rectCreated)
 		{
-			rect.right = x;
-			rect.bottom = y;
+			setRight(x);
+			setBottom(y);
 		}
 		else move(x, y);
 	}
@@ -162,8 +167,8 @@ public class ToolSelection extends Tool
 	{
 		if(!rectCreated)
 		{
-			rect.right = x;
-			rect.bottom = y;
+			setRight(x);
+			setBottom(y);
 		}
 		else move(x, y);
 		correctBounds();
@@ -178,38 +183,63 @@ public class ToolSelection extends Tool
 		
 		switch(movingType)
 		{
+		case NONE:
+			break;
 		case LEFT_TOP_CORNER:
-			rect.left += deltaX;
-			rect.top += deltaY;
+			setLeft(rect.left + deltaX);
+			setTop(rect.top + deltaY);
 			break;
 		case RIGHT_TOP_CORNER:
-			rect.right += deltaX;
-			rect.top += deltaY;
+			setRight(rect.right + deltaX);
+			setTop(rect.top + deltaY);
 			break;
 		case LEFT_BOTTOM_CORNER:
-			rect.left += deltaX;
-			rect.bottom += deltaY;
+			setLeft(rect.left + deltaX);
+			setBottom(rect.bottom + deltaY);
 			break;
 		case RIGHT_BOTTOM_CORNER:
-			rect.right += deltaX;
-			rect.bottom += deltaY;
+			setRight(rect.right + deltaX);
+			setBottom(rect.bottom + deltaY);
 			break;
 		case LEFT_SIDE:
-			rect.left += deltaX;
+			setLeft(rect.left + deltaX);
 			break;
 		case TOP_SIDE:
-			rect.top += deltaY;
+			setTop(rect.top + deltaY);
 			break;
 		case RIGHT_SIDE:
-			rect.right += deltaX;
+			setRight(rect.right + deltaX);
 			break;
 		case BOTTOM_SIDE:
-			rect.bottom += deltaY;
+			setBottom(rect.bottom + deltaY);
 			break;
 		case MOVE:
-			rect.offset(deltaX, deltaY);
+			PointF oldCenter = new PointF(rect.centerX(), rect.centerY());
+			PointF newCenter = new PointF(oldCenter.x + deltaX, oldCenter.y + deltaY);
+			helpersManager.snapPoint(newCenter);
+			rect.offset((int) (newCenter.x - oldCenter.x), (int) (newCenter.y - oldCenter.y));
 			break;
 		}
+	}
+	
+	private void setLeft(int left)
+	{
+		rect.left = (int) helpersManager.snapX(left);
+	}
+	
+	private void setTop(int top)
+	{
+		rect.top = (int) helpersManager.snapY(top);
+	}
+	
+	private void setRight(int right)
+	{
+		rect.right = (int) helpersManager.snapX(right);
+	}
+	
+	private void setBottom(int bottom)
+	{
+		rect.bottom = (int) helpersManager.snapY(bottom);
 	}
 	
 	private void correctBounds()
@@ -249,6 +279,12 @@ public class ToolSelection extends Tool
 		rect.top = -1;
 		rect.right = -1;
 		rect.bottom = -1;
+	}
+	
+	@Override
+	public boolean isLayerSpace()
+	{
+		return false;
 	}
 	
 	@Override

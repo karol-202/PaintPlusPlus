@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.pan;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -38,7 +39,7 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isUsingSnapping()
 	{
 		return false;
 	}
@@ -50,8 +51,9 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		super.onTouch(event, manager);
 		float x = event.getX() - image.getViewX();
 		float y = event.getY() - image.getViewY();
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(x, y);
@@ -88,6 +90,12 @@ public class ToolPan extends Tool
 		int yMax = image.getHeight();
 		if(image.getViewY() < yMin) image.setViewY(yMin);
 		else if(image.getViewY() > yMax) image.setViewY(yMax);
+	}
+	
+	@Override
+	public boolean isLayerSpace()
+	{
+		return false;
 	}
 	
 	@Override
