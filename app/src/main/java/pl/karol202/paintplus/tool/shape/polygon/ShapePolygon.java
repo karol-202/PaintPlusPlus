@@ -157,10 +157,6 @@ public class ShapePolygon extends Shape
 			
 			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
 			
-			//float angleDelta = (float) getAngle(current);
-			//angleDelta -= (float) getAngle(draggingStart);
-			//angle = angleAtBeginning + angleDelta;
-			
 			angle = (float) getAngle(new Point((int) result.x, (int) result.y));
 		}
 		else
