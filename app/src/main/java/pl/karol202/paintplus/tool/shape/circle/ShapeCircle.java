@@ -1,15 +1,15 @@
 package pl.karol202.paintplus.tool.shape.circle;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
+import android.graphics.*;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.util.Utils;
 
 public class ShapeCircle extends Shape
 {
@@ -18,6 +18,7 @@ public class ShapeCircle extends Shape
 	private boolean fill;
 	private int circleWidth;
 	
+	private HelpersManager helpersManager;
 	private boolean circleCreated;
 	private Point center;
 	private float radius;
@@ -55,8 +56,9 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		helpersManager = manager;
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
@@ -66,7 +68,7 @@ public class ShapeCircle extends Shape
 	private void onTouchStart(int x, int y)
 	{
 		if(!isInEditMode()) enableEditMode();
-		if(!circleCreated) center = new Point(x, y);
+		if(!circleCreated) setCenterPoint(new Point(x, y));
 		else
 		{
 			float distanceToCenter = calcDistance(center, x, y);
@@ -92,7 +94,9 @@ public class ShapeCircle extends Shape
 	private void onTouchStop(int x, int y)
 	{
 		onTouchMove(x, y);
+		
 		circleCreated = true;
+		draggingStart = null;
 	}
 	
 	private void drag(Point current)
@@ -109,18 +113,41 @@ public class ShapeCircle extends Shape
 		
 		Point newCenter = new Point(centerAtBeginning);
 		newCenter.offset(delta.x, delta.y);
-		center = newCenter;
+		setCenterPoint(newCenter);
 	}
 	
 	private void dragRadius(Point current)
 	{
 		if(draggingStart != null)
 		{
-			float radiusDelta = calcDistance(center, current.x, current.y);
-			radiusDelta -= calcDistance(center, draggingStart.x, draggingStart.y);
-			radius = radiusAtBeginning + radiusDelta;
+			double theta = Math.toRadians(Utils.getAngle(center, current));
+			float rCurrent = calcDistance(center, current.x, current.y);
+			float rDraggingStart = calcDistance(center, draggingStart.x, draggingStart.y);
+			float rBeginning = radiusAtBeginning;
+			
+			float rDelta = rCurrent - rDraggingStart;
+			float rResult = rBeginning + rDelta;
+			
+			float x = (float) (rResult * Math.cos(theta)) + center.x;
+			float y = (float) (rResult * Math.sin(theta)) + center.y;
+			PointF result = new PointF(x, y);
+			helpersManager.snapPoint(result);
+			
+			radius = calcDistance(center, (int) result.x, (int) result.y);
 		}
-		else radius = calcDistance(center, current.x, current.y);
+		else
+		{
+			PointF snapped = new PointF(current);
+			helpersManager.snapPoint(snapped);
+			radius = calcDistance(center, (int) snapped.x, (int) snapped.y);
+		}
+	}
+	
+	private void setCenterPoint(Point point)
+	{
+		PointF snapped = new PointF(point);
+		helpersManager.snapPoint(snapped);
+		center = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
 	@Override

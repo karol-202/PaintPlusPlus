@@ -278,9 +278,19 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		return activity.getTool();
 	}
 	
+	public boolean isGridEnabled()
+	{
+		return helpersManager.getGrid().isEnabled();
+	}
+	
 	public void setGridEnabled(boolean enabled)
 	{
 		helpersManager.getGrid().setEnabled(enabled);
+	}
+	
+	public boolean isSnapToGridEnabled()
+	{
+		return helpersManager.getGrid().isSnapToGrid();
 	}
 	
 	public void setSnapToGrid(boolean enabled)

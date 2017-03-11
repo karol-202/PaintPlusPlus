@@ -67,7 +67,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	@Override
 	public boolean isUsingSnapping()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 			updateSelectionPath();
 			updateClipping(canvas);
 		}
-		return shape.onTouch(event);
+		return shape.onTouch(event, manager);
 	}
 	
 	@Override

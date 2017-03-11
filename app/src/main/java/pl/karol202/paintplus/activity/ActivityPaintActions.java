@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.image.Clipboard;
@@ -16,6 +17,7 @@ import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 class ActivityPaintActions
 {
 	private ActivityPaint activity;
+	private PaintView paintView;
 	private Image image;
 	private MenuInflater menuInflater;
 	private PackageManager packageManager;
@@ -29,6 +31,7 @@ class ActivityPaintActions
 	
 	void inflateMenu(Menu menu)
 	{
+		paintView = activity.getPaintView();
 		menuInflater.inflate(R.menu.menu_paint, menu);
 		image = activity.getImage();
 		image.addOnSelectionChangeListener(new OnSelectionChangeListener()
@@ -95,10 +98,15 @@ class ActivityPaintActions
 	
 	private void prepareSnapOptions(Menu menu)
 	{
-		boolean grid = menu.findItem(R.id.action_grid).isChecked();
-		MenuItem snapToGrid = menu.findItem(R.id.action_snap_to_grid);
-		snapToGrid.setEnabled(grid);
-		if(!grid) snapToGrid.setChecked(false);
+		boolean grid = paintView.isGridEnabled();
+		boolean snapToGrid = paintView.isSnapToGridEnabled();
+		
+		MenuItem gridItem = menu.findItem(R.id.action_grid);
+		gridItem.setChecked(grid);
+		
+		MenuItem snapToGridItem = menu.findItem(R.id.action_snap_to_grid);
+		snapToGridItem.setChecked(grid && snapToGrid);
+		snapToGridItem.setEnabled(grid);
 	}
 	
 	boolean handleAction(MenuItem item)

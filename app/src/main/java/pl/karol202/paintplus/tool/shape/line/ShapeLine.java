@@ -2,7 +2,9 @@ package pl.karol202.paintplus.tool.shape.line;
 
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.view.MotionEvent;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
@@ -17,6 +19,7 @@ public class ShapeLine extends Shape
 	private int lineWidth;
 	private Cap lineCap;
 	
+	private HelpersManager helpersManager;
 	private boolean lineCreated;
 	private Point start;
 	private Point end;
@@ -53,8 +56,9 @@ public class ShapeLine extends Shape
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		helpersManager = manager;
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
@@ -64,7 +68,7 @@ public class ShapeLine extends Shape
 	private void onTouchStart(int x, int y)
 	{
 		if(!isInEditMode()) enableEditMode();
-		if(!lineCreated) start = new Point(x, y);
+		if(!lineCreated) setStartPoint(new Point(x, y));
 		else
 		{
 			float distanceToStart = calcDistance(start, x, y);
@@ -91,13 +95,13 @@ public class ShapeLine extends Shape
 
 	private void onTouchMove(int x, int y)
 	{
-		if(!lineCreated) end = new Point(x, y);
+		if(!lineCreated) setEndPoint(new Point(x, y));
 		else dragPoint(new Point(x, y));
 	}
 	
 	private void onTouchStop(int x, int y)
 	{
-		if(!lineCreated) end = new Point(x, y);
+		if(!lineCreated) setEndPoint(new Point(x, y));
 		else dragPoint(new Point(x, y));
 		lineCreated = true;
 	}
@@ -112,8 +116,22 @@ public class ShapeLine extends Shape
 		
 		Point dragged = new Point(draggedPoint);
 		dragged.offset(delta.x, delta.y);
-		if(this.draggedIndex == 0) start = dragged;
-		else end = dragged;
+		if(this.draggedIndex == 0) setStartPoint(dragged);
+		else setEndPoint(dragged);
+	}
+	
+	private void setStartPoint(Point point)
+	{
+		PointF snapped = new PointF(point);
+		helpersManager.snapPoint(snapped);
+		start = new Point((int) snapped.x, (int) snapped.y);
+	}
+	
+	private void setEndPoint(Point point)
+	{
+		PointF snapped = new PointF(point);
+		helpersManager.snapPoint(snapped);
+		end = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
 	@Override

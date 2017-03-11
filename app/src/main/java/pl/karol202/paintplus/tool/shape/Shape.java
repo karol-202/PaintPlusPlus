@@ -4,8 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 
 public abstract class Shape
 {
@@ -35,7 +36,7 @@ public abstract class Shape
 	
 	public abstract Class<? extends ShapeProperties> getPropertiesClass();
 	
-	public abstract boolean onTouch(MotionEvent event);
+	public abstract boolean onTouch(MotionEvent event, HelpersManager helpersManager);
 	
 	public abstract void onScreenDraw(Canvas canvas);
 	
@@ -43,9 +44,9 @@ public abstract class Shape
 	
 	public abstract void cancel();
 	
-	public float calcDistance(Point point, int x, int y)
+	protected float calcDistance(Point point, int x, int y)
 	{
-		return (float) Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
+		return (float) Math.hypot(point.x - x, point.y - y);
 	}
 	
 	public void update()

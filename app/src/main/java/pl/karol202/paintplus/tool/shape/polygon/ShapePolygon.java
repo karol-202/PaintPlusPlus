@@ -1,16 +1,15 @@
 package pl.karol202.paintplus.tool.shape.polygon;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.*;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
+import pl.karol202.paintplus.util.Utils;
 
 public class ShapePolygon extends Shape
 {
@@ -20,6 +19,7 @@ public class ShapePolygon extends Shape
 	private boolean fill;
 	private int lineWidth;
 	
+	private HelpersManager helpersManager;
 	private boolean polygonCreated;
 	private Point center;
 	private float radiusOCC; //Radius of circumscribed circle
@@ -61,8 +61,9 @@ public class ShapePolygon extends Shape
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event)
+	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		helpersManager = manager;
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
@@ -73,7 +74,7 @@ public class ShapePolygon extends Shape
 	{
 		Point touchPoint = new Point(x, y);
 		if(!isInEditMode()) enableEditMode();
-		if(!polygonCreated) center = touchPoint;
+		if(!polygonCreated) setCenterPoint(touchPoint);
 		else
 		{
 			float side = (float) (2 * radiusOCC * Math.sin(Math.PI / sides));
@@ -132,7 +133,7 @@ public class ShapePolygon extends Shape
 		
 		Point newCenter = new Point(centerAtBeginning);
 		newCenter.offset(delta.x, delta.y);
-		center = newCenter;
+		setCenterPoint(newCenter);
 		
 		createPath();
 	}
@@ -141,18 +142,34 @@ public class ShapePolygon extends Shape
 	{
 		if(draggingStart != null)
 		{
-			float radiusDelta = calcDistance(center, current.x, current.y);
-			radiusDelta -= calcDistance(center, draggingStart.x, draggingStart.y);
-			radiusOCC = radiusOCCAtBeginning + radiusDelta;
+			double theta = Math.toRadians(Utils.getAngle(center, current));
+			float rCurrent = calcDistance(center, current.x, current.y);
+			float rDraggingStart = calcDistance(center, draggingStart.x, draggingStart.y);
+			float rBeginning = radiusOCCAtBeginning;
 			
-			float angleDelta = (float) getAngle(current);
-			angleDelta -= (float) getAngle(draggingStart);
-			angle = angleAtBeginning + angleDelta;
+			float rDelta = rCurrent - rDraggingStart;
+			float rResult = rBeginning + rDelta;
+			
+			float x = (float) (rResult * Math.cos(theta)) + center.x;
+			float y = (float) (rResult * Math.sin(theta)) + center.y;
+			PointF result = new PointF(x, y);
+			helpersManager.snapPoint(result);
+			
+			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
+			
+			//float angleDelta = (float) getAngle(current);
+			//angleDelta -= (float) getAngle(draggingStart);
+			//angle = angleAtBeginning + angleDelta;
+			
+			angle = (float) getAngle(new Point((int) result.x, (int) result.y));
 		}
 		else
 		{
-			radiusOCC = calcDistance(center, current.x, current.y);
-			angle = (float) getAngle(current);
+			PointF snapped = new PointF(current);
+			helpersManager.snapPoint(snapped);
+			radiusOCC = calcDistance(center, (int) snapped.x, (int) snapped.y);
+			
+			angle = (float) getAngle(new Point((int) snapped.x, (int) snapped.y));
 		}
 		
 		createPath();
@@ -168,6 +185,13 @@ public class ShapePolygon extends Shape
 		if(deltaY < 0) angleDeg += 180;
 		if(angleDeg < 0) angleDeg += 360;
 		return angleDeg;
+	}
+	
+	private void setCenterPoint(Point point)
+	{
+		PointF snapped = new PointF(point);
+		helpersManager.snapPoint(snapped);
+		center = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
 	@Override

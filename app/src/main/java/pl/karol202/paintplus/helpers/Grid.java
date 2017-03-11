@@ -93,13 +93,13 @@ public class Grid
 	{
 		int snapDistance = (int) (SNAP_DISTANCE_DP * density);
 		
-		int xSquareIndex = 0;
+		int xSquareIndex = -1;
 		for(int xLine = 0; xLine < verticalLines.length && verticalLines[xLine] <= x; xSquareIndex = xLine++);
 		
-		int left = verticalLines[xSquareIndex];
+		int left = xSquareIndex != -1 ? verticalLines[xSquareIndex] : -1;
 		int right = xSquareIndex + 1 < verticalLines.length ? verticalLines[xSquareIndex + 1] : -1;
 		
-		boolean leftSnap = x - left < snapDistance;
+		boolean leftSnap = x - left < snapDistance && left != -1;
 		boolean rightSnap = right - x < snapDistance && right != -1;
 		
 		if(leftSnap && !rightSnap) return left;
@@ -112,13 +112,13 @@ public class Grid
 	{
 		int snapDistance = (int) (SNAP_DISTANCE_DP * density);
 		
-		int ySquareIndex = 0;
+		int ySquareIndex = -1;
 		for(int yLine = 0; yLine < horizontalLines.length && horizontalLines[yLine] <= y; ySquareIndex = yLine++);
 		
-		int top = horizontalLines[ySquareIndex];
+		int top = ySquareIndex != -1 ? horizontalLines[ySquareIndex] : -1;
 		int bottom = ySquareIndex + 1 < horizontalLines.length ? horizontalLines[ySquareIndex + 1] : -1;
 		
-		boolean topSnap = y - top < snapDistance;
+		boolean topSnap = y - top < snapDistance && top != -1;
 		boolean bottomSnap = bottom - y < snapDistance && bottom != -1;
 		
 		if(topSnap && !bottomSnap) return top;
@@ -131,6 +131,11 @@ public class Grid
 	{
 		point.x = snapXToGrid(point.x);
 		point.y = snapYToGrid(point.y);
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
 	}
 	
 	public void setEnabled(boolean enabled)

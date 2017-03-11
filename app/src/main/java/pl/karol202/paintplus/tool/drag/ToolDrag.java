@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.drag;
 
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
@@ -11,6 +12,7 @@ import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolDrag extends Tool
 {
+	private HelpersManager helpersManager;
 	private Layer layer;
 	private int oldLayerX;
 	private int oldLayerY;
@@ -49,12 +51,14 @@ public class ToolDrag extends Tool
 	@Override
 	public boolean isUsingSnapping()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
 	public boolean onTouch(MotionEvent event, HelpersManager manager)
 	{
+		helpersManager = manager;
+		
 		float x = event.getX() - image.getViewX();
 		float y = event.getY() - image.getViewY();
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(x, y);
@@ -75,8 +79,12 @@ public class ToolDrag extends Tool
 	{
 		int deltaTouchX = Math.round(x - oldTouchX);
 		int deltaTouchY = Math.round(y - oldTouchY);
-		layer.setX(oldLayerX + deltaTouchX);
-		layer.setY(oldLayerY + deltaTouchY);
+		
+		PointF snapped = new PointF(oldLayerX + deltaTouchX, oldLayerY + deltaTouchY);
+		helpersManager.snapPoint(snapped);
+		
+		layer.setX((int) snapped.x);
+		layer.setY((int) snapped.y);
 	}
 	
 	@Override
