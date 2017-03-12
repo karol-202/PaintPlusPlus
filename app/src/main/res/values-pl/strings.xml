@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">Paint++</string>
 	<string name="activity_main">Paint++</string>
+	<string name="activity_color_select">Wybierz kolor</string>
 	<string name="activity_file_open">Otwórz plik</string>
 	<string name="activity_file_save">Zapisz plik</string>
 	<string name="activity_settings">Ustawienia</string>

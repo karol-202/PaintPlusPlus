@@ -27,6 +27,9 @@
         <activity
             android:name=".activity.ActivityPaint"
             android:label="@string/activity_main"/>
+	    <activity
+		    android:name=".color.ActivityColorSelect"
+		    android:label="@string/activity_color_select"/>
 		<activity
 			android:name=".file.ActivityFileOpen"
 			android:label="@string/activity_file_open" />

@@ -3,34 +3,27 @@ package pl.karol202.paintplus.color;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import com.google.firebase.crash.FirebaseCrash;
-import com.kunzisoft.androidclearchroma.ChromaDialog;
-import com.kunzisoft.androidclearchroma.IndicatorMode;
-import com.kunzisoft.androidclearchroma.colormode.ColorMode;
-import com.kunzisoft.androidclearchroma.listener.OnColorSelectedListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.settings.ActivitySettings;
 
-public class ColorsSelect extends Fragment implements View.OnClickListener, OnColorSelectedListener, ColorsSet.OnColorsChangeListener
+public class ColorsSelect extends Fragment implements View.OnClickListener, ColorsSet.OnColorsChangeListener
 {
+	private static final int REQUEST_COLOR_PICK = 0;
 	private static final int TARGET_FIRST = 0;
 	private static final int TARGET_SECOND = 1;
 	
 	private ActivityPaint activityPaint;
 	private Image image;
 	private ColorsSet colors;
-	private SharedPreferences preferences;
 
 	private View colorFirst;
 	private View colorSecond;
@@ -56,7 +49,6 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 		if(!(context instanceof ActivityPaint))
 			throw new RuntimeException("ColorsSelect fragment can only be attached to ActivityPaint.");
 		activityPaint = (ActivityPaint) context;
-		preferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	
 	@Override
@@ -99,40 +91,23 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, OnCo
 	private void pickColor(int target)
 	{
 		this.target = target;
+		@ColorInt int color = target == TARGET_FIRST ? colors.getFirstColor() : colors.getSecondColor();
 		
-		@ColorInt int color = target == 0 ? colors.getFirstColor() : colors.getSecondColor();
-		new ChromaDialog.Builder().colorMode(getColorMode())
-								  .initialColor(color)
-								  .indicatorMode(IndicatorMode.DECIMAL)
-								  .setOnColorSelectedListener(this)
-								  .create()
-								  .show(((FragmentActivity) getActivity()).getSupportFragmentManager(), "ColorPicker");
-	}
-	
-	private ColorMode getColorMode()
-	{
-		String value = preferences.getString(ActivitySettings.KEY_COLOR_MODE, "RGB");
-		switch(value)
-		{
-		case "RGB": return ColorMode.RGB;
-		case "HSV": return ColorMode.HSV;
-		case "HSL": return ColorMode.HSL;
-		case "CMYK": return ColorMode.CMYK255;
-		}
-		FirebaseCrash.report(new RuntimeException("Unknown color mode: " + value));
-		return ColorMode.RGB;
+		Intent intent = new Intent(getActivity(), ActivityColorSelect.class);
+		intent.putExtra(ActivityColorSelect.COLOR_KEY, color);
+		startActivityForResult(intent, REQUEST_COLOR_PICK);
 	}
 	
 	@Override
-	public void onPositiveButtonClick(@ColorInt int color)
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		if(requestCode != REQUEST_COLOR_PICK || data == null) return;
+		int color = data.getIntExtra(ActivityColorSelect.COLOR_KEY, Color.BLACK) | 0xFF000000;
+		
 		if(target == TARGET_FIRST) colors.setFirstColor(color);
 		else if(target == TARGET_SECOND) colors.setSecondColor(color);
 		updateColors();
 	}
-	
-	@Override
-	public void onNegativeButtonClick(@ColorInt int color) { }
 	
 	@Override
 	public void onColorsChanged()

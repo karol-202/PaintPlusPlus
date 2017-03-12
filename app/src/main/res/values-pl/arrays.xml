@@ -3,7 +3,6 @@
 	<string-array name="color_modes">
 		<item>RGB</item>
 		<item>HSV</item>
-		<item>HSL</item>
 		<item>CMYK</item>
 	</string-array>
 </resources>
