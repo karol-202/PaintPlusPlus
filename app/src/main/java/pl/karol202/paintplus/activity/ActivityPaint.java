@@ -140,7 +140,6 @@ public class ActivityPaint extends AppCompatActivity
 	private void createNewDataFragment()
 	{
 		dataFragment = new AppDataFragment();
-		dataFragment.setOnImageChangeListener(paintView);
 		dataFragment.setAsyncManager(asyncManager);
 		FragmentTransaction transaction = fragments.beginTransaction();
 		transaction.add(dataFragment, AppDataFragment.TAG);

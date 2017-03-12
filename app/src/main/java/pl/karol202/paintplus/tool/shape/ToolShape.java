@@ -14,7 +14,7 @@ import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
-public class ToolShape extends Tool implements OnShapeEditListener, OnToolChangeListener
+public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
@@ -25,11 +25,10 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	private Layer layer;
 	
 	private Shapes shapes;
-	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
 	private Paint maskPaint;
 	
-	public ToolShape(Image image, OnImageChangeListener imageChangeListener)
+	public ToolShape(Image image)
 	{
 		super(image);
 		this.colors = image.getColorsSet();
@@ -37,8 +36,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		this.layer = image.getSelectedLayer();
 		updateSelectionPath();
 		
-		this.shapes = new Shapes(colors, imageChangeListener, this);
-		this.imageChangeListener = imageChangeListener;
+		this.shapes = new Shapes(colors, this, this);
 		this.maskPaint = new Paint();
 		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));
@@ -129,17 +127,6 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
 	}
 	
-	@Override
-	public void onStartShapeEditing()
-	{
-		if(shapeEditListener != null) shapeEditListener.onStartShapeEditing();
-	}
-	
-	public void apply()
-	{
-		shape.apply(canvas);
-	}
-	
 	private void updateSelectionPath()
 	{
 		selectionPath = new Path(selection.getPath());
@@ -152,9 +139,29 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
 	}
 	
+	public void apply()
+	{
+		shape.apply(canvas);
+	}
+	
 	public void cancel()
 	{
 		shape.cancel();
+	}
+	
+	@Override
+	public void onImageChanged()
+	{
+		image.updateImage();
+	}
+	
+	@Override
+	public void onLayersChanged() { }
+	
+	@Override
+	public void onStartShapeEditing()
+	{
+		if(shapeEditListener != null) shapeEditListener.onStartShapeEditing();
 	}
 	
 	@Override
@@ -166,7 +173,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		cancel();
 	}
 	
-	public Shapes getShapesClass()
+	Shapes getShapesClass()
 	{
 		return shapes;
 	}
@@ -180,15 +187,15 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 	{
 		if(this.shape == shape) this.shape.cancel();
 		this.shape = shape;
-		imageChangeListener.onImageChanged();
+		image.updateImage();
 	}
 	
-	public boolean isSmoothed()
+	boolean isSmoothed()
 	{
 		return shape.isSmooth();
 	}
 	
-	public void setSmoothed(boolean smooth)
+	void setSmoothed(boolean smooth)
 	{
 		shapes.setSmooth(smooth);
 	}
@@ -208,7 +215,7 @@ public class ToolShape extends Tool implements OnShapeEditListener, OnToolChange
 		return shape.isInEditMode();
 	}
 	
-	public void setShapeEditListener(OnShapeEditListener listener)
+	void setShapeEditListener(OnShapeEditListener listener)
 	{
 		this.shapeEditListener = listener;
 	}

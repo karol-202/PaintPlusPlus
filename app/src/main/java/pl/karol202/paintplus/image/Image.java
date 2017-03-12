@@ -299,6 +299,21 @@ public class Image
 		clipboard.paste();
 	}
 	
+	public void selectAll()
+	{
+		selection.selectAll();
+	}
+	
+	public void selectNothing()
+	{
+		selection.selectNothing();
+	}
+	
+	public void revertSelection()
+	{
+		selection.revert();
+	}
+	
 	public void setOnImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
@@ -318,21 +333,6 @@ public class Image
 	public Selection getSelection()
 	{
 		return selection;
-	}
-	
-	public void selectAll()
-	{
-		selection.selectAll();
-	}
-	
-	public void selectNothing()
-	{
-		selection.selectNothing();
-	}
-	
-	public void revertSelection()
-	{
-		selection.revert();
 	}
 	
 	public Clipboard getClipboard()

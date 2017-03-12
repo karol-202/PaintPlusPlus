@@ -19,14 +19,14 @@ public class Tools
 {
 	private ArrayList<Tool> tools;
 	
-	public Tools(Image image, OnImageChangeListener listener, AsyncManager asyncManager)
+	public Tools(Image image, AsyncManager asyncManager)
 	{
 		tools = new ArrayList<>();
 		tools.add(new ToolPan(image));
 		tools.add(new ToolMarker(image));
 		tools.add(new ToolBrush(image));
 		tools.add(new ToolFill(image, asyncManager));
-		tools.add(new ToolShape(image, listener));
+		tools.add(new ToolShape(image));
 		tools.add(new ToolSelection(image));
 		tools.add(new ToolColorPick(image));
 		tools.add(new ToolDrag(image));

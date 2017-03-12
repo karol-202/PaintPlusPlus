@@ -3,7 +3,6 @@ package pl.karol202.paintplus;
 import android.app.Fragment;
 import android.os.Bundle;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 
@@ -11,7 +10,6 @@ public class AppDataFragment extends Fragment
 {
 	public static final String TAG = "DATA_FRAGMENT";
 	
-	private OnImageChangeListener listener;
 	private AsyncManager asyncManager;
 	private Image image;
 	private Tools tools;
@@ -26,14 +24,9 @@ public class AppDataFragment extends Fragment
 		image = new Image(getActivity());
 		image.newImage(600, 600);
 		
-		tools = new Tools(image, listener, asyncManager);
+		tools = new Tools(image, asyncManager);
 		
 		tool = tools.getTool(1);
-	}
-	
-	public void setOnImageChangeListener(OnImageChangeListener listener)
-	{
-		this.listener = listener;
 	}
 	
 	public void setAsyncManager(AsyncManager asyncManager)
