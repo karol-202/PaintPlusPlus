@@ -21,7 +21,6 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 	private TextView textThreshold;
 	private SeekBar seekBarTranslucency;
 	private TextView textTranslucency;
-	private TextView textWarning;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -36,7 +35,7 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		seekBarThreshold.setOnTouchListener(new SeekBarTouchListener());
 		
 		textThreshold = (TextView) view.findViewById(R.id.fill_threshold);
-		textThreshold.setText(String.format(Locale.US, "%1$d%%", seekBarThreshold.getProgress()));
+		textThreshold.setText(String.format(Locale.US, "%d%%", seekBarThreshold.getProgress()));
 		
 		seekBarTranslucency = (SeekBar) view.findViewById(R.id.seekBar_fill_translucency);
 		seekBarTranslucency.setProgress((int) ((1 - fill.getOpacity()) * 100));
@@ -44,9 +43,7 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		seekBarTranslucency.setOnTouchListener(new SeekBarTouchListener());
 		
 		textTranslucency = (TextView) view.findViewById(R.id.fill_translucency);
-		textTranslucency.setText(String.format(Locale.US, "%1$d%%", seekBarTranslucency.getProgress()));
-		
-		textWarning = (TextView) view.findViewById(R.id.text_fill_warning);
+		textTranslucency.setText(String.format(Locale.US, "%d%%", seekBarTranslucency.getProgress()));
 		return view;
 	}
 	
@@ -60,13 +57,13 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 	private void setFillThreshold(int threshold)
 	{
 		fill.setFillThreshold(threshold);
-		textThreshold.setText(String.format(Locale.US, "%1$d%%", threshold));
+		textThreshold.setText(String.format(Locale.US, "%d%%", threshold));
 	}
 	
 	private void setFillTranslucency(int translucency)
 	{
 		fill.setOpacity(1 - (translucency / 100f));
-		textTranslucency.setText(String.format(Locale.US, "%1$d%%", translucency));
+		textTranslucency.setText(String.format(Locale.US, "%d%%", translucency));
 	}
 	
 	@Override

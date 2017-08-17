@@ -47,9 +47,4 @@ public class ManipulatorSelection
 	{
 		return bounds;
 	}
-	
-	public void setBounds(Rect bounds)
-	{
-		this.bounds = bounds;
-	}
 }

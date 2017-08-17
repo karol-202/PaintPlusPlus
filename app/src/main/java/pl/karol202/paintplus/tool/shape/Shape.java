@@ -49,58 +49,58 @@ public abstract class Shape
 		return (float) Math.hypot(point.x - x, point.y - y);
 	}
 	
-	public void update()
+	protected void update()
 	{
 		updateColor();
 		paint.setAntiAlias(smooth);
 		imageChangeListener.onImageChanged();
 	}
 	
-	public void updateColor()
+	protected void updateColor()
 	{
 		paint.setColor(colors.getFirstColor());
 		paint.setAlpha((int) (opacity * 255));
 	}
 	
-	public void cleanUp()
+	protected void cleanUp()
 	{
 		editMode = false;
 		imageChangeListener.onImageChanged();
 	}
 	
-	public boolean isInEditMode()
+	protected boolean isInEditMode()
 	{
 		return editMode;
 	}
 	
-	public void enableEditMode()
+	protected void enableEditMode()
 	{
 		editMode = true;
 		shapeEditListener.onStartShapeEditing();
 	}
 	
-	public Paint getPaint()
+	protected Paint getPaint()
 	{
 		return paint;
 	}
 	
-	public boolean isSmooth()
+	protected boolean isSmooth()
 	{
 		return smooth;
 	}
 	
-	public void setSmooth(boolean smooth)
+	protected void setSmooth(boolean smooth)
 	{
 		this.smooth = smooth;
 		update();
 	}
 	
-	public float getOpacity()
+	protected float getOpacity()
 	{
 		return opacity;
 	}
 	
-	public void setOpacity(float opacity)
+	protected void setOpacity(float opacity)
 	{
 		this.opacity = opacity;
 		update();

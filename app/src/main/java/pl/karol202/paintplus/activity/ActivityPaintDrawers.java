@@ -89,6 +89,7 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	
 	private final int LEFT_DRAWER_WIDTH = 280;
 	private final int RIGHT_DRAWER_WIDTH = 320;
+	private final int MIN_SPACE_TO_EDGE = 112;
 	
 	private ActivityPaint activity;
 	private DrawerAdapter drawerAdapter;
@@ -131,7 +132,7 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	{
 		ViewGroup.LayoutParams params1 = drawerLeft.getLayoutParams();
 		
-		int maxWidth = screenWidthDp - 112;
+		int maxWidth = screenWidthDp - MIN_SPACE_TO_EDGE;
 		params1.width = (int) (Math.min(maxWidth, LEFT_DRAWER_WIDTH) * displayMetrics.density);
 	}
 	
@@ -139,7 +140,7 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	{
 		ViewGroup.LayoutParams params2 = drawerRight.getLayoutParams();
 		
-		int maxWidth = screenWidthDp - 112;
+		int maxWidth = screenWidthDp - MIN_SPACE_TO_EDGE;
 		params2.width = (int) (Math.min(maxWidth, RIGHT_DRAWER_WIDTH) * displayMetrics.density);
 	}
 	

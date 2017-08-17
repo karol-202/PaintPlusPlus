@@ -3,7 +3,7 @@ package pl.karol202.paintplus.tool.fill;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
-public class FillParams
+class FillParams
 {
 	private OnFillCompleteListener listener;
 	private Image image;
@@ -12,7 +12,7 @@ public class FillParams
 	private int x;
 	private int y;
 	
-	public FillParams(OnFillCompleteListener listener, Image image, float threshold, float translucency, int x, int y)
+	FillParams(OnFillCompleteListener listener, Image image, float threshold, float translucency, int x, int y)
 	{
 		this.listener = listener;
 		this.image = image;
@@ -22,32 +22,32 @@ public class FillParams
 		this.y = y;
 	}
 	
-	public OnFillCompleteListener getListener()
+	OnFillCompleteListener getListener()
 	{
 		return listener;
 	}
 	
-	public Image getImage()
+	Image getImage()
 	{
 		return image;
 	}
 	
-	public float getThreshold()
+	float getThreshold()
 	{
 		return threshold;
 	}
 	
-	public float getTranslucency()
+	float getTranslucency()
 	{
 		return translucency;
 	}
 	
-	public int getX()
+	int getX()
 	{
 		return x;
 	}
 	
-	public int getY()
+	int getY()
 	{
 		return y;
 	}

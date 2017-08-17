@@ -80,7 +80,7 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 	private void setBrushTranslucency(int translucency)
 	{
 		brush.setOpacity(1 - (translucency / 100f));
-		textBrushTranslucency.setText(String.format(Locale.US, "%1$d%%", translucency));
+		textBrushTranslucency.setText(String.format(Locale.US, "%d%%", translucency));
 	}
 	
 	@Override

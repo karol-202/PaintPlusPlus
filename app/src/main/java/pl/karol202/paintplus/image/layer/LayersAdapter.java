@@ -59,12 +59,12 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		return layers.size();
 	}
 	
-	public Context getContext()
+	Context getContext()
 	{
 		return context;
 	}
 	
-	public Image getImage()
+	Image getImage()
 	{
 		return image;
 	}
@@ -76,22 +76,22 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		notifyDataSetChanged();
 	}
 	
-	public HashMap<Integer, LayerViewHolder> getViewHolders()
+	HashMap<Integer, LayerViewHolder> getViewHolders()
 	{
 		return viewHolders;
 	}
 	
-	public LayerHandle getLayerHandle()
+	LayerHandle getLayerHandle()
 	{
 		return layerHandle;
 	}
 	
-	public boolean isLastLayer(Layer layer)
+	boolean isLastLayer(Layer layer)
 	{
 		return layers.indexOf(layer) == layers.size() - 1;
 	}
 	
-	public void moveLayer(int layerId, int target)
+	void moveLayer(int layerId, int target)
 	{
 		Layer selected = image.getSelectedLayer();
 		
@@ -102,7 +102,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		image.updateImage();
 	}
 	
-	public void duplicateLayer(Layer layer)
+	void duplicateLayer(Layer layer)
 	{
 		int layerIndex = layers.indexOf(layer);
 		String newName = layer.getName() + DUPLICATE_INDICATOR;
@@ -113,7 +113,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
 	}
 	
-	public void joinWithNextLayer(Layer firstLayer)
+	void joinWithNextLayer(Layer firstLayer)
 	{
 		int firstIndex = layers.indexOf(firstLayer);
 		Layer secondLayer = layers.get(firstIndex + 1);

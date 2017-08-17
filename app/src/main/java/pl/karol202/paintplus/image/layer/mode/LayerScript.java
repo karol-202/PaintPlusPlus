@@ -8,7 +8,7 @@ public abstract class LayerScript<S extends ScriptC>
 {
 	S script;
 	
-	protected LayerScript(RenderScript renderScript)
+	LayerScript(RenderScript renderScript)
 	{
 		script = getNewScript(renderScript);
 	}

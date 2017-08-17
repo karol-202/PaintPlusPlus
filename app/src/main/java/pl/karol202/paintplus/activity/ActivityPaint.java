@@ -324,7 +324,7 @@ public class ActivityPaint extends AppCompatActivity
 		return toolbar;
 	}
 	
-	public PaintView getPaintView()
+	PaintView getPaintView()
 	{
 		return paintView;
 	}

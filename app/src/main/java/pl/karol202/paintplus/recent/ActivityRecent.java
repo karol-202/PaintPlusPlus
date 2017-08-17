@@ -11,7 +11,7 @@ import android.view.View;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.image.layer.LayersLayoutManager;
+import pl.karol202.paintplus.util.BlockableLinearLayoutManager;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
@@ -58,14 +58,14 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		
 		FirebaseAnalytics.getInstance(this);
 		loader = new RecentLoader(this);
-		adapter = new RecentAdapter(this, loader.load(), this);
+		adapter = new RecentAdapter(this, loader.getImages(), this);
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
 		recyclerRecent = (RecyclerView) findViewById(R.id.recycler_recent);
 		recyclerRecent.setAdapter(adapter);
-		recyclerRecent.setLayoutManager(new LayersLayoutManager(this));
+		recyclerRecent.setLayoutManager(new BlockableLinearLayoutManager(this));
 		attachSwipingFeature();
 		
 		buttonNewImage = (FloatingActionButton) findViewById(R.id.button_new_image);

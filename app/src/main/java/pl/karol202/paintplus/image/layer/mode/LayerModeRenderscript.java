@@ -14,20 +14,20 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 	private Layer layer;
 	private Paint paint;
 	private RenderScript rs;
-	private LayerScript script;
+	private S script;
 	
 	private Canvas canvasSrc;
 	private Bitmap bitmapOut;
 	private Allocation allocationOut;
 	
-	public LayerModeRenderscript()
+	LayerModeRenderscript()
 	{
 		paint = new Paint();
 		rs = GraphicsHelper.getRenderScript();
 		script = getNewScript(rs);
 	}
 	
-	protected abstract LayerScript getNewScript(RenderScript renderScript);
+	protected abstract S getNewScript(RenderScript renderScript);
 	
 	@Override
 	public Bitmap drawLayer(Bitmap bitmapDst, Matrix matrix)

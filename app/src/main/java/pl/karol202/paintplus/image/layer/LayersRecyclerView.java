@@ -5,11 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import pl.karol202.paintplus.util.ItemDivider;
+import pl.karol202.paintplus.util.BlockableLinearLayoutManager;
 
 public class LayersRecyclerView extends RecyclerView
 {
 	private int maxHeight;
-	private LayersLayoutManager manager;
+	private BlockableLinearLayoutManager manager;
 	
 	public LayersRecyclerView(Context context)
 	{
@@ -24,7 +25,7 @@ public class LayersRecyclerView extends RecyclerView
 	public LayersRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-		manager = new LayersLayoutManager(context);
+		manager = new BlockableLinearLayoutManager(context);
 		setLayoutManager(manager);
 		addItemDecoration(new ItemDivider(context));
 	}

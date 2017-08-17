@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>
 {
@@ -23,7 +23,7 @@ class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>
 		private TextView textName;
 		private Button buttonOpen;
 		
-		public ViewHolder(View view)
+		ViewHolder(View view)
 		{
 			super(view);
 			imageThumbnail = (ImageView) view.findViewById(R.id.image_recent_thumbnail);
@@ -49,10 +49,10 @@ class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>
 	}
 	
 	private Context context;
-	private ArrayList<RecentImage> images;
+	private List<RecentImage> images;
 	private OnImageSelectListener listener;
 	
-	public RecentAdapter(Context context, ArrayList<RecentImage> images, OnImageSelectListener listener)
+	RecentAdapter(Context context, List<RecentImage> images, OnImageSelectListener listener)
 	{
 		this.context = context;
 		this.images = images;

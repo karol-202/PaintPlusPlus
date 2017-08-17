@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -84,10 +85,10 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	}
 	
 	@Override
-	public void onBitmapSaved(boolean saved, String filePath)
+	public void onBitmapSaved(boolean saved, String filePath, Bitmap bitmap)
 	{
 		asyncManager.unblock(this);
 		if(!saved) Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
-		else if(listener != null) listener.onFileEdited(filePath);
+		else if(listener != null) listener.onFileEdited(filePath, bitmap);
 	}
 }

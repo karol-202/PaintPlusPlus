@@ -25,7 +25,7 @@ import pl.karol202.paintplus.R;
 public class LayerViewHolder extends RecyclerView.ViewHolder
 		implements OnLongClickListener, OnTouchListener, OnClickListener, OnMenuItemClickListener
 {
-	public static final int HEIGHT_DP = 64;
+	static final int HEIGHT_DP = 64;
 	
 	private final int ELEVATION_DP = 18;
 	
@@ -46,7 +46,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	private float animationTargetX;
 	private float animationTargetY;
 	
-	public LayerViewHolder(LayersAdapter adapter, View view)
+	LayerViewHolder(LayersAdapter adapter, View view)
 	{
 		super(view);
 		this.adapter = adapter;
@@ -68,7 +68,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		buttonLayerMenu.setOnClickListener(this);
 	}
 	
-	public void bind(Layer layer)
+	void bind(Layer layer)
 	{
 		this.layer = layer;
 		
@@ -277,13 +277,13 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		view.setVisibility(View.INVISIBLE);
 	}
 	
-	public void setViewOffset(float x, float y)
+	void setViewOffset(float x, float y)
 	{
 		view.setTranslationX(x);
 		view.setTranslationY(y);
 	}
 	
-	public void setViewOffsetWithAnimation(float x, float y, AnimatorListener listener)
+	void setViewOffsetWithAnimation(float x, float y, AnimatorListener listener)
 	{
 		if(x != animationTargetX || y != animationTargetY)
 		{
@@ -299,14 +299,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		if(ghost) view.setTranslationZ(elevationPx);
 	}
 	
-	public boolean isGhost()
+	void setGhost()
 	{
-		return ghost;
-	}
-	
-	public void setGhost(boolean ghost)
-	{
-		this.ghost = ghost;
+		this.ghost = true;
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) setElevation();
 	}
 	

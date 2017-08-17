@@ -11,9 +11,9 @@ import pl.karol202.paintplus.R;
 
 import java.util.ArrayList;
 
-public class ShapeAdapter extends ArrayAdapter<Shape>
+class ShapeAdapter extends ArrayAdapter<Shape>
 {
-	public ShapeAdapter(Context context, ArrayList<Shape> shapes)
+	ShapeAdapter(Context context, ArrayList<Shape> shapes)
 	{
 		super(context, R.layout.spinner_item_shape, shapes);
 	}

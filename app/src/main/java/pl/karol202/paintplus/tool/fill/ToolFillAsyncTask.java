@@ -26,9 +26,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private int selectedLayerX;
 	private int selectedLayerY;
 	private int destColor;
-	//private ColorRGB destColorRGB;
 	private float threshold;
-	//private float translucency;
 	private int x;
 	private int y;
 	
@@ -50,9 +48,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		selectedLayerX = image.getSelectedLayerX();
 		selectedLayerY = image.getSelectedLayerY();
 		destColor = colorsSet.getFirstColor();
-		//destColorRGB = new ColorRGB(destColor);
 		threshold = params.getThreshold();
-		//translucency = params.getTranslucency();
 		x = params.getX();
 		y = params.getY();
 		
@@ -82,8 +78,6 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 			int pos = point.y * width + point.x;
 			int oldColor = pixels[pos];
 			if(!checkColor(touchedColor, oldColor)) continue;
-			//ColorRGB oldColorRGB = new ColorRGB(oldColor);
-			//pixels[pos] = destColorRGB.add(oldColorRGB.multiply(translucency)).getColor();
 			pixels[pos] = destColor;
 			
 			if(point.x > 0)

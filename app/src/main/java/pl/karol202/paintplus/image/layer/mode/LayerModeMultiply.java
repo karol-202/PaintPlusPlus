@@ -7,7 +7,7 @@ public class LayerModeMultiply extends LayerModeRenderscript<LayerModeMultiply.S
 {
 	protected class ScriptMultiply extends LayerScript<ScriptC_lm_multiply>
 	{
-		protected ScriptMultiply(RenderScript renderScript)
+		ScriptMultiply(RenderScript renderScript)
 		{
 			super(renderScript);
 		}
@@ -43,7 +43,7 @@ public class LayerModeMultiply extends LayerModeRenderscript<LayerModeMultiply.S
 	}
 	
 	@Override
-	protected LayerScript getNewScript(RenderScript renderScript)
+	protected ScriptMultiply getNewScript(RenderScript renderScript)
 	{
 		return new ScriptMultiply(renderScript);
 	}

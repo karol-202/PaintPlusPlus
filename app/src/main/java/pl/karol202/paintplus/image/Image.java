@@ -130,7 +130,7 @@ public class Image
 		if(listener != null) listener.onImageChanged();
 	}
 	
-	public void updateLayersPreview()
+	private void updateLayersPreview()
 	{
 		if(listener != null) listener.onLayersChanged();
 	}

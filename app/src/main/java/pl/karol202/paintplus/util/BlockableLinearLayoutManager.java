@@ -1,13 +1,13 @@
-package pl.karol202.paintplus.image.layer;
+package pl.karol202.paintplus.util;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 
-public class LayersLayoutManager extends LinearLayoutManager
+public class BlockableLinearLayoutManager extends LinearLayoutManager
 {
 	private boolean allowScrolling;
 	
-	public LayersLayoutManager(Context context)
+	public BlockableLinearLayoutManager(Context context)
 	{
 		super(context);
 		allowScrolling = true;

@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-public class SelectionModeAdapter extends ArrayAdapter<ToolSelectionMode>
+class SelectionModeAdapter extends ArrayAdapter<ToolSelectionMode>
 {
-	public SelectionModeAdapter(Context context)
+	SelectionModeAdapter(Context context)
 	{
 		super(context, R.layout.spinner_item_selection_mode, ToolSelectionMode.values());
 	}

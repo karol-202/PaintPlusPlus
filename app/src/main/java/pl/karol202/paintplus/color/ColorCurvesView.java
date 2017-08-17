@@ -463,7 +463,7 @@ public class ColorCurvesView extends View
 	public String getInfoText()
 	{
 		if(newDraggedCurvePoint == null || draggedPointRemoved) return "";
-		return String.format(Locale.US, "X: %1$d   Y: %2$d", newDraggedCurvePoint.x, newDraggedCurvePoint.y);
+		return String.format(Locale.US, "X: %d   Y: %d", newDraggedCurvePoint.x, newDraggedCurvePoint.y);
 	}
 	
 	private ColorCurve getCurrentCurve()

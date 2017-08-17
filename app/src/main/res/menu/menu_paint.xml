@@ -69,42 +69,41 @@
                   app:showAsAction="never"/>
         </menu>
     </item>
-
-    <item android:id="@+id/action_view"
-	    android:icon="@drawable/ic_grid_white_24dp"
-	    android:title="@string/action_view"
-	    android:orderInCategory="7"
-	    app:showAsAction="never">
-	    
-	    <menu>
-		    <item android:id="@+id/action_set_zoom"
-			    android:icon="@drawable/ic_zoom_in_white_24dp"
-			    android:title="@string/action_set_zoom"
-			    android:orderInCategory="1"/>
-		    <item android:id="@+id/action_zoom_default"
-			    android:icon="@drawable/ic_zoom_default_white_24dp"
-			    android:title="@string/action_zoom_default"
-			    android:orderInCategory="2"/>
-		    <item android:id="@+id/action_image_center"
-			    android:icon="@drawable/ic_center_white_24dp"
-			    android:title="@string/action_image_center"
-			    android:orderInCategory="3"/>
-		    <item android:id="@+id/action_grid"
-			    android:icon="@drawable/ic_grid_white_24dp"
-			    android:title="@string/action_grid"
-			    android:orderInCategory="4"
-			    android:checkable="true"
-			    android:checked="false"/>
-		    <item android:id="@+id/action_snap_to_grid"
-			    android:icon="@drawable/ic_snap_to_grid_white_24px"
-			    android:title="@string/action_snap_to_grid"
-			    android:orderInCategory="5"
-			    android:checkable="true"
-			    android:checked="false"/>
-	    </menu>
-    </item>
-    
-    <item android:id="@+id/action_image"
+	
+	<item android:id="@+id/action_view"
+		android:icon="@drawable/ic_grid_white_24dp"
+		android:title="@string/action_view"
+		android:orderInCategory="7">
+		
+		<menu>
+			<item android:id="@+id/action_set_zoom"
+				android:icon="@drawable/ic_zoom_in_white_24dp"
+				android:title="@string/action_set_zoom"
+				android:orderInCategory="1"/>
+			<item android:id="@+id/action_zoom_default"
+				android:icon="@drawable/ic_zoom_default_white_24dp"
+				android:title="@string/action_zoom_default"
+				android:orderInCategory="2"/>
+			<item android:id="@+id/action_image_center"
+				android:icon="@drawable/ic_center_white_24dp"
+				android:title="@string/action_image_center"
+				android:orderInCategory="3"/>
+			<item android:id="@+id/action_grid"
+				android:icon="@drawable/ic_grid_white_24dp"
+				android:title="@string/action_grid"
+				android:orderInCategory="4"
+				android:checkable="true"
+				android:checked="false"/>
+			<item android:id="@+id/action_snap_to_grid"
+				android:icon="@drawable/ic_snap_to_grid_white_24px"
+				android:title="@string/action_snap_to_grid"
+				android:orderInCategory="5"
+				android:checkable="true"
+				android:checked="false"/>
+		</menu>
+	</item>
+	
+	<item android:id="@+id/action_image"
           android:icon="@drawable/ic_image_white_24dp"
           android:title="@string/action_image"
           android:orderInCategory="8"

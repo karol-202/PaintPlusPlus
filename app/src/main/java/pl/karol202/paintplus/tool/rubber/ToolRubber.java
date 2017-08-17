@@ -196,32 +196,32 @@ public class ToolRubber extends Tool
 		canvas.drawPath(path, pathPaint);
 	}
 	
-	public float getSize()
+	float getSize()
 	{
 		return size;
 	}
 	
-	public void setSize(float size)
+	void setSize(float size)
 	{
 		this.size = size;
 	}
 	
-	public float getStrength()
+	float getStrength()
 	{
 		return strength;
 	}
 	
-	public void setStrength(float strength)
+	void setStrength(float strength)
 	{
 		this.strength = strength;
 	}
 	
-	public boolean isSmooth()
+	boolean isSmooth()
 	{
 		return smooth;
 	}
 	
-	public void setSmooth(boolean smooth)
+	void setSmooth(boolean smooth)
 	{
 		this.smooth = smooth;
 	}

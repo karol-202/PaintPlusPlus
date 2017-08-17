@@ -52,8 +52,8 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 	private Stack<File> previousDirectories;
 	private ArrayList<File> files;
 	
-	protected Toolbar toolbar;
-	protected RecyclerView recyclerFiles;
+	private Toolbar toolbar;
+	private RecyclerView recyclerFiles;
 	
 	@Override
 	protected void onCreate(Bundle state)

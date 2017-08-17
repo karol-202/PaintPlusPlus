@@ -324,27 +324,27 @@ public class ToolSelection extends Tool
 		this.selectionListener = selectionListener;
 	}
 	
-	public boolean isInEditMode()
+	boolean isInEditMode()
 	{
 		return editMode;
 	}
 	
-	public ToolSelectionShape getShape()
+	ToolSelectionShape getShape()
 	{
 		return shape;
 	}
 	
-	public void setShape(ToolSelectionShape shape)
+	void setShape(ToolSelectionShape shape)
 	{
 		this.shape = shape;
 	}
 	
-	public ToolSelectionMode getMode()
+	ToolSelectionMode getMode()
 	{
 		return mode;
 	}
 	
-	public void setMode(ToolSelectionMode mode)
+	void setMode(ToolSelectionMode mode)
 	{
 		this.mode = mode;
 	}

@@ -133,22 +133,22 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 		return R.string.dialog_fill_message;
 	}
 	
-	public float getFillThreshold()
+	float getFillThreshold()
 	{
 		return fillThreshold;
 	}
 	
-	public void setFillThreshold(float fillThreshold)
+	void setFillThreshold(float fillThreshold)
 	{
 		this.fillThreshold = fillThreshold;
 	}
 	
-	public float getOpacity()
+	float getOpacity()
 	{
 		return opacity;
 	}
 	
-	public void setOpacity(float opacity)
+	void setOpacity(float opacity)
 	{
 		this.opacity = opacity;
 	}

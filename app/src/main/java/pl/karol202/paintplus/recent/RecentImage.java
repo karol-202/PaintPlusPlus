@@ -9,11 +9,6 @@ class RecentImage implements Comparable<RecentImage>
 	private String name;
 	private long date;
 	
-	RecentImage(String path, String name, long date)
-	{
-		this(path, null, name, date);
-	}
-	
 	RecentImage(String path, Bitmap thumbnail, String name, long date)
 	{
 		this.path = path;
@@ -46,7 +41,7 @@ class RecentImage implements Comparable<RecentImage>
 	public int compareTo(RecentImage o)
 	{
 		if(date == o.date) return 0;
-		return date > o.date ? 1 : -1;
+		return date < o.date ? 1 : -1;
 	}
 	
 	String getPath()
@@ -57,6 +52,11 @@ class RecentImage implements Comparable<RecentImage>
 	Bitmap getThumbnail()
 	{
 		return thumbnail;
+	}
+	
+	public void setThumbnail(Bitmap thumbnail)
+	{
+		this.thumbnail = thumbnail;
 	}
 	
 	String getName()

@@ -178,12 +178,12 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 		return shapes;
 	}
 	
-	public Shape getShape()
+	Shape getShape()
 	{
 		return shape;
 	}
 	
-	public void setShape(Shape shape)
+	void setShape(Shape shape)
 	{
 		if(this.shape == shape) this.shape.cancel();
 		this.shape = shape;
@@ -200,17 +200,17 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 		shapes.setSmooth(smooth);
 	}
 	
-	public float getOpacity()
+	float getOpacity()
 	{
 		return shape.getOpacity();
 	}
 	
-	public void setOpacity(float opacity)
+	void setOpacity(float opacity)
 	{
 		shapes.setOpacity(opacity);
 	}
 	
-	public boolean isInEditMode()
+	boolean isInEditMode()
 	{
 		return shape.isInEditMode();
 	}

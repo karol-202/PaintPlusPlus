@@ -113,17 +113,17 @@ public class ToolPan extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
 	
-	public float getZoom()
+	float getZoom()
 	{
 		return image.getZoom();
 	}
 	
-	public void setZoom(float zoom)
+	void setZoom(float zoom)
 	{
 		image.setZoom(zoom);
 	}
 	
-	public void centerView()
+	void centerView()
 	{
 		image.centerView();
 	}

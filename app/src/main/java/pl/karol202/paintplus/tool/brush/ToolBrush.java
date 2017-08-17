@@ -196,32 +196,32 @@ public class ToolBrush extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
 	
-	public float getSize()
+	float getSize()
 	{
 		return size;
 	}
 
-	public void setSize(float size)
+	void setSize(float size)
 	{
 		this.size = size;
 	}
 
-	public float getShapeOffset()
+	float getShapeOffset()
 	{
 		return shapeOffset;
 	}
 
-	public void setShapeOffset(float shapeOffset)
+	void setShapeOffset(float shapeOffset)
 	{
 		this.shapeOffset = shapeOffset;
 	}
 	
-	public float getOpacity()
+	float getOpacity()
 	{
 		return opacity;
 	}
 	
-	public void setOpacity(float opacity)
+	void setOpacity(float opacity)
 	{
 		this.opacity = opacity;
 	}

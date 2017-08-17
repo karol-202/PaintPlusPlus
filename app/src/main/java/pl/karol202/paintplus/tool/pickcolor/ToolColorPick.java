@@ -141,12 +141,12 @@ public class ToolColorPick extends Tool
 	@Override
 	public void onScreenDraw(Canvas canvas) { }
 	
-	public int getSize()
+	int getSize()
 	{
 		return size;
 	}
 	
-	public void setSize(int size)
+	void setSize(int size)
 	{
 		this.size = size;
 	}

@@ -14,14 +14,14 @@ public class Clipboard
 	private int left;
 	private int top;
 	
-	public Clipboard(Image image, String defaultLayerName)
+	Clipboard(Image image, String defaultLayerName)
 	{
 		this.image = image;
 		this.selection = image.getSelection();
 		this.defaultLayerName = defaultLayerName;
 	}
 	
-	public void cut(Layer selectedLayer)
+	void cut(Layer selectedLayer)
 	{
 		copy(selectedLayer);
 		
@@ -32,7 +32,7 @@ public class Clipboard
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
 	}
 	
-	public void copy(Layer selectedLayer)
+	void copy(Layer selectedLayer)
 	{
 		Rect bounds = selection.getBounds();
 		left = bounds.left;
@@ -46,7 +46,7 @@ public class Clipboard
 		canvas.drawBitmap(selectedLayer.getBitmap(), -left, -top, null);
 	}
 	
-	public void paste()
+	void paste()
 	{
 		Layer layer = image.newLayer(bitmap.getWidth(), bitmap.getHeight(), defaultLayerName);
 		if(layer == null) return;

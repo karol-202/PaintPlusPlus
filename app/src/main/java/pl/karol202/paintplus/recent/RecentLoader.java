@@ -8,18 +8,20 @@ import com.google.firebase.crash.FirebaseCrash;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+import pl.karol202.paintplus.file.ImageLoader;
 
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 class RecentLoader
 {
 	private final String FILENAME = "recent.dat";
 	
 	private Context context;
-	private ArrayList<RecentImage> images;
+	private List<RecentImage> images;
 	private XmlPullParser parser;
 	private XmlSerializer serializer;
 	
@@ -29,21 +31,14 @@ class RecentLoader
 		this.images = new ArrayList<>();
 	}
 	
-	ArrayList<RecentImage> load()
+	void load()
 	{
 		images.clear();
 		
 		try
 		{
 			InputStream inputStream = createInputStream();
-			if(inputStream == null) return images;
-			
-			/*int r = inputStream.read();
-			while(r != -1)
-			{
-				System.out.println((char) r);
-				r = inputStream.read();
-			}*/
+			if(inputStream == null) return;
 			
 			createParser(inputStream);
 			readImages();
@@ -55,14 +50,15 @@ class RecentLoader
 			e.printStackTrace();
 			FirebaseCrash.report(e);
 		}
-		return images;
 	}
 	
 	private InputStream createInputStream() throws IOException
 	{
 		try
 		{
-			return new FileInputStream(getFile());
+			File file = getFile(false);
+			if(file == null) return null;
+			return new FileInputStream(file);
 		}
 		catch(FileNotFoundException e)
 		{
@@ -70,11 +66,16 @@ class RecentLoader
 		}
 	}
 	
-	private File getFile() throws IOException
+	private File getFile(boolean createIfNotExisting) throws IOException
 	{
 		File file = new File(context.getFilesDir(), FILENAME);
-		file.createNewFile();
-		return file;
+		
+		if(createIfNotExisting)
+		{
+			file.createNewFile();
+			return file;
+		}
+		else return file.exists() ? file : null;
 	}
 	
 	private void createParser(InputStream inputStream) throws XmlPullParserException, IOException, ParseException
@@ -102,7 +103,8 @@ class RecentLoader
 		checkTag();
 		
 		String path = readPath();
-		Bitmap thumbnail = loadThumbnail(path);
+		String thumbnailPath = readThumbnailPath();
+		Bitmap thumbnail = loadThumbnail(thumbnailPath);
 		String name = readName();
 		long date = readDate();
 		if(thumbnail == null) return;
@@ -121,6 +123,15 @@ class RecentLoader
 		
 		String path = parser.getAttributeValue(null, "path");
 		if(path == null || path.isEmpty()) throw new ParseException("Attribute not found: path", parser.getLineNumber());
+		return path;
+	}
+	
+	private String readThumbnailPath() throws ParseException, IOException, XmlPullParserException
+	{
+		checkTag();
+		
+		String path = parser.getAttributeValue(null, "thumbnailPath");
+		if(path == null || path.isEmpty()) throw new ParseException("Attribute not found: thumbnailPath", parser.getLineNumber());
 		return path;
 	}
 	
@@ -164,12 +175,11 @@ class RecentLoader
 		}
 		
 		load();
-		System.out.println("u");
 	}
 	
 	private OutputStream createOutputStream() throws IOException
 	{
-		return new FileOutputStream(getFile());
+		return new FileOutputStream(getFile(true));
 	}
 	
 	private void createSerializer(OutputStream outputStream) throws IOException
@@ -191,9 +201,20 @@ class RecentLoader
 	{
 		serializer.startTag(null, "image");
 		serializer.attribute(null, "path", image.getPath());
+		serializer.attribute(null, "thumbnailPath", saveThumbnailAndReturnPath(image));
 		serializer.attribute(null, "name", image.getName());
 		serializer.attribute(null, "date", String.valueOf(image.getDate()));
 		serializer.endTag(null, "image");
+	}
+	
+	private String saveThumbnailAndReturnPath(RecentImage image) throws IOException
+	{
+		String fileName = String.format("_%s", image.getName());
+		File file = new File(context.getFilesDir(), fileName);
+		String path = file.getAbsolutePath();
+		Bitmap bitmap = image.getThumbnail();
+		ImageLoader.saveBitmap(bitmap, path, 70);
+		return path;
 	}
 	
 	void addOrUpdateRecentImage(RecentImage image)
@@ -203,14 +224,19 @@ class RecentLoader
 		{
 			int indexOfExisting = images.indexOf(image);
 			RecentImage existing = images.get(indexOfExisting);
+			existing.setThumbnail(image.getThumbnail());
 			existing.setDate(image.getDate());
 		}
 		Collections.sort(images);
-		Collections.reverse(images);
 	}
 	
 	void removeRecentImage(int imageId)
 	{
 		images.remove(imageId);
+	}
+	
+	List<RecentImage> getImages()
+	{
+		return images;
 	}
 }

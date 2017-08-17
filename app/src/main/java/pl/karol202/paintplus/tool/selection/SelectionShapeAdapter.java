@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-public class SelectionShapeAdapter extends ArrayAdapter<ToolSelectionShape>
+class SelectionShapeAdapter extends ArrayAdapter<ToolSelectionShape>
 {
-	public SelectionShapeAdapter(Context context)
+	SelectionShapeAdapter(Context context)
 	{
 		super(context, R.layout.spinner_item_selection_shape, ToolSelectionShape.values());
 	}

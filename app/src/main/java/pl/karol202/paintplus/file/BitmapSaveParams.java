@@ -18,22 +18,22 @@ public class BitmapSaveParams
 		this.quality = quality;
 	}
 	
-	public OnBitmapSaveListener getListener()
+	OnBitmapSaveListener getListener()
 	{
 		return listener;
 	}
 	
-	public Bitmap getBitmap()
+	Bitmap getBitmap()
 	{
 		return bitmap;
 	}
 	
-	public String getFilePath()
+	String getFilePath()
 	{
 		return filePath;
 	}
 	
-	public int getQuality()
+	int getQuality()
 	{
 		return quality;
 	}

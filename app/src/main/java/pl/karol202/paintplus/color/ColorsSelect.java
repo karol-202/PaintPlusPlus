@@ -31,6 +31,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 	private int target;
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
@@ -72,7 +73,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 		return view;
 	}
 	
-	public void updateColors()
+	private void updateColors()
 	{
 		colorFirst.setBackgroundColor(colors.getFirstColor());
 		colorSecond.setBackgroundColor(colors.getSecondColor());

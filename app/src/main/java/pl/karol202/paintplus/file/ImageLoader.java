@@ -11,8 +11,8 @@ import java.io.FileOutputStream;
 
 public class ImageLoader
 {
-	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
-	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
+	static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
+	static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
 	
 	public static Bitmap openBitmap(String path)
 	{
@@ -27,8 +27,7 @@ public class ImageLoader
 			float higher = Math.max(widthRatio, heightRatio);
 			int newWidth = (int) Math.floor(photo.getWidth() / higher);
 			int newHeight = (int) Math.floor(photo.getHeight() / higher);
-			Bitmap scaled = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			return scaled;
+			return Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
 		}
 		else return photo;
 		

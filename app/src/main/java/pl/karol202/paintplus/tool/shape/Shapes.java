@@ -8,11 +8,11 @@ import pl.karol202.paintplus.tool.shape.polygon.ShapePolygon;
 
 import java.util.ArrayList;
 
-public class Shapes
+class Shapes
 {
 	private ArrayList<Shape> shapes;
 	
-	public Shapes(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	Shapes(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
 		shapes = new ArrayList<>();
 		shapes.add(new ShapeLine(colors, imageChangeListener, shapeEditListener));
@@ -20,12 +20,12 @@ public class Shapes
 		shapes.add(new ShapePolygon(colors, imageChangeListener, shapeEditListener));
 	}
 	
-	public Shape getShape(int id)
+	Shape getShape(int id)
 	{
 		return shapes.get(id);
 	}
 	
-	public int getShapeId(Shape shape)
+	int getShapeId(Shape shape)
 	{
 		for(int i = 0; i < shapes.size(); i++)
 		{
@@ -35,17 +35,17 @@ public class Shapes
 		return -1;
 	}
 	
-	public ArrayList<Shape> getShapes()
+	ArrayList<Shape> getShapes()
 	{
 		return shapes;
 	}
 	
-	public void setSmooth(boolean smooth)
+	void setSmooth(boolean smooth)
 	{
 		for(Shape shape : shapes) shape.setSmooth(smooth);
 	}
 	
-	public void setOpacity(float opacity)
+	void setOpacity(float opacity)
 	{
 		for(Shape shape : shapes) shape.setOpacity(opacity);
 	}

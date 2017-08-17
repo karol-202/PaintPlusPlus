@@ -4,7 +4,7 @@ public abstract class ColorsManipulatorParams
 {
 	private ManipulatorSelection selection;
 	
-	public ColorsManipulatorParams(ManipulatorSelection selection)
+	ColorsManipulatorParams(ManipulatorSelection selection)
 	{
 		this.selection = selection;
 	}

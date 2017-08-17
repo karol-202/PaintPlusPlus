@@ -26,7 +26,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 		private ImageView imageFileType;
 		private TextView textFileName;
 		
-		public ViewHolder(View view)
+		ViewHolder(View view)
 		{
 			super(view);
 			view.setOnClickListener(this);
@@ -34,7 +34,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 			textFileName = (TextView) view.findViewById(R.id.text_file_name);
 		}
 		
-		public void bind(File file)
+		void bind(File file)
 		{
 			this.file = file;
 			imageFileType.setImageResource(getFileTypeIcon(file));
@@ -43,7 +43,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 		
 		private int getFileTypeIcon(File file)
 		{
-			if(file == null) return R.drawable.ic_arrow_back_black_24dp;
+			if(file == null) return R.drawable.ic_arrow_file_back_black_24dp;
 			if(file.isDirectory()) return R.drawable.ic_folder_black_24dp;
 			else
 			{
@@ -79,7 +79,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 	private ArrayList<File> files;
 	private OnFileSelectListener listener;
 	
-	public FileAdapter(Context context, OnFileSelectListener listener)
+	FileAdapter(Context context, OnFileSelectListener listener)
 	{
 		this.context = context;
 		this.res = context.getResources();
@@ -106,7 +106,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 		return files.size();
 	}
 	
-	public void setFiles(ArrayList<File> files)
+	void setFiles(ArrayList<File> files)
 	{
 		this.files = files;
 	}

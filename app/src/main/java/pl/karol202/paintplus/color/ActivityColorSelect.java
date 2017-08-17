@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,16 +24,16 @@ import pl.karol202.paintplus.settings.ActivitySettings;
 
 public class ActivityColorSelect extends AppCompatActivity implements OnColorChangedListener
 {
-	public static final String COLOR_KEY = "initial_color";
+	static final String COLOR_KEY = "initial_color";
 	private static final String CURRENT_COLOR_KEY = "current_color";
 	
 	private static final int VALUE_THRESHOLD = 192;
-	private static final int DARK_TEXT = 0xDE000000;
-	private static final int LIGHT_TEXT = 0xFFFFFFFF;
 	
-	@ColorInt
+	private int darkTextColor;
+	private int lightTextColor;
+	//@ColorInt
 	private int defaultColor;
-	@ColorInt
+	//@ColorInt
 	private int currentColor;
 	private boolean portrait;
 	private ActionBar actionBar;
@@ -44,17 +45,15 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_color_select);
-		detectConfiguration();
 		onArgumentsRead(getIntent());
 		onLoadInstanceState(savedInstanceState);
+		
+		detectConfiguration();
+		loadResources();
+		
 		initToolbar();
 		if(savedInstanceState == null) createFragment();
 		onColorChanged(currentColor);
-	}
-	
-	private void detectConfiguration()
-	{
-		portrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 	}
 	
 	private void onArgumentsRead(Intent intent)
@@ -66,6 +65,17 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	{
 		if(savedInstanceState != null) currentColor = savedInstanceState.getInt(CURRENT_COLOR_KEY, defaultColor);
 		else currentColor = defaultColor;
+	}
+	
+	private void detectConfiguration()
+	{
+		portrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+	}
+	
+	private void loadResources()
+	{
+		darkTextColor = ResourcesCompat.getColor(getResources(), R.color.text_color_select_title_dark, null);
+		lightTextColor = ResourcesCompat.getColor(getResources(), R.color.text_color_select_title_light, null);
 	}
 	
 	private void initToolbar()
@@ -106,11 +116,11 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 		toolbar.setBackgroundColor(color);
 		
 		int value = Math.max(Color.red(color), Math.max(Color.green(color), Color.blue(color)));
-		int titleColor = value < VALUE_THRESHOLD ? LIGHT_TEXT : DARK_TEXT;
+		int titleColor = value < VALUE_THRESHOLD ? lightTextColor : darkTextColor;
 		toolbar.setTitleTextColor(titleColor);
 		
-		Drawable upArrow = getResources().getDrawable(android.support.design.R.drawable.abc_ic_ab_back_material);
-		upArrow.setColorFilter(titleColor, PorterDuff.Mode.SRC_ATOP);
+		Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_back_black_24dp, null);
+		if(upArrow != null) upArrow.setColorFilter(titleColor, PorterDuff.Mode.SRC_ATOP);
 		actionBar.setHomeAsUpIndicator(upArrow);
 	}
 	

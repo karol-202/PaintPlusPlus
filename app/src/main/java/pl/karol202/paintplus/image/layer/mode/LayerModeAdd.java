@@ -7,7 +7,7 @@ public class LayerModeAdd extends LayerModeRenderscript<LayerModeAdd.ScriptAdd>
 {
 	protected class ScriptAdd extends LayerScript<ScriptC_lm_add>
 	{
-		protected ScriptAdd(RenderScript renderScript)
+		ScriptAdd(RenderScript renderScript)
 		{
 			super(renderScript);
 		}
@@ -43,7 +43,7 @@ public class LayerModeAdd extends LayerModeRenderscript<LayerModeAdd.ScriptAdd>
 	}
 	
 	@Override
-	protected LayerScript getNewScript(RenderScript renderScript)
+	protected ScriptAdd getNewScript(RenderScript renderScript)
 	{
 		return new ScriptAdd(renderScript);
 	}

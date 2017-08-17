@@ -158,7 +158,7 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 		return shapes.getShapeId(shape);
 	}
 	
-	public Shapes getShapes()
+	Shapes getShapes()
 	{
 		return shapes;
 	}

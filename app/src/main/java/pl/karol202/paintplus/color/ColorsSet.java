@@ -21,7 +21,7 @@ public class ColorsSet implements Parcelable
 		this.secondColor = secondColor;
 	}
 
-	public void revert()
+	void revert()
 	{
 		int first = firstColor;
 		firstColor = secondColor;

@@ -10,7 +10,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 
 import java.util.HashMap;
 
-public class LayerHandle implements Animator.AnimatorListener
+class LayerHandle implements Animator.AnimatorListener
 {
 	private ActivityPaint activity;
 	private ViewGroup mainContainer;
@@ -27,7 +27,7 @@ public class LayerHandle implements Animator.AnimatorListener
 	private float oldOffsetY;
 	private int currentPos;
 	
-	public LayerHandle(ActivityPaint activity, LayersAdapter adapter)
+	LayerHandle(ActivityPaint activity, LayersAdapter adapter)
 	{
 		this.activity = activity;
 		this.mainContainer = activity.getMainContainer();
@@ -36,7 +36,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		this.viewHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, LayerViewHolder.HEIGHT_DP, activity.getDisplayMetrics());
 	}
 	
-	public void onTouchStart(float x, float y)
+	void onTouchStart(float x, float y)
 	{
 		if(layer == null) return;
 		View view = viewHolder.getView();
@@ -45,7 +45,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		ViewGroup parent = (ViewGroup) view.getParent();
 		parent.removeView(view);
 		
-		viewHolder.setGhost(true);
+		viewHolder.setGhost();
 		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y);
 		mainContainer.addView(view);
 		activity.setScrollingBlocked(true);
@@ -69,7 +69,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		return findPointInMainContainer(parentView, point);
 	}
 	
-	public void onTouchMove(float x, float y)
+	void onTouchMove(float x, float y)
 	{
 		if(layer == null) return;
 		
@@ -79,7 +79,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		moveOtherLayers(getCurrentPosition(y));
 	}
 	
-	public void onTouchStop(float x, float y)
+	void onTouchStop(float x, float y)
 	{
 		if(layer == null) return;
 		
@@ -152,7 +152,7 @@ public class LayerHandle implements Animator.AnimatorListener
 		viewHolder = null;
 	}
 	
-	public void setViewHolder(LayerViewHolder viewHolder)
+	void setViewHolder(LayerViewHolder viewHolder)
 	{
 		this.layer = viewHolder.getLayer();
 		this.viewHolder = viewHolder;

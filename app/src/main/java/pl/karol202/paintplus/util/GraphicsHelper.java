@@ -10,7 +10,7 @@ public class GraphicsHelper
 {
 	private class GLException extends RuntimeException
 	{
-		public GLException(String message)
+		GLException(String message)
 		{
 			super(message);
 		}

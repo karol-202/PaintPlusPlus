@@ -52,7 +52,7 @@ public class OptionFileOpen extends Option implements ActivityResultListener
 			image.centerView();
 			
 			if(listener != null)
-				listener.onFileEdited(filePath);
+				listener.onFileEdited(filePath, bitmap);
 		}
 	}
 	

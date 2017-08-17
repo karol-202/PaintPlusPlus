@@ -13,7 +13,7 @@ public class LayerModeDefault implements LayerMode
 	private Bitmap lastBitmap;
 	private Canvas canvas;
 	
-	public LayerModeDefault()
+	LayerModeDefault()
 	{
 		this.paint = new Paint();
 	}

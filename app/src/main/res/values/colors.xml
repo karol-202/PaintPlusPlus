@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="color_primary">#ff5722</color>
-	<color name="color_primary_dark">#FFE64A19</color>
-	<color name="color_accent">#00e676</color>
+	<color name="color_primary">#FF5722</color>
+	<color name="color_primary_dark">#E64A19</color>
+	<color name="color_accent">#00E676</color>
 	<color name="divider">#1F000000</color>
 	<color name="text_item_tool">#DE000000</color>
 	<color name="paint_view_background">#D0D0D0</color>
 	<color name="drawer_background">#F8F8F8</color>
-	<color name="transparent">#00ffffff</color>
+	<color name="transparent">#00FFFFFF</color>
 	<color name="text_warning">#D50000</color>
-	<color name="color_selection_border">#01579b</color>
+	<color name="text_color_select_title_dark">#DE000000</color>
+	<color name="text_color_select_title_light">#FFFFFF</color>
+	<color name="color_selection_border">#01579B</color>
 	<color name="shape_properties">#E9E9E9</color>
 	<color name="layer_name_text">#DE000000</color>
 	<color name="layer_view_selected">#1E88E5</color>
@@ -19,7 +21,6 @@
 	<color name="red">#FF0000</color>
 	<color name="green">#00FF00</color>
 	<color name="blue">#0000FF</color>
-	<color name="turquoise">#00FFFF</color>
 	<color name="white">#FFFFFF</color>
 	<color name="black">#000000</color>
 </resources>

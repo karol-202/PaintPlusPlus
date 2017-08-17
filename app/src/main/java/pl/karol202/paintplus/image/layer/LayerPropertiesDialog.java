@@ -15,7 +15,7 @@ import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 
 import java.util.Locale;
 
-public class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener
+class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener
 {
 	private Context context;
 	private Layer layer;
@@ -26,7 +26,7 @@ public class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener
 	private SeekBar seekBarOpacity;
 	private TextView textOpacity;
 	
-	public LayerPropertiesDialog(Context context, Layer layer)
+	LayerPropertiesDialog(Context context, Layer layer)
 	{
 		this.context = context;
 		this.layer = layer;
@@ -91,7 +91,7 @@ public class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
 		layer.setOpacity(progress / 100f);
-		textOpacity.setText(String.format(Locale.US, "%1$d%%", seekBarOpacity.getProgress()));
+		textOpacity.setText(String.format(Locale.US, "%d%%", seekBarOpacity.getProgress()));
 	}
 	
 	@Override
