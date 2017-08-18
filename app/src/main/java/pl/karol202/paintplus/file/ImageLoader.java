@@ -3,6 +3,8 @@ package pl.karol202.paintplus.file;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Point;
 import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
@@ -14,26 +16,56 @@ public class ImageLoader
 	static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
 	
-	public static Bitmap openBitmap(String path)
+	public static Bitmap openBitmapAndScaleIfNecessary(String path)
 	{
-		Bitmap photo = BitmapFactory.decodeFile(path);
-		if(photo == null) return null;
+		Bitmap bitmap = BitmapFactory.decodeFile(path);
+		if(bitmap == null) return null;
 		
-		float maxSize = GraphicsHelper.getMaxTextureSize();
-		if(photo.getWidth() > maxSize || photo.getHeight() > maxSize)
+		Point bitmapSize = new Point(bitmap.getWidth(), bitmap.getHeight());
+		if(isBitmapTooBig(bitmapSize))
 		{
-			float widthRatio = photo.getWidth() / maxSize;
-			float heightRatio = photo.getHeight() / maxSize;
-			float higher = Math.max(widthRatio, heightRatio);
-			int newWidth = (int) Math.floor(photo.getWidth() / higher);
-			int newHeight = (int) Math.floor(photo.getHeight() / higher);
-			
-			Bitmap bitmap = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
-			bitmap.setHasAlpha(true);
-			return bitmap;
+			bitmapSize = scaleBitmapSizeIfNecessary(bitmapSize);
+			return Bitmap.createScaledBitmap(bitmap, bitmapSize.x, bitmapSize.y, true);
 		}
-		else return photo;
+		else return bitmap;
+	}
+	
+	static Bitmap openBitmapAndScale(String path, Point targetSize)
+	{
+		Bitmap bitmap = BitmapFactory.decodeFile(path);
+		if(bitmap == null) return null;
 		
+		return Bitmap.createScaledBitmap(bitmap, targetSize.x, targetSize.y, true);
+	}
+	
+	static boolean isBitmapTooBig(Point size)
+	{
+		float maxSize = GraphicsHelper.getMaxTextureSize();
+		return size.x > maxSize || size.y > maxSize;
+	}
+	
+	static Point getBitmapSize(String path)
+	{
+		Options options = new Options();
+		options.inJustDecodeBounds = true;
+		
+		BitmapFactory.decodeFile(path, options);
+		return new Point(options.outWidth,options.outHeight);
+	}
+	
+	static Point scaleBitmapSizeIfNecessary(Point originalSize)
+	{
+		if(isBitmapTooBig(originalSize))
+		{
+			float maxSize = GraphicsHelper.getMaxTextureSize();
+			float widthRatio = originalSize.x / maxSize;
+			float heightRatio = originalSize.y / maxSize;
+			float higher = Math.max(widthRatio, heightRatio);
+			int newWidth = (int) Math.floor(originalSize.x / higher);
+			int newHeight = (int) Math.floor(originalSize.y / higher);
+			return new Point(newWidth, newHeight);
+		}
+		else return originalSize;
 	}
 	
 	public static boolean saveBitmap(Bitmap bitmap, String path, int quality)

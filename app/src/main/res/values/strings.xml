@@ -198,4 +198,7 @@
 	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Can\'t save file</string>
 	<string name="open">Open</string>
+	<string name="dialog_image_too_big">Image is too big</string>
+	<string name="dialog_image_too_big_question">Do you want to scale it down to %1$dx%2$d?</string>
+	<string name="scale_down">Scale down</string>
 </resources>

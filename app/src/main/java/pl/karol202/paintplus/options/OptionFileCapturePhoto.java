@@ -71,7 +71,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
 		
-		Bitmap bitmap = ImageLoader.openBitmap(photoFile.getAbsolutePath());
+		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(photoFile.getAbsolutePath());
 		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 		else
 		{

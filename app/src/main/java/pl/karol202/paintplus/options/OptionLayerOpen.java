@@ -8,17 +8,18 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileOpen;
-import pl.karol202.paintplus.file.ImageLoader;
+import pl.karol202.paintplus.file.ImageLoaderDialog;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
 import static android.app.Activity.RESULT_OK;
 
-public class OptionLayerOpen extends Option implements ActivityResultListener
+public class OptionLayerOpen extends Option implements ActivityResultListener, ImageLoaderDialog.OnImageLoadListener
 {
 	private static final int REQUEST_OPEN_LAYER = 3;
 	
 	private ActivityPaint activity;
+	private String fileName;
 	
 	public OptionLayerOpen(ActivityPaint activity, Image image)
 	{
@@ -40,9 +41,14 @@ public class OptionLayerOpen extends Option implements ActivityResultListener
 		activity.unregisterActivityResultListener(REQUEST_OPEN_LAYER);
 		if(resultCode != RESULT_OK) return;
 		String filePath = data.getStringExtra("filePath");
-		String fileName = data.getStringExtra("fileName");
+		fileName = data.getStringExtra("fileName");
 		
-		Bitmap bitmap = ImageLoader.openBitmap(filePath);
+		new ImageLoaderDialog(context, this).loadBitmapAndAskForScalingIfTooBig(filePath);
+	}
+	
+	@Override
+	public void onImageLoaded(Bitmap bitmap)
+	{
 		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 		else
 		{
