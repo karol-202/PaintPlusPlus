@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.Utils;
-
-import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public abstract class OptionRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
@@ -34,7 +32,7 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
-		dialogBuilder.setNegativeButton(R.string.cancel, this);
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		
 		seekBarAngle = (SeekBar) view.findViewById(R.id.seekBar_angle);
 		seekBarAngle.setProgress(angleToProgress(0));
@@ -52,11 +50,9 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which == BUTTON_POSITIVE)
-		{
-			float angle = progressToAngle(seekBarAngle.getProgress());
-			rotate(angle);
-		}
+		float angle = progressToAngle(seekBarAngle.getProgress());
+		rotate(angle);
+		image.updateImage();
 	}
 	
 	protected abstract void rotate(float angle);

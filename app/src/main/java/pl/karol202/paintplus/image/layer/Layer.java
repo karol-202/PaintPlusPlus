@@ -128,6 +128,7 @@ public class Layer
 	public void setBitmap(Bitmap bitmap)
 	{
 		if(!bitmap.isMutable()) bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		bitmap.setHasAlpha(true);
 		this.bitmap = bitmap;
 		editCanvas = new Canvas(bitmap);
 	}

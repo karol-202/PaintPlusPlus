@@ -60,10 +60,14 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		
 		imageLayerHandle = (ImageView) view.findViewById(R.id.image_layer_handle);
 		imageLayerHandle.setOnTouchListener(this);
+		
 		textLayerName = (TextView) view.findViewById(R.id.text_layer_name);
+		
 		imageLayerPreview = (ImageView) view.findViewById(R.id.image_layer_preview);
+		
 		buttonLayerVisibility = (ImageButton) view.findViewById(R.id.button_layer_visibility);
 		buttonLayerVisibility.setOnClickListener(this);
+		
 		buttonLayerMenu = (ImageButton) view.findViewById(R.id.button_layer_menu);
 		buttonLayerMenu.setOnClickListener(this);
 	}

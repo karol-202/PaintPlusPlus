@@ -57,7 +57,7 @@ public class ActivityPaint extends AppCompatActivity
 		
 		actions = new ActivityPaintActions(this);
 		drawers = new ActivityPaintDrawers(this);
-		layers  = new ActivityPaintLayers (this);
+		layers = new ActivityPaintLayers(this);
 		
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
@@ -175,6 +175,7 @@ public class ActivityPaint extends AppCompatActivity
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		outState.putString("title", toolbar.getTitle().toString());
+		getIntent().putExtra("path", (String) null);
 		super.onSaveInstanceState(outState);
 	}
 	

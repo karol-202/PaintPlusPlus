@@ -27,7 +27,10 @@ public class ImageLoader
 			float higher = Math.max(widthRatio, heightRatio);
 			int newWidth = (int) Math.floor(photo.getWidth() / higher);
 			int newHeight = (int) Math.floor(photo.getHeight() / higher);
-			return Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
+			
+			Bitmap bitmap = Bitmap.createScaledBitmap(photo, newWidth, newHeight, true);
+			bitmap.setHasAlpha(true);
+			return bitmap;
 		}
 		else return photo;
 		

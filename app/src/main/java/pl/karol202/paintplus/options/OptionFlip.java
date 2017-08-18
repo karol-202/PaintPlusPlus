@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
-
-import static android.content.DialogInterface.BUTTON_POSITIVE;
+import pl.karol202.paintplus.image.Image;
 
 public abstract class OptionFlip extends Option implements DialogInterface.OnClickListener
 {
@@ -33,7 +31,7 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
-		dialogBuilder.setNegativeButton(R.string.cancel, this);
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		
 		radioHorizontal = (RadioButton) view.findViewById(R.id.radio_horizontal);
 		radioVertical = (RadioButton) view.findViewById(R.id.radio_vertical);
@@ -47,18 +45,16 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which == BUTTON_POSITIVE)
+		int direction;
+		if(radioHorizontal.isChecked() && !radioVertical.isChecked()) direction = Image.FLIP_HORIZONTALLY;
+		else if(!radioHorizontal.isChecked() && radioVertical.isChecked()) direction = Image.FLIP_VERTICALLY;
+		else
 		{
-			int direction;
-			if(radioHorizontal.isChecked() && !radioVertical.isChecked()) direction = Image.FLIP_HORIZONTALLY;
-			else if(!radioHorizontal.isChecked() && radioVertical.isChecked()) direction = Image.FLIP_VERTICALLY;
-			else
-			{
-				Toast.makeText(context, R.string.message_flip_direction, Toast.LENGTH_SHORT).show();
-				return;
-			}
-			flip(direction);
+			Toast.makeText(context, R.string.message_flip_direction, Toast.LENGTH_SHORT).show();
+			return;
 		}
+		flip(direction);
+		image.updateImage();
 	}
 	
 	protected abstract void flip(int direction);

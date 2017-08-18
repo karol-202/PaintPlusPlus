@@ -27,8 +27,10 @@ public class Clipboard
 		
 		Paint paint = new Paint();
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		Path path = new Path(selection.getPath());
+		path.offset(-selectedLayer.getX(), -selectedLayer.getY());
 		Canvas canvas = selectedLayer.getEditCanvas();
-		canvas.clipPath(selection.getPath(), Region.Op.REPLACE);
+		canvas.clipPath(path, Region.Op.REPLACE);
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
 	}
 	
@@ -43,7 +45,7 @@ public class Clipboard
 		bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		canvas.clipPath(path);
-		canvas.drawBitmap(selectedLayer.getBitmap(), -left, -top, null);
+		canvas.drawBitmap(selectedLayer.getBitmap(), -left + selectedLayer.getX(), -top + selectedLayer.getY(), null);
 	}
 	
 	void paste()

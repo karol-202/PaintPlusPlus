@@ -212,6 +212,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardMatrix.preTranslate(-image.getViewX() * image.getZoom(), -image.getViewY() * image.getZoom());
 		updateLayerBounds();
 		updateSelectionPath();
+		activity.updateLayersPreview();
 		
 		invalidate();
 	}

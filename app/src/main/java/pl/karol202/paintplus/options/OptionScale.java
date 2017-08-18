@@ -82,6 +82,7 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 		}
 		boolean smooth = checkSmooth.isChecked();
 		applySize(width, height, smooth);
+		image.updateImage();
 	}
 	
 	protected abstract void applySize(int width, int height, boolean smooth);
