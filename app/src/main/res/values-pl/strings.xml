@@ -25,7 +25,7 @@
 	<string name="dialog_wait">Proszę czekać</string>
 	<string name="dialog_fill_message">Trwa wypełnianie…</string>
 	<string name="dialog_layer_name">Podaj nazwę warstwy</string>
-	<string name="dialog_layer_delete">Usunąć warstwę?</string>
+	<string name="dialog_layer_delete">Usunąć warstwę \"%s\"?</string>
 	<string name="dialog_layer_properties">Właściwości warstwy</string>
 	<string name="dialog_color_curves_rgb">Krzywe kolorów RGB</string>
 	<string name="dialog_color_curves_hsv">Krzywe kolorów HSV</string>

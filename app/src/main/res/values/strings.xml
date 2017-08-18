@@ -24,7 +24,7 @@
 	<string name="dialog_wait">Please wait</string>
 	<string name="dialog_fill_message">Filling…</string>
 	<string name="dialog_layer_name">New layer name</string>
-	<string name="dialog_layer_delete">Delete layer?</string>
+	<string name="dialog_layer_delete">Delete layer \"%s\"?</string>
 	<string name="dialog_layer_properties">Layer properties</string>
 	<string name="dialog_color_curves_rgb">RGB color curves</string>
 	<string name="dialog_color_curves_hsv">HSV color curves</string>

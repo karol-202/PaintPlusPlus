@@ -261,8 +261,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	private void delete()
 	{
+		String message = adapter.getContext().getString(R.string.dialog_layer_delete, layer.getName());
 		AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
-		builder.setMessage(R.string.dialog_layer_delete);
+		builder.setMessage(message);
 		builder.setPositiveButton(R.string.layer_delete, new DialogInterface.OnClickListener()
 		{
 			@Override

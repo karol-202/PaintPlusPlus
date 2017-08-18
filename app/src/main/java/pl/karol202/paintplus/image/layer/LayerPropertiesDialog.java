@@ -2,6 +2,7 @@ package pl.karol202.paintplus.image.layer;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,11 +16,14 @@ import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 
 import java.util.Locale;
 
-class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener
+class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener, DialogInterface.OnClickListener
 {
 	private Context context;
 	private Layer layer;
 	private LayerModeAdapter adapter;
+	
+	private LayerMode layerMode;
+	private float opacity;
 	
 	private AlertDialog dialog;
 	private Spinner spinnerMode;
@@ -30,6 +34,10 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	{
 		this.context = context;
 		this.layer = layer;
+		
+		layerMode = layer.getMode();
+		opacity = layer.getOpacity();
+		
 		init();
 	}
 	
@@ -40,6 +48,8 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.dialog_layer_properties);
+		builder.setPositiveButton(R.string.ok, this);
+		builder.setNegativeButton(R.string.cancel, null);
 		builder.setView(view);
 		
 		adapter = new LayerModeAdapter(context);
@@ -75,8 +85,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		try
 		{
 			LayerModeType type = adapter.getItem(position);
-			LayerMode mode = type.getLayerModeClass().newInstance();
-			layer.setMode(mode);
+			layerMode = type.getLayerModeClass().newInstance();
 		}
 		catch(Exception e)
 		{
@@ -90,7 +99,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		layer.setOpacity(progress / 100f);
+		opacity = progress / 100f;
 		textOpacity.setText(String.format(Locale.US, "%d%%", seekBarOpacity.getProgress()));
 	}
 	
@@ -99,4 +108,11 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) { }
+	
+	@Override
+	public void onClick(DialogInterface dialog, int which)
+	{
+		layer.setMode(layerMode);
+		layer.setOpacity(opacity);
+	}
 }
