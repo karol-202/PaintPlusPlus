@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.tool;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.view.MotionEvent;
@@ -21,11 +22,11 @@ public abstract class Tool
 	
 	public abstract Class<? extends ToolProperties> getPropertiesFragmentClass();
 	
-	public abstract boolean isLayerSpace();
+	public abstract CoordinateSpace getCoordinateSpace();
 	
 	public abstract boolean isUsingSnapping();
 	
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
 		if(isUsingSnapping())
 		{

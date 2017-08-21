@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.tool.marker;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -11,6 +12,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -77,21 +79,21 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
+	public CoordinateSpace getCoordinateSpace()
+	{
+		return CoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
 	public boolean isUsingSnapping()
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
-		return true;
-	}
-	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		super.onTouch(event, manager);
+		super.onTouch(event, manager, context);
 		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
@@ -154,7 +156,7 @@ public class ToolMarker extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isImageLimited()
 	{
 		return true;
 	}

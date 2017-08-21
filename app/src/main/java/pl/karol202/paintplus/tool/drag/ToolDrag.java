@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.tool.drag;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.view.MotionEvent;
@@ -7,6 +8,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -43,9 +45,9 @@ public class ToolDrag extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public CoordinateSpace getCoordinateSpace()
 	{
-		return false;
+		return CoordinateSpace.IMAGE_SPACE;
 	}
 	
 	@Override
@@ -55,7 +57,7 @@ public class ToolDrag extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
 		helpersManager = manager;
 		

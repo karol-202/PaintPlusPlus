@@ -15,6 +15,7 @@ import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 import pl.karol202.paintplus.settings.ActivitySettings;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -189,19 +190,28 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		if(image.getSelectedLayer() == null) return false;
+		Tool tool = getTool();
+		transformTouchCoordinates(event, tool);
+		
+		boolean result = getTool().onTouch(event, helpersManager, getContext());
+		invalidate();
+		return result;
+	}
+	
+	private void transformTouchCoordinates(MotionEvent event, Tool tool)
+	{
+		if(tool.getCoordinateSpace() == CoordinateSpace.SCREEN_SPACE) return;
+		
 		float x = (event.getX() / image.getZoom()) + image.getViewX();
 		float y = (event.getY() / image.getZoom()) + image.getViewY();
 		
-		if(getTool().isLayerSpace())
+		if(tool.getCoordinateSpace() == CoordinateSpace.LAYER_SPACE)
 		{
 			x -= image.getSelectedLayerX();
 			y -= image.getSelectedLayerY();
 		}
-		event.setLocation(x, y);
 		
-		boolean result = getTool().onTouch(event, helpersManager);
-		invalidate();
-		return result;
+		event.setLocation(x, y);
 	}
 	
 	@Override

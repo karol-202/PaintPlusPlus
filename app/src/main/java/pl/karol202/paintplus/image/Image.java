@@ -10,6 +10,7 @@ import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
+import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +42,8 @@ public class Image
 	private Selection selection;
 	private Clipboard clipboard;
 	
-	private int viewX;
-	private int viewY;
+	private float viewX;
+	private float viewY;
 	private float zoom;
 	private Matrix imageMatrix;
 	private int viewportWidth;
@@ -118,7 +119,7 @@ public class Image
 	private void updateMatrix()
 	{
 		Matrix matrix = new Matrix();
-		matrix.postTranslate(-viewX, -viewY);
+		matrix.postTranslate((int) -viewX, (int) -viewY);
 		matrix.postScale(zoom, zoom);
 		
 		imageMatrix.set(matrix);
@@ -137,8 +138,8 @@ public class Image
 	
 	public void centerView()
 	{
-		viewX = (int) (((width * zoom / 2) - (viewportWidth / 2)) / zoom);
-		viewY = (int) (((height * zoom / 2) - (viewportHeight / 2)) / zoom);
+		viewX = ((width * zoom / 2) - (viewportWidth / 2)) / zoom;
+		viewY = ((height * zoom / 2) - (viewportHeight / 2)) / zoom;
 		updateMatrix();
 	}
 	
@@ -342,12 +343,12 @@ public class Image
 	
 	public int getViewX()
 	{
-		return viewX;
+		return (int) viewX;
 	}
 	
 	public int getViewY()
 	{
-		return viewY;
+		return (int) viewY;
 	}
 	
 	public void setViewX(int viewX)
@@ -369,8 +370,19 @@ public class Image
 	
 	public void setZoom(float zoom)
 	{
-		this.viewX += ((viewportWidth / this.zoom) - (viewportWidth / zoom)) / 2;
-		this.viewY += ((viewportHeight / this.zoom) - (viewportHeight / zoom)) / 2;
+		setZoom(zoom, viewportWidth / 2, viewportHeight / 2);
+	}
+	
+	public void setZoom(float zoom, float focusX, float focusY)
+	{
+		float focusXInImage = Utils.map(focusX, -viewX * this.zoom, (-viewX + width) * this.zoom, 0, 1);
+		float focusYInImage = Utils.map(focusY, -viewY * this.zoom, (-viewY + height) * this.zoom, 0, 1);
+		float offsetXLeft = (viewX * (this.zoom / zoom)) - viewX;
+		float offsetYTop = (viewY * (this.zoom / zoom)) - viewY;
+		float offsetXRight = (((viewX * this.zoom) + ((width * zoom) - (width * this.zoom))) / zoom) - viewX;
+		float offsetYBottom = (((viewY * this.zoom) + ((height * zoom) - (height * this.zoom))) / zoom) - viewY;
+		viewX += Utils.lerp(focusXInImage, offsetXLeft, offsetXRight);
+		viewY += Utils.lerp(focusYInImage, offsetYTop, offsetYBottom);
 		
 		this.zoom = zoom;
 		updateMatrix();

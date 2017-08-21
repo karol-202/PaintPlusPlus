@@ -1,10 +1,12 @@
 package pl.karol202.paintplus.tool.selection;
 
+import android.content.Context;
 import android.graphics.*;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -74,21 +76,21 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
+	public CoordinateSpace getCoordinateSpace()
+	{
+		return CoordinateSpace.IMAGE_SPACE;
+	}
+	
+	@Override
 	public boolean isUsingSnapping()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
-		return false;
-	}
-	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		super.onTouch(event, manager);
+		super.onTouch(event, manager, context);
 		helpersManager = manager;
 		
 		if(image.getSelectedLayer() == null)
@@ -282,7 +284,7 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isImageLimited()
 	{
 		return false;
 	}

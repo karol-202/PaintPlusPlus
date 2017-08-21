@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.tool.shape;
 
+import android.content.Context;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import android.view.MotionEvent;
@@ -9,6 +10,7 @@ import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -63,21 +65,21 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 	}
 	
 	@Override
+	public CoordinateSpace getCoordinateSpace()
+	{
+		return CoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
 	public boolean isUsingSnapping()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
-		return false;
-	}
-	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		super.onTouch(event, manager);
+		super.onTouch(event, manager, context);
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
 			canvas = image.getSelectedCanvas();
@@ -92,9 +94,9 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isImageLimited()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override

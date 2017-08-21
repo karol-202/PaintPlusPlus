@@ -2,7 +2,6 @@ package pl.karol202.paintplus.tool;
 
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.brush.ToolBrush;
 import pl.karol202.paintplus.tool.drag.ToolDrag;
 import pl.karol202.paintplus.tool.fill.ToolFill;

@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.tool.fill;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
@@ -11,6 +12,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
@@ -52,9 +54,9 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public CoordinateSpace getCoordinateSpace()
 	{
-		return true;
+		return CoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -64,9 +66,9 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
-		super.onTouch(event, manager);
+		super.onTouch(event, manager, context);
 		Layer layer = image.getSelectedLayer();
 		if(event.getX() < 0 || event.getY() < 0 ||
 		   event.getX() > layer.getWidth() - 1 || event.getY() > layer.getHeight() - 1)

@@ -109,7 +109,7 @@ class RecentLoader
 		long date = readDate();
 		if(thumbnail == null) return;
 		
-		images.add(new RecentImage(path, thumbnail, name, date));
+		images.add(new RecentImage(path, thumbnailPath, thumbnail, name, date));
 	}
 	
 	private void checkTag() throws IOException, XmlPullParserException
@@ -201,14 +201,16 @@ class RecentLoader
 	{
 		serializer.startTag(null, "image");
 		serializer.attribute(null, "path", image.getPath());
-		serializer.attribute(null, "thumbnailPath", saveThumbnailAndReturnPath(image));
+		serializer.attribute(null, "thumbnailPath", getThumbnailPath(image));
 		serializer.attribute(null, "name", image.getName());
 		serializer.attribute(null, "date", String.valueOf(image.getDate()));
 		serializer.endTag(null, "image");
 	}
 	
-	private String saveThumbnailAndReturnPath(RecentImage image) throws IOException
+	private String getThumbnailPath(RecentImage image) throws IOException
 	{
+		if(image.getThumbnailPath() != null) return image.getThumbnailPath();
+		
 		String fileName = String.format("_%s", image.getName());
 		File file = new File(context.getFilesDir(), fileName);
 		String path = file.getAbsolutePath();
@@ -224,6 +226,7 @@ class RecentLoader
 		{
 			int indexOfExisting = images.indexOf(image);
 			RecentImage existing = images.get(indexOfExisting);
+			existing.setThumbnailPath(null);
 			existing.setThumbnail(image.getThumbnail());
 			existing.setDate(image.getDate());
 		}

@@ -1,19 +1,93 @@
 package pl.karol202.paintplus.tool.pan;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolPan extends Tool
 {
-	private int oldImageX;
-	private int oldImageY;
-	private float oldTouchX;
-	private float oldTouchY;
+	interface OnZoomChangeListener
+	{
+		void onZoomChanged();
+	}
+	
+	private class ImageOnGestureListener extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onDown(MotionEvent e)
+		{
+			return true;
+		}
+		
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+		{
+			image.setViewX(image.getViewX() + Math.round(distanceX / image.getZoom()));
+			image.setViewY(image.getViewY() + Math.round(distanceY / image.getZoom()));
+			
+			return true;
+		}
+	}
+	
+	private class ImageOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
+	{
+		private boolean scaling;
+		private float lastFocusX;
+		private float lastFocusY;
+		
+		@Override
+		public boolean onScaleBegin(ScaleGestureDetector detector)
+		{
+			scaling = true;
+			lastFocusX = detector.getFocusX();
+			lastFocusY = detector.getFocusY();
+			return true;
+		}
+		
+		@Override
+		public boolean onScale(ScaleGestureDetector detector)
+		{
+			image.setZoom(detector.getScaleFactor() * image.getZoom(), detector.getFocusX(), detector.getFocusY());
+			
+			image.setViewX(image.getViewX() - Math.round((detector.getFocusX() - lastFocusX) / image.getZoom()));
+			image.setViewY(image.getViewY() - Math.round((detector.getFocusY() - lastFocusY) / image.getZoom()));
+
+			lastFocusX = detector.getFocusX();
+			lastFocusY = detector.getFocusY();
+			
+			if(zoomListener != null) zoomListener.onZoomChanged();
+			return true;
+		}
+		
+		@Override
+		public void onScaleEnd(ScaleGestureDetector detector)
+		{
+			scaling = false;
+		}
+		
+		boolean isScaling()
+		{
+			return scaling;
+		}
+	}
+	
+	private Context context;
+	private OnZoomChangeListener zoomListener;
+	
+	private ImageOnScaleGestureListener scaleGestureListener;
+	private ImageOnGestureListener gestureListener;
+	
+	private GestureDetectorCompat gestureDetector;
+	private ScaleGestureDetector scaleGestureDetector;
 	
 	public ToolPan(Image image)
 	{
@@ -39,61 +113,40 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
+	public CoordinateSpace getCoordinateSpace()
+	{
+		return CoordinateSpace.SCREEN_SPACE;
+	}
+	
+	@Override
 	public boolean isUsingSnapping()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
 	{
-		return false;
-	}
-	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		super.onTouch(event, manager);
-		float x = event.getX() - image.getViewX();
-		float y = event.getY() - image.getViewY();
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(x, y);
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(x, y);
+		if(this.context != context) initDetectors(context);
+		
+		scaleGestureDetector.onTouchEvent(event);
+		if(!scaleGestureListener.isScaling()) gestureDetector.onTouchEvent(event);
 		return true;
 	}
 	
-	private void onTouchStart(float x, float y)
+	private void initDetectors(Context context)
 	{
-		oldImageX = image.getViewX();
-		oldImageY = image.getViewY();
-		oldTouchX = x;
-		oldTouchY = y;
-	}
-	
-	private void onTouchMove(float x, float y)
-	{
-		int deltaTouchX = Math.round(x - oldTouchX);
-		int deltaTouchY = Math.round(y - oldTouchY);
-		image.setViewX(oldImageX - deltaTouchX);
-		image.setViewY(oldImageY - deltaTouchY);
+		this.context = context;
 		
-		checkLimits();
-	}
-	
-	private void checkLimits()
-	{
-		int xMin = (int) (-image.getViewportWidth() / image.getZoom());
-		int xMax = image.getWidth();
-		if(image.getViewX() < xMin) image.setViewX(xMin);
-		else if(image.getViewX() > xMax) image.setViewX(xMax);
+		this.gestureListener = new ImageOnGestureListener();
+		this.scaleGestureListener = new ImageOnScaleGestureListener();
 		
-		int yMin = (int) (-image.getViewportHeight() / image.getZoom());
-		int yMax = image.getHeight();
-		if(image.getViewY() < yMin) image.setViewY(yMin);
-		else if(image.getViewY() > yMax) image.setViewY(yMax);
+		this.gestureDetector = new GestureDetectorCompat(context, gestureListener);
+		this.scaleGestureDetector = new ScaleGestureDetector(context, scaleGestureListener);
 	}
 	
 	@Override
-	public boolean isLayerSpace()
+	public boolean isImageLimited()
 	{
 		return false;
 	}
@@ -126,5 +179,10 @@ public class ToolPan extends Tool
 	void centerView()
 	{
 		image.centerView();
+	}
+	
+	void setZoomListener(OnZoomChangeListener zoomListener)
+	{
+		this.zoomListener = zoomListener;
 	}
 }

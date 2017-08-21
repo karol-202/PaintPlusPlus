@@ -5,13 +5,15 @@ import android.graphics.Bitmap;
 class RecentImage implements Comparable<RecentImage>
 {
 	private String path;
+	private String thumbnailPath;
 	private Bitmap thumbnail;
 	private String name;
 	private long date;
 	
-	RecentImage(String path, Bitmap thumbnail, String name, long date)
+	RecentImage(String path, String thumbnailPath, Bitmap thumbnail, String name, long date)
 	{
 		this.path = path;
+		this.thumbnailPath = thumbnailPath;
 		this.thumbnail = thumbnail;
 		this.name = name;
 		this.date = date;
@@ -49,12 +51,22 @@ class RecentImage implements Comparable<RecentImage>
 		return path;
 	}
 	
+	String getThumbnailPath()
+	{
+		return thumbnailPath;
+	}
+	
+	void setThumbnailPath(String thumbnailPath)
+	{
+		this.thumbnailPath = thumbnailPath;
+	}
+	
 	Bitmap getThumbnail()
 	{
 		return thumbnail;
 	}
 	
-	public void setThumbnail(Bitmap thumbnail)
+	void setThumbnail(Bitmap thumbnail)
 	{
 		this.thumbnail = thumbnail;
 	}

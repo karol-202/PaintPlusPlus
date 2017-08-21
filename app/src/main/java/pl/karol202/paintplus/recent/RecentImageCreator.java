@@ -29,7 +29,7 @@ public class RecentImageCreator implements OnFileEditListener
 		String name = parts[parts.length - 1];
 		Bitmap thumbnail = createThumbnail(originalBitmap);
 		
-		return new RecentImage(path, thumbnail, name, System.currentTimeMillis());
+		return new RecentImage(path, null, thumbnail, name, System.currentTimeMillis());
 	}
 	
 	private Bitmap createThumbnail(Bitmap originalBitmap)

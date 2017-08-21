@@ -14,7 +14,7 @@ import pl.karol202.paintplus.tool.ToolProperties;
 
 import java.util.Locale;
 
-public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher
+public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher, ToolPan.OnZoomChangeListener
 {
 	public static final double SQRT2 = Math.sqrt(2);
 	public static final double MIN_ZOOM = 0.009;
@@ -35,6 +35,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.properties_pan, container, false);
 		pan = (ToolPan) tool;
+		pan.setZoomListener(this);
 		zoom = pan.getZoom();
 		
 		buttonZoomOut = (ImageButton) view.findViewById(R.id.button_zoom_out);
@@ -107,12 +108,12 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	
 	private String zoomToText(double zoom)
 	{
-		return String.format(Locale.US, "%d%%", Math.round(zoom * 100));
+		return String.format(Locale.US, "%.1f%%", zoom * 100);
 	}
 	
 	private double textToZoom(String text)
 	{
-		return Integer.parseInt(text.substring(0, text.length() - 1)) / 100d;
+		return Float.parseFloat(text.substring(0, text.length() - 1)) / 100;
 	}
 	
 	private double getLowerZoom()
@@ -168,5 +169,11 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		double round = Math.round(fract * 2) / 2f;
 		if(position >= 0) return round;
 		else return 1 / round;
+	}
+	
+	@Override
+	public void onZoomChanged()
+	{
+		updateZoom(pan.getZoom(), true);
 	}
 }

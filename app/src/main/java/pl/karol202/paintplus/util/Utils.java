@@ -6,13 +6,13 @@ import android.util.TypedValue;
 
 public class Utils
 {
-	public static float map(float src, int srcMin, int srcMax, int dstMin, int dstMax)
+	public static float map(float src, float srcMin, float srcMax, float dstMin, float dstMax)
 	{
 		float srcPoint = (src - srcMin) / (srcMax - srcMin);
 		return lerp(srcPoint, dstMin, dstMax);
 	}
 
-	private static float lerp(float value, int v1, int v2)
+	public static float lerp(float value, float v1, float v2)
 	{
 		return v1 + value * (v2 - v1);
 	}
