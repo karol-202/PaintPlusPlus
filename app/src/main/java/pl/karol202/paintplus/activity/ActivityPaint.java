@@ -18,6 +18,7 @@ import pl.karol202.paintplus.AppDataFragment;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.OptionFileOpen;
 import pl.karol202.paintplus.recent.OnFileEditListener;
@@ -283,6 +284,11 @@ public class ActivityPaint extends AppCompatActivity
 		return getResources().getDisplayMetrics();
 	}
 	
+	AsyncManager getAsyncManager()
+	{
+		return asyncManager;
+	}
+	
 	public Image getImage()
 	{
 		return dataFragment.getImage();
@@ -305,9 +311,9 @@ public class ActivityPaint extends AppCompatActivity
 		paintView.onImageChanged();
 	}
 	
-	AsyncManager getAsyncManager()
+	public HelpersManager getHelpersManager()
 	{
-		return asyncManager;
+		return dataFragment.getHelpersManager();
 	}
 	
 	OnFileEditListener getFileEditListener()

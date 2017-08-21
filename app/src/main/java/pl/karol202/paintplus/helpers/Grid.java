@@ -9,7 +9,8 @@ import pl.karol202.paintplus.image.Image;
 public class Grid
 {
 	private final int LINE_WIDTH = 1;
-	private final int LINE_OFFSET_CONSTANT = 50;
+	private final int LINE_OFFSET_CONSTANT = 40;
+	private final int LINE_OFFSET_BASE = 20;
 	private final int SNAP_DISTANCE_DP = 15;
 	
 	private Image image;
@@ -37,7 +38,7 @@ public class Grid
 	
 	private void createLines(Canvas canvas)
 	{
-		int offset = (int) Math.floor(density * LINE_OFFSET_CONSTANT / lastZoom);
+		int offset = calculateLineOffset();
 		
 		float right = lastX + (canvas.getWidth() / lastZoom);
 		float bottom = lastY + (canvas.getHeight() / lastZoom);
@@ -54,6 +55,16 @@ public class Grid
 			verticalLines[vertLine - firstVerticalLineIndex] = vertLine * offset;
 		for(int horLine = firstHorizontalLineIndex; horLine <= lastHorizontalLineIndex; horLine++)
 			horizontalLines[horLine - firstHorizontalLineIndex] = horLine * offset;
+	}
+	
+	private int calculateLineOffset()
+	{
+		float offsetRaw = density * LINE_OFFSET_CONSTANT / lastZoom;
+		int nearestOffset = LINE_OFFSET_BASE;
+		for(int offset = LINE_OFFSET_BASE;
+		    Math.abs(offsetRaw - offset) <= Math.abs(offsetRaw - nearestOffset);
+		    offset *= 2) nearestOffset = offset;
+		return nearestOffset;
 	}
 	
 	public void onScreenDraw(Canvas canvas)
@@ -123,7 +134,7 @@ public class Grid
 		
 		if(topSnap && !bottomSnap) return top;
 		else if(!topSnap && bottomSnap) return bottom;
-		else if(topSnap && bottomSnap) return (y - top) <= (top - y) ? top : bottom;
+		else if(topSnap && bottomSnap) return (y - top) <= (bottom - y) ? top : bottom;
 		else return y;
 	}
 	

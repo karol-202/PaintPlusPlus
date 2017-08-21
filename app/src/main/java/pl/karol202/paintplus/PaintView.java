@@ -73,7 +73,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
 		
-		helpersManager = new HelpersManager(image, getResources());
+		helpersManager = activity.getHelpersManager();
 	}
 	
 	public void updatePreferences()
