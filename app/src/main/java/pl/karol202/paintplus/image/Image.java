@@ -119,7 +119,7 @@ public class Image
 	private void updateMatrix()
 	{
 		Matrix matrix = new Matrix();
-		matrix.postTranslate((int) -viewX, (int) -viewY);
+		matrix.postTranslate(-viewX, -viewY);
 		matrix.postScale(zoom, zoom);
 		
 		imageMatrix.set(matrix);
@@ -341,23 +341,23 @@ public class Image
 		return clipboard;
 	}
 	
-	public int getViewX()
+	public float getViewX()
 	{
-		return (int) viewX;
+		return viewX;
 	}
 	
-	public int getViewY()
+	public float getViewY()
 	{
-		return (int) viewY;
+		return viewY;
 	}
 	
-	public void setViewX(int viewX)
+	public void setViewX(float viewX)
 	{
 		this.viewX = viewX;
 		updateMatrix();
 	}
 	
-	public void setViewY(int viewY)
+	public void setViewY(float viewY)
 	{
 		this.viewY = viewY;
 		updateMatrix();

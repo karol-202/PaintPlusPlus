@@ -309,9 +309,9 @@ public class ToolSelection extends Tool
 		else if(shape == OVAL) canvas.drawOval(new RectF(transformRect()), paint);
 	}
 	
-	private Rect transformRect()
+	private RectF transformRect()
 	{
-		Rect newRect = new Rect(rect);
+		RectF newRect = new RectF(rect);
 		newRect.offset(-image.getViewX(), -image.getViewY());
 		
 		newRect.left *= image.getZoom();

@@ -192,7 +192,7 @@ public class ToolRubber extends Tool
 	{
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX() + layer.getX(),
-				-image.getViewY() + layer.getY());
+						 -image.getViewY() + layer.getY());
 		
 		canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
 		canvas.drawPath(path, pathPaint);

@@ -21,8 +21,8 @@ public class Grid
 	private int[] verticalLines;
 	private int[] horizontalLines;
 	private float lastZoom;
-	private int lastX;
-	private int lastY;
+	private float lastX;
+	private float lastY;
 	
 	Grid(Image image, Resources resources)
 	{
@@ -39,8 +39,8 @@ public class Grid
 	{
 		int offset = (int) Math.floor(density * LINE_OFFSET_CONSTANT / lastZoom);
 		
-		int right = lastX + (int) (canvas.getWidth() / lastZoom);
-		int bottom = lastY + (int) (canvas.getHeight() / lastZoom);
+		float right = lastX + (canvas.getWidth() / lastZoom);
+		float bottom = lastY + (canvas.getHeight() / lastZoom);
 		
 		int firstVerticalLineIndex = (int) Math.ceil(lastX / offset);
 		int lastVerticalLineIndex = (int) Math.floor(right / offset);

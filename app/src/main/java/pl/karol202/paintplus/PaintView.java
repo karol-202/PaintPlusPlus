@@ -25,6 +25,7 @@ import java.util.Collections;
 public class PaintView extends SurfaceView implements OnImageChangeListener, Selection.OnSelectionChangeListener
 {
 	private final float[] PAINT_DASH = new float[] { 5f, 5f };
+	private final float CHECKERBOARD_OFFSET = 8;
 	
 	private ActivityPaint activity;
 	private Image image;
@@ -218,12 +219,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	public void onImageChanged()
 	{
 		if(image == null) return;
-		checkerboardMatrix = new Matrix();
-		checkerboardMatrix.preTranslate(-image.getViewX() * image.getZoom(), -image.getViewY() * image.getZoom());
+		updateCheckerboardMatrix();
 		updateLayerBounds();
 		updateSelectionPath();
 		activity.updateLayersPreview();
-		
 		invalidate();
 	}
 	
@@ -243,15 +242,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		updateSelectionPath();
 	}
 	
-	private void updateSelectionPath()
+	private void updateCheckerboardMatrix()
 	{
-		Region region = new Region(image.getSelection().getRegion());
-		Rect screen = new Rect();
-		getScreenRect().round(screen);
-		region.op(screen, Region.Op.INTERSECT);
-		
-		selectionPath = region.getBoundaryPath();
-		selectionPath.transform(image.getImageMatrix());
+		checkerboardMatrix = new Matrix();
+		checkerboardMatrix.preTranslate(-image.getViewX() * image.getZoom() + CHECKERBOARD_OFFSET, -image.getViewY() * image.getZoom() + CHECKERBOARD_OFFSET);
 	}
 	
 	private void updateLayerBounds()
@@ -264,6 +258,17 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		boundsPath = new Path();
 		boundsPath.addRect(bounds, Path.Direction.CW);
 		boundsPath.transform(image.getImageMatrix());
+	}
+	
+	private void updateSelectionPath()
+	{
+		Region region = new Region(image.getSelection().getRegion());
+		Rect screen = new Rect();
+		getScreenRect().round(screen);
+		region.op(screen, Region.Op.INTERSECT);
+		
+		selectionPath = region.getBoundaryPath();
+		selectionPath.transform(image.getImageMatrix());
 	}
 	
 	private RectF getScreenRect()

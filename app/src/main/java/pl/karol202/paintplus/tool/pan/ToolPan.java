@@ -31,8 +31,8 @@ public class ToolPan extends Tool
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			image.setViewX(image.getViewX() + Math.round(distanceX / image.getZoom()));
-			image.setViewY(image.getViewY() + Math.round(distanceY / image.getZoom()));
+			image.setViewX(image.getViewX() + (distanceX / image.getZoom()));
+			image.setViewY(image.getViewY() + (distanceY / image.getZoom()));
 			
 			return true;
 		}
@@ -58,8 +58,8 @@ public class ToolPan extends Tool
 		{
 			image.setZoom(detector.getScaleFactor() * image.getZoom(), detector.getFocusX(), detector.getFocusY());
 			
-			image.setViewX(image.getViewX() - Math.round((detector.getFocusX() - lastFocusX) / image.getZoom()));
-			image.setViewY(image.getViewY() - Math.round((detector.getFocusY() - lastFocusY) / image.getZoom()));
+			image.setViewX(image.getViewX() + ((lastFocusX - detector.getFocusX()) / image.getZoom()));
+			image.setViewY(image.getViewY() + ((lastFocusY - detector.getFocusY()) / image.getZoom()));
 
 			lastFocusX = detector.getFocusX();
 			lastFocusY = detector.getFocusY();
