@@ -1,19 +1,16 @@
 package pl.karol202.paintplus.tool.brush;
 
-import android.content.Context;
 import android.graphics.*;
 import android.graphics.Region.Op;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.CoordinateSpace;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
-public class ToolBrush extends Tool
+public class ToolBrush extends StandardTool
 {
 	private float size;
 	private float shapeOffset;
@@ -77,18 +74,9 @@ public class ToolBrush extends Tool
 	{
 		return true;
 	}
-	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
-	{
-		super.onTouch(event, manager, context);
-		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
-		return true;
-	}
 
-	private boolean onTouchStart(float x, float y)
+	@Override
+	public boolean onTouchStart(float x, float y)
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
@@ -129,7 +117,8 @@ public class ToolBrush extends Tool
 		}
 	}
 	
-	private void onTouchMove(float x, float y)
+	@Override
+	public boolean onTouchMove(float x, float y)
 	{
 		path.quadTo(lastX, lastY, x, y);
 		
@@ -137,11 +126,13 @@ public class ToolBrush extends Tool
 		
 		lastX = x;
 		lastY = y;
+		return true;
 	}
-
-	private void onTouchStop(float x, float y)
+	
+	@Override
+	public boolean onTouchStop(float x, float y)
 	{
-		if(lastX == -1 || lastY == -1) return;
+		if(lastX == -1 || lastY == -1) return true;
 		path.lineTo(x, y);
 		
 		drawPointsOnPath();
@@ -150,6 +141,7 @@ public class ToolBrush extends Tool
 		lastX = -1;
 		lastY = -1;
 		pathDistance = 0;
+		return true;
 	}
 	
 	private void drawPointsOnPath()

@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.tool.shape.polygon;
 
 import android.graphics.*;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
@@ -19,7 +18,6 @@ public class ShapePolygon extends Shape
 	private boolean fill;
 	private int lineWidth;
 	
-	private HelpersManager helpersManager;
 	private boolean polygonCreated;
 	private Point center;
 	private float radiusOCC; //Radius of circumscribed circle
@@ -30,11 +28,10 @@ public class ShapePolygon extends Shape
 	private int draggedIndex;
 	private Point centerAtBeginning;
 	private float radiusOCCAtBeginning;
-	private float angleAtBeginning;
 	
-	public ShapePolygon(ColorsSet colors, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapePolygon(ColorsSet colors, HelpersManager helpersManager, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
-		super(colors, imageChangeListener, shapeEditListener);
+		super(colors, helpersManager, imageChangeListener, shapeEditListener);
 		this.sides = 4;
 		this.fill = false;
 		this.lineWidth = 30;
@@ -60,17 +57,7 @@ public class ShapePolygon extends Shape
 		return PolygonProperties.class;
 	}
 	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		helpersManager = manager;
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
-		return true;
-	}
-	
-	private void onTouchStart(int x, int y)
+	public void onTouchStart(int x, int y)
 	{
 		Point touchPoint = new Point(x, y);
 		if(!isInEditMode()) enableEditMode();
@@ -86,7 +73,7 @@ public class ShapePolygon extends Shape
 			if(angle < 0) angle += 360;
 			float angleMod = angle % centralAngle;
 			float a = Math.abs(angleMod - halfOfCentral);
-			float centerToSide = map(0, halfOfCentral, radiusOIC, radiusOCC, a);
+			float centerToSide = Utils.map(a, 0, halfOfCentral, radiusOIC, radiusOCC);
 			
 			float distanceToCenter = calcDistance(center, x, y);
 			float distanceToSide = Math.abs(distanceToCenter - centerToSide);
@@ -94,26 +81,20 @@ public class ShapePolygon extends Shape
 			draggingStart = touchPoint;
 			centerAtBeginning = center;
 			radiusOCCAtBeginning = radiusOCC;
-			angleAtBeginning = this.angle;
 			if(Math.min(distanceToCenter, distanceToSide) > MAX_DISTANCE) draggedIndex = -1;
 			else if(distanceToCenter < distanceToSide) draggedIndex = 0;
 			else draggedIndex = 1;
 		}
 	}
 	
-	private float map(float srcMin, float srcMax, float dstMin, float dstMax, float value)
-	{
-		return (value - srcMin) / (srcMax - srcMin) * (dstMax - dstMin) + dstMin;
-	}
-	
-	private void onTouchMove(int x, int y)
+	public void onTouchMove(int x, int y)
 	{
 		Point current = new Point(x, y);
 		if(!polygonCreated) dragRadius(current);
 		else drag(current);
 	}
 	
-	private void onTouchStop(int x, int y)
+	public void onTouchStop(int x, int y)
 	{
 		onTouchMove(x, y);
 		polygonCreated = true;
@@ -153,7 +134,7 @@ public class ShapePolygon extends Shape
 			float x = (float) (rResult * Math.cos(theta)) + center.x;
 			float y = (float) (rResult * Math.sin(theta)) + center.y;
 			PointF result = new PointF(x, y);
-			helpersManager.snapPoint(result);
+			getHelpersManager().snapPoint(result);
 			
 			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
 			
@@ -162,7 +143,7 @@ public class ShapePolygon extends Shape
 		else
 		{
 			PointF snapped = new PointF(current);
-			helpersManager.snapPoint(snapped);
+			getHelpersManager().snapPoint(snapped);
 			radiusOCC = calcDistance(center, (int) snapped.x, (int) snapped.y);
 			
 			angle = (float) getAngle(new Point((int) snapped.x, (int) snapped.y));
@@ -186,7 +167,7 @@ public class ShapePolygon extends Shape
 	private void setCenterPoint(Point point)
 	{
 		PointF snapped = new PointF(point);
-		helpersManager.snapPoint(snapped);
+		getHelpersManager().snapPoint(snapped);
 		center = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
@@ -261,35 +242,35 @@ public class ShapePolygon extends Shape
 		path.close();
 	}
 	
-	public int getSides()
+	int getSides()
 	{
 		return sides;
 	}
 	
-	public void setSides(int sides)
+	void setSides(int sides)
 	{
 		if(sides < 3) throw new IllegalArgumentException("Number of sides of polygon cannot be lower than 3.");
 		this.sides = sides;
 		update();
 	}
 	
-	public boolean isFill()
+	boolean isFill()
 	{
 		return fill;
 	}
 	
-	public void setFill(boolean fill)
+	void setFill(boolean fill)
 	{
 		this.fill = fill;
 		update();
 	}
 	
-	public int getLineWidth()
+	int getLineWidth()
 	{
 		return lineWidth;
 	}
 	
-	public void setLineWidth(int lineWidth)
+	void setLineWidth(int lineWidth)
 	{
 		this.lineWidth = lineWidth;
 		update();

@@ -3,11 +3,10 @@ package pl.karol202.paintplus.tool.shape.line;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.view.MotionEvent;
-import pl.karol202.paintplus.helpers.HelpersManager;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
@@ -19,7 +18,6 @@ public class ShapeLine extends Shape
 	private int lineWidth;
 	private Cap lineCap;
 	
-	private HelpersManager helpersManager;
 	private boolean lineCreated;
 	private Point start;
 	private Point end;
@@ -28,9 +26,9 @@ public class ShapeLine extends Shape
 	private Point draggedPoint;
 	private Point draggingStart;
 	
-	public ShapeLine(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeLine(ColorsSet colors, HelpersManager helpersManager, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
-		super(colors, imageChangeListener, shapeEditListener);
+		super(colors, helpersManager, imageChangeListener, shapeEditListener);
 		this.lineWidth = 10;
 		this.lineCap = Cap.ROUND;
 		
@@ -55,17 +53,7 @@ public class ShapeLine extends Shape
 		return LineProperties.class;
 	}
 	
-	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		helpersManager = manager;
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
-		return true;
-	}
-	
-	private void onTouchStart(int x, int y)
+	public void onTouchStart(int x, int y)
 	{
 		if(!isInEditMode()) enableEditMode();
 		if(!lineCreated) setStartPoint(new Point(x, y));
@@ -93,13 +81,13 @@ public class ShapeLine extends Shape
 		}
 	}
 
-	private void onTouchMove(int x, int y)
+	public void onTouchMove(int x, int y)
 	{
 		if(!lineCreated) setEndPoint(new Point(x, y));
 		else dragPoint(new Point(x, y));
 	}
 	
-	private void onTouchStop(int x, int y)
+	public void onTouchStop(int x, int y)
 	{
 		if(!lineCreated) setEndPoint(new Point(x, y));
 		else dragPoint(new Point(x, y));
@@ -123,14 +111,14 @@ public class ShapeLine extends Shape
 	private void setStartPoint(Point point)
 	{
 		PointF snapped = new PointF(point);
-		helpersManager.snapPoint(snapped);
+		getHelpersManager().snapPoint(snapped);
 		start = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
 	private void setEndPoint(Point point)
 	{
 		PointF snapped = new PointF(point);
-		helpersManager.snapPoint(snapped);
+		getHelpersManager().snapPoint(snapped);
 		end = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
@@ -183,23 +171,23 @@ public class ShapeLine extends Shape
 		super.enableEditMode();
 	}
 	
-	public int getLineWidth()
+	int getLineWidth()
 	{
 		return lineWidth;
 	}
 	
-	public void setLineWidth(int lineWidth)
+	void setLineWidth(int lineWidth)
 	{
 		this.lineWidth = lineWidth;
 		update();
 	}
 	
-	public Cap getLineCap()
+	Cap getLineCap()
 	{
 		return lineCap;
 	}
 	
-	public void setLineCap(Cap lineCap)
+	void setLineCap(Cap lineCap)
 	{
 		this.lineCap = lineCap;
 		update();

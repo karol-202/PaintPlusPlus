@@ -18,7 +18,6 @@ import pl.karol202.paintplus.AppDataFragment;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.OptionFileOpen;
 import pl.karol202.paintplus.recent.OnFileEditListener;
@@ -309,11 +308,6 @@ public class ActivityPaint extends AppCompatActivity
 	{
 		dataFragment.setTool(tool);
 		paintView.onImageChanged();
-	}
-	
-	public HelpersManager getHelpersManager()
-	{
-		return dataFragment.getHelpersManager();
 	}
 	
 	OnFileEditListener getFileEditListener()

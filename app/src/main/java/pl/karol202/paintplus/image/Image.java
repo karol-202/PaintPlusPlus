@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
@@ -41,6 +42,7 @@ public class Image
 	private ColorsSet colorsSet;
 	private Selection selection;
 	private Clipboard clipboard;
+	private HelpersManager helpersManager;
 	
 	private float viewX;
 	private float viewY;
@@ -57,6 +59,7 @@ public class Image
 		this.colorsSet = ColorsSet.getDefault();
 		this.selection = new Selection();
 		this.clipboard = new Clipboard(this, context.getString(R.string.pasted_layer));
+		this.helpersManager = new HelpersManager(this, context.getResources());
 		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
@@ -339,6 +342,11 @@ public class Image
 	public Clipboard getClipboard()
 	{
 		return clipboard;
+	}
+	
+	public HelpersManager getHelpersManager()
+	{
+		return helpersManager;
 	}
 	
 	public float getViewX()

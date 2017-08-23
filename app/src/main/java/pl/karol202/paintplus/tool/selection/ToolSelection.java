@@ -1,19 +1,17 @@
 package pl.karol202.paintplus.tool.selection;
 
-import android.content.Context;
 import android.graphics.*;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.CoordinateSpace;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 import static pl.karol202.paintplus.tool.selection.ToolSelectionShape.OVAL;
 import static pl.karol202.paintplus.tool.selection.ToolSelectionShape.RECTANGLE;
 
-public class ToolSelection extends Tool
+public class ToolSelection extends StandardTool
 {
 	private enum MoveType
 	{
@@ -46,6 +44,7 @@ public class ToolSelection extends Tool
 		this.shape = RECTANGLE;
 		this.mode = ToolSelectionMode.NEW;
 		
+		this.helpersManager = image.getHelpersManager();
 		this.selection = image.getSelection();
 		this.rect = new Rect();
 		this.paint = new Paint();
@@ -88,24 +87,17 @@ public class ToolSelection extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
+	public boolean onTouchStart(float xFloat, float yFloat)
 	{
-		super.onTouch(event, manager, context);
-		helpersManager = manager;
-		
 		if(image.getSelectedLayer() == null)
 		{
 			if(editMode) cleanUp();
 			return false;
 		}
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
-		return true;
-	}
-	
-	private void onTouchStart(int x, int y)
-	{
+		
+		int x = Math.round(xFloat);
+		int y = Math.round(yFloat);
+		
 		if(!editMode) enableEditMode();
 		if(!rectCreated)
 		{
@@ -118,6 +110,7 @@ public class ToolSelection extends Tool
 			rectAtBeginning = new Rect(rect);
 			movingStart = new Point(x, y);
 		}
+		return true;
 	}
 	
 	private void enableEditMode()
@@ -155,18 +148,28 @@ public class ToolSelection extends Tool
 		if(left && bottom) movingType = MoveType.LEFT_BOTTOM_CORNER;
 	}
 	
-	private void onTouchMove(int x, int y)
+	@Override
+	public boolean onTouchMove(float xFloat, float yFloat)
 	{
+		int x = Math.round(xFloat);
+		int y = Math.round(yFloat);
+		
 		if(!rectCreated)
 		{
 			setRight(x);
 			setBottom(y);
 		}
 		else move(x, y);
+		
+		return true;
 	}
 	
-	private void onTouchStop(int x, int y)
+	@Override
+	public boolean onTouchStop(float xFloat, float yFloat)
 	{
+		int x = Math.round(xFloat);
+		int y = Math.round(yFloat);
+		
 		if(!rectCreated)
 		{
 			setRight(x);
@@ -175,6 +178,8 @@ public class ToolSelection extends Tool
 		else move(x, y);
 		correctBounds();
 		rectCreated = true;
+		
+		return true;
 	}
 	
 	private void move(int x, int y)

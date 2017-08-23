@@ -1,9 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
-import android.content.Context;
 import android.graphics.*;
 import android.graphics.Region.Op;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
@@ -12,17 +10,19 @@ import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
-public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEditListener, OnToolChangeListener
+public class ToolShape extends StandardTool implements OnImageChangeListener, OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
 	private Canvas canvas;
 	private ColorsSet colors;
 	private Selection selection;
+	private HelpersManager helpersManager;
+	
 	private Path selectionPath;
 	private Layer layer;
 	
@@ -35,10 +35,12 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 		super(image);
 		this.colors = image.getColorsSet();
 		this.selection = image.getSelection();
+		this.helpersManager = image.getHelpersManager();
+		
 		this.layer = image.getSelectedLayer();
 		updateSelectionPath();
 		
-		this.shapes = new Shapes(colors, this, this);
+		this.shapes = new Shapes(colors, helpersManager, this, this);
 		this.maskPaint = new Paint();
 		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));
@@ -77,20 +79,32 @@ public class ToolShape extends Tool implements OnImageChangeListener, OnShapeEdi
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
+	public boolean onTouchStart(float x, float y)
 	{
-		super.onTouch(event, manager, context);
-		if(event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-			canvas = image.getSelectedCanvas();
-			if(canvas == null) return false;
-			selection = image.getSelection();
-			layer = image.getSelectedLayer();
-			
-			updateSelectionPath();
-			updateClipping(canvas);
-		}
-		return shape.onTouch(event, manager);
+		canvas = image.getSelectedCanvas();
+		if(canvas == null) return false;
+		selection = image.getSelection();
+		layer = image.getSelectedLayer();
+		
+		updateSelectionPath();
+		updateClipping(canvas);
+		
+		shape.onTouchStart((int) x, (int) y);
+		return true;
+	}
+	
+	@Override
+	public boolean onTouchMove(float x, float y)
+	{
+		shape.onTouchMove((int) x, (int) y);
+		return true;
+	}
+	
+	@Override
+	public boolean onTouchStop(float x, float y)
+	{
+		shape.onTouchStop((int) x, (int) y);
+		return true;
 	}
 	
 	@Override

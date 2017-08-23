@@ -3,7 +3,6 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
@@ -18,8 +17,9 @@ public abstract class Shape
 	private boolean editMode;
 	private Paint paint;
 	private ColorsSet colors;
+	private HelpersManager helpersManager;
 	
-	public Shape(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public Shape(ColorsSet colors, HelpersManager helpersManager, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
 		this.smooth = true;
 		this.opacity = 1;
@@ -28,6 +28,7 @@ public abstract class Shape
 		this.shapeEditListener = shapeEditListener;
 		this.paint = new Paint();
 		this.colors = colors;
+		this.helpersManager = helpersManager;
 	}
 	
 	public abstract int getName();
@@ -36,7 +37,11 @@ public abstract class Shape
 	
 	public abstract Class<? extends ShapeProperties> getPropertiesClass();
 	
-	public abstract boolean onTouch(MotionEvent event, HelpersManager helpersManager);
+	public abstract void onTouchStart(int x, int y);
+	
+	public abstract void onTouchMove(int x, int y);
+	
+	public abstract void onTouchStop(int x, int y);
 	
 	public abstract void onScreenDraw(Canvas canvas);
 	
@@ -82,6 +87,11 @@ public abstract class Shape
 	protected Paint getPaint()
 	{
 		return paint;
+	}
+	
+	protected HelpersManager getHelpersManager()
+	{
+		return helpersManager;
 	}
 	
 	protected boolean isSmooth()

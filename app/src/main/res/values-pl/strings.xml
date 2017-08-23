@@ -152,7 +152,7 @@
 	<string name="replace_file_text">Plik o podanej nazwie już istnieje. Czy chcesz go zamienić?</string>
 	<string name="replace">Zamień</string>
 	<string name="fill_threshold">Progowanie</string>
-	<string name="marker_smooth">Wygładź</string>
+	<string name="marker_smooth_edge">Gładka krawędź</string>
 	<string name="fill_warning">Wypełnianie dużych obszarów może chwilę potrwać.</string>
 	<string name="shape">Kształt</string>
 	<string name="line_width">Grubość</string>

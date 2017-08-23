@@ -23,7 +23,7 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 	private TextView textMarkerSize;
 	private SeekBar seekMarkerTranslucency;
 	private TextView textMarkerTranslucency;
-	private CheckBox checkSmooth;
+	private CheckBox checkSmoothEdge;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -48,9 +48,9 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 		textMarkerTranslucency = (TextView) view.findViewById(R.id.marker_translucency);
 		textMarkerTranslucency.setText(String.format(Locale.US, "%1$d%%", seekMarkerTranslucency.getProgress()));
 		
-		checkSmooth = (CheckBox) view.findViewById(R.id.check_smooth);
-		checkSmooth.setChecked(marker.isSmooth());
-		checkSmooth.setOnCheckedChangeListener(this);
+		checkSmoothEdge = (CheckBox) view.findViewById(R.id.check_smooth_edge);
+		checkSmoothEdge.setChecked(marker.isSmoothEdge());
+		checkSmoothEdge.setOnCheckedChangeListener(this);
 		return view;
 	}
 	
@@ -82,6 +82,6 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
-		marker.setSmooth(isChecked);
+		if(buttonView == checkSmoothEdge) marker.setSmoothEdge(isChecked);
 	}
 }

@@ -1,20 +1,17 @@
 package pl.karol202.paintplus.tool.pickcolor;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.CoordinateSpace;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
-public class ToolColorPick extends Tool
+public class ToolColorPick extends StandardTool
 {
 	private int size;
 	
@@ -62,11 +59,22 @@ public class ToolColorPick extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
+	public boolean onTouchStart(float x, float y)
 	{
-		super.onTouch(event, manager, context);
-		if(event.getAction() == MotionEvent.ACTION_UP) pickColor((int) event.getX(), (int) event.getY());
 		return true;
+	}
+	
+	@Override
+	public boolean onTouchMove(float x, float y)
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean onTouchStop(float x, float y)
+	{
+		pickColor((int) x, (int) y);
+		return false;
 	}
 	
 	private void pickColor(int x, int y)

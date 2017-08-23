@@ -15,7 +15,6 @@ import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 import pl.karol202.paintplus.settings.ActivitySettings;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -30,12 +29,13 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private ActivityPaint activity;
 	private Image image;
 	private ColorsSet colors;
+	private HelpersManager helpersManager;
+	
 	private Paint selectionPaint;
 	private Paint layerBoundsPaint;
 	private Paint checkerboardPaint;
 	private Shader checkerboardShader;
 	private boolean initialized;
-	private HelpersManager helpersManager;
 	
 	private Matrix checkerboardMatrix;
 	private ArrayList<Layer> reversedLayers;
@@ -55,6 +55,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		image.setOnImageChangeListener(this);
 		image.addOnSelectionChangeListener(this);
 		colors = image.getColorsSet();
+		helpersManager = image.getHelpersManager();
 		
 		selectionPaint = new Paint();
 		selectionPaint.setStyle(Paint.Style.STROKE);
@@ -72,8 +73,6 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardPaint = new Paint();
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
-		
-		helpersManager = activity.getHelpersManager();
 	}
 	
 	public void updatePreferences()
@@ -192,27 +191,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	{
 		if(image.getSelectedLayer() == null) return false;
 		Tool tool = getTool();
-		transformTouchCoordinates(event, tool);
 		
-		boolean result = getTool().onTouch(event, helpersManager, getContext());
-		invalidate();
+		boolean result = tool.onTouch(event, getContext());
+		if(result) invalidate();
 		return result;
-	}
-	
-	private void transformTouchCoordinates(MotionEvent event, Tool tool)
-	{
-		if(tool.getCoordinateSpace() == CoordinateSpace.SCREEN_SPACE) return;
-		
-		float x = (event.getX() / image.getZoom()) + image.getViewX();
-		float y = (event.getY() / image.getZoom()) + image.getViewY();
-		
-		if(tool.getCoordinateSpace() == CoordinateSpace.LAYER_SPACE)
-		{
-			x -= image.getSelectedLayerX();
-			y -= image.getSelectedLayerY();
-		}
-		
-		event.setLocation(x, y);
 	}
 	
 	@Override

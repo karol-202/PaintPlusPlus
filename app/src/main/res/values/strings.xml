@@ -151,7 +151,7 @@
 	<string name="replace_file_text">File already exists. Replace?</string>
 	<string name="replace">Replace</string>
 	<string name="fill_threshold">Threshold</string>
-	<string name="marker_smooth">Smooth</string>
+	<string name="marker_smooth_edge">Smooth edge</string>
 	<string name="fill_warning">Filling big regions may take a while.</string>
 	<string name="shape">Shape</string>
 	<string name="line_width">Width</string>

@@ -37,16 +37,6 @@
 		app:layout_constraintTop_toTopOf="@+id/text_marker_size"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_marker_size" />
 	
-	<CheckBox
-		android:text="@string/marker_smooth"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/check_smooth"
-		android:layout_marginStart="12dp"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/seekBar_marker_translucency"
-		android:layout_marginTop="8dp" />
-	
 	<TextView
 		android:text="@string/translucency"
 		android:layout_width="wrap_content"
@@ -75,4 +65,15 @@
 		android:id="@+id/marker_translucency"
 		app:layout_constraintTop_toTopOf="@+id/seekBar_marker_translucency"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_marker_translucency" />
+	
+	<CheckBox
+		android:id="@+id/check_smooth_edge"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="12dp"
+		android:layout_marginTop="8dp"
+		android:text="@string/marker_smooth_edge"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/seekBar_marker_translucency" />
+
 </android.support.constraint.ConstraintLayout>

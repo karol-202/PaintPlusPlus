@@ -1,18 +1,15 @@
 package pl.karol202.paintplus.tool.rubber;
 
-import android.content.Context;
 import android.graphics.*;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.CoordinateSpace;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
-public class ToolRubber extends Tool
+public class ToolRubber extends StandardTool
 {
 	private float size;
 	private float strength;
@@ -83,16 +80,7 @@ public class ToolRubber extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
-	{
-		super.onTouch(event, manager, context);
-		if(event.getAction() == MotionEvent.ACTION_DOWN) return onTouchStart(event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(event.getX(), event.getY());
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(event.getX(), event.getY());
-		return true;
-	}
-	
-	private boolean onTouchStart(float x, float y)
+	public boolean onTouchStart(float x, float y)
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
@@ -137,16 +125,19 @@ public class ToolRubber extends Tool
 		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Region.Op.INTERSECT);
 	}
 	
-	private void onTouchMove(float x, float y)
+	@Override
+	public boolean onTouchMove(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
 		
 		lastX = x;
 		lastY = y;
 		pathCreated = true;
+		return true;
 	}
 	
-	private void onTouchStop(float x, float y)
+	@Override
+	public boolean onTouchStop(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
@@ -167,6 +158,7 @@ public class ToolRubber extends Tool
 		pathCreated = false;
 		editStarted = false;
 		layer.setVisibility(oldVisibility);
+		return true;
 	}
 	
 	@Override

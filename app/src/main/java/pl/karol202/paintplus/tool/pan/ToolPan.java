@@ -7,13 +7,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
-public class ToolPan extends Tool
+public class ToolPan implements Tool
 {
 	interface OnZoomChangeListener
 	{
@@ -80,6 +79,7 @@ public class ToolPan extends Tool
 		}
 	}
 	
+	private Image image;
 	private Context context;
 	private OnZoomChangeListener zoomListener;
 	
@@ -91,7 +91,7 @@ public class ToolPan extends Tool
 	
 	public ToolPan(Image image)
 	{
-		super(image);
+		this.image = image;
 	}
 	
 	@Override
@@ -125,7 +125,7 @@ public class ToolPan extends Tool
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
+	public boolean onTouch(MotionEvent event, Context context)
 	{
 		if(this.context != context) initDetectors(context);
 		

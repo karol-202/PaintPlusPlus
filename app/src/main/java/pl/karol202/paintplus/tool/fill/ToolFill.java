@@ -1,23 +1,20 @@
 package pl.karol202.paintplus.tool.fill;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Region;
 import android.os.AsyncTask;
-import android.view.MotionEvent;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.CoordinateSpace;
-import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
-public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlocker
+public class ToolFill extends StandardTool implements OnFillCompleteListener, AsyncBlocker
 {
 	private float fillThreshold;
 	private float opacity;
@@ -66,25 +63,31 @@ public class ToolFill extends Tool implements OnFillCompleteListener, AsyncBlock
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager, Context context)
+	public boolean onTouchStart(float x, float y)
 	{
-		super.onTouch(event, manager, context);
 		Layer layer = image.getSelectedLayer();
-		if(event.getX() < 0 || event.getY() < 0 ||
-		   event.getX() > layer.getWidth() - 1 || event.getY() > layer.getHeight() - 1)
-			return false;
+		if(x < 0 || y < 0 || x > layer.getWidth() - 1 || y > layer.getHeight() - 1) return false;
 		
-		if(event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-			canvas = image.getSelectedCanvas();
-			if(canvas == null) return false;
-			
-			if(!asyncManager.block(this)) return false;
-			cancelClipping();
-			
-			FillParams params = new FillParams(this, image, fillThreshold, 1 - opacity, (int) event.getX(), (int) event.getY());
-			asyncTask = new ToolFillAsyncTask().execute(params);
-		}
+		canvas = image.getSelectedCanvas();
+		if(canvas == null) return false;
+		
+		if(!asyncManager.block(this)) return false;
+		cancelClipping();
+		
+		FillParams params = new FillParams(this, image, fillThreshold, 1 - opacity, (int) x, (int) y);
+		asyncTask = new ToolFillAsyncTask().execute(params);
+		return false;
+	}
+	
+	@Override
+	public boolean onTouchMove(float x, float y)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean onTouchStop(float x, float y)
+	{
 		return false;
 	}
 	

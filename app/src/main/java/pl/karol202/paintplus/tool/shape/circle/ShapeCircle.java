@@ -1,7 +1,9 @@
 package pl.karol202.paintplus.tool.shape.circle;
 
-import android.graphics.*;
-import android.view.MotionEvent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PointF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
@@ -18,7 +20,6 @@ public class ShapeCircle extends Shape
 	private boolean fill;
 	private int circleWidth;
 	
-	private HelpersManager helpersManager;
 	private boolean circleCreated;
 	private Point center;
 	private float radius;
@@ -28,9 +29,9 @@ public class ShapeCircle extends Shape
 	private Point centerAtBeginning;
 	private float radiusAtBeginning;
 	
-	public ShapeCircle(ColorsSet colors, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeCircle(ColorsSet colors, HelpersManager helpersManager, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
-		super(colors, imageChangeListener, shapeEditListener);
+		super(colors, helpersManager, imageChangeListener, shapeEditListener);
 		this.fill = false;
 		this.circleWidth = 30;
 		
@@ -56,16 +57,7 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
-	public boolean onTouch(MotionEvent event, HelpersManager manager)
-	{
-		helpersManager = manager;
-		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchStart(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove(Math.round(event.getX()), Math.round(event.getY()));
-		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchStop(Math.round(event.getX()), Math.round(event.getY()));
-		return true;
-	}
-	
-	private void onTouchStart(int x, int y)
+	public void onTouchStart(int x, int y)
 	{
 		if(!isInEditMode()) enableEditMode();
 		if(!circleCreated) setCenterPoint(new Point(x, y));
@@ -84,14 +76,16 @@ public class ShapeCircle extends Shape
 		}
 	}
 	
-	private void onTouchMove(int x, int y)
+	@Override
+	public void onTouchMove(int x, int y)
 	{
 		Point current = new Point(x, y);
 		if(!circleCreated) dragRadius(current);
 		else drag(current);
 	}
 	
-	private void onTouchStop(int x, int y)
+	@Override
+	public void onTouchStop(int x, int y)
 	{
 		onTouchMove(x, y);
 		
@@ -131,14 +125,14 @@ public class ShapeCircle extends Shape
 			float x = (float) (rResult * Math.cos(theta)) + center.x;
 			float y = (float) (rResult * Math.sin(theta)) + center.y;
 			PointF result = new PointF(x, y);
-			helpersManager.snapPoint(result);
+			getHelpersManager().snapPoint(result);
 			
 			radius = calcDistance(center, (int) result.x, (int) result.y);
 		}
 		else
 		{
 			PointF snapped = new PointF(current);
-			helpersManager.snapPoint(snapped);
+			getHelpersManager().snapPoint(snapped);
 			radius = calcDistance(center, (int) snapped.x, (int) snapped.y);
 		}
 	}
@@ -146,7 +140,7 @@ public class ShapeCircle extends Shape
 	private void setCenterPoint(Point point)
 	{
 		PointF snapped = new PointF(point);
-		helpersManager.snapPoint(snapped);
+		getHelpersManager().snapPoint(snapped);
 		center = new Point((int) snapped.x, (int) snapped.y);
 	}
 	
@@ -199,23 +193,23 @@ public class ShapeCircle extends Shape
 		super.enableEditMode();
 	}
 	
-	public boolean isFilled()
+	boolean isFilled()
 	{
 		return fill;
 	}
 	
-	public void setFill(boolean fill)
+	void setFill(boolean fill)
 	{
 		this.fill = fill;
 		update();
 	}
 	
-	public int getCircleWidth()
+	int getCircleWidth()
 	{
 		return circleWidth;
 	}
 	
-	public void setCircleWidth(int circleWidth)
+	void setCircleWidth(int circleWidth)
 	{
 		this.circleWidth = circleWidth;
 		update();
