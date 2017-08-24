@@ -201,4 +201,11 @@
 	<string name="dialog_image_too_big">Image is too big</string>
 	<string name="dialog_image_too_big_question">Do you want to scale it down to %1$dx%2$d?</string>
 	<string name="scale_down">Scale down</string>
+	<string name="tool_gradient">Gradient</string>
+	<string name="gradient">Gradient</string>
+	<string name="gradient_shape">Gradient shape</string>
+	<string name="gradient_shape_linear">Linear</string>
+	<string name="gradient_shape_bilinear">Bilinear</string>
+	<string name="gradient_shape_radial">Radial</string>
+	<string name="gradient_shape_square">Quadratic</string>
 </resources>
