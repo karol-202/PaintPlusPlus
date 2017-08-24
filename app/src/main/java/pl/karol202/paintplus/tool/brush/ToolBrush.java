@@ -91,8 +91,8 @@ public class ToolBrush extends StandardTool
 		path.reset();
 		path.moveTo(x, y);
 		
-		lastX = x;
-		lastY = y;
+		lastX = -1;
+		lastY = -1;
 		return true;
 	}
 	
@@ -120,20 +120,26 @@ public class ToolBrush extends StandardTool
 	@Override
 	public boolean onTouchMove(float x, float y)
 	{
-		path.quadTo(lastX, lastY, x, y);
-		
-		drawPointsOnPath();
-		
-		lastX = x;
-		lastY = y;
+		if(lastX != -1 && lastY != -1)
+		{
+			path.quadTo(lastX, lastY, x, y);
+			lastX = -1;
+			lastY = -1;
+			drawPointsOnPath();
+		}
+		else
+		{
+			lastX = x;
+			lastY = y;
+		}
 		return true;
 	}
 	
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
-		if(lastX == -1 || lastY == -1) return true;
-		path.lineTo(x, y);
+		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
+		else path.lineTo(x, y);
 		
 		drawPointsOnPath();
 		

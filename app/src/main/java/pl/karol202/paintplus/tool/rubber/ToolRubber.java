@@ -26,7 +26,6 @@ public class ToolRubber extends StandardTool
 	private float lastY;
 	private boolean pathCreated;
 	private boolean editStarted;
-	private boolean oldVisibility;
 	
 	public ToolRubber(Image image)
 	{
@@ -107,8 +106,7 @@ public class ToolRubber extends StandardTool
 		lastY = y;
 		pathCreated = false;
 		editStarted = true;
-		oldVisibility = layer.isVisible();
-		layer.setVisibility(false);
+		layer.setTemporaryHidden(true);
 		return true;
 	}
 	
@@ -157,7 +155,7 @@ public class ToolRubber extends StandardTool
 		lastY = -1;
 		pathCreated = false;
 		editStarted = false;
-		layer.setVisibility(oldVisibility);
+		layer.setTemporaryHidden(false);
 		return true;
 	}
 	
@@ -170,7 +168,7 @@ public class ToolRubber extends StandardTool
 	@Override
 	public boolean doesScreenDraw(boolean layerVisible)
 	{
-		return editStarted && oldVisibility;
+		return editStarted && layerVisible;
 	}
 	
 	@Override

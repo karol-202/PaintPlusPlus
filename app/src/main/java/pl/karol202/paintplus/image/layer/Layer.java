@@ -14,6 +14,7 @@ public class Layer
 	
 	private String name;
 	private boolean visible;
+	private boolean temporaryHidden;
 	private int x;
 	private int y;
 	private LayerMode mode;
@@ -27,6 +28,7 @@ public class Layer
 		
 		this.name = name;
 		this.visible = true;
+		this.temporaryHidden = false;
 		this.x = x;
 		this.y = y;
 		this.mode = new LayerModeDefault(this);
@@ -172,6 +174,16 @@ public class Layer
 	{
 		this.visible = visible;
 		if(listener != null) listener.onImageChanged();
+	}
+	
+	public boolean isTemporaryHidden()
+	{
+		return temporaryHidden;
+	}
+	
+	public void setTemporaryHidden(boolean temporaryHidden)
+	{
+		this.temporaryHidden = temporaryHidden;
 	}
 	
 	public int getX()

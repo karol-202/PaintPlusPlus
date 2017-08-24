@@ -149,7 +149,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		for(Layer layer : reversedLayers)
 		{
 			boolean drawTool = tool.doesScreenDraw(layer.isVisible()) && !tool.isDrawingOnTop() && image.isLayerSelected(layer);
-			if(layer.isVisible())
+			if(layer.isVisible() && !layer.isTemporaryHidden())
 			{
 				Matrix imageMatrix = new Matrix(image.getImageMatrix());
 				if(drawTool) screenBitmap = layer.drawLayerAndTool(screenBitmap, imageMatrix, toolBitmap);
@@ -189,8 +189,12 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		if(image.getSelectedLayer() == null) return false;
 		Tool tool = getTool();
+		if(image.getSelectedLayer() == null)
+		{
+			if(event.getAction() != MotionEvent.ACTION_DOWN) tool.onTouch(event, getContext());
+			return false;
+		}
 		
 		boolean result = tool.onTouch(event, getContext());
 		if(result) invalidate();

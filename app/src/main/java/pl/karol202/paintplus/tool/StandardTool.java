@@ -43,6 +43,7 @@ public abstract class StandardTool implements Tool
 			result = result && onTouchMove(point.x, point.y);
 			break;
 		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_CANCEL:
 			result = onTouchStop(point.x, point.y);
 			break;
 		}
