@@ -207,5 +207,6 @@
 	<string name="gradient_shape_linear">Linear</string>
 	<string name="gradient_shape_bilinear">Bilinear</string>
 	<string name="gradient_shape_radial">Radial</string>
-	<string name="gradient_shape_square">Quadratic</string>
+	<string name="gradient_shape_sweep">Sweep</string>
+	<string name="gradient_shape_sweep_symmetric">Sweep symmetric</string>
 </resources>

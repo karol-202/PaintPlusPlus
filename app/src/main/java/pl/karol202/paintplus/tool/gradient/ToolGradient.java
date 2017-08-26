@@ -19,7 +19,9 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 	
 	private static final float POINT_OUTER_RADIUS = 10;
-	private static final float POINT_INNER_RADIUS = 7;
+	private static final float POINT_INNER_RADIUS = 4;
+	
+	private static final float MAX_DISTANCE = 70;
 	
 	private Gradient gradient;
 	private GradientShape shape;
@@ -137,13 +139,13 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		float distanceToFirst = (float) Math.hypot(firstPoint.x - x, firstPoint.y - y);
 		float distanceToSecond = (float) Math.hypot(secondPoint.x - x, secondPoint.y - y);
 		
-		if(distanceToFirst < distanceToSecond)
+		if(distanceToFirst <= distanceToSecond && distanceToFirst <= MAX_DISTANCE)
 		{
 			draggingIndex = 0;
 			draggingStart = new PointF(x, y);
 			previousPositionOfDraggedPoint = new PointF(firstPoint.x, firstPoint.y);
 		}
-		else
+		else if(distanceToSecond < distanceToFirst && distanceToSecond <= MAX_DISTANCE)
 		{
 			draggingIndex = 1;
 			draggingStart = new PointF(x, y);
@@ -203,25 +205,31 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		
 		canvas.scale(image.getZoom(), image.getZoom());
 		canvas.translate(-image.getViewX() + layer.getX(), -image.getViewY() + layer.getY());
-		updateClipping(canvas);
 		
+		canvas.save();
+		updateClipping(canvas);
 		shape.onScreenDraw(canvas);
+		canvas.restore();
+		
 		if(firstPoint != null) drawPoint(canvas, firstPoint);
 		if(secondPoint != null) drawPoint(canvas, secondPoint);
 	}
 	
 	private void drawPoint(Canvas canvas, PointF point)
 	{
-		pointDrawRect.left = point.x - POINT_OUTER_RADIUS;
-		pointDrawRect.top = point.y - POINT_OUTER_RADIUS;
-		pointDrawRect.right = point.x + POINT_OUTER_RADIUS;
-		pointDrawRect.bottom = point.y + POINT_OUTER_RADIUS;
+		float outerSize = POINT_OUTER_RADIUS / image.getZoom();
+		float innerSize = POINT_INNER_RADIUS / image.getZoom();
+		
+		pointDrawRect.left = point.x - outerSize;
+		pointDrawRect.top = point.y - outerSize;
+		pointDrawRect.right = point.x + outerSize;
+		pointDrawRect.bottom = point.y + outerSize;
 		canvas.drawOval(pointDrawRect, pointOuterPaint);
 		
-		pointDrawRect.left = point.x - POINT_INNER_RADIUS;
-		pointDrawRect.top = point.y - POINT_INNER_RADIUS;
-		pointDrawRect.right = point.x + POINT_INNER_RADIUS;
-		pointDrawRect.bottom = point.y + POINT_INNER_RADIUS;
+		pointDrawRect.left = point.x - innerSize;
+		pointDrawRect.top = point.y - innerSize;
+		pointDrawRect.right = point.x + innerSize;
+		pointDrawRect.bottom = point.y + innerSize;
 		canvas.drawOval(pointDrawRect, pointInnerPaint);
 	}
 	
@@ -298,6 +306,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	void setShape(GradientShape shape)
 	{
 		this.shape = shape;
+		image.updateImage();
 	}
 	
 	PointF getFirstPoint()

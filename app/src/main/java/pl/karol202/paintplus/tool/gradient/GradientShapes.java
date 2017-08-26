@@ -11,6 +11,10 @@ class GradientShapes
 	{
 		shapes = new ArrayList<>();
 		shapes.add(new GradientShapeLinear(toolGradient));
+		shapes.add(new GradientShapeBilinear(toolGradient));
+		shapes.add(new GradientShapeRadial(toolGradient));
+		shapes.add(new GradientShapeSweep(toolGradient));
+		shapes.add(new GradientShapeSweepSymmetric(toolGradient));
 	}
 	
 	GradientShape getShape(int id)

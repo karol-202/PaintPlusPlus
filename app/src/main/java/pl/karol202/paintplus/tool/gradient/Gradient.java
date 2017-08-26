@@ -40,7 +40,7 @@ class Gradient
 		@Override
 		public int compareTo(GradientPoint o)
 		{
-			return (int) Math.ceil(position - o.position);
+			return Float.compare(position, o.position);
 		}
 	}
 	
