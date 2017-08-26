@@ -13,10 +13,12 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	private ToolGradient toolGradient;
 	private GradientShapes shapes;
 	private GradientShapeAdapter adapterGradientShape;
+	private GradientRepeatabilityAdapter adapterGradientRepeatability;
 	
 	private View view;
 	private GradientPreviewView gradientPreview;
 	private Spinner spinnerGradientShape;
+	private Spinner spinnerGradientRepeatability;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -28,6 +30,7 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 		toolGradient.setOnGradientEditListener(this);
 		shapes = toolGradient.getShapes();
 		adapterGradientShape = new GradientShapeAdapter(getActivity(), shapes.getShapes());
+		adapterGradientRepeatability = new GradientRepeatabilityAdapter(getActivity());
 		
 		gradientPreview = (GradientPreviewView) view.findViewById(R.id.gradient_preview);
 		gradientPreview.setGradient(toolGradient.getGradient());
@@ -37,6 +40,11 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 		spinnerGradientShape.setAdapter(adapterGradientShape);
 		spinnerGradientShape.setSelection(shapes.getIdOfShape(toolGradient.getShape()));
 		spinnerGradientShape.setOnItemSelectedListener(this);
+		
+		spinnerGradientRepeatability = (Spinner) view.findViewById(R.id.spinner_gradient_repeatability);
+		spinnerGradientRepeatability.setAdapter(adapterGradientRepeatability);
+		spinnerGradientRepeatability.setSelection(toolGradient.getRepeatability().ordinal());
+		spinnerGradientRepeatability.setOnItemSelectedListener(this);
 		
 		return view;
 	}
@@ -77,8 +85,13 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
-		GradientShape shape = shapes.getShape(position);
-		toolGradient.setShape(shape);
+		if(parent == spinnerGradientShape)
+		{
+			GradientShape shape = shapes.getShape(position);
+			toolGradient.setShape(shape);
+		}
+		else if(parent == spinnerGradientRepeatability)
+			toolGradient.setRepeatability(GradientRepeatability.values()[position]);
 	}
 	
 	@Override

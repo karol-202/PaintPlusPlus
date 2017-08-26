@@ -10,6 +10,7 @@ App has following features:
 * Rubber
 * Fill tool
 * Shapes tool
+* Gradients
 * Color picker
 * Selection
 * Layers (with layers mixing modes)

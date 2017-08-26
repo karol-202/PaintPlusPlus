@@ -22,7 +22,7 @@ abstract class GradientShape
 	
 	abstract int getIcon();
 	
-	abstract Shader createShader();
+	abstract Shader createShader(Shader.TileMode tileMode);
 	
 	void applyGradient(Canvas imageCanvas)
 	{
@@ -60,7 +60,7 @@ abstract class GradientShape
 		if(firstPoint == null || secondPoint == null) shader = null;
 		else
 		{
-			shader = createShader();
+			shader = createShader(toolGradient.getRepeatability().getTileMode());
 			paint.setShader(shader);
 		}
 	}
@@ -68,7 +68,6 @@ abstract class GradientShape
 	private PointF clonePoint(PointF point)
 	{
 		if(point == null) return null;
-		PointF newPoint = new PointF(point.x, point.y);
-		return newPoint;
+		return new PointF(point.x, point.y);
 	}
 }

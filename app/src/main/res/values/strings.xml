@@ -209,4 +209,8 @@
 	<string name="gradient_shape_radial">Radial</string>
 	<string name="gradient_shape_sweep">Sweep</string>
 	<string name="gradient_shape_sweep_symmetric">Sweep symmetric</string>
+	<string name="gradient_repeatability">Repeatability</string>
+	<string name="gradient_repeatability_no_repeat">No repeat</string>
+	<string name="gradient_repeatability_repeat">Repeat</string>
+	<string name="gradient_repeatability_mirror">Mirror</string>
 </resources>

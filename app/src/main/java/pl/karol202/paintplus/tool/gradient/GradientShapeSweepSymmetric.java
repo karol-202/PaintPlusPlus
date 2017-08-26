@@ -31,7 +31,7 @@ class GradientShapeSweepSymmetric extends GradientShape
 	}
 	
 	@Override
-	Shader createShader()
+	Shader createShader(Shader.TileMode tileMode)
 	{
 		float angle = (float) Math.toDegrees(Math.atan2(secondPoint.y - firstPoint.y, secondPoint.x - firstPoint.x));
 		float offset = Utils.map(angle, -180, 180, -0.5f, 0.5f);

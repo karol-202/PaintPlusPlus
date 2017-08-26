@@ -23,9 +23,9 @@ class GradientShapeLinear extends GradientShape
 	}
 	
 	@Override
-	Shader createShader()
+	Shader createShader(Shader.TileMode tileMode)
 	{
 		return new LinearGradient(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y,
-								  gradient.getColorsArray(), gradient.getPositionsArray(), Shader.TileMode.CLAMP);
+								  gradient.getColorsArray(), gradient.getPositionsArray(), tileMode);
 	}
 }

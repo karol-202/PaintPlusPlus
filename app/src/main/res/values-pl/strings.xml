@@ -210,4 +210,8 @@
 	<string name="gradient_shape_linear">Liniowy</string>
 	<string name="gradient_shape_sweep">Stożkowy</string>
 	<string name="gradient_shape_sweep_symmetric">Stożkowy symetryczny</string>
+	<string name="gradient_repeatability">Powtarzalność</string>
+	<string name="gradient_repeatability_mirror">Odbicie</string>
+	<string name="gradient_repeatability_repeat">Powtarzanie</string>
+	<string name="gradient_repeatability_no_repeat">Brak</string>
 </resources>

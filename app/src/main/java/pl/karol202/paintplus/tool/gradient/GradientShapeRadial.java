@@ -24,11 +24,11 @@ class GradientShapeRadial extends GradientShape
 	}
 	
 	@Override
-	Shader createShader()
+	Shader createShader(Shader.TileMode tileMode)
 	{
 		float radius = (float) Math.hypot(secondPoint.x - firstPoint.x, secondPoint.y - firstPoint.y);
 		radius = Math.max(radius, 0.01f);
 		return new RadialGradient(firstPoint.x, firstPoint.y, radius,
-								  gradient.getColorsArray(), gradient.getPositionsArray(), Shader.TileMode.CLAMP);
+								  gradient.getColorsArray(), gradient.getPositionsArray(), tileMode);
 	}
 }

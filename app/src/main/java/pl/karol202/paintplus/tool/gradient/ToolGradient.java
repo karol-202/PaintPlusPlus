@@ -25,6 +25,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	
 	private Gradient gradient;
 	private GradientShape shape;
+	private GradientRepeatability repeatability;
 	
 	private OnGradientEditListener listener;
 	private Selection selection;
@@ -50,6 +51,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	{
 		super(image);
 		gradient = Gradient.createSimpleGradient(Color.WHITE, Color.BLACK);
+		repeatability = GradientRepeatability.NO_REPEAT;
 		
 		selection = image.getSelection();
 		shapes = new GradientShapes(this);
@@ -307,6 +309,16 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	{
 		this.shape = shape;
 		image.updateImage();
+	}
+	
+	GradientRepeatability getRepeatability()
+	{
+		return repeatability;
+	}
+	
+	void setRepeatability(GradientRepeatability repeatability)
+	{
+		this.repeatability = repeatability;
 	}
 	
 	PointF getFirstPoint()
