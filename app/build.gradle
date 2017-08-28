@@ -9,6 +9,7 @@ android {
         applicationId "pl.karol202.paintplus"
         minSdkVersion 17
         targetSdkVersion 25
+        renderscriptTargetApi 24
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

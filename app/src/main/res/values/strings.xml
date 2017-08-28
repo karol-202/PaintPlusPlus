@@ -31,6 +31,7 @@
 	<string name="dialog_colors_brightness">Brightness settings</string>
 	<string name="dialog_save_message">Saving…</string>
 	<string name="dialog_set_zoom">Set zoom</string>
+	<string name="dialog_gradient">Gradient</string>
 	
 	<string name="preference_jpg_quality">JPG save quality</string>
 	<string name="preference_jpg_quality_dialog">JPG save quality</string>

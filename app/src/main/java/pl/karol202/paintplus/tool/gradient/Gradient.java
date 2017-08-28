@@ -6,49 +6,17 @@ import java.util.List;
 
 class Gradient
 {
-	private class GradientPoint implements Comparable<GradientPoint>
-	{
-		private float position;
-		private int color;
-		
-		GradientPoint(float position, int color)
-		{
-			this.position = position;
-			this.color = color;
-		}
-		
-		@Override
-		public boolean equals(Object o)
-		{
-			if(this == o) return true;
-			if(o == null || getClass() != o.getClass()) return false;
-			
-			GradientPoint that = (GradientPoint) o;
-			
-			if(Float.compare(that.position, position) != 0) return false;
-			return color == that.color;
-		}
-		
-		@Override
-		public int hashCode()
-		{
-			int result = (position != +0.0f ? Float.floatToIntBits(position) : 0);
-			result = 31 * result + color;
-			return result;
-		}
-		
-		@Override
-		public int compareTo(GradientPoint o)
-		{
-			return Float.compare(position, o.position);
-		}
-	}
-	
 	private List<GradientPoint> points;
 	
-	Gradient()
+	private Gradient()
 	{
 		points = new ArrayList<>();
+	}
+	
+	Gradient(Gradient gradient)
+	{
+		this();
+		setGradient(gradient);
 	}
 	
 	static Gradient createSimpleGradient(int firstColor, int secondColor)
@@ -62,21 +30,37 @@ class Gradient
 	void addPoint(float position, int color)
 	{
 		points.add(new GradientPoint(position, color));
+		sort();
+	}
+	
+	void sort()
+	{
 		Collections.sort(points);
 	}
 	
 	float[] getPositionsArray()
 	{
 		float[] array = new float[points.size()];
-		for(int i = 0; i < points.size(); i++) array[i] = points.get(i).position;
+		for(int i = 0; i < points.size(); i++) array[i] = points.get(i).getPosition();
 		return array;
 	}
 	
 	int[] getColorsArray()
 	{
 		int[] array = new int[points.size()];
-		for(int i = 0; i < points.size(); i++) array[i] = points.get(i).color;
+		for(int i = 0; i < points.size(); i++) array[i] = points.get(i).getColor();
 		return array;
+	}
+	
+	List<GradientPoint> getPoints()
+	{
+		return new ArrayList<>(points);
+	}
+	
+	void setGradient(Gradient gradient)
+	{
+		points.clear();
+		for(GradientPoint point : gradient.points) points.add(new GradientPoint(point));
 	}
 	
 	@Override

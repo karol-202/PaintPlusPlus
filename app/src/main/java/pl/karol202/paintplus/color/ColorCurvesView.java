@@ -29,7 +29,6 @@ public class ColorCurvesView extends View
 	
 	private final int POINT_RADIUS = 8;
 	private final int POINT_INNER_RADIUS = 3;
-	private final int ADDITIONAL_MARGIN_SPACING = 9;
 	
 	private final int MAX_TOUCH_DISTANCE = 65;
 	private final int REMOVE_LIMIT = 100;
@@ -161,11 +160,6 @@ public class ColorCurvesView extends View
 	private void drawPoints(Canvas canvas)
 	{
 		if(points == null) createPoints();
-		canvas.clipRect(LEFT_GRID_MARGIN - ADDITIONAL_MARGIN_SPACING,
-				TOP_GRID_MARGIN - ADDITIONAL_MARGIN_SPACING,
-				canvas.getWidth() - RIGHT_GRID_MARGIN + ADDITIONAL_MARGIN_SPACING,
-				canvas.getHeight() - BOTTOM_GRID_MARGIN + ADDITIONAL_MARGIN_SPACING,
-				Region.Op.REPLACE);
 		
 		for(RectF point : points) canvas.drawOval(point, pointPaint);
 		for(RectF point : innerPoints) canvas.drawOval(point, pointInnerPaint);
@@ -174,9 +168,6 @@ public class ColorCurvesView extends View
 	private void drawCurve(Canvas canvas)
 	{
 		if(points == null) createPoints();
-		canvas.clipRect(LEFT_GRID_MARGIN, TOP_GRID_MARGIN,
-						canvas.getWidth() - RIGHT_GRID_MARGIN, canvas.getHeight() - BOTTOM_GRID_MARGIN,
-						Region.Op.REPLACE);
 		
 		float lastX = LEFT_GRID_MARGIN;
 		float lastY = points.get(0).centerY();

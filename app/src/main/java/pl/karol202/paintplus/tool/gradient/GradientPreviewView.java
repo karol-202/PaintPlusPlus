@@ -5,14 +5,14 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class GradientPreviewView extends View
+class GradientPreviewView extends View
 {
 	private Gradient gradient;
 	
 	private Paint paint;
 	private Shader shader;
 	
-	public GradientPreviewView(Context context, AttributeSet attrs)
+	GradientPreviewView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		paint = new Paint();
@@ -23,16 +23,9 @@ public class GradientPreviewView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		if(shader == null) return;
+		if(gradient == null) return;
+		if(shader == null) updateShader();
 		canvas.drawRect(1, 1, getWidth() - 1, getHeight() - 1, paint);
-	}
-	
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom)
-	{
-		super.onLayout(changed, left, top, right, bottom);
-		if(gradient != null && shader == null) updateShader();
-		System.out.println("layout");
 	}
 	
 	private void updateShader()
@@ -41,7 +34,13 @@ public class GradientPreviewView extends View
 		paint.setShader(shader);
 	}
 	
-	public void setGradient(Gradient gradient)
+	void update()
+	{
+		updateShader();
+		invalidate();
+	}
+	
+	void setGradient(Gradient gradient)
 	{
 		this.gradient = gradient;
 		this.shader = null;

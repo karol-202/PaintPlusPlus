@@ -8,7 +8,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.gradient.ToolGradient.OnGradientEditListener;
 
-public class GradientProperties extends ToolProperties implements OnGradientEditListener, AdapterView.OnItemSelectedListener, View.OnClickListener
+public class GradientProperties extends ToolProperties implements OnGradientEditListener, AdapterView.OnItemSelectedListener, View.OnClickListener, GradientDialog.OnGradientUpdateListener
 {
 	private ToolGradient toolGradient;
 	private GradientShapes shapes;
@@ -103,6 +103,14 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	@Override
 	public void onClick(View v)
 	{
+		GradientDialog dialog = new GradientDialog(getActivity(), toolGradient.getGradient());
+		dialog.setGradientUpdateListener(this);
+		dialog.show();
+	}
 	
+	@Override
+	public void onGradientUpdated()
+	{
+		gradientPreview.update();
 	}
 }

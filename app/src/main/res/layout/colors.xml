@@ -7,22 +7,22 @@
 	android:gravity="center_horizontal">
 	
 	<FrameLayout
+		android:id="@+id/view_border_color_first"
 		android:layout_width="32dp"
 		android:layout_height="32dp"
-		android:id="@+id/view_border_color_first"
 		android:background="@drawable/border"
-		android:padding="1dp"
-		app:layout_constraintRight_toLeftOf="@+id/button_colors_swap"
-		tools:layout_constraintTop_creator="1"
-		tools:layout_constraintRight_creator="1"
-		tools:layout_constraintBottom_creator="1"
+		android:padding="1px"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
+		app:layout_constraintRight_toLeftOf="@+id/button_colors_swap"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:layout_constraintBottom_creator="1"
+		tools:layout_constraintRight_creator="1"
+		tools:layout_constraintTop_creator="1">
 		
 		<View
+			android:id="@+id/view_color_first"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
-			android:id="@+id/view_color_first"
 			android:background="#0f0" />
 	
 	</FrameLayout>
@@ -41,22 +41,22 @@
 		app:layout_constraintTop_toTopOf="parent" />
 	
 	<FrameLayout
+		android:id="@+id/view_border_color_second"
 		android:layout_width="32dp"
 		android:layout_height="32dp"
-		android:id="@+id/view_border_color_second"
 		android:background="@drawable/border"
-		android:padding="1dp"
-		tools:layout_constraintTop_creator="1"
-		tools:layout_constraintBottom_creator="1"
+		android:padding="1px"
 		app:layout_constraintBottom_toBottomOf="parent"
-		tools:layout_constraintLeft_creator="1"
+		app:layout_constraintLeft_toRightOf="@+id/button_colors_swap"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintLeft_toRightOf="@+id/button_colors_swap">
+		tools:layout_constraintBottom_creator="1"
+		tools:layout_constraintLeft_creator="1"
+		tools:layout_constraintTop_creator="1">
 		
 		<View
+			android:id="@+id/view_color_second"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
-			android:id="@+id/view_color_second"
 			android:background="#f00" />
 	</FrameLayout>
 

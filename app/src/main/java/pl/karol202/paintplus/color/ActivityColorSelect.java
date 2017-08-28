@@ -24,16 +24,15 @@ import pl.karol202.paintplus.settings.ActivitySettings;
 
 public class ActivityColorSelect extends AppCompatActivity implements OnColorChangedListener
 {
-	static final String COLOR_KEY = "initial_color";
+	public static final String COLOR_KEY = "initial_color";
 	private static final String CURRENT_COLOR_KEY = "current_color";
 	
 	private static final int VALUE_THRESHOLD = 192;
 	
 	private int darkTextColor;
 	private int lightTextColor;
-	//@ColorInt
+	
 	private int defaultColor;
-	//@ColorInt
 	private int currentColor;
 	private boolean portrait;
 	private ActionBar actionBar;
