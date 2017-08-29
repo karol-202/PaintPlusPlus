@@ -2,8 +2,6 @@ package pl.karol202.paintplus.tool.shape.polygon;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
@@ -12,8 +10,6 @@ import pl.karol202.paintplus.util.Utils;
 
 public class ShapePolygon extends Shape
 {
-	private final int MAX_DISTANCE = 50;
-	
 	private int sides;
 	private boolean fill;
 	private int lineWidth;
@@ -29,9 +25,9 @@ public class ShapePolygon extends Shape
 	private Point centerAtBeginning;
 	private float radiusOCCAtBeginning;
 	
-	public ShapePolygon(ColorsSet colors, HelpersManager helpersManager, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapePolygon(Image image, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
-		super(colors, helpersManager, imageChangeListener, shapeEditListener);
+		super(image, imageChangeListener, shapeEditListener);
 		this.sides = 4;
 		this.fill = false;
 		this.lineWidth = 30;
@@ -81,7 +77,7 @@ public class ShapePolygon extends Shape
 			draggingStart = touchPoint;
 			centerAtBeginning = center;
 			radiusOCCAtBeginning = radiusOCC;
-			if(Math.min(distanceToCenter, distanceToSide) > MAX_DISTANCE) draggedIndex = -1;
+			if(Math.min(distanceToCenter, distanceToSide) > getMaxTouchDistance()) draggedIndex = -1;
 			else if(distanceToCenter < distanceToSide) draggedIndex = 0;
 			else draggedIndex = 1;
 		}

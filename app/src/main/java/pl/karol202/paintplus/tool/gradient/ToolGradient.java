@@ -18,10 +18,13 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		void onGradientSet();
 	}
 	
-	private static final float POINT_OUTER_RADIUS = 10;
-	private static final float POINT_INNER_RADIUS = 4;
+	private final float POINT_OUTER_RADIUS_DP = 5;
+	private final float POINT_INNER_RADIUS_DP = 2;
 	
-	private static final float MAX_DISTANCE = 70;
+	private final float POINT_OUTER_RADIUS_PX;
+	private final float POINT_INNER_RADIUS_PX;
+	
+	private static final float MAX_TOUCH_DISTANCE_DP = 35;
 	
 	private Gradient gradient;
 	private GradientShape shape;
@@ -50,6 +53,9 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	public ToolGradient(Image image)
 	{
 		super(image);
+		POINT_OUTER_RADIUS_PX = POINT_OUTER_RADIUS_DP * image.SCREEN_DENSITY;
+		POINT_INNER_RADIUS_PX = POINT_INNER_RADIUS_DP * image.SCREEN_DENSITY;
+		
 		gradient = Gradient.createSimpleGradient(Color.WHITE, Color.BLACK);
 		repeatability = GradientRepeatability.NO_REPEAT;
 		
@@ -141,18 +147,23 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		float distanceToFirst = (float) Math.hypot(firstPoint.x - x, firstPoint.y - y);
 		float distanceToSecond = (float) Math.hypot(secondPoint.x - x, secondPoint.y - y);
 		
-		if(distanceToFirst <= distanceToSecond && distanceToFirst <= MAX_DISTANCE)
+		if(distanceToFirst <= distanceToSecond && distanceToFirst <= getMaxTouchDistance())
 		{
 			draggingIndex = 0;
 			draggingStart = new PointF(x, y);
 			previousPositionOfDraggedPoint = new PointF(firstPoint.x, firstPoint.y);
 		}
-		else if(distanceToSecond < distanceToFirst && distanceToSecond <= MAX_DISTANCE)
+		else if(distanceToSecond < distanceToFirst && distanceToSecond <= getMaxTouchDistance())
 		{
 			draggingIndex = 1;
 			draggingStart = new PointF(x, y);
 			previousPositionOfDraggedPoint = new PointF(secondPoint.x, secondPoint.y);
 		}
+	}
+	
+	private float getMaxTouchDistance()
+	{
+		return MAX_TOUCH_DISTANCE_DP * image.SCREEN_DENSITY / image.getZoom();
 	}
 	
 	@Override
@@ -219,8 +230,8 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	
 	private void drawPoint(Canvas canvas, PointF point)
 	{
-		float outerSize = POINT_OUTER_RADIUS / image.getZoom();
-		float innerSize = POINT_INNER_RADIUS / image.getZoom();
+		float outerSize = POINT_OUTER_RADIUS_PX / image.getZoom();
+		float innerSize = POINT_INNER_RADIUS_PX / image.getZoom();
 		
 		pointDrawRect.left = point.x - outerSize;
 		pointDrawRect.top = point.y - outerSize;

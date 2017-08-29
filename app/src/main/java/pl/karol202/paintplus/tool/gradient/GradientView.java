@@ -48,48 +48,42 @@ class GradientView extends View
 		}
 	}
 	
-	private static final int BORDER_WIDTH = 1;
+	private final float MAX_TOUCH_DISTANCE = 0.05f;
 	
-	private static final int SIDE_MARGIN = 20;
-	private static final int TOP_MARGIN = 1;
+	private final float BORDER_WIDTH_PX = 1;
 	
-	private static final int TOP_BAR_HEIGHT = 30;
-	private static final int BOTTOM_BAR_HEIGHT = 50;
+	private final float SIDE_MARGIN_DP = 10;
+	private final float TOP_MARGIN_PX = 1;
 	
-	private static final float MAX_TOUCH_DISTANCE = 0.05f;
+	private final float TOP_BAR_HEIGHT_DP = 15;
+	private final float BOTTOM_BAR_HEIGHT_DP = 25;
 	
-	private static final int TRIANGLE_Y_OFFSET = TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT - 10;
-	private static final Path TRIANGLE_OUTER_PATH = new Path();
-	private static final Path TRIANGLE_INNER_PATH = new Path();
-	static
-	{
-		TRIANGLE_OUTER_PATH.moveTo(0, 0);
-		TRIANGLE_OUTER_PATH.lineTo(20, 40);
-		TRIANGLE_OUTER_PATH.lineTo(-20, 40);
-		TRIANGLE_OUTER_PATH.close();
-		
-		TRIANGLE_INNER_PATH.moveTo(0, 10);
-		TRIANGLE_INNER_PATH.lineTo(13, 36);
-		TRIANGLE_INNER_PATH.lineTo(-13, 36);
-		TRIANGLE_INNER_PATH.close();
-	}
+	private final float HEIGHT_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP + 20;
 	
-	private static final int HEIGHT = TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT + 40;
+	private final float TRIANGLE_Y_OFFSET_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP - 5;
+	private final Path TRIANGLE_OUTER_PATH = new Path();
+	private final Path TRIANGLE_INNER_PATH = new Path();
+	
+	private final float SIDE_MARGIN_PX;
+	private final float TOP_BAR_HEIGHT_PX;
+	private final float BOTTOM_BAR_HEIGHT_PX;
+	private final float TRIANGLE_Y_OFFSET_PX;
+	private final float HEIGHT_PX;
 	
 	private OnGradientEditorUpdateListener gradientUpdateListener;
 	private Gradient gradient;
 	private boolean addingMode;
 	
-	private Rect borderRect;
+	private RectF borderRect;
 	private Paint borderPaint;
-	private Rect checkerboardRect;
+	private RectF checkerboardRect;
 	private Paint checkerboardPaint;
 	
-	private Rect topBarRect;
+	private RectF topBarRect;
 	private Paint topBarPaint;
 	private Shader topBarShader;
 	
-	private Rect bottomBarRect;
+	private RectF bottomBarRect;
 	private Paint bottomBarPaint;
 	private Shader bottomBarShader;
 	
@@ -106,11 +100,33 @@ class GradientView extends View
 	GradientView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		SIDE_MARGIN_PX = Utils.dpToPixels(context, SIDE_MARGIN_DP);
+		TOP_BAR_HEIGHT_PX = Utils.dpToPixels(context, TOP_BAR_HEIGHT_DP);
+		BOTTOM_BAR_HEIGHT_PX = Utils.dpToPixels(context, BOTTOM_BAR_HEIGHT_DP);
+		TRIANGLE_Y_OFFSET_PX = Utils.dpToPixels(context, TRIANGLE_Y_OFFSET_DP) + TOP_MARGIN_PX;
+		HEIGHT_PX = Utils.dpToPixels(context, HEIGHT_DP) + TOP_MARGIN_PX;
+		
+		TRIANGLE_OUTER_PATH.moveTo(0, 0);
+		TRIANGLE_OUTER_PATH.lineTo(10, 20);
+		TRIANGLE_OUTER_PATH.lineTo(-10, 20);
+		TRIANGLE_OUTER_PATH.close();
+		
+		TRIANGLE_INNER_PATH.moveTo(0, 4.5f);
+		TRIANGLE_INNER_PATH.lineTo(7, 18);
+		TRIANGLE_INNER_PATH.lineTo(-7, 18);
+		TRIANGLE_INNER_PATH.close();
+		
+		float scale = context.getResources().getDisplayMetrics().density;
+		Matrix matrix = new Matrix();
+		matrix.preScale(scale, scale);
+		TRIANGLE_OUTER_PATH.transform(matrix);
+		TRIANGLE_INNER_PATH.transform(matrix);
+		
 		gradient = null;
 		
 		borderPaint = new Paint();
 		borderPaint.setStyle(Paint.Style.STROKE);
-		borderPaint.setStrokeWidth(BORDER_WIDTH);
+		borderPaint.setStrokeWidth(BORDER_WIDTH_PX);
 		borderPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.border, null));
 		
 		Bitmap checkerboard = BitmapFactory.decodeResource(getResources(), R.drawable.checkerboard);
@@ -142,7 +158,7 @@ class GradientView extends View
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		setMeasuredDimension(getMeasuredWidth(), HEIGHT);
+		setMeasuredDimension(getMeasuredWidth(), (int) HEIGHT_PX);
 	}
 	
 	@Override
@@ -165,8 +181,8 @@ class GradientView extends View
 	
 	private void updateBorderRect()
 	{
-		borderRect = new Rect(SIDE_MARGIN - BORDER_WIDTH, TOP_MARGIN - BORDER_WIDTH, getWidth() - SIDE_MARGIN,
-				TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT);
+		borderRect = new RectF(SIDE_MARGIN_PX - BORDER_WIDTH_PX, TOP_MARGIN_PX - BORDER_WIDTH_PX,
+				getWidth() - SIDE_MARGIN_PX, TOP_MARGIN_PX + TOP_BAR_HEIGHT_PX + BOTTOM_BAR_HEIGHT_PX);
 	}
 	
 	private void drawCheckerboard(Canvas canvas)
@@ -177,8 +193,8 @@ class GradientView extends View
 	
 	private void updateCheckerboardRect()
 	{
-		checkerboardRect = new Rect(SIDE_MARGIN, TOP_MARGIN,
-							  getWidth() - SIDE_MARGIN, TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT);
+		checkerboardRect = new RectF(SIDE_MARGIN_PX, TOP_MARGIN_PX, getWidth() - SIDE_MARGIN_PX,
+				TOP_MARGIN_PX + TOP_BAR_HEIGHT_PX + BOTTOM_BAR_HEIGHT_PX);
 	}
 	
 	private void drawTopBar(Canvas canvas)
@@ -190,12 +206,13 @@ class GradientView extends View
 	
 	private void updateTopBarRect()
 	{
-		topBarRect = new Rect(SIDE_MARGIN, TOP_MARGIN, getWidth() - SIDE_MARGIN, TOP_MARGIN + TOP_BAR_HEIGHT);
+		topBarRect = new RectF(SIDE_MARGIN_PX, TOP_MARGIN_PX, getWidth() - SIDE_MARGIN_PX,
+				TOP_MARGIN_PX + TOP_BAR_HEIGHT_PX);
 	}
 	
 	private void updateTopBarPaint()
 	{
-		topBarShader = new LinearGradient(SIDE_MARGIN, 0, getWidth() - SIDE_MARGIN, 0,
+		topBarShader = new LinearGradient(SIDE_MARGIN_PX, 0, getWidth() - SIDE_MARGIN_PX, 0,
 										  gradient.getColorsArray(), gradient.getPositionsArray(), Shader.TileMode.CLAMP);
 		topBarPaint.setShader(topBarShader);
 	}
@@ -209,14 +226,14 @@ class GradientView extends View
 	
 	private void updateBottomBarRect()
 	{
-		bottomBarRect = new Rect(SIDE_MARGIN, TOP_MARGIN + TOP_BAR_HEIGHT, getWidth() - SIDE_MARGIN,
-								 TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT);
+		bottomBarRect = new RectF(SIDE_MARGIN_PX, TOP_MARGIN_PX + TOP_BAR_HEIGHT_PX, getWidth() - SIDE_MARGIN_PX,
+								 TOP_MARGIN_PX + TOP_BAR_HEIGHT_PX + BOTTOM_BAR_HEIGHT_PX);
 	}
 	
 	private void updateBottomBarPaint()
 	{
 		int[] colors = removeAlphaFromColorsArray(gradient.getColorsArray());
-		bottomBarShader = new LinearGradient(SIDE_MARGIN, 0, getWidth() - SIDE_MARGIN, 0,
+		bottomBarShader = new LinearGradient(SIDE_MARGIN_PX, 0, getWidth() - SIDE_MARGIN_PX, 0,
 											 colors, gradient.getPositionsArray(), Shader.TileMode.CLAMP);
 		bottomBarPaint.setShader(bottomBarShader);
 	}
@@ -248,8 +265,8 @@ class GradientView extends View
 	
 	private void createTriangleForPoint(GradientPoint point)
 	{
-		float xOffset = Utils.map(point.getPosition(), 0, 1, SIDE_MARGIN, getWidth() - SIDE_MARGIN);
-		Triangle triangle = new Triangle(xOffset, TRIANGLE_Y_OFFSET);
+		float xOffset = Utils.map(point.getPosition(), 0, 1, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX);
+		Triangle triangle = new Triangle(xOffset, TRIANGLE_Y_OFFSET_PX);
 		triangles.put(point, triangle);
 	}
 	
@@ -279,7 +296,8 @@ class GradientView extends View
 		selectedPoint = nearestPoint;
 		draggedPoint = nearestPoint;
 		lastPosition = x;
-		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
+		if(gradientUpdateListener != null)
+			gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
 		return nearestPoint != null;
 	}
 	
@@ -318,12 +336,12 @@ class GradientView extends View
 	
 	private float calculateGradientPosition(float viewPosition)
 	{
-		return Utils.map(viewPosition, SIDE_MARGIN, getWidth() - SIDE_MARGIN, 0, 1);
+		return Utils.map(viewPosition, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX, 0, 1);
 	}
 	
 	private float calculateGradientDistance(float distance)
 	{
-		return Utils.map(distance, 0, getWidth() - (2 * SIDE_MARGIN), 0, 1);
+		return Utils.map(distance, 0, getWidth() - (2 * SIDE_MARGIN_PX), 0, 1);
 	}
 	
 	private void onTouchUp(float x)
@@ -346,10 +364,10 @@ class GradientView extends View
 		updateBottomBarPaint();
 		
 		selectedPoint = point;
-		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
-		if(gradientUpdateListener != null) gradientUpdateListener.onGradientPointAdded();
-		
 		invalidate();
+		if(gradientUpdateListener == null) return;
+		gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
+		gradientUpdateListener.onGradientPointAdded();
 	}
 	
 	void deleteSelectedPoint()
@@ -362,9 +380,9 @@ class GradientView extends View
 		updateBottomBarPaint();
 		
 		selectedPoint = null;
-		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
-		
 		invalidate();
+		if(gradientUpdateListener != null)
+			gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
 	}
 	
 	boolean canDeletePoint()

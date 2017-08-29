@@ -33,7 +33,7 @@ class ActivityPaintLayers implements View.OnClickListener
 		this.activity = activity;
 		
 		decorView = activity.getWindow().getDecorView();
-		sheetPanelSizePx = Utils.dpToPixels(activity.getDisplayMetrics(), SHEET_PANEL_SIZE_DP);
+		sheetPanelSizePx = (int) Utils.dpToPixels(activity.getDisplayMetrics(), SHEET_PANEL_SIZE_DP);
 	}
 	
 	void initLayers()

@@ -4,8 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
@@ -13,8 +12,6 @@ import pl.karol202.paintplus.tool.shape.ShapeProperties;
 
 public class ShapeLine extends Shape
 {
-	private final int MAX_DISTANCE = 50;
-	
 	private int lineWidth;
 	private Cap lineCap;
 	
@@ -26,9 +23,9 @@ public class ShapeLine extends Shape
 	private Point draggedPoint;
 	private Point draggingStart;
 	
-	public ShapeLine(ColorsSet colors, HelpersManager helpersManager, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeLine(Image image, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
-		super(colors, helpersManager, imageChangeListener, shapeEditListener);
+		super(image, imageChangeListener, shapeEditListener);
 		this.lineWidth = 10;
 		this.lineCap = Cap.ROUND;
 		
@@ -61,7 +58,7 @@ public class ShapeLine extends Shape
 		{
 			float distanceToStart = calcDistance(start, x, y);
 			float distanceToEnd = calcDistance(end, x, y);
-			if(Math.min(distanceToStart, distanceToEnd) > MAX_DISTANCE)
+			if(Math.min(distanceToStart, distanceToEnd) > getMaxTouchDistance())
 			{
 				draggedIndex = -1;
 				draggedPoint = null;

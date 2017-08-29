@@ -5,13 +5,17 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 
 public abstract class Shape
 {
+	private final int MAX_TOUCH_DISTANCE_DP = 25;
+	
 	private boolean smooth;
 	private float opacity;
 	
+	private Image image;
 	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
 	private boolean editMode;
@@ -19,16 +23,17 @@ public abstract class Shape
 	private ColorsSet colors;
 	private HelpersManager helpersManager;
 	
-	public Shape(ColorsSet colors, HelpersManager helpersManager, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public Shape(Image image, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
 	{
 		this.smooth = true;
 		this.opacity = 1;
 		
+		this.image = image;
 		this.imageChangeListener = imageChangeListener;
 		this.shapeEditListener = shapeEditListener;
 		this.paint = new Paint();
-		this.colors = colors;
-		this.helpersManager = helpersManager;
+		this.colors = image.getColorsSet();
+		this.helpersManager = image.getHelpersManager();
 	}
 	
 	public abstract int getName();
@@ -71,6 +76,16 @@ public abstract class Shape
 	{
 		editMode = false;
 		imageChangeListener.onImageChanged();
+	}
+	
+	protected float getMaxTouchDistance()
+	{
+		return MAX_TOUCH_DISTANCE_DP * image.SCREEN_DENSITY / image.getZoom();
+	}
+	
+	protected Image getImage()
+	{
+		return image;
 	}
 	
 	protected boolean isInEditMode()

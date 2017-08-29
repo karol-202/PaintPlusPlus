@@ -40,7 +40,7 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 		this.layer = image.getSelectedLayer();
 		updateSelectionPath();
 		
-		this.shapes = new Shapes(colors, helpersManager, this, this);
+		this.shapes = new Shapes(image, this, this);
 		this.maskPaint = new Paint();
 		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));

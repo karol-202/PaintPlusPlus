@@ -27,6 +27,7 @@ public class Image
 	}
 	
 	private final String DEFAULT_LAYER_NAME;
+	public final float SCREEN_DENSITY;
 	
 	public static final int MAX_LAYERS = 8;
 	public static final int FLIP_HORIZONTALLY = 0;
@@ -54,6 +55,7 @@ public class Image
 	public Image(Context context)
 	{
 		this.DEFAULT_LAYER_NAME = context.getString(R.string.new_layer_name);
+		this.SCREEN_DENSITY = context.getResources().getDisplayMetrics().density;
 		
 		this.layers = new ArrayList<>();
 		this.colorsSet = ColorsSet.getDefault();

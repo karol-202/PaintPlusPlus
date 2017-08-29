@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.util;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -17,9 +18,14 @@ public class Utils
 		return v1 + value * (v2 - v1);
 	}
 	
-	public static int dpToPixels(DisplayMetrics metrics, int dp)
+	public static float dpToPixels(Context context, float dp)
 	{
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+		return dpToPixels(context.getResources().getDisplayMetrics(), dp);
+	}
+	
+	public static float dpToPixels(DisplayMetrics metrics, float dp)
+	{
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
 	}
 	
 	public static double getAngle(Point center, Point point)
