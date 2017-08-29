@@ -81,12 +81,6 @@ class GradientShapeSweep extends GradientShape
 		return new SweepGradient(firstPoint.x, firstPoint.y, newColors, newPositions);
 	}
 	
-	private float findNearestFreeKeyOfMap(Map<Float, ?> map, float key)
-	{
-		while(map.containsKey(key)) key += 0.001f;
-		return key;
-	}
-	
 	private int interpolate(int[] colors, float[] positions, float position)
 	{
 		int lowerColor = Color.BLACK;

@@ -1,6 +1,6 @@
 <resources>
 	<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-		<item name="borderlessSelectableBackground">?android:attr/selectableItemBackground</item>
+		<item name="borderlessSelectableBackground">?android:attr/selectableItemBackgroundBorderless</item>
 	</style>
 	
 	<style name="PopupStyle" parent="ThemeOverlay.AppCompat.Light">

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+	android:color="@color/image_toggle_button_ripple">
+	<item android:id="@android:id/mask" android:drawable="@drawable/image_toggle_button_mask"/>
+	<item android:drawable="@drawable/image_toggle_button_selector"/>
+</ripple>

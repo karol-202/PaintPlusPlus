@@ -14,9 +14,13 @@ import java.util.Map;
 
 class GradientView extends View
 {
-	interface OnColorUpdateListener
+	interface OnGradientEditorUpdateListener
 	{
-		void onColorUpdated(int color);
+		void onGradientPositionUpdated(float position);
+		
+		void onGradientSelectionUpdated(float position, int color);
+		
+		void onGradientPointAdded();
 	}
 	
 	private class Triangle
@@ -70,8 +74,11 @@ class GradientView extends View
 		TRIANGLE_INNER_PATH.close();
 	}
 	
-	private OnColorUpdateListener colorUpdateListener;
+	private static final int HEIGHT = TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT + 40;
+	
+	private OnGradientEditorUpdateListener gradientUpdateListener;
 	private Gradient gradient;
+	private boolean addingMode;
 	
 	private Paint borderPaint;
 	
@@ -123,6 +130,7 @@ class GradientView extends View
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(getMeasuredWidth(), HEIGHT);
 	}
 	
 	@Override
@@ -214,6 +222,11 @@ class GradientView extends View
 		triangles.put(point, triangle);
 	}
 	
+	private void removeTriangleForPoint(GradientPoint point)
+	{
+		triangles.remove(point);
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
@@ -228,12 +241,14 @@ class GradientView extends View
 	
 	private boolean onTouchDown(float x)
 	{
-		float gradientPos = Utils.map(x, SIDE_MARGIN, getWidth() - SIDE_MARGIN, 0, 1);
+		if(addingMode) return true;
+		
+		float gradientPos = calculateGradientPosition(x);
 		GradientPoint nearestPoint = findNearestPoint(gradientPos);
 		selectedPoint = nearestPoint;
 		draggedPoint = nearestPoint;
 		lastPosition = x;
-		if(colorUpdateListener != null) colorUpdateListener.onColorUpdated(getSelectedColor());
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
 		return nearestPoint != null;
 	}
 	
@@ -253,7 +268,8 @@ class GradientView extends View
 	
 	private void onTouchMove(float x)
 	{
-		if(draggedPoint == null) return;
+		if(draggedPoint == null || addingMode) return;
+		
 		float screenOffset = x - lastPosition;
 		float gradientOffset = calculateGradientDistance(screenOffset);
 		float newPosition = draggedPoint.getPosition() + gradientOffset;
@@ -266,6 +282,12 @@ class GradientView extends View
 		createTriangleForPoint(draggedPoint);
 		updateTopBarPaint();
 		updateBottomBarPaint();
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientPositionUpdated(newPosition);
+	}
+	
+	private float calculateGradientPosition(float viewPosition)
+	{
+		return Utils.map(viewPosition, SIDE_MARGIN, getWidth() - SIDE_MARGIN, 0, 1);
 	}
 	
 	private float calculateGradientDistance(float distance)
@@ -275,13 +297,59 @@ class GradientView extends View
 	
 	private void onTouchUp(float x)
 	{
-		onTouchMove(x);
-		draggedPoint = null;
+		if(addingMode) addPoint(x);
+		else
+		{
+			onTouchMove(x);
+			draggedPoint = null;
+		}
+	}
+	
+	private void addPoint(float viewX)
+	{
+		float gradientPosition = calculateGradientPosition(viewX);
+		GradientPoint point = gradient.addPoint(gradientPosition);
+		
+		createTriangleForPoint(point);
+		updateTopBarPaint();
+		updateBottomBarPaint();
+		
+		selectedPoint = point;
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientPointAdded();
+		
+		invalidate();
+	}
+	
+	void deleteSelectedPoint()
+	{
+		if(selectedPoint == null || gradient.getPointsAmount() < 3) return;
+		gradient.deletePoint(selectedPoint);
+		
+		removeTriangleForPoint(selectedPoint);
+		updateTopBarPaint();
+		updateBottomBarPaint();
+		
+		selectedPoint = null;
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), getSelectedColor());
+		
+		invalidate();
+	}
+	
+	boolean canDeletePoint()
+	{
+		return selectedPoint != null && gradient.getPointsAmount() >= 3;
 	}
 	
 	boolean isAnyColorSelected()
 	{
 		return selectedPoint != null;
+	}
+	
+	private float getSelectedPosition()
+	{
+		if(selectedPoint == null) return -1;
+		return selectedPoint.getPosition();
 	}
 	
 	int getSelectedColor()
@@ -295,14 +363,14 @@ class GradientView extends View
 		if(selectedPoint == null) return;
 		selectedPoint.setColor(color);
 		
-		if(colorUpdateListener != null) colorUpdateListener.onColorUpdated(color);
+		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), color);
 		updateTopBarPaint();
 		updateBottomBarPaint();
 	}
 	
-	void setColorUpdateListener(OnColorUpdateListener colorUpdateListener)
+	void setGradientUpdateListener(OnGradientEditorUpdateListener gradientUpdateListener)
 	{
-		this.colorUpdateListener = colorUpdateListener;
+		this.gradientUpdateListener = gradientUpdateListener;
 	}
 	
 	Gradient getGradient()
@@ -317,5 +385,10 @@ class GradientView extends View
 		this.bottomBarShader = null;
 		this.triangles = null;
 		invalidate();
+	}
+	
+	void setAddingMode(boolean enabled)
+	{
+		addingMode = enabled;
 	}
 }

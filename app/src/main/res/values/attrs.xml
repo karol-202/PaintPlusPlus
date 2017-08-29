@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<attr name="borderlessSelectableBackground" format="reference"/>
+	
+	<declare-styleable name="imageToggleButton">
+		<attr name="checked" format="boolean"/>
+	</declare-styleable>
 </resources>
