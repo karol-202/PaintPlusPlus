@@ -80,7 +80,10 @@ class GradientView extends View
 	private Gradient gradient;
 	private boolean addingMode;
 	
+	private Rect borderRect;
 	private Paint borderPaint;
+	private Rect checkerboardRect;
+	private Paint checkerboardPaint;
 	
 	private Rect topBarRect;
 	private Paint topBarPaint;
@@ -110,6 +113,15 @@ class GradientView extends View
 		borderPaint.setStrokeWidth(BORDER_WIDTH);
 		borderPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.border, null));
 		
+		Bitmap checkerboard = BitmapFactory.decodeResource(getResources(), R.drawable.checkerboard);
+		Matrix checkerboardMatrix = new Matrix();
+		Shader checkerboardShader = new BitmapShader(checkerboard, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+		checkerboardMatrix.preTranslate(-5, -7);
+		checkerboardShader.setLocalMatrix(checkerboardMatrix);
+		checkerboardPaint = new Paint();
+		checkerboardPaint.setShader(checkerboardShader);
+		checkerboardPaint.setFilterBitmap(false);
+		
 		topBarPaint = new Paint();
 		bottomBarPaint = new Paint();
 		
@@ -138,6 +150,7 @@ class GradientView extends View
 	{
 		super.onDraw(canvas);
 		drawBorder(canvas);
+		drawCheckerboard(canvas);
 		if(gradient == null) return;
 		drawTopBar(canvas);
 		drawBottomBar(canvas);
@@ -146,8 +159,26 @@ class GradientView extends View
 	
 	private void drawBorder(Canvas canvas)
 	{
-		canvas.drawRect(SIDE_MARGIN - BORDER_WIDTH, TOP_MARGIN - BORDER_WIDTH, getWidth() - SIDE_MARGIN,
-						TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT, borderPaint);
+		if(borderRect == null) updateBorderRect();
+		canvas.drawRect(borderRect, borderPaint);
+	}
+	
+	private void updateBorderRect()
+	{
+		borderRect = new Rect(SIDE_MARGIN - BORDER_WIDTH, TOP_MARGIN - BORDER_WIDTH, getWidth() - SIDE_MARGIN,
+				TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT);
+	}
+	
+	private void drawCheckerboard(Canvas canvas)
+	{
+		if(checkerboardRect == null) updateCheckerboardRect();
+		canvas.drawRect(checkerboardRect, checkerboardPaint);
+	}
+	
+	private void updateCheckerboardRect()
+	{
+		checkerboardRect = new Rect(SIDE_MARGIN, TOP_MARGIN,
+							  getWidth() - SIDE_MARGIN, TOP_MARGIN + TOP_BAR_HEIGHT + BOTTOM_BAR_HEIGHT);
 	}
 	
 	private void drawTopBar(Canvas canvas)
@@ -164,16 +195,9 @@ class GradientView extends View
 	
 	private void updateTopBarPaint()
 	{
-		int[] colors = removeAlphaFromColorsArray(gradient.getColorsArray());
 		topBarShader = new LinearGradient(SIDE_MARGIN, 0, getWidth() - SIDE_MARGIN, 0,
-										  colors, gradient.getPositionsArray(), Shader.TileMode.CLAMP);
+										  gradient.getColorsArray(), gradient.getPositionsArray(), Shader.TileMode.CLAMP);
 		topBarPaint.setShader(topBarShader);
-	}
-	
-	private int[] removeAlphaFromColorsArray(int[] colors)
-	{
-		for(int i = 0; i < colors.length; i++) colors[i] |= 0xFF000000;
-		return colors;
 	}
 	
 	private void drawBottomBar(Canvas canvas)
@@ -191,9 +215,16 @@ class GradientView extends View
 	
 	private void updateBottomBarPaint()
 	{
+		int[] colors = removeAlphaFromColorsArray(gradient.getColorsArray());
 		bottomBarShader = new LinearGradient(SIDE_MARGIN, 0, getWidth() - SIDE_MARGIN, 0,
-											 gradient.getColorsArray(), gradient.getPositionsArray(), Shader.TileMode.CLAMP);
+											 colors, gradient.getPositionsArray(), Shader.TileMode.CLAMP);
 		bottomBarPaint.setShader(bottomBarShader);
+	}
+	
+	private int[] removeAlphaFromColorsArray(int[] colors)
+	{
+		for(int i = 0; i < colors.length; i++) colors[i] |= 0xFF000000;
+		return colors;
 	}
 	
 	private void drawTriangles(Canvas canvas)

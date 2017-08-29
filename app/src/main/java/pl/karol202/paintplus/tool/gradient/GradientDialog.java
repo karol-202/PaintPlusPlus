@@ -170,6 +170,7 @@ class GradientDialog
 	private void pickColor()
 	{
 		Intent intent = new Intent(activity, ActivityColorSelect.class);
+		intent.putExtra(ActivityColorSelect.ALPHA_KEY, true);
 		intent.putExtra(ActivityColorSelect.COLOR_KEY, gradientView.getSelectedColor());
 		activity.registerActivityResultListener(REQUEST_CODE, new ActivityResultListener() {
 			@Override
@@ -185,6 +186,7 @@ class GradientDialog
 	{
 		activity.unregisterActivityResultListener(REQUEST_CODE);
 		int color = data.getIntExtra(ActivityColorSelect.COLOR_KEY, Color.BLACK);
+		
 		gradientView.setSelectedColor(color);
 	}
 	

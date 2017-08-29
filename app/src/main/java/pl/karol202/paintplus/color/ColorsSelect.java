@@ -95,6 +95,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 		@ColorInt int color = target == TARGET_FIRST ? colors.getFirstColor() : colors.getSecondColor();
 		
 		Intent intent = new Intent(getActivity(), ActivityColorSelect.class);
+		intent.putExtra(ActivityColorSelect.ALPHA_KEY, false);
 		intent.putExtra(ActivityColorSelect.COLOR_KEY, color);
 		startActivityForResult(intent, REQUEST_COLOR_PICK);
 	}

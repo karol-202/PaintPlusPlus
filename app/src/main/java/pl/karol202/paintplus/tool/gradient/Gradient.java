@@ -46,6 +46,8 @@ class Gradient
 	
 	private int getValueAtPosition(float position)
 	{
+		GradientPoint lastPoint = points.get(points.size() - 1);
+		if(lastPoint.getPosition() <= position) return lastPoint.getColor();
 		GradientPoint nextPoint;
 		int nextIndex = -1;
 		do

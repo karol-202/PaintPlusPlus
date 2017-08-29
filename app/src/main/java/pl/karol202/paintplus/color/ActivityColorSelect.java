@@ -24,6 +24,7 @@ import pl.karol202.paintplus.settings.ActivitySettings;
 
 public class ActivityColorSelect extends AppCompatActivity implements OnColorChangedListener
 {
+	public static final String ALPHA_KEY = "use_alpha";
 	public static final String COLOR_KEY = "initial_color";
 	private static final String CURRENT_COLOR_KEY = "current_color";
 	
@@ -32,6 +33,7 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	private int darkTextColor;
 	private int lightTextColor;
 	
+	private boolean useAlpha;
 	private int defaultColor;
 	private int currentColor;
 	private boolean portrait;
@@ -57,7 +59,9 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	
 	private void onArgumentsRead(Intent intent)
 	{
-		if(intent != null) defaultColor = intent.getIntExtra(COLOR_KEY, Color.BLACK);
+		if(intent == null) return;
+		useAlpha = intent.getBooleanExtra(ALPHA_KEY, false);
+		defaultColor = intent.getIntExtra(COLOR_KEY, Color.BLACK);
 	}
 	
 	private void onLoadInstanceState(Bundle savedInstanceState)
@@ -112,6 +116,7 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	
 	private void changeToolbarColor(@ColorInt int color)
 	{
+		color |= 0xFF000000;
 		toolbar.setBackgroundColor(color);
 		
 		int value = Math.max(Color.red(color), Math.max(Color.green(color), Color.blue(color)));
@@ -143,7 +148,7 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 		String value = preferences.getString(ActivitySettings.KEY_COLOR_MODE, "RGB");
 		switch(value)
 		{
-		case "RGB": return ColorMode.RGB;
+		case "RGB": return useAlpha ? ColorMode.ARGB : ColorMode.RGB;
 		case "HSV": return ColorMode.HSV;
 		case "HSL": return ColorMode.HSL;
 		case "CMYK": return ColorMode.CMYK255;
