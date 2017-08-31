@@ -32,7 +32,6 @@ class GradientDialog
 	private Gradient originalGradient;
 	private Gradient gradient;
 	
-	private AlertDialog dialog;
 	private GradientView gradientView;
 	private TextView textGradientPosition;
 	private ImageToggleButton buttonAdd;
@@ -119,7 +118,7 @@ class GradientDialog
 			}
 		});
 		
-		dialog = builder.show();
+		builder.show();
 	}
 	
 	private void onOKClick()

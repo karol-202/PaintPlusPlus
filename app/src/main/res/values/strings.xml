@@ -214,4 +214,5 @@
 	<string name="gradient_repeatability_no_repeat">No repeat</string>
 	<string name="gradient_repeatability_repeat">Repeat</string>
 	<string name="gradient_repeatability_mirror">Mirror</string>
+	<string name="gradient_revert">Revert</string>
 </resources>

@@ -1,14 +1,12 @@
 package pl.karol202.paintplus.tool.brush;
 
 import android.graphics.*;
-import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolBrush extends StandardTool
 {
@@ -34,6 +32,8 @@ public class ToolBrush extends StandardTool
 		this.size = 25;
 		this.shapeOffset = 10;
 		this.opacity = 1;
+		
+		this.colors = image.getColorsSet();
 		
 		this.shaderMatrix = new Matrix();
 		this.paint = new Paint();
@@ -64,9 +64,9 @@ public class ToolBrush extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -74,15 +74,13 @@ public class ToolBrush extends StandardTool
 	{
 		return true;
 	}
-
+	
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
-		updateClipping();
-		
-		colors = image.getColorsSet();
+		doLayerAndSelectionClipping(canvas);
 		
 		paint.setAlpha((int) (opacity * 255));
 		paint.setStrokeWidth(size);
@@ -103,18 +101,6 @@ public class ToolBrush extends StandardTool
 		int edge = Color.argb(0, Color.red(color), Color.green(color), Color.blue(color));
 		radialShader = new RadialGradient(0, 0, size / 2, center, edge, Shader.TileMode.CLAMP);
 		paint.setShader(radialShader);
-	}
-	
-	private void updateClipping()
-	{
-		Selection selection = image.getSelection();
-		if(selection.isEmpty()) canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.REPLACE);
-		else
-		{
-			Path path = new Path(image.getSelection().getPath());
-			path.offset(-image.getSelectedLayerX(), -image.getSelectedLayerY());
-			canvas.clipPath(path, Op.REPLACE);
-		}
 	}
 	
 	@Override
@@ -176,25 +162,34 @@ public class ToolBrush extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas) { }
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	float getSize()
 	{

@@ -1,19 +1,28 @@
 package pl.karol202.paintplus.tool;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.tool.selection.Selection;
 
 public abstract class StandardTool implements Tool
 {
 	protected Image image;
+	private Selection selection;
 	protected HelpersManager helpersManager;
+	
+	private Path selectionPath;
+	private Layer layer;
 	
 	public StandardTool(Image image)
 	{
 		this.image = image;
+		this.selection = image.getSelection();
 		this.helpersManager = image.getHelpersManager();
 	}
 	
@@ -60,12 +69,12 @@ public abstract class StandardTool implements Tool
 	
 	private void transformTouchCoordinates(PointF point)
 	{
-		if(getCoordinateSpace() == CoordinateSpace.SCREEN_SPACE) return;
+		if(getCoordinateSpace() == ToolCoordinateSpace.SCREEN_SPACE) return;
 		
 		float x = (point.x / image.getZoom()) + image.getViewX();
 		float y = (point.y / image.getZoom()) + image.getViewY();
 		
-		if(getCoordinateSpace() == CoordinateSpace.LAYER_SPACE)
+		if(getCoordinateSpace() == ToolCoordinateSpace.LAYER_SPACE)
 		{
 			x -= image.getSelectedLayerX();
 			y -= image.getSelectedLayerY();
@@ -78,5 +87,24 @@ public abstract class StandardTool implements Tool
 	private void snapTouchCoordinates(PointF point)
 	{
 		if(isUsingSnapping()) helpersManager.snapPoint(point);
+	}
+	
+	protected void doLayerAndSelectionClipping(Canvas canvas)
+	{
+		layer = image.getSelectedLayer();
+		
+		if(selectionPath == null) updateSelectionPath();
+		if(canvas.getSaveCount() > 0) canvas.restoreToCount(1);
+		canvas.save();
+		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight());
+		if(!selection.isEmpty()) canvas.clipPath(selectionPath);
+	}
+	
+	protected void updateSelectionPath()
+	{
+		layer = image.getSelectedLayer();
+		
+		selectionPath = new Path(image.getSelection().getPath());
+		selectionPath.offset(-layer.getX(), -layer.getY());
 	}
 }

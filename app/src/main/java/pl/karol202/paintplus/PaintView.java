@@ -16,6 +16,7 @@ import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private ActivityPaint activity;
 	private Image image;
+	private Selection selection;
 	private ColorsSet colors;
 	private HelpersManager helpersManager;
 	
@@ -40,6 +42,10 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private Matrix checkerboardMatrix;
 	private ArrayList<Layer> reversedLayers;
 	private Path boundsPath;
+	
+	private Path rawLimitedSelectionPath;
+	private Path limitedSelectionPath;
+	private Path rawSelectionPath;
 	private Path selectionPath;
 
 	public PaintView(Context context, AttributeSet attrs)
@@ -54,6 +60,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		image = activity.getImage();
 		image.setOnImageChangeListener(this);
 		image.addOnSelectionChangeListener(this);
+		selection = image.getSelection();
 		colors = image.getColorsSet();
 		helpersManager = image.getHelpersManager();
 		
@@ -92,8 +99,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		
 		setClipping(canvas);
 		drawCheckerboard(canvas);
-		drawImage(canvas);
 		removeClipping(canvas);
+		drawImage(canvas);
 		drawLayerBounds(canvas);
 		drawSelection(canvas);
 		
@@ -106,6 +113,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		image.setViewportHeight(getHeight());
 		image.centerView();
 		
+		onSelectionChanged();
 		onImageChanged();
 		onLayersChanged();
 		initialized = true;
@@ -118,12 +126,13 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		float width = image.getWidth() * image.getZoom();
 		float height = image.getHeight() * image.getZoom();
 		
+		canvas.save();
 		canvas.clipRect(viewX, viewY, viewX + width, viewY + height);
 	}
 	
 	private void removeClipping(Canvas canvas)
 	{
-		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
+		canvas.restore();
 	}
 	
 	private void drawCheckerboard(Canvas canvas)
@@ -136,42 +145,68 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	{
 		Tool tool = getTool();
 		Bitmap screenBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-		
-		Bitmap toolBitmap = null;
-		if(tool.doesScreenDraw(image.getSelectedLayer() != null))
-		{
-			toolBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-			Canvas toolCanvas = new Canvas(toolBitmap);
-			tool.onScreenDraw(toolCanvas);
-		}
+		Canvas screenCanvas = new Canvas(screenBitmap);
 		
 		if(reversedLayers == null) return;
 		for(Layer layer : reversedLayers)
 		{
-			boolean drawTool = tool.doesScreenDraw(layer.isVisible()) && !tool.isDrawingOnTop() && image.isLayerSelected(layer);
-			if(layer.isVisible() && !layer.isTemporaryHidden())
+			boolean layerVisible = layer.isVisible() && !layer.isTemporaryHidden();
+			Matrix imageMatrix = new Matrix(image.getImageMatrix());
+			if(image.isLayerSelected(layer) && tool.doesOnLayerDraw(layer.isVisible()))
 			{
-				Matrix imageMatrix = new Matrix(image.getImageMatrix());
-				if(drawTool) screenBitmap = layer.drawLayerAndTool(screenBitmap, imageMatrix, toolBitmap);
-				else screenBitmap = layer.drawLayer(screenBitmap, imageMatrix);
+				Bitmap toolBitmap = createOnLayerToolBitmap(tool, layer);
+				if(layerVisible)
+					screenBitmap = layer.drawLayerAndTool(screenBitmap, imageMatrix, toolBitmap);
+				else screenBitmap = layer.drawTool(screenBitmap, toolBitmap);
 			}
-			else if(drawTool) screenBitmap = layer.drawTool(screenBitmap, toolBitmap);
+			else if(layerVisible) screenBitmap = layer.drawLayer(screenBitmap, imageMatrix);
 		}
-		canvas.drawBitmap(screenBitmap, 0, 0, null);
 		
-		if(tool.doesScreenDraw(true))
+		if(tool.doesOnTopDraw())
 		{
-			if(tool.isDrawingOnTop())
-			{
-				if(!tool.isImageLimited()) removeClipping(canvas);
-				canvas.drawBitmap(toolBitmap, 0, 0, null);
-				if(!tool.isImageLimited()) setClipping(canvas);
-			}
-			else if(!tool.isImageLimited())
-			{
-				canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.XOR);
-				canvas.drawBitmap(toolBitmap, 0, 0, null);
-			}
+			Bitmap toolBitmap = createOnTopToolBitmap(tool);
+			screenCanvas.drawBitmap(toolBitmap, 0, 0, null);
+		}
+		
+		canvas.drawBitmap(screenBitmap, 0, 0, null);
+	}
+	
+	private Bitmap createOnLayerToolBitmap(Tool tool, Layer layer)
+	{
+		if(!tool.doesOnLayerDraw(layer.isVisible())) return null;
+		
+		Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		transformToolCanvas(canvas, tool.getOnLayerDrawingCoordinateSpace());
+		tool.onLayerDraw(canvas);
+		return bitmap;
+	}
+	
+	private Bitmap createOnTopToolBitmap(Tool tool)
+	{
+		if(!tool.doesOnTopDraw()) return null;
+		
+		Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		transformToolCanvas(canvas, tool.getOnTopDrawingCoordinateSpace());
+		tool.onTopDraw(canvas);
+		return bitmap;
+	}
+	
+	private void transformToolCanvas(Canvas canvas, ToolCoordinateSpace space)
+	{
+		switch(space)
+		{
+		case SCREEN_SPACE: break;
+		case IMAGE_SPACE:
+			canvas.scale(image.getZoom(), image.getZoom());
+			canvas.translate(-image.getViewX(), -image.getViewY());
+			break;
+		case LAYER_SPACE:
+			canvas.scale(image.getZoom(), image.getZoom());
+			canvas.translate(-image.getViewX() + image.getSelectedLayerX(),
+							 -image.getViewY() + image.getSelectedLayerY());
+			break;
 		}
 	}
 	
@@ -183,7 +218,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private void drawSelection(Canvas canvas)
 	{
-		canvas.drawPath(selectionPath, selectionPaint);
+		canvas.drawPath(limitedSelectionPath, selectionPaint);
 	}
 	
 	@Override
@@ -225,13 +260,30 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	@Override
 	public void onSelectionChanged()
 	{
+		createSelectionPath();
+	}
+	
+	private void createSelectionPath()
+	{
+		Rect screen = new Rect();
+		getScreenRect().round(screen);
+		
+		Region region = new Region(selection.getRegion());
+		region.op(screen, Region.Op.INTERSECT);
+		
+		rawLimitedSelectionPath = region.getBoundaryPath();
+		rawSelectionPath = selection.getPath();
+		
+		limitedSelectionPath = new Path();
+		selectionPath = new Path();
 		updateSelectionPath();
 	}
 	
 	private void updateCheckerboardMatrix()
 	{
 		checkerboardMatrix = new Matrix();
-		checkerboardMatrix.preTranslate(-image.getViewX() * image.getZoom() + CHECKERBOARD_OFFSET, -image.getViewY() * image.getZoom() + CHECKERBOARD_OFFSET);
+		checkerboardMatrix.preTranslate(-image.getViewX() * image.getZoom() + CHECKERBOARD_OFFSET,
+										-image.getViewY() * image.getZoom() + CHECKERBOARD_OFFSET);
 	}
 	
 	private void updateLayerBounds()
@@ -248,13 +300,9 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private void updateSelectionPath()
 	{
-		Region region = new Region(image.getSelection().getRegion());
-		Rect screen = new Rect();
-		getScreenRect().round(screen);
-		region.op(screen, Region.Op.INTERSECT);
-		
-		selectionPath = region.getBoundaryPath();
-		selectionPath.transform(image.getImageMatrix());
+		if(rawLimitedSelectionPath == null || rawSelectionPath == null) return;
+		rawLimitedSelectionPath.transform(image.getImageMatrix(), limitedSelectionPath);
+		rawSelectionPath.transform(image.getImageMatrix(), selectionPath);
 	}
 	
 	private RectF getScreenRect()

@@ -9,7 +9,7 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
@@ -51,9 +51,9 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -97,25 +97,34 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas) { }
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	@Override
 	public void onFillComplete(Bitmap bitmap)

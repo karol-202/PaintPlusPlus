@@ -3,12 +3,14 @@ package pl.karol202.paintplus.tool.gradient;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.gradient.ToolGradient.OnGradientEditListener;
 
-public class GradientProperties extends ToolProperties implements OnGradientEditListener, AdapterView.OnItemSelectedListener, View.OnClickListener, GradientDialog.OnGradientUpdateListener
+public class GradientProperties extends ToolProperties implements OnGradientEditListener, AdapterView.OnItemSelectedListener, View.OnClickListener, GradientDialog.OnGradientUpdateListener, CompoundButton.OnCheckedChangeListener
 {
 	private ToolGradient toolGradient;
 	private GradientShapes shapes;
@@ -17,6 +19,7 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	
 	private View view;
 	private GradientPreviewView gradientPreview;
+	private CheckBox checkGradientRevert;
 	private Spinner spinnerGradientShape;
 	private Spinner spinnerGradientRepeatability;
 	
@@ -32,16 +35,20 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 		adapterGradientShape = new GradientShapeAdapter(getActivity(), shapes.getShapes());
 		adapterGradientRepeatability = new GradientRepeatabilityAdapter(getActivity());
 		
-		gradientPreview = (GradientPreviewView) view.findViewById(R.id.gradient_preview);
+		gradientPreview = view.findViewById(R.id.gradient_preview);
 		gradientPreview.setGradient(toolGradient.getGradient());
 		gradientPreview.setOnClickListener(this);
 		
-		spinnerGradientShape = (Spinner) view.findViewById(R.id.spinner_gradient_shape);
+		checkGradientRevert = view.findViewById(R.id.check_gradient_revert);
+		checkGradientRevert.setChecked(toolGradient.isReverted());
+		checkGradientRevert.setOnCheckedChangeListener(this);
+		
+		spinnerGradientShape = view.findViewById(R.id.spinner_gradient_shape);
 		spinnerGradientShape.setAdapter(adapterGradientShape);
 		spinnerGradientShape.setSelection(shapes.getIdOfShape(toolGradient.getShape()));
 		spinnerGradientShape.setOnItemSelectedListener(this);
 		
-		spinnerGradientRepeatability = (Spinner) view.findViewById(R.id.spinner_gradient_repeatability);
+		spinnerGradientRepeatability = view.findViewById(R.id.spinner_gradient_repeatability);
 		spinnerGradientRepeatability.setAdapter(adapterGradientRepeatability);
 		spinnerGradientRepeatability.setSelection(toolGradient.getRepeatability().ordinal());
 		spinnerGradientRepeatability.setOnItemSelectedListener(this);
@@ -83,24 +90,6 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	}
 	
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-	{
-		if(parent == spinnerGradientShape)
-		{
-			GradientShape shape = shapes.getShape(position);
-			toolGradient.setShape(shape);
-		}
-		else if(parent == spinnerGradientRepeatability)
-			toolGradient.setRepeatability(GradientRepeatability.values()[position]);
-	}
-	
-	@Override
-	public void onNothingSelected(AdapterView<?> parent)
-	{
-		System.err.println("nothing!");
-	}
-	
-	@Override
 	public void onClick(View v)
 	{
 		GradientDialog dialog = new GradientDialog(getActivity(), toolGradient.getGradient());
@@ -112,5 +101,26 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	public void onGradientUpdated()
 	{
 		gradientPreview.update();
+	}
+	
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+	{
+		if(parent == spinnerGradientShape)
+			toolGradient.setShape(shapes.getShape(position));
+		else if(parent == spinnerGradientRepeatability)
+			toolGradient.setRepeatability(GradientRepeatability.values()[position]);
+	}
+	
+	@Override
+	public void onNothingSelected(AdapterView<?> parent)
+	{
+		System.err.println("nothing!");
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton compoundButton, boolean b)
+	{
+		toolGradient.setRevert(b);
 	}
 }

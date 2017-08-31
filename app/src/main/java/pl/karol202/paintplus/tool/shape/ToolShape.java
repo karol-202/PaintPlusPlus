@@ -3,27 +3,19 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.*;
 import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolShape extends StandardTool implements OnImageChangeListener, OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
 	private Canvas canvas;
-	private ColorsSet colors;
-	private Selection selection;
-	private HelpersManager helpersManager;
-	
-	private Path selectionPath;
 	private Layer layer;
 	
 	private Shapes shapes;
@@ -33,12 +25,6 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	public ToolShape(Image image)
 	{
 		super(image);
-		this.colors = image.getColorsSet();
-		this.selection = image.getSelection();
-		this.helpersManager = image.getHelpersManager();
-		
-		this.layer = image.getSelectedLayer();
-		updateSelectionPath();
 		
 		this.shapes = new Shapes(image, this, this);
 		this.maskPaint = new Paint();
@@ -67,9 +53,9 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -83,11 +69,9 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
-		selection = image.getSelection();
 		layer = image.getSelectedLayer();
 		
-		updateSelectionPath();
-		updateClipping(canvas);
+		doLayerAndSelectionClipping(canvas);
 		
 		shape.onTouchStart((int) x, (int) y);
 		return true;
@@ -108,25 +92,31 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return false;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return layerVisible;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
+	{
+		return ToolCoordinateSpace.SCREEN_SPACE;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas)
 	{
 		layer = image.getSelectedLayer();
 		
@@ -135,7 +125,7 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 						 -image.getViewY() + layer.getY());
 		shape.onScreenDraw(canvas);
 		
-		updateClipping(canvas);
+		doLayerAndSelectionClipping(canvas);
 		canvas.translate(image.getViewX() - layer.getX(), image.getViewY() - layer.getY());
 		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.XOR);
@@ -143,17 +133,8 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
 	}
 	
-	private void updateSelectionPath()
-	{
-		selectionPath = new Path(selection.getPath());
-		selectionPath.offset(-layer.getX(), -layer.getY());
-	}
-	
-	private void updateClipping(Canvas canvas)
-	{
-		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Op.REPLACE);
-		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
-	}
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	public void apply()
 	{

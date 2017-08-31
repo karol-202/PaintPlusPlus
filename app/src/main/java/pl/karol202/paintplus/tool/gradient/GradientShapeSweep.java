@@ -28,13 +28,13 @@ class GradientShapeSweep extends GradientShape
 	}
 	
 	@Override
-	Shader createShader(Shader.TileMode tileMode)
+	Shader createShader()
 	{
-		float angle = (float) Math.toDegrees(Math.atan2(secondPoint.y - firstPoint.y, secondPoint.x - firstPoint.x));
+		float angle = (float) Math.toDegrees(Math.atan2(getSecondPoint().y - getFirstPoint().y, getSecondPoint().x - getFirstPoint().x));
 		float offset = Utils.map(angle, -180, 180, -0.5f, 0.5f);
 		
-		int[] oldColors = gradient.getColorsArray();
-		float[] oldPositions = gradient.getPositionsArray();
+		int[] oldColors = getColorsArray();
+		float[] oldPositions = getPositionsArray();
 		
 		if(oldColors.length != oldPositions.length) throw new RuntimeException("Corrupted gradient.");
 		int oldLength = oldColors.length;
@@ -46,7 +46,6 @@ class GradientShapeSweep extends GradientShape
 			float position = oldPositions[i] + offset;
 			if(position < 0) position += 1.0001;
 			if(position > 1) position -= 1.0001;
-			//float freePosition = findNearestFreeKeyOfMap(gradient, position);
 			gradient.put(position, color);
 		}
 		if(!gradient.containsKey(0f) || !gradient.containsKey(1f))
@@ -78,7 +77,7 @@ class GradientShapeSweep extends GradientShape
 			lastPosition = position;
 		}
 		
-		return new SweepGradient(firstPoint.x, firstPoint.y, newColors, newPositions);
+		return new SweepGradient(getFirstPoint().x, getFirstPoint().y, newColors, newPositions);
 	}
 	
 	private int interpolate(int[] colors, float[] positions, float position)

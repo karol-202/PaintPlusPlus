@@ -88,10 +88,24 @@ class Gradient
 		return array;
 	}
 	
+	float[] getRevertedPositionsArray()
+	{
+		float[] array = new float[points.size()];
+		for(int i = 0; i < points.size(); i++) array[i] = 1 - points.get(points.size() - 1 - i).getPosition();
+		return array;
+	}
+	
 	int[] getColorsArray()
 	{
 		int[] array = new int[points.size()];
 		for(int i = 0; i < points.size(); i++) array[i] = points.get(i).getColor();
+		return array;
+	}
+	
+	int[] getRevertedColorsArray()
+	{
+		int[] array = new int[points.size()];
+		for(int i = 0; i < points.size(); i++) array[i] = points.get(points.size() - 1 - i).getColor();
 		return array;
 	}
 	

@@ -6,13 +6,12 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolDrag extends StandardTool
 {
-	private HelpersManager helpersManager;
 	private Layer layer;
 	private int oldLayerX;
 	private int oldLayerY;
@@ -22,7 +21,6 @@ public class ToolDrag extends StandardTool
 	public ToolDrag(Image image)
 	{
 		super(image);
-		helpersManager = image.getHelpersManager();
 	}
 	
 	@Override
@@ -44,9 +42,9 @@ public class ToolDrag extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.IMAGE_SPACE;
+		return ToolCoordinateSpace.IMAGE_SPACE;
 	}
 	
 	@Override
@@ -93,23 +91,32 @@ public class ToolDrag extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		return false;
+		return null;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas) { }
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 }

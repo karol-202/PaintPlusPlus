@@ -12,17 +12,21 @@ public interface Tool
 	
 	Class<? extends ToolProperties> getPropertiesFragmentClass();
 	
-	CoordinateSpace getCoordinateSpace();
+	ToolCoordinateSpace getCoordinateSpace();
 	
 	boolean isUsingSnapping();
 	
 	boolean onTouch(MotionEvent event, Context context);
 	
-	boolean isImageLimited();
+	boolean doesOnLayerDraw(boolean layerVisible);
 	
-	boolean doesScreenDraw(boolean layerVisible);
+	boolean doesOnTopDraw();
 	
-	boolean isDrawingOnTop();
+	ToolCoordinateSpace getOnLayerDrawingCoordinateSpace();
+	
+	ToolCoordinateSpace getOnTopDrawingCoordinateSpace();
 
-	void onScreenDraw(Canvas canvas);
+	void onLayerDraw(Canvas canvas);
+	
+	void onTopDraw(Canvas canvas);
 }

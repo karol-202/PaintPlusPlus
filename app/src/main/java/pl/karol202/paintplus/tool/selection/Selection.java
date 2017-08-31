@@ -32,7 +32,7 @@ public class Selection
 	{
 		this.imageRect = new Rect(0, 0, width, height);
 		this.region = new Region();
-		this.path = new Path();
+		
 		updatePath();
 	}
 	

@@ -31,9 +31,10 @@ class GradientShapeSweepSymmetric extends GradientShape
 	}
 	
 	@Override
-	Shader createShader(Shader.TileMode tileMode)
+	Shader createShader()
 	{
-		float angle = (float) Math.toDegrees(Math.atan2(secondPoint.y - firstPoint.y, secondPoint.x - firstPoint.x));
+		float angle = (float) Math.toDegrees(Math.atan2(getSecondPoint().y - getFirstPoint().y,
+														getSecondPoint().x - getFirstPoint().x));
 		float offset = Utils.map(angle, -180, 180, -0.5f, 0.5f);
 		
 		mirrorGradient();
@@ -77,13 +78,13 @@ class GradientShapeSweepSymmetric extends GradientShape
 			lastPosition = position;
 		}
 		
-		return new SweepGradient(firstPoint.x, firstPoint.y, newColors, newPositions);
+		return new SweepGradient(getFirstPoint().x, getFirstPoint().y, newColors, newPositions);
 	}
 	
 	private void mirrorGradient()
 	{
-		oldColors = gradient.getColorsArray();
-		oldPositions = gradient.getPositionsArray();
+		oldColors = getColorsArray();
+		oldPositions = getPositionsArray();
 		for(int i = 0; i < oldPositions.length; i++) oldPositions[i] = oldPositions[i] / 2;
 		
 		if(oldColors.length != oldPositions.length) throw new RuntimeException("Corrupted gradient.");

@@ -1,13 +1,19 @@
 package pl.karol202.paintplus.tool.gradient;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 
 abstract class GradientShape
 {
 	private ToolGradient toolGradient;
-	Gradient gradient;
-	PointF firstPoint;
-	PointF secondPoint;
+	private Gradient gradient;
+	private PointF firstPoint;
+	private PointF secondPoint;
+	private boolean reverted;
+	private TileMode tileMode;
 	
 	private Paint paint;
 	private Shader shader;
@@ -22,7 +28,7 @@ abstract class GradientShape
 	
 	abstract int getIcon();
 	
-	abstract Shader createShader(Shader.TileMode tileMode);
+	abstract Shader createShader();
 	
 	void applyGradient(Canvas imageCanvas)
 	{
@@ -33,7 +39,6 @@ abstract class GradientShape
 
 	void onScreenDraw(Canvas canvas)
 	{
-		if(!toolGradient.canDrawGradient()) return;
 		if(isShaderOutdated()) updatePaint();
 		drawGradient(canvas);
 	}
@@ -56,11 +61,13 @@ abstract class GradientShape
 		gradient = toolGradient.getGradient();
 		firstPoint = clonePoint(toolGradient.getFirstPoint());
 		secondPoint = clonePoint(toolGradient.getSecondPoint());
+		reverted = toolGradient.isReverted();
+		tileMode = toolGradient.getRepeatability().getTileMode();
 		
 		if(firstPoint == null || secondPoint == null) shader = null;
 		else
 		{
-			shader = createShader(toolGradient.getRepeatability().getTileMode());
+			shader = createShader();
 			paint.setShader(shader);
 		}
 	}
@@ -69,5 +76,30 @@ abstract class GradientShape
 	{
 		if(point == null) return null;
 		return new PointF(point.x, point.y);
+	}
+	
+	int[] getColorsArray()
+	{
+		return reverted ? gradient.getRevertedColorsArray() : gradient.getColorsArray();
+	}
+	
+	float[] getPositionsArray()
+	{
+		return reverted ? gradient.getRevertedPositionsArray() : gradient.getPositionsArray();
+	}
+	
+	PointF getFirstPoint()
+	{
+		return firstPoint;
+	}
+	
+	PointF getSecondPoint()
+	{
+		return secondPoint;
+	}
+	
+	TileMode getTileMode()
+	{
+		return tileMode;
 	}
 }

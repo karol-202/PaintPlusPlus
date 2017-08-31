@@ -6,7 +6,7 @@ import android.graphics.Color;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.CoordinateSpace;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -47,9 +47,9 @@ public class ToolColorPick extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -131,25 +131,34 @@ public class ToolColorPick extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas) { }
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	int getSize()
 	{

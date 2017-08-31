@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.CoordinateSpace;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -113,9 +113,9 @@ public class ToolPan implements Tool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.SCREEN_SPACE;
+		return ToolCoordinateSpace.SCREEN_SPACE;
 	}
 	
 	@Override
@@ -146,25 +146,34 @@ public class ToolPan implements Tool
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		return false;
+		return null;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas) { }
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	float getZoom()
 	{

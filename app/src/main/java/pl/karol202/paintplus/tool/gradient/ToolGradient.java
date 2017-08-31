@@ -1,13 +1,12 @@
 package pl.karol202.paintplus.tool.gradient;
 
 import android.graphics.*;
-import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -29,6 +28,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	private Gradient gradient;
 	private GradientShape shape;
 	private GradientRepeatability repeatability;
+	private boolean revert;
 	
 	private OnGradientEditListener listener;
 	private Selection selection;
@@ -76,9 +76,6 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		pointInnerPaint.setStyle(Paint.Style.FILL);
 		pointInnerPaint.setColor(Color.WHITE);
 		
-		layer = image.getSelectedLayer();
-		updateSelectionPath();
-		
 		pointDrawRect = new RectF();
 		
 		draggingIndex = -1;
@@ -105,9 +102,9 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -124,7 +121,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		canvas = image.getSelectedCanvas();
 		
 		updateSelectionPath();
-		updateClipping(canvas);
+		doLayerAndSelectionClipping(canvas);
 		
 		if(!pointsCreated) startGradientEditing(x, y);
 		else startPointsDragging(x, y);
@@ -169,23 +166,23 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	@Override
 	public boolean onTouchMove(float x, float y)
 	{
-		continuePointsDragging(x, y);
-		return true;
+		return continuePointsDragging(x, y);
 	}
 	
-	private void continuePointsDragging(float x, float y)
+	private boolean continuePointsDragging(float x, float y)
 	{
-		if(draggingIndex == -1) return;
+		if(draggingIndex == -1) return false;
 		float newX = x - draggingStart.x + previousPositionOfDraggedPoint.x;
 		float newY = y - draggingStart.y + previousPositionOfDraggedPoint.y;
 		if(draggingIndex == 0) firstPoint.set(newX, newY);
 		else if(draggingIndex == 1) secondPoint.set(newX, newY);
+		return true;
 	}
 	
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
-		continuePointsDragging(x, y);
+		if(!continuePointsDragging(x, y)) return false;
 		
 		pointsCreated = true;
 		draggingIndex = -1;
@@ -194,36 +191,40 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return false;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return layerVisible;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		layer = image.getSelectedLayer();
-		
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + layer.getX(), -image.getViewY() + layer.getY());
-		
-		canvas.save();
-		updateClipping(canvas);
+		return ToolCoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return ToolCoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas)
+	{
+		if(!canDrawGradient()) return;
+		doLayerAndSelectionClipping(canvas);
 		shape.onScreenDraw(canvas);
-		canvas.restore();
-		
+	}
+	
+	@Override
+	public void onTopDraw(Canvas canvas)
+	{
 		if(firstPoint != null) drawPoint(canvas, firstPoint);
 		if(secondPoint != null) drawPoint(canvas, secondPoint);
 	}
@@ -246,18 +247,6 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		canvas.drawOval(pointDrawRect, pointInnerPaint);
 	}
 	
-	private void updateSelectionPath()
-	{
-		selectionPath = new Path(selection.getPath());
-		selectionPath.offset(-layer.getX(), -layer.getY());
-	}
-	
-	private void updateClipping(Canvas canvas)
-	{
-		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Op.REPLACE);
-		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
-	}
-	
 	void apply()
 	{
 		shape.applyGradient(canvas);
@@ -266,6 +255,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	
 	void cancel()
 	{
+		draggingIndex = -1;
 		firstPoint = null;
 		secondPoint = null;
 		pointsCreated = false;
@@ -330,6 +320,17 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	void setRepeatability(GradientRepeatability repeatability)
 	{
 		this.repeatability = repeatability;
+	}
+	
+	boolean isReverted()
+	{
+		return revert;
+	}
+	
+	void setRevert(boolean revert)
+	{
+		this.revert = revert;
+		image.updateImage();
 	}
 	
 	PointF getFirstPoint()

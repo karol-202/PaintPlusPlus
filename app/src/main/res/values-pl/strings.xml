@@ -214,4 +214,6 @@
 	<string name="gradient_repeatability_mirror">Odbicie</string>
 	<string name="gradient_repeatability_repeat">Powtarzanie</string>
 	<string name="gradient_repeatability_no_repeat">Brak</string>
+	<string name="dialog_gradient">Gradient</string>
+	<string name="gradient_revert">Odwróć</string>
 </resources>

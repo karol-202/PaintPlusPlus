@@ -2,10 +2,9 @@ package pl.karol202.paintplus.tool.selection;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 import static pl.karol202.paintplus.tool.selection.ToolSelectionShape.OVAL;
@@ -27,7 +26,6 @@ public class ToolSelection extends StandardTool
 	private ToolSelectionMode mode;
 	
 	private OnSelectionEditListener selectionListener;
-	private HelpersManager helpersManager;
 	private Selection selection;
 	private Rect rect;
 	private boolean editMode;
@@ -44,7 +42,6 @@ public class ToolSelection extends StandardTool
 		this.shape = RECTANGLE;
 		this.mode = ToolSelectionMode.NEW;
 		
-		this.helpersManager = image.getHelpersManager();
 		this.selection = image.getSelection();
 		this.rect = new Rect();
 		this.paint = new Paint();
@@ -75,9 +72,9 @@ public class ToolSelection extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.IMAGE_SPACE;
+		return ToolCoordinateSpace.IMAGE_SPACE;
 	}
 	
 	@Override
@@ -289,41 +286,38 @@ public class ToolSelection extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnTopDraw()
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		return true;
+		return null;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return ToolCoordinateSpace.IMAGE_SPACE;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas) { }
+	
+	@Override
+	public void onTopDraw(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
-		if(shape == RECTANGLE) canvas.drawRect(transformRect(), paint);
-		else if(shape == OVAL) canvas.drawOval(new RectF(transformRect()), paint);
-	}
-	
-	private RectF transformRect()
-	{
-		RectF newRect = new RectF(rect);
-		newRect.offset(-image.getViewX(), -image.getViewY());
-		
-		newRect.left *= image.getZoom();
-		newRect.top *= image.getZoom();
-		newRect.right *= image.getZoom();
-		newRect.bottom *= image.getZoom();
-		return newRect;
+		if(shape == RECTANGLE) canvas.drawRect(rect, paint);
+		else if(shape == OVAL) canvas.drawOval(new RectF(rect), paint);
 	}
 	
 	void setSelectionListener(OnSelectionEditListener selectionListener)

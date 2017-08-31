@@ -4,10 +4,9 @@ import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolRubber extends StandardTool
 {
@@ -16,7 +15,7 @@ public class ToolRubber extends StandardTool
 	private boolean smooth;
 	
 	private Canvas canvas;
-	private Path selectionPath;
+	
 	private Layer layer;
 	
 	private Paint pathPaint;
@@ -33,9 +32,6 @@ public class ToolRubber extends StandardTool
 		this.size = 25;
 		this.strength = 1;
 		this.smooth = true;
-		
-		this.layer = image.getSelectedLayer();
-		updateSelectionPath();
 		
 		this.pathPaint = new Paint();
 		this.pathPaint.setStyle(Paint.Style.STROKE);
@@ -67,9 +63,9 @@ public class ToolRubber extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -86,7 +82,7 @@ public class ToolRubber extends StandardTool
 		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
-		updateClipping();
+		doLayerAndSelectionClipping(canvas);
 		
 		pathPaint.setColor(Color.TRANSPARENT);
 		pathPaint.setAlpha((int) (strength * 255));
@@ -108,19 +104,6 @@ public class ToolRubber extends StandardTool
 		editStarted = true;
 		layer.setTemporaryHidden(true);
 		return true;
-	}
-	
-	private void updateSelectionPath()
-	{
-		selectionPath = new Path(image.getSelection().getPath());
-		selectionPath.offset(-layer.getX(), -layer.getY());
-	}
-	
-	private void updateClipping()
-	{
-		Selection selection = image.getSelection();
-		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Region.Op.REPLACE);
-		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Region.Op.INTERSECT);
 	}
 	
 	@Override
@@ -160,33 +143,39 @@ public class ToolRubber extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return editStarted && layerVisible;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + layer.getX(),
-						 -image.getViewY() + layer.getY());
-		
+		return ToolCoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas)
+	{
 		canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
+		doLayerAndSelectionClipping(canvas);
 		canvas.drawPath(path, pathPaint);
 	}
+	
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	float getSize()
 	{

@@ -23,10 +23,10 @@ class GradientShapeBilinear extends GradientShape
 	}
 	
 	@Override
-	Shader createShader(Shader.TileMode tileMode)
+	Shader createShader()
 	{
-		int[] oldColors = gradient.getColorsArray();
-		float[] oldPositions = gradient.getPositionsArray();
+		int[] oldColors = getColorsArray();
+		float[] oldPositions = getPositionsArray();
 		for(int i = 0; i < oldPositions.length; i++) oldPositions[i] = oldPositions[i] / 2;
 		
 		if(oldColors.length != oldPositions.length) throw new RuntimeException("Corrupted gradient.");
@@ -44,7 +44,7 @@ class GradientShapeBilinear extends GradientShape
 			newPositions[i] = 1 - oldPositions[newLength - i - 1];
 		}
 		
-		return new LinearGradient(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y,
-								  newColors, newPositions, tileMode);
+		return new LinearGradient(getFirstPoint().x, getFirstPoint().y, getSecondPoint().x, getSecondPoint().y,
+								  newColors, newPositions, getTileMode());
 	}
 }

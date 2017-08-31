@@ -1,16 +1,12 @@
 package pl.karol202.paintplus.tool.marker;
 
 import android.graphics.Canvas;
-import android.graphics.Path;
-import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.CoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolMarker extends StandardTool
 {
@@ -20,8 +16,6 @@ public class ToolMarker extends StandardTool
 	
 	private Canvas canvas;
 	private ColorsSet colors;
-	private Path selectionPath;
-	private Layer layer;
 	
 	private MarkerAdapterQuadraticPath adapterQuadraticPath;
 
@@ -33,8 +27,6 @@ public class ToolMarker extends StandardTool
 		this.smoothEdge = true;
 		
 		this.colors = image.getColorsSet();
-		this.layer = image.getSelectedLayer();
-		updateSelectionPath();
 		
 		this.adapterQuadraticPath = new MarkerAdapterQuadraticPath(this);
 	}
@@ -58,9 +50,9 @@ public class ToolMarker extends StandardTool
 	}
 	
 	@Override
-	public CoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getCoordinateSpace()
 	{
-		return CoordinateSpace.LAYER_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -74,10 +66,9 @@ public class ToolMarker extends StandardTool
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
-		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
-		updateClipping(canvas);
+		doLayerAndSelectionClipping(canvas);
 		
 		getCurrentAdapter().onBeginDraw(x, y);
 		return true;
@@ -98,49 +89,38 @@ public class ToolMarker extends StandardTool
 	}
 	
 	@Override
-	public boolean isImageLimited()
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean doesScreenDraw(boolean layerVisible)
+	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return layerVisible;
 	}
 	
 	@Override
-	public boolean isDrawingOnTop()
+	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		layer = image.getSelectedLayer();
-		
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + layer.getX(),
-						 -image.getViewY() + layer.getY());
-		
-		updateClipping(canvas);
+		return ToolCoordinateSpace.LAYER_SPACE;
+	}
+	
+	@Override
+	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
+	{
+		return null;
+	}
+	
+	@Override
+	public void onLayerDraw(Canvas canvas)
+	{
+		doLayerAndSelectionClipping(canvas);
 		getCurrentAdapter().onScreenDraw(canvas);
 	}
 	
-	private void updateClipping(Canvas canvas)
-	{
-		Selection selection = image.getSelection();
-		
-		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight(), Op.REPLACE);
-		if(!selection.isEmpty()) canvas.clipPath(selectionPath, Op.INTERSECT);
-	}
-	
-	private void updateSelectionPath()
-	{
-		selectionPath = new Path(image.getSelection().getPath());
-		selectionPath.offset(-layer.getX(), -layer.getY());
-	}
+	@Override
+	public void onTopDraw(Canvas canvas) { }
 	
 	private MarkerAdapter getCurrentAdapter()
 	{
