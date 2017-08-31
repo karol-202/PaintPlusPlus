@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import pl.karol202.paintplus.R;
 
-class GradientPreviewView extends View
+public class GradientPreviewView extends View
 {
 	private Gradient gradient;
 	
@@ -16,7 +16,7 @@ class GradientPreviewView extends View
 	private Paint paint;
 	private Shader shader;
 	
-	GradientPreviewView(Context context, AttributeSet attrs)
+	public GradientPreviewView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		
@@ -31,14 +31,16 @@ class GradientPreviewView extends View
 		
 		paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
+		
+		if(isInEditMode()) gradient = Gradient.createSimpleGradient(Color.BLACK, Color.WHITE);
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		if(gradient == null) return;
 		drawCheckerboard(canvas);
+		if(gradient == null) return;
 		drawGradient(canvas);
 	}
 	

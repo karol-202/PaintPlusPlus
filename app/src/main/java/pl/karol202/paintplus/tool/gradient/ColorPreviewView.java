@@ -6,14 +6,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import pl.karol202.paintplus.R;
 
-class ColorPreviewView extends View
+public class ColorPreviewView extends View
 {
 	private Rect checkerboardRect;
 	private Paint checkerboardPaint;
 	
 	private Paint paint;
 	
-	ColorPreviewView(Context context, AttributeSet attrs)
+	public ColorPreviewView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		

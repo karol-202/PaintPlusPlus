@@ -12,7 +12,7 @@ import pl.karol202.paintplus.util.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-class GradientView extends View
+public class GradientView extends View
 {
 	interface OnGradientEditorUpdateListener
 	{
@@ -97,7 +97,7 @@ class GradientView extends View
 	private GradientPoint draggedPoint;
 	private float lastPosition;
 	
-	GradientView(Context context, AttributeSet attrs)
+	public GradientView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		SIDE_MARGIN_PX = Utils.dpToPixels(context, SIDE_MARGIN_DP);
@@ -167,6 +167,7 @@ class GradientView extends View
 		super.onDraw(canvas);
 		drawBorder(canvas);
 		drawCheckerboard(canvas);
+		if(gradient == null && isInEditMode()) setGradient(Gradient.createSimpleGradient(Color.BLACK, Color.WHITE));
 		if(gradient == null) return;
 		drawTopBar(canvas);
 		drawBottomBar(canvas);
@@ -403,7 +404,7 @@ class GradientView extends View
 	
 	int getSelectedColor()
 	{
-		if(selectedPoint == null) return Color.MAGENTA;
+		if(selectedPoint == null) return Color.TRANSPARENT;
 		return selectedPoint.getColor();
 	}
 	
