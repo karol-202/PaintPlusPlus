@@ -13,6 +13,7 @@ import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
@@ -42,6 +43,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private Matrix checkerboardMatrix;
 	private ArrayList<Layer> reversedLayers;
 	private Path boundsPath;
+	private RectF imageRect;
 	
 	private Path rawLimitedSelectionPath;
 	private Path limitedSelectionPath;
@@ -80,6 +82,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardPaint = new Paint();
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
+		
+		imageRect = new RectF();
 	}
 	
 	public void updatePreferences()
@@ -121,13 +125,8 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private void setClipping(Canvas canvas)
 	{
-		float viewX = -image.getViewX() * image.getZoom();
-		float viewY = -image.getViewY() * image.getZoom();
-		float width = image.getWidth() * image.getZoom();
-		float height = image.getHeight() * image.getZoom();
-		
 		canvas.save();
-		canvas.clipRect(viewX, viewY, viewX + width, viewY + height);
+		canvas.clipRect(imageRect);
 	}
 	
 	private void removeClipping(Canvas canvas)
@@ -150,16 +149,24 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		if(reversedLayers == null) return;
 		for(Layer layer : reversedLayers)
 		{
-			boolean layerVisible = layer.isVisible() && !layer.isTemporaryHidden();
-			Matrix imageMatrix = new Matrix(image.getImageMatrix());
-			if(image.isLayerSelected(layer) && tool.doesOnLayerDraw(layer.isVisible()))
+			boolean drawLayer = layer.isVisible() && !layer.isTemporaryHidden();
+			boolean drawTool = image.isLayerSelected(layer) && tool.doesOnLayerDraw(layer.isVisible());
+			
+			LayerMode layerMode = layer.getMode();
+			layerMode.startDrawing(screenBitmap, screenCanvas);
+			
+			if(drawLayer)
 			{
-				Bitmap toolBitmap = createOnLayerToolBitmap(tool, layer);
-				if(layerVisible)
-					screenBitmap = layer.drawLayerAndTool(screenBitmap, imageMatrix, toolBitmap);
-				else screenBitmap = layer.drawTool(screenBitmap, toolBitmap);
+				Matrix layerMatrix = new Matrix(image.getImageMatrix());
+				layerMatrix.preTranslate(layer.getX(), layer.getY());
+				
+				layerMode.setRectClipping(imageRect);
+				layerMode.addLayer(layerMatrix);
+				layerMode.resetClipping();
 			}
-			else if(layerVisible) screenBitmap = layer.drawLayer(screenBitmap, imageMatrix);
+			if(drawTool) layerMode.addTool(createOnLayerToolBitmap(tool, layer));
+			
+			screenBitmap = layerMode.apply();
 		}
 		
 		if(tool.doesOnTopDraw())
@@ -240,9 +247,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	public void onImageChanged()
 	{
 		if(image == null) return;
-		updateCheckerboardMatrix();
 		updateLayerBounds();
-		updateSelectionPath();
 		activity.updateLayersPreview();
 		invalidate();
 	}
@@ -255,6 +260,17 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		reversedLayers = new ArrayList<>(image.getLayers());
 		Collections.reverse(reversedLayers);
 		updateLayerBounds();
+	}
+	
+	@Override
+	public void onImageMatrixChanged()
+	{
+		if(image == null) return;
+		updateCheckerboardMatrix();
+		updateLayerBounds();
+		updateSelectionPath();
+		updateImageRect();
+		invalidate();
 	}
 	
 	@Override
@@ -303,6 +319,11 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		if(rawLimitedSelectionPath == null || rawSelectionPath == null) return;
 		rawLimitedSelectionPath.transform(image.getImageMatrix(), limitedSelectionPath);
 		rawSelectionPath.transform(image.getImageMatrix(), selectionPath);
+	}
+	
+	private void updateImageRect()
+	{
+		image.setImageRect(imageRect);
 	}
 	
 	private RectF getScreenRect()

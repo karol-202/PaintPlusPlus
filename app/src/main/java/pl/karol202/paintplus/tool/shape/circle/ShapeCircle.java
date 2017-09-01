@@ -26,9 +26,9 @@ public class ShapeCircle extends Shape
 	private Point centerAtBeginning;
 	private float radiusAtBeginning;
 	
-	public ShapeCircle(Image image, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeCircle(Image image, OnShapeEditListener shapeEditListener)
 	{
-		super(image, imageChangeListener, shapeEditListener);
+		super(image, shapeEditListener);
 		this.fill = false;
 		this.circleWidth = 30;
 		

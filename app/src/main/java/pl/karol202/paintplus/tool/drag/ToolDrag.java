@@ -3,16 +3,13 @@ package pl.karol202.paintplus.tool.drag;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolDrag extends StandardTool
 {
-	private Layer layer;
 	private int oldLayerX;
 	private int oldLayerY;
 	private float oldTouchX;

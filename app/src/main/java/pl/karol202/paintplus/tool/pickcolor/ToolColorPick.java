@@ -6,10 +6,9 @@ import android.graphics.Color;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolColorPick extends StandardTool
 {
@@ -17,7 +16,6 @@ public class ToolColorPick extends StandardTool
 	
 	private Bitmap bitmap;
 	private ColorsSet colors;
-	private Selection selection;
 	
 	public ToolColorPick(Image image)
 	{
@@ -25,7 +23,6 @@ public class ToolColorPick extends StandardTool
 		this.size = 1;
 		
 		this.colors = image.getColorsSet();
-		this.selection = image.getSelection();
 	}
 	
 	@Override
@@ -85,7 +82,6 @@ public class ToolColorPick extends StandardTool
 		if(bitmap == null) colors.setFirstColor(Color.BLACK);
 		else if(size == 1) pickPixelColor(x, y);
 		else if(size > 1) pickAverageColor(x, y);
-		
 	}
 	
 	private void pickPixelColor(int x, int y)

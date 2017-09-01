@@ -13,11 +13,11 @@ import pl.karol202.paintplus.tool.selection.Selection;
 public abstract class StandardTool implements Tool
 {
 	protected Image image;
-	private Selection selection;
+	protected Selection selection;
 	protected HelpersManager helpersManager;
 	
 	private Path selectionPath;
-	private Layer layer;
+	protected Layer layer;
 	
 	public StandardTool(Image image)
 	{
@@ -89,12 +89,31 @@ public abstract class StandardTool implements Tool
 		if(isUsingSnapping()) helpersManager.snapPoint(point);
 	}
 	
+	protected void resetClipping(Canvas canvas)
+	{
+		if(canvas.getSaveCount() > 0) canvas.restoreToCount(1);
+	}
+	
+	protected void doImageClipping(Canvas canvas)
+	{
+		layer = image.getSelectedLayer();
+		
+		canvas.save();
+		canvas.clipRect(-layer.getX(), -layer.getY(),
+				  layer.getWidth() - layer.getX(), layer.getHeight() - layer.getY());
+	}
+	
+	protected void doSelectionClipping(Canvas canvas)
+	{
+		if(selectionPath == null) updateSelectionPath();
+		if(!selection.isEmpty()) canvas.clipPath(selectionPath);
+	}
+	
 	protected void doLayerAndSelectionClipping(Canvas canvas)
 	{
 		layer = image.getSelectedLayer();
 		
 		if(selectionPath == null) updateSelectionPath();
-		if(canvas.getSaveCount() > 0) canvas.restoreToCount(1);
 		canvas.save();
 		canvas.clipRect(0, 0, layer.getWidth(), layer.getHeight());
 		if(!selection.isEmpty()) canvas.clipPath(selectionPath);
@@ -102,8 +121,6 @@ public abstract class StandardTool implements Tool
 	
 	protected void updateSelectionPath()
 	{
-		layer = image.getSelectedLayer();
-		
 		selectionPath = new Path(image.getSelection().getPath());
 		selectionPath.offset(-layer.getX(), -layer.getY());
 	}

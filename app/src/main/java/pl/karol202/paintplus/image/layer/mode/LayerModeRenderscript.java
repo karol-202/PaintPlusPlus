@@ -1,9 +1,6 @@
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import pl.karol202.paintplus.image.layer.Layer;
@@ -16,7 +13,11 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 	private RenderScript rs;
 	private S script;
 	
+	private Bitmap bitmapDst;
+	
+	private Bitmap bitmapSrc;
 	private Canvas canvasSrc;
+	
 	private Bitmap bitmapOut;
 	private Allocation allocationOut;
 	
@@ -30,27 +31,56 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 	protected abstract S getNewScript(RenderScript renderScript);
 	
 	@Override
-	public Bitmap drawLayer(Bitmap bitmapDst, Matrix matrix)
+	public void startDrawing(Bitmap bitmapDst, Canvas canvasDst)
 	{
-		return drawLayerAndTool(bitmapDst, matrix, null);
+		if(layer == null) throw new NullPointerException("Layer is null");
+		this.bitmapDst = bitmapDst;
+		
+		bitmapSrc = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
+		canvasSrc = new Canvas(bitmapSrc);
+		
+		updateOutAllocationIfOutdated();
+		
+		paint.setFilterBitmap(LayerModeType.isAntialiasing());
+	}
+	
+	private void updateOutAllocationIfOutdated()
+	{
+		if(bitmapOut != null && bitmapOut.getWidth() == bitmapDst.getWidth() && bitmapOut.getHeight() == bitmapDst.getHeight())
+			return;
+		bitmapOut = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
+		allocationOut = Allocation.createFromBitmap(rs, bitmapOut);
 	}
 	
 	@Override
-	public Bitmap drawLayerAndTool(Bitmap bitmapDst, Matrix matrix, Bitmap toolBitmap)
+	public void addLayer(Matrix matrixLayer)
 	{
-		if(layer == null) throw new NullPointerException("Layer is null");
-		if(bitmapOut == null || bitmapOut.getWidth() != bitmapDst.getWidth() || bitmapOut.getHeight() != bitmapDst.getHeight())
-		{
-			bitmapOut = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
-			allocationOut = Allocation.createFromBitmap(rs, bitmapOut);
-		}
-		paint.setFilterBitmap(LayerModeType.isAntialiasing());
-		
-		Bitmap bitmapSrc = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
-		canvasSrc = new Canvas(bitmapSrc);
-		if(matrix != null) canvasSrc.drawBitmap(layer.getBitmap(), matrix, paint);
-		if(toolBitmap != null) canvasSrc.drawBitmap(toolBitmap, 0, 0, paint);
-		
+		canvasSrc.drawBitmap(layer.getBitmap(), matrixLayer, paint);
+	}
+	
+	@Override
+	public void addTool(Bitmap bitmapTool)
+	{
+		canvasSrc.drawBitmap(bitmapTool, 0, 0, paint);
+	}
+	
+	@Override
+	public void setRectClipping(RectF clipRect)
+	{
+		if(canvasSrc.getSaveCount() > 0) canvasSrc.restoreToCount(1);
+		canvasSrc.save();
+		canvasSrc.clipRect(clipRect);
+	}
+	
+	@Override
+	public void resetClipping()
+	{
+		canvasSrc.restore();
+	}
+	
+	@Override
+	public Bitmap apply()
+	{
 		Allocation allocationDst = Allocation.createFromBitmap(rs, bitmapDst);
 		Allocation allocationSrc = Allocation.createFromBitmap(rs, bitmapSrc);
 		
@@ -60,12 +90,6 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 		allocationOut.copyTo(bitmapOut);
 		
 		return bitmapOut;
-	}
-	
-	@Override
-	public Bitmap drawTool(Bitmap bitmapDst, Bitmap toolBitmap)
-	{
-		return drawLayerAndTool(bitmapDst, null, toolBitmap);
 	}
 	
 	@Override

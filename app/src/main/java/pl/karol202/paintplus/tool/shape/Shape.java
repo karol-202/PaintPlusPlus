@@ -6,7 +6,6 @@ import android.graphics.Point;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 
 public abstract class Shape
 {
@@ -16,20 +15,18 @@ public abstract class Shape
 	private float opacity;
 	
 	private Image image;
-	private OnImageChangeListener imageChangeListener;
 	private OnShapeEditListener shapeEditListener;
 	private boolean editMode;
 	private Paint paint;
 	private ColorsSet colors;
 	private HelpersManager helpersManager;
 	
-	public Shape(Image image, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public Shape(Image image, OnShapeEditListener shapeEditListener)
 	{
 		this.smooth = true;
 		this.opacity = 1;
 		
 		this.image = image;
-		this.imageChangeListener = imageChangeListener;
 		this.shapeEditListener = shapeEditListener;
 		this.paint = new Paint();
 		this.colors = image.getColorsSet();
@@ -63,7 +60,7 @@ public abstract class Shape
 	{
 		updateColor();
 		paint.setAntiAlias(smooth);
-		imageChangeListener.onImageChanged();
+		image.updateImage();
 	}
 	
 	protected void updateColor()
@@ -75,7 +72,7 @@ public abstract class Shape
 	protected void cleanUp()
 	{
 		editMode = false;
-		imageChangeListener.onImageChanged();
+		image.updateImage();
 	}
 	
 	protected float getMaxTouchDistance()
@@ -109,12 +106,12 @@ public abstract class Shape
 		return helpersManager;
 	}
 	
-	protected boolean isSmooth()
+	boolean isSmooth()
 	{
 		return smooth;
 	}
 	
-	protected void setSmooth(boolean smooth)
+	void setSmooth(boolean smooth)
 	{
 		this.smooth = smooth;
 		update();

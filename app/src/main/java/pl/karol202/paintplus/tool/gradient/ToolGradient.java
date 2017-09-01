@@ -3,12 +3,10 @@ package pl.karol202.paintplus.tool.gradient;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ToolGradient extends StandardTool implements OnToolChangeListener
 {
@@ -31,15 +29,11 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	private boolean revert;
 	
 	private OnGradientEditListener listener;
-	private Selection selection;
+	private Canvas canvas;
 	private GradientShapes shapes;
 	private Paint maskPaint;
 	private Paint pointOuterPaint;
 	private Paint pointInnerPaint;
-	
-	private Layer layer;
-	private Canvas canvas;
-	private Path selectionPath;
 	
 	private PointF firstPoint;
 	private PointF secondPoint;
@@ -59,7 +53,6 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		gradient = Gradient.createSimpleGradient(Color.WHITE, Color.BLACK);
 		repeatability = GradientRepeatability.NO_REPEAT;
 		
-		selection = image.getSelection();
 		shapes = new GradientShapes(this);
 		
 		maskPaint = new Paint();
@@ -121,6 +114,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		canvas = image.getSelectedCanvas();
 		
 		updateSelectionPath();
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
 		if(!pointsCreated) startGradientEditing(x, y);
@@ -218,7 +212,9 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	public void onLayerDraw(Canvas canvas)
 	{
 		if(!canDrawGradient()) return;
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
+		doImageClipping(canvas);
 		shape.onScreenDraw(canvas);
 	}
 	

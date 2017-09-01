@@ -26,7 +26,6 @@ public class ToolSelection extends StandardTool
 	private ToolSelectionMode mode;
 	
 	private OnSelectionEditListener selectionListener;
-	private Selection selection;
 	private Rect rect;
 	private boolean editMode;
 	private boolean rectCreated;
@@ -42,7 +41,6 @@ public class ToolSelection extends StandardTool
 		this.shape = RECTANGLE;
 		this.mode = ToolSelectionMode.NEW;
 		
-		this.selection = image.getSelection();
 		this.rect = new Rect();
 		this.paint = new Paint();
 		this.paint.setAntiAlias(true);

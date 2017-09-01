@@ -23,9 +23,9 @@ public class ShapeLine extends Shape
 	private Point draggedPoint;
 	private Point draggingStart;
 	
-	public ShapeLine(Image image, OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapeLine(Image image, OnShapeEditListener shapeEditListener)
 	{
-		super(image, imageChangeListener, shapeEditListener);
+		super(image, shapeEditListener);
 		this.lineWidth = 10;
 		this.lineCap = Cap.ROUND;
 		

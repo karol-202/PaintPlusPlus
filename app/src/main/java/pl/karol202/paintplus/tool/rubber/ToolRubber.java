@@ -3,7 +3,6 @@ package pl.karol202.paintplus.tool.rubber;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -15,8 +14,6 @@ public class ToolRubber extends StandardTool
 	private boolean smooth;
 	
 	private Canvas canvas;
-	
-	private Layer layer;
 	
 	private Paint pathPaint;
 	private Path path;
@@ -82,6 +79,7 @@ public class ToolRubber extends StandardTool
 		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
 		pathPaint.setColor(Color.TRANSPARENT);
@@ -169,8 +167,10 @@ public class ToolRubber extends StandardTool
 	@Override
 	public void onLayerDraw(Canvas canvas)
 	{
+		resetClipping(canvas);
+		doImageClipping(canvas);
 		canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
-		doLayerAndSelectionClipping(canvas);
+		doSelectionClipping(canvas);
 		canvas.drawPath(path, pathPaint);
 	}
 	

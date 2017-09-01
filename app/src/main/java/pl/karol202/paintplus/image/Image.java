@@ -1,10 +1,7 @@
 package pl.karol202.paintplus.image;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
+import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
@@ -24,6 +21,8 @@ public class Image
 		void onImageChanged();
 		
 		void onLayersChanged();
+		
+		void onImageMatrixChanged();
 	}
 	
 	private final String DEFAULT_LAYER_NAME;
@@ -128,7 +127,7 @@ public class Image
 		matrix.postScale(zoom, zoom);
 		
 		imageMatrix.set(matrix);
-		if(listener != null) listener.onImageChanged();
+		if(listener != null) listener.onImageMatrixChanged();
 	}
 	
 	public void updateImage()
@@ -151,11 +150,13 @@ public class Image
 	public Bitmap getFullImage()
 	{
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		RectF clipRect = new RectF();
 		
 		ArrayList<Layer> reversed = new ArrayList<>(layers);
 		Collections.reverse(reversed);
 		for(Layer layer : reversed)
-			if(layer.isVisible()) layer.drawLayer(bitmap);
+			if(layer.isVisible()) layer.drawLayer(bitmap, canvas, clipRect, imageMatrix);
 		return bitmap;
 	}
 	
@@ -401,6 +402,15 @@ public class Image
 	public Matrix getImageMatrix()
 	{
 		return imageMatrix;
+	}
+	
+	public void setImageRect(RectF rect)
+	{
+		float viewX = -getViewX() * zoom;
+		float viewY = -getViewY() * zoom;
+		float width = this.width * zoom;
+		float height = this.height * zoom;
+		rect.set(viewX, viewY, viewX + width, viewY + height);
 	}
 	
 	public int getViewportWidth()

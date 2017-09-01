@@ -95,26 +95,15 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
-	public Bitmap drawLayer(Bitmap dst)
+	public void drawLayer(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)
 	{
-		return drawLayer(dst, new Matrix());
-	}
-	
-	public Bitmap drawLayer(Bitmap dst, Matrix matrix)
-	{
-		matrix.preTranslate(x, y);
-		return mode.drawLayer(dst, matrix);
-	}
-	
-	public Bitmap drawLayerAndTool(Bitmap dst, Matrix matrix, Bitmap toolBitmap)
-	{
-		matrix.preTranslate(x, y);
-		return mode.drawLayerAndTool(dst, matrix, toolBitmap);
-	}
-	
-	public Bitmap drawTool(Bitmap dst, Bitmap toolBitmap)
-	{
-		return mode.drawTool(dst, toolBitmap);
+		Matrix layerMatrix = new Matrix(imageMatrix);
+		layerMatrix.preTranslate(x, y);
+		
+		mode.startDrawing(bitmap, canvas);
+		mode.setRectClipping(clipRect);
+		mode.addLayer(layerMatrix);
+		mode.apply();
 	}
 	
 	public void setImageChangeListener(OnImageChangeListener listener)

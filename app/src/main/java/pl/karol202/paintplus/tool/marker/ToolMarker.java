@@ -66,8 +66,10 @@ public class ToolMarker extends StandardTool
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
+		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
 		getCurrentAdapter().onBeginDraw(x, y);
@@ -115,7 +117,9 @@ public class ToolMarker extends StandardTool
 	@Override
 	public void onLayerDraw(Canvas canvas)
 	{
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
+		doImageClipping(canvas);
 		getCurrentAdapter().onScreenDraw(canvas);
 	}
 	

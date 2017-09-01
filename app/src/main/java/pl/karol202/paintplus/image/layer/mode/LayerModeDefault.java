@@ -1,19 +1,17 @@
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
+import android.graphics.*;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class LayerModeDefault implements LayerMode
 {
 	private Layer layer;
 	private Paint paint;
-	private Bitmap lastBitmap;
-	private Canvas canvas;
 	
-	LayerModeDefault()
+	private Bitmap bitmapDst;
+	private Canvas canvasDst;
+	
+	public LayerModeDefault()
 	{
 		this.paint = new Paint();
 	}
@@ -25,37 +23,46 @@ public class LayerModeDefault implements LayerMode
 	}
 	
 	@Override
-	public Bitmap drawLayer(Bitmap dst, Matrix matrix)
+	public void startDrawing(Bitmap bitmapDst, Canvas canvasDst)
 	{
 		if(layer == null) throw new NullPointerException("Layer is null");
-		return drawBitmap(dst, layer.getBitmap(), matrix);
-	}
-	
-	@Override
-	public Bitmap drawLayerAndTool(Bitmap dst, Matrix matrix, Bitmap toolBitmap)
-	{
-		drawLayer(dst, matrix);
-		canvas.drawBitmap(toolBitmap, 0, 0, paint);
-		return dst;
-	}
-	
-	@Override
-	public Bitmap drawTool(Bitmap dst, Bitmap toolBitmap)
-	{
-		return drawBitmap(dst, toolBitmap, null);
-	}
-	
-	private Bitmap drawBitmap(Bitmap dst, Bitmap src, Matrix matrix)
-	{
+		this.bitmapDst = bitmapDst;
+		this.canvasDst = canvasDst;
+		
 		paint.setFilterBitmap(LayerModeType.isAntialiasing());
 		paint.setAlpha((int) (layer.getOpacity() * 255f));
-		
-		if(dst != lastBitmap || canvas == null) canvas = new Canvas(dst);
-		if(matrix != null) canvas.drawBitmap(src, matrix, paint);
-		else canvas.drawBitmap(src, 0, 0, paint);
-		
-		lastBitmap = dst;
-		return dst;
+	}
+	
+	@Override
+	public void addLayer(Matrix matrixLayer)
+	{
+		canvasDst.drawBitmap(layer.getBitmap(), matrixLayer, paint);
+	}
+	
+	@Override
+	public void addTool(Bitmap bitmapTool)
+	{
+		canvasDst.drawBitmap(bitmapTool, 0, 0, paint);
+	}
+	
+	@Override
+	public void setRectClipping(RectF clipRect)
+	{
+		if(canvasDst.getSaveCount() > 0) canvasDst.restoreToCount(1);
+		canvasDst.save();
+		canvasDst.clipRect(clipRect);
+	}
+	
+	@Override
+	public void resetClipping()
+	{
+		canvasDst.restore();
+	}
+	
+	@Override
+	public Bitmap apply()
+	{
+		return bitmapDst;
 	}
 	
 	@Override

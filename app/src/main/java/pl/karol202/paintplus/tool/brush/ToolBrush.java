@@ -80,6 +80,8 @@ public class ToolBrush extends StandardTool
 	{
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
+		layer = image.getSelectedLayer();
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
 		paint.setAlpha((int) (opacity * 255));

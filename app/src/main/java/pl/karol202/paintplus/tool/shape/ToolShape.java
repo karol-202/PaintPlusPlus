@@ -4,19 +4,16 @@ import android.graphics.*;
 import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
-import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
-public class ToolShape extends StandardTool implements OnImageChangeListener, OnShapeEditListener, OnToolChangeListener
+public class ToolShape extends StandardTool implements OnShapeEditListener, OnToolChangeListener
 {
 	private Shape shape;
 	
 	private Canvas canvas;
-	private Layer layer;
 	
 	private Shapes shapes;
 	private OnShapeEditListener shapeEditListener;
@@ -26,7 +23,7 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	{
 		super(image);
 		
-		this.shapes = new Shapes(image, this, this);
+		this.shapes = new Shapes(image, this);
 		this.maskPaint = new Paint();
 		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));
@@ -71,6 +68,7 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
 		
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
 		shape.onTouchStart((int) x, (int) y);
@@ -125,7 +123,9 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 						 -image.getViewY() + layer.getY());
 		shape.onScreenDraw(canvas);
 		
+		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
+		doImageClipping(canvas);
 		canvas.translate(image.getViewX() - layer.getX(), image.getViewY() - layer.getY());
 		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.XOR);
@@ -145,15 +145,6 @@ public class ToolShape extends StandardTool implements OnImageChangeListener, On
 	{
 		shape.cancel();
 	}
-	
-	@Override
-	public void onImageChanged()
-	{
-		image.updateImage();
-	}
-	
-	@Override
-	public void onLayersChanged() { }
 	
 	@Override
 	public void onStartShapeEditing()

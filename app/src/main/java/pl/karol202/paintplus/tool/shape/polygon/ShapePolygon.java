@@ -25,9 +25,9 @@ public class ShapePolygon extends Shape
 	private Point centerAtBeginning;
 	private float radiusOCCAtBeginning;
 	
-	public ShapePolygon(Image image, Image.OnImageChangeListener imageChangeListener, OnShapeEditListener shapeEditListener)
+	public ShapePolygon(Image image, OnShapeEditListener shapeEditListener)
 	{
-		super(image, imageChangeListener, shapeEditListener);
+		super(image, shapeEditListener);
 		this.sides = 4;
 		this.fill = false;
 		this.lineWidth = 30;
