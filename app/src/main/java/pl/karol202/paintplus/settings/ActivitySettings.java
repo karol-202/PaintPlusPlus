@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.settings;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -25,7 +25,7 @@ public class ActivitySettings extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-		fragments = getFragmentManager();
+		fragments = getSupportFragmentManager();
 		fragments.beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);

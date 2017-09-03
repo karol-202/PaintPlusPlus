@@ -1,15 +1,28 @@
 package pl.karol202.paintplus.settings;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import pl.karol202.paintplus.R;
 
-public class SettingsFragment extends PreferenceFragment
+public class SettingsFragment extends PreferenceFragmentCompat
 {
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+		setPreferencesFromResource(R.xml.preferences, rootKey);
+	}
+	
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference)
+	{
+		DialogFragment fragment;
+		if (preference instanceof SeekBarPreference) {
+			fragment = SeekBarPreferenceDialogFragmentCompat.newInstance(preference);
+			fragment.setTargetFragment(this, 0);
+			fragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
+		}
+		else super.onDisplayPreferenceDialog(preference);
 	}
 }

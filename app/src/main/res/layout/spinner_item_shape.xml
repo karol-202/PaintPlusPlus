@@ -11,7 +11,8 @@
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginLeft="16dp" />
 	
 	<TextView
 		android:text="@string/unknown"
@@ -23,5 +24,6 @@
 		app:layout_constraintLeft_toRightOf="@+id/image_shape_icon"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		android:textColor="@android:color/black" />
+		android:textColor="@android:color/black"
+		android:layout_marginLeft="8dp" />
 </android.support.constraint.ConstraintLayout>

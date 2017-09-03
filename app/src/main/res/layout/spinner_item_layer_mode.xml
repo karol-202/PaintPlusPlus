@@ -14,5 +14,6 @@
 		app:layout_constraintTop_toTopOf="parent"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="@android:color/black"
-		app:layout_constraintLeft_toLeftOf="parent" />
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:layout_marginLeft="16dp" />
 </android.support.constraint.ConstraintLayout>

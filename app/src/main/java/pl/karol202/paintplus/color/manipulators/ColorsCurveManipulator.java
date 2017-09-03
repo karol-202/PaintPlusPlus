@@ -2,9 +2,9 @@ package pl.karol202.paintplus.color.manipulators;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RenderScript;
 import pl.karol202.paintplus.color.ChannelInOutSet;
 import pl.karol202.paintplus.color.ColorChannel;
 import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;

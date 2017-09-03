@@ -1,9 +1,9 @@
 package pl.karol202.paintplus.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -106,7 +106,7 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	ActivityPaintDrawers(ActivityPaint activity)
 	{
 		this.activity = activity;
-		fragments = activity.getFragmentManager();
+		fragments = activity.getSupportFragmentManager();
 		displayMetrics = activity.getDisplayMetrics();
 		resources = activity.getResources();
 		screenWidthDp = (int) (displayMetrics.widthPixels / displayMetrics.density);

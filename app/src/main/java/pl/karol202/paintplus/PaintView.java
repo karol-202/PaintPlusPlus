@@ -311,6 +311,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		bounds.intersect(getScreenRect());
 		boundsPath = new Path();
 		boundsPath.addRect(bounds, Path.Direction.CW);
+		boundsPath.close();
 		boundsPath.transform(image.getImageMatrix());
 	}
 	

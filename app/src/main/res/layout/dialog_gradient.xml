@@ -35,7 +35,7 @@
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/button_add_gradient_point" />
 	
-	<ImageButton
+	<android.support.v7.widget.AppCompatImageButton
 		android:id="@+id/button_delete_gradient_point"
 		android:layout_width="48dp"
 		android:layout_height="48dp"
@@ -43,7 +43,7 @@
 		android:layout_marginRight="8dp"
 		android:layout_marginTop="4dp"
 		android:background="?borderlessSelectableBackground"
-		android:tint="@color/colored_image_button"
+		app:tint="@color/colored_image_button"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/gradient_view"
 		app:srcCompat="@drawable/ic_delete_white_24dp" />

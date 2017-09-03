@@ -14,7 +14,8 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:scaleType="fitXY"
 		android:layout_marginTop="8dp"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginLeft="12dp" />
 	
 	<ImageButton
 		android:layout_width="40dp"
@@ -26,7 +27,8 @@
 		android:background="?android:attr/selectableItemBackground"
 		android:scaleType="fitXY"
 		android:layout_marginTop="8dp"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginRight="12dp" />
 	
 	<EditText
 		android:layout_width="0dp"

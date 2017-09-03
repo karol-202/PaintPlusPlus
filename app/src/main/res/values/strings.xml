@@ -215,4 +215,7 @@
 	<string name="gradient_repeatability_repeat">Repeat</string>
 	<string name="gradient_repeatability_mirror">Mirror</string>
 	<string name="gradient_revert">Revert</string>
+	<string name="temp_100">100%</string>
+	<string name="temp_50_">50</string>
+	<string name="temp_100_">100</string>
 </resources>

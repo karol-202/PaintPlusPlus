@@ -1,7 +1,7 @@
 package pl.karol202.paintplus.color;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -66,7 +66,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 		colorSecond = view.findViewById(R.id.view_color_second);
 		colorSecond.setOnClickListener(this);
 
-		buttonSwap = (ImageButton) view.findViewById(R.id.button_colors_swap);
+		buttonSwap = view.findViewById(R.id.button_colors_swap);
 		buttonSwap.setOnClickListener(this);
 
 		updateColors();

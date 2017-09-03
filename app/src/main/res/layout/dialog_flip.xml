@@ -13,7 +13,9 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginTop="8dp"
 		android:id="@+id/radioGroup_direction"
-		app:layout_constraintTop_toTopOf="parent">
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="24dp">
 		
 		<RadioButton
 			android:text="@string/direction_horizontal"

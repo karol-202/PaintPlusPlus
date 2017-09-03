@@ -10,8 +10,7 @@
             android:layout_height="match_parent"
             android:id="@+id/card_recent"
             app:cardElevation="2dp"
-            app:cardUseCompatPadding="true"
-    >
+            app:cardUseCompatPadding="true">
 		
 		<LinearLayout
 			android:layout_width="match_parent"

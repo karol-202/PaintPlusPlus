@@ -31,9 +31,11 @@ public class GradientView extends View
 		Triangle(float xOffset, float yOffset)
 		{
 			outerPath = new Path(TRIANGLE_OUTER_PATH);
+			outerPath.close();
 			outerPath.offset(xOffset, yOffset);
 			
 			innerPath = new Path(TRIANGLE_INNER_PATH);
+			innerPath.close();
 			innerPath.offset(xOffset, yOffset);
 		}
 		
@@ -416,6 +418,7 @@ public class GradientView extends View
 		if(gradientUpdateListener != null) gradientUpdateListener.onGradientSelectionUpdated(getSelectedPosition(), color);
 		updateTopBarPaint();
 		updateBottomBarPaint();
+		invalidate();
 	}
 	
 	void setGradientUpdateListener(OnGradientEditorUpdateListener gradientUpdateListener)

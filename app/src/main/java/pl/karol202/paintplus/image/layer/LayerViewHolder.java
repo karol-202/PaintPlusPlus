@@ -2,7 +2,7 @@ package pl.karol202.paintplus.image.layer;
 
 import android.animation.Animator.AnimatorListener;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;

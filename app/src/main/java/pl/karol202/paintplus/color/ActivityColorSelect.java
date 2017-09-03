@@ -12,6 +12,7 @@ import android.support.annotation.ColorInt;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import com.google.firebase.crash.FirebaseCrash;
@@ -123,7 +124,7 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 		int titleColor = value < VALUE_THRESHOLD ? lightTextColor : darkTextColor;
 		toolbar.setTitleTextColor(titleColor);
 		
-		Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_back_black_24dp, null);
+		Drawable upArrow = AppCompatResources.getDrawable(this, R.drawable.ic_arrow_back_black_24dp);
 		if(upArrow != null) upArrow.setColorFilter(titleColor, PorterDuff.Mode.SRC_ATOP);
 		actionBar.setHomeAsUpIndicator(upArrow);
 	}

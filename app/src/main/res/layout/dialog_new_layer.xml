@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -14,7 +13,8 @@
 		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_name"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:textAppearance="?android:attr/textAppearanceMedium" />
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_marginLeft="24dp" />
 	
 	<EditText
 		android:layout_width="0dp"
@@ -26,7 +26,9 @@
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_layer_name"
 		android:layout_marginEnd="16dp"
-		app:layout_constraintRight_toRightOf="parent" />
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginLeft="24dp"
+		android:layout_marginRight="16dp" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -36,7 +38,8 @@
 		android:id="@+id/text_width"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_width" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_width"
+		android:layout_marginLeft="24dp" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -46,7 +49,8 @@
 		android:id="@+id/text_height"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_height" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_height"
+		android:layout_marginLeft="24dp" />
 	
 	<EditText
 		android:layout_width="0dp"
@@ -59,7 +63,9 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_width"
-		app:layout_constraintTop_toBottomOf="@+id/edit_layer_name" />
+		app:layout_constraintTop_toBottomOf="@+id/edit_layer_name"
+		android:layout_marginRight="16dp"
+		android:layout_marginLeft="24dp" />
 	
 	<EditText
 		android:layout_width="0dp"
@@ -72,7 +78,9 @@
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
-		app:layout_constraintLeft_toRightOf="@+id/text_height" />
+		app:layout_constraintLeft_toRightOf="@+id/text_height"
+		android:layout_marginRight="16dp"
+		android:layout_marginLeft="24dp" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -82,7 +90,8 @@
 		android:id="@+id/text_x"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_x" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_x"
+		android:layout_marginLeft="24dp" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -92,7 +101,8 @@
 		android:id="@+id/text_y"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_y" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_layer_y"
+		android:layout_marginLeft="24dp" />
 	
 	<EditText
 		android:layout_width="0dp"
@@ -105,7 +115,9 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_x"
-		app:layout_constraintTop_toBottomOf="@+id/edit_layer_height" />
+		app:layout_constraintTop_toBottomOf="@+id/edit_layer_height"
+		android:layout_marginRight="16dp"
+		android:layout_marginLeft="24dp" />
 	
 	<EditText
 		android:layout_width="0dp"
@@ -118,14 +130,20 @@
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/edit_layer_x"
 		android:layout_marginStart="24dp"
-		app:layout_constraintLeft_toRightOf="@+id/text_y" />
+		app:layout_constraintLeft_toRightOf="@+id/text_y"
+		android:layout_marginRight="16dp"
+		android:layout_marginLeft="24dp" />
 	
 	<ImageView
-		android:layout_width="192dp"
-		android:layout_height="192dp"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
 		android:id="@+id/image_size_preview"
 		app:layout_constraintTop_toBottomOf="@+id/edit_layer_y"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent" />
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginTop="0dp"
+		app:layout_constraintDimensionRatio="h,1:1"
+		android:layout_marginLeft="64dp"
+		android:layout_marginRight="64dp" />
 
 </android.support.constraint.ConstraintLayout>

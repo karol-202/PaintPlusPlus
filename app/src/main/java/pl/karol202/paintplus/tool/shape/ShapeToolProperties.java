@@ -1,7 +1,7 @@
 package pl.karol202.paintplus.tool.shape;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -39,20 +39,20 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 		shapes = shapeTool.getShapesClass();
 		shapeAdapter = new ShapeAdapter(getActivity(), shapes.getShapes());
 		
-		spinnerShape = (Spinner) view.findViewById(R.id.spinner_shape);
+		spinnerShape = view.findViewById(R.id.spinner_shape);
 		spinnerShape.setAdapter(shapeAdapter);
 		spinnerShape.setSelection(getShapeId(shapeTool.getShape()));
 		spinnerShape.setOnItemSelectedListener(this);
 		
-		seekShapeTranslucency = (SeekBar) view.findViewById(R.id.seekBar_shape_translucency);
+		seekShapeTranslucency = view.findViewById(R.id.seekBar_shape_translucency);
 		seekShapeTranslucency.setProgress((int) ((1 - shapeTool.getOpacity()) * 100));
 		seekShapeTranslucency.setOnSeekBarChangeListener(this);
 		seekShapeTranslucency.setOnTouchListener(new SeekBarTouchListener());
 		
-		textShapeTranslucency = (TextView) view.findViewById(R.id.shape_translucency);
+		textShapeTranslucency = view.findViewById(R.id.shape_translucency);
 		textShapeTranslucency.setText(String.format(Locale.US, "%1$d%%", seekShapeTranslucency.getProgress()));
 		
-		checkBoxSmooth = (CheckBox) view.findViewById(R.id.check_shape_smooth);
+		checkBoxSmooth = view.findViewById(R.id.check_shape_smooth);
 		checkBoxSmooth.setChecked(shapeTool.isSmoothed());
 		checkBoxSmooth.setOnCheckedChangeListener(this);
 		

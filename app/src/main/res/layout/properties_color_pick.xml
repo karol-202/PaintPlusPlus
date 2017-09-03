@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="match_parent">
 	
 	<CheckBox
@@ -12,7 +11,8 @@
 		android:layout_marginStart="12dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginTop="8dp"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginLeft="12dp" />
 	
 	<TextView
 		android:text="@string/pick_average_size"
@@ -22,7 +22,8 @@
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/check_pick_average"
 		android:layout_marginStart="16dp"
-		app:layout_constraintLeft_toLeftOf="parent" />
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:layout_marginLeft="16dp" />
 	
 	<SeekBar
 		android:layout_width="0dp"
@@ -32,10 +33,11 @@
 		app:layout_constraintLeft_toRightOf="@+id/text_pick_size"
 		android:layout_marginEnd="32dp"
 		app:layout_constraintRight_toRightOf="parent"
-		android:max="49" />
+		android:max="49"
+		android:layout_marginRight="32dp" />
 	
 	<TextView
-		android:text="50"
+		android:text="@string/temp_50_"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/pick_size"

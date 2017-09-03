@@ -39,7 +39,7 @@
 			android:choiceMode="singleChoice"
 			android:clickable="true"/>
 		
-		<RelativeLayout
+		<android.support.constraint.ConstraintLayout
 			android:id="@+id/drawer_right"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
@@ -48,13 +48,18 @@
 			android:clickable="true">
 			
 			<ScrollView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
+				android:layout_width="0dp"
+				android:layout_height="0dp"
 				android:id="@+id/scroll_properties"
-				android:layout_alignParentTop="true"
-				android:layout_alignParentEnd="true"
-				android:layout_alignParentStart="true"
-				android:layout_above="@+id/colors_fragment">
+				android:layout_above="@+id/colors_fragment"
+				android:layout_marginRight="0dp"
+				app:layout_constraintRight_toRightOf="parent"
+				android:layout_marginLeft="0dp"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				android:layout_marginTop="0dp"
+				android:layout_marginBottom="0dp"
+				app:layout_constraintBottom_toTopOf="@+id/colors_fragment">
 				
 				<FrameLayout
 					android:id="@+id/properties_fragment"
@@ -64,13 +69,16 @@
 			
 			<FrameLayout
 				android:id="@+id/colors_fragment"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
 				android:layout_height="100dp"
-				android:layout_alignParentBottom="true"
-				android:layout_alignParentStart="true"
-				android:layout_alignParentEnd="true" />
+				android:layout_marginBottom="0dp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				android:layout_marginLeft="0dp"
+				app:layout_constraintLeft_toLeftOf="parent"
+				android:layout_marginRight="0dp"
+				app:layout_constraintRight_toRightOf="parent" />
 		
-		</RelativeLayout>
+		</android.support.constraint.ConstraintLayout>
 	
 	</android.support.v4.widget.DrawerLayout>
 	
@@ -92,7 +100,8 @@
 			app:layout_constraintBottom_toTopOf="@+id/recycler_layers"
 			app:layout_constraintLeft_toLeftOf="parent"
 			android:layout_marginStart="16dp"
-			android:textSize="16sp" />
+			android:textSize="16sp"
+			android:layout_marginLeft="16dp" />
 		
 		<ImageButton
 			android:layout_width="48dp"
