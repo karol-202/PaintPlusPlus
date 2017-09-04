@@ -66,26 +66,26 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		imageWidth = layerWidth = image.getWidth();
 		imageHeight = layerHeight = image.getHeight();
 		
-		editName = (EditText) view.findViewById(R.id.edit_layer_name);
+		editName = view.findViewById(R.id.edit_layer_name);
 		editName.setText(image.getDefaultLayerName());
 		
-		editWidth = (EditText) view.findViewById(R.id.edit_layer_width);
+		editWidth = view.findViewById(R.id.edit_layer_width);
 		editWidth.setText(String.valueOf(layerWidth));
 		editWidth.addTextChangedListener(this);
 		
-		editHeight = (EditText) view.findViewById(R.id.edit_layer_height);
+		editHeight = view.findViewById(R.id.edit_layer_height);
 		editHeight.setText(String.valueOf(layerHeight));
 		editHeight.addTextChangedListener(this);
 		
-		editX = (EditText) view.findViewById(R.id.edit_layer_x);
+		editX = view.findViewById(R.id.edit_layer_x);
 		editX.setText("0");
 		editX.addTextChangedListener(this);
 		
-		editY = (EditText) view.findViewById(R.id.edit_layer_y);
+		editY = view.findViewById(R.id.edit_layer_y);
 		editY.setText("0");
 		editY.addTextChangedListener(this);
 		
-		imagePreview = (ImageView) view.findViewById(R.id.image_size_preview);
+		imagePreview = view.findViewById(R.id.image_size_preview);
 		
 		dialog = dialogBuilder.create();
 		dialog.setOnShowListener(new DialogInterface.OnShowListener()

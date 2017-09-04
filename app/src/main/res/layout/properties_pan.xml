@@ -26,7 +26,8 @@
 		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
 		android:layout_marginTop="8dp"
 		android:scaleType="fitXY"
-		android:layout_marginLeft="12dp" />
+		android:layout_marginLeft="12dp"
+		android:contentDescription="@string/scale_down" />
 	
 	<ImageButton
 		android:layout_width="40dp"
@@ -39,7 +40,8 @@
 		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
 		android:layout_marginTop="8dp"
 		android:scaleType="fitXY"
-		android:layout_marginRight="12dp" />
+		android:layout_marginRight="12dp"
+		android:contentDescription="@string/desc_scale_up" />
 	
 	<EditText
 		android:layout_width="0dp"

@@ -35,7 +35,7 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 	private float ratio;
 	private boolean dontFireEvent;
 	
-	public OptionResize(Context context, Image image)
+	OptionResize(Context context, Image image)
 	{
 		super(context, image);
 	}
@@ -56,25 +56,25 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 		oldHeight = getOldObjectHeight();
 		ratio = -1;
 		
-		editWidth = (EditText) view.findViewById(R.id.edit_object_width);
+		editWidth = view.findViewById(R.id.edit_object_width);
 		editWidth.setText(String.valueOf(newWidth));
 		editWidth.addTextChangedListener(this);
 		
-		editHeight = (EditText) view.findViewById(R.id.edit_object_height);
+		editHeight = view.findViewById(R.id.edit_object_height);
 		editHeight.setText(String.valueOf(newHeight));
 		editHeight.addTextChangedListener(this);
 		
-		editX = (EditText) view.findViewById(R.id.edit_object_x);
+		editX = view.findViewById(R.id.edit_object_x);
 		editX.setText(String.valueOf(getObjectX()));
 		editX.addTextChangedListener(this);
 		
-		editY = (EditText) view.findViewById(R.id.edit_object_y);
+		editY = view.findViewById(R.id.edit_object_y);
 		editY.setText(String.valueOf(getObjectY()));
 		editY.addTextChangedListener(this);
 		
-		imagePreview = (ImageView) view.findViewById(R.id.image_resize_preview);
+		imagePreview = view.findViewById(R.id.image_resize_preview);
 		
-		checkKeepRatio = (CheckBox) view.findViewById(R.id.check_keep_ratio);
+		checkKeepRatio = view.findViewById(R.id.check_keep_ratio);
 		checkKeepRatio.setOnCheckedChangeListener(this);
 		
 		dialog = dialogBuilder.create();

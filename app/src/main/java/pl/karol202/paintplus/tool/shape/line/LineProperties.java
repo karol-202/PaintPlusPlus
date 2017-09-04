@@ -31,15 +31,15 @@ public class LineProperties extends ShapeProperties implements SeekBar.OnSeekBar
 		line = (ShapeLine) shape;
 		capAdapter = new CapAdapter(getActivity());
 		
-		seekBarWidth = (SeekBar) view.findViewById(R.id.seekBar_line_width);
+		seekBarWidth = view.findViewById(R.id.seekBar_line_width);
 		seekBarWidth.setProgress(line.getLineWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
 		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
-		textWidth = (TextView) view.findViewById(R.id.line_width);
+		textWidth = view.findViewById(R.id.line_width);
 		textWidth.setText(String.valueOf(line.getLineWidth()));
 		
-		spinnerCap = (Spinner) view.findViewById(R.id.spinner_line_cap);
+		spinnerCap = view.findViewById(R.id.spinner_line_cap);
 		spinnerCap.setAdapter(capAdapter);
 		spinnerCap.setSelection(line.getLineCap().ordinal());
 		spinnerCap.setOnItemSelectedListener(this);

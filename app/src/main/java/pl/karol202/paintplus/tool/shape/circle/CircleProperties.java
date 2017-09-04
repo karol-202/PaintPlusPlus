@@ -29,16 +29,16 @@ public class CircleProperties extends ShapeProperties implements CompoundButton.
 		
 		circle = (ShapeCircle) shape;
 		
-		checkFill = (CheckBox) view.findViewById(R.id.check_circle_fill);
+		checkFill = view.findViewById(R.id.check_circle_fill);
 		checkFill.setChecked(circle.isFilled());
 		checkFill.setOnCheckedChangeListener(this);
 		
-		seekBarWidth = (SeekBar) view.findViewById(R.id.seekBar_circle_width);
+		seekBarWidth = view.findViewById(R.id.seekBar_circle_width);
 		seekBarWidth.setProgress(circle.getCircleWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
 		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
-		textWidth = (TextView) view.findViewById(R.id.circle_width);
+		textWidth = view.findViewById(R.id.circle_width);
 		textWidth.setText(String.valueOf(circle.getCircleWidth()));
 		
 		return view;
@@ -48,7 +48,6 @@ public class CircleProperties extends ShapeProperties implements CompoundButton.
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
 		circle.setFill(isChecked);
-		//seekBarWidth.setEnabled(!isChecked);
 	}
 	
 	@Override

@@ -49,18 +49,18 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 		height = getObjectHeight();
 		ratio = -1;
 		
-		editWidth = (EditText) view.findViewById(R.id.edit_object_width);
+		editWidth = view.findViewById(R.id.edit_object_width);
 		editWidth.setText(String.valueOf(width));
 		editWidth.addTextChangedListener(this);
 		
-		editHeight = (EditText) view.findViewById(R.id.edit_object_height);
+		editHeight = view.findViewById(R.id.edit_object_height);
 		editHeight.setText(String.valueOf(height));
 		editHeight.addTextChangedListener(this);
 		
-		checkKeepRatio = (CheckBox) view.findViewById(R.id.check_keep_ratio);
+		checkKeepRatio = view.findViewById(R.id.check_keep_ratio);
 		checkKeepRatio.setOnCheckedChangeListener(this);
 		
-		checkSmooth = (CheckBox) view.findViewById(R.id.check_scaling_smooth);
+		checkSmooth = view.findViewById(R.id.check_scaling_smooth);
 		
 		dialog = dialogBuilder.create();
 		dialog.show();

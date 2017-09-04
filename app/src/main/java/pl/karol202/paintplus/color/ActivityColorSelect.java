@@ -84,7 +84,7 @@ public class ActivityColorSelect extends AppCompatActivity implements OnColorCha
 	
 	private void initToolbar()
 	{
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
 		if(actionBar == null) throw new RuntimeException("Action bar not found.");

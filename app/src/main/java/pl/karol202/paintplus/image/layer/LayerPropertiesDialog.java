@@ -54,16 +54,16 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		
 		adapter = new LayerModeAdapter(context);
 		
-		spinnerMode = (Spinner) view.findViewById(R.id.spinner_layer_mode);
+		spinnerMode = view.findViewById(R.id.spinner_layer_mode);
 		spinnerMode.setAdapter(adapter);
 		spinnerMode.setSelection(indexOf(layer.getMode()));
 		spinnerMode.setOnItemSelectedListener(this);
 		
-		seekBarOpacity = (SeekBar) view.findViewById(R.id.seekBar_layer_opacity);
+		seekBarOpacity = view.findViewById(R.id.seekBar_layer_opacity);
 		seekBarOpacity.setProgress((int) (layer.getOpacity() * 100));
 		seekBarOpacity.setOnSeekBarChangeListener(this);
 		
-		textOpacity = (TextView) view.findViewById(R.id.layer_opacity);
+		textOpacity = view.findViewById(R.id.layer_opacity);
 		textOpacity.setText(String.format(Locale.US, "%1$d%%", seekBarOpacity.getProgress()));
 		
 		dialog = builder.create();

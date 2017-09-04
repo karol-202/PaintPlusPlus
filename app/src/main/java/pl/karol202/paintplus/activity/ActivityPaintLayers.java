@@ -45,10 +45,10 @@ class ActivityPaintLayers implements View.OnClickListener
 		bottomSheetBehaviour.setSkipCollapsed(true);
 		bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
 		
-		recyclerLayers = (LayersRecyclerView) activity.findViewById(R.id.recycler_layers);
+		recyclerLayers = activity.findViewById(R.id.recycler_layers);
 		recyclerLayers.setAdapter(layersAdapter);
 		
-		buttonAddLayer = (ImageButton) activity.findViewById(R.id.button_add_layer);
+		buttonAddLayer = activity.findViewById(R.id.button_add_layer);
 		buttonAddLayer.setOnClickListener(this);
 	}
 	

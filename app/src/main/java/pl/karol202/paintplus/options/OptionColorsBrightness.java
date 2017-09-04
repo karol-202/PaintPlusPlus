@@ -52,19 +52,19 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, this);
 		
-		seekBarBrightness = (SeekBar) view.findViewById(R.id.seekBar_brightness);
+		seekBarBrightness = view.findViewById(R.id.seekBar_brightness);
 		seekBarBrightness.setOnSeekBarChangeListener(this);
 		
-		seekBarContrast = (SeekBar) view.findViewById(R.id.seekBar_contrast);
+		seekBarContrast = view.findViewById(R.id.seekBar_contrast);
 		seekBarContrast.setOnSeekBarChangeListener(this);
 		
-		textBrightness = (TextView) view.findViewById(R.id.brightness);
+		textBrightness = view.findViewById(R.id.brightness);
 		textBrightness.setText(getText(seekBarBrightness));
 		
-		textContrast = (TextView) view.findViewById(R.id.contrast);
+		textContrast = view.findViewById(R.id.contrast);
 		textContrast.setText(getText(seekBarContrast));
 		
-		buttonPreview = (Button) view.findViewById(R.id.button_preview);
+		buttonPreview = view.findViewById(R.id.button_preview);
 		buttonPreview.setOnTouchListener(this);
 		
 		dialog = dialogBuilder.create();

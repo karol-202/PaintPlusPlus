@@ -12,7 +12,8 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginLeft="16dp" />
+		android:layout_marginLeft="16dp"
+		tools:ignore="ContentDescription" />
 	
 	<TextView
 		android:text="@string/unknown"

@@ -58,17 +58,17 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		animationTargetX = 0;
 		animationTargetY = 0;
 		
-		imageLayerHandle = (ImageView) view.findViewById(R.id.image_layer_handle);
+		imageLayerHandle = view.findViewById(R.id.image_layer_handle);
 		imageLayerHandle.setOnTouchListener(this);
 		
-		textLayerName = (TextView) view.findViewById(R.id.text_layer_name);
+		textLayerName = view.findViewById(R.id.text_layer_name);
 		
-		imageLayerPreview = (ImageView) view.findViewById(R.id.image_layer_preview);
+		imageLayerPreview = view.findViewById(R.id.image_layer_preview);
 		
-		buttonLayerVisibility = (ImageButton) view.findViewById(R.id.button_layer_visibility);
+		buttonLayerVisibility = view.findViewById(R.id.button_layer_visibility);
 		buttonLayerVisibility.setOnClickListener(this);
 		
-		buttonLayerMenu = (ImageButton) view.findViewById(R.id.button_layer_menu);
+		buttonLayerMenu = view.findViewById(R.id.button_layer_menu);
 		buttonLayerMenu.setOnClickListener(this);
 	}
 	
@@ -81,6 +81,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		
 		textLayerName.setText(layer.getName());
 		imageLayerPreview.setImageBitmap(layer.getBitmap());
+		buttonLayerVisibility.setContentDescription(getVisibilityButtonDescription());
 		
 		if(adapter.getImage().isLayerSelected(layer))
 		{
@@ -104,6 +105,11 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		}
 	}
 	
+	private CharSequence getVisibilityButtonDescription()
+	{
+		return adapter.getContext().getString(layer.isVisible() ? R.string.desc_layer_visible : R.string.desc_layer_invisible);
+	}
+	
 	private void setViewBackground(boolean selected)
 	{
 		Drawable drawable = ResourcesCompat.getDrawable(adapter.getContext().getResources(),
@@ -111,7 +117,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 				null);
 		view.setBackground(drawable);
 		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  rippleDrawable = (RippleDrawable) drawable;
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) rippleDrawable = (RippleDrawable) drawable;
 	}
 	
 	//Long click on the whole view
@@ -243,7 +249,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		builder.setView(dialogView);
 		builder.setTitle(R.string.dialog_layer_name);
 		
-		final EditText editTextName = (EditText) dialogView.findViewById(R.id.edit_layer_name);
+		final EditText editTextName = dialogView.findViewById(R.id.edit_layer_name);
 		editTextName.setText(layer.getName());
 		
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
@@ -290,12 +296,10 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	void setViewOffsetWithAnimation(float x, float y, AnimatorListener listener)
 	{
-		if(x != animationTargetX || y != animationTargetY)
-		{
-			animationTargetX = x;
-			animationTargetY = y;
-			view.animate().translationX(x).translationY(y).setDuration(animationDuration).setListener(listener).start();
-		}
+		if(x == animationTargetX && y == animationTargetY) return;
+		animationTargetX = x;
+		animationTargetY = y;
+		view.animate().translationX(x).translationY(y).setDuration(animationDuration).setListener(listener).start();
 	}
 	
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)

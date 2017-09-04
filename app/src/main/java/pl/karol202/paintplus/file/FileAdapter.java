@@ -30,14 +30,15 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 		{
 			super(view);
 			view.setOnClickListener(this);
-			imageFileType = (ImageView) view.findViewById(R.id.image_file_type);
-			textFileName = (TextView) view.findViewById(R.id.text_file_name);
+			imageFileType = view.findViewById(R.id.image_file_type);
+			textFileName = view.findViewById(R.id.text_file_name);
 		}
 		
 		void bind(File file)
 		{
 			this.file = file;
 			imageFileType.setImageResource(getFileTypeIcon(file));
+			imageFileType.setContentDescription(getFileTypeDescription(file));
 			textFileName.setText(getFileName(file));
 		}
 		
@@ -51,6 +52,19 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 				for(String filter : ImageLoader.OPEN_FORMATS)
 					if(extension.equalsIgnoreCase(filter)) return R.drawable.ic_image_black_24dp;
 				return R.drawable.ic_file_black_24dp;
+			}
+		}
+		
+		private CharSequence getFileTypeDescription(File file)
+		{
+			if(file == null) return "";
+			if(file.isDirectory()) return context.getString(R.string.desc_file_type_directory);
+			else
+			{
+				String extension = getFileExtension(file);
+				for(String filter : ImageLoader.OPEN_FORMATS)
+					if(extension.equalsIgnoreCase(filter)) return context.getString(R.string.desc_file_type_image);
+				return context.getString(R.string.desc_file_type_file);
 			}
 		}
 		

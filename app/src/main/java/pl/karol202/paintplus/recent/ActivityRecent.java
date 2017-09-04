@@ -20,7 +20,7 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 {
 	private class SwipeCallback extends ItemTouchHelper.SimpleCallback
 	{
-		public SwipeCallback()
+		SwipeCallback()
 		{
 			super(0, LEFT | RIGHT);
 		}
@@ -60,15 +60,16 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		loader = new RecentLoader(this);
 		adapter = new RecentAdapter(this, loader.getImages(), this);
 		
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		if(getSupportActionBar() == null) throw new RuntimeException("Cannot set action bar of activity.");
 		
-		recyclerRecent = (RecyclerView) findViewById(R.id.recycler_recent);
+		recyclerRecent = findViewById(R.id.recycler_recent);
 		recyclerRecent.setAdapter(adapter);
 		recyclerRecent.setLayoutManager(new BlockableLinearLayoutManager(this));
 		attachSwipingFeature();
 		
-		buttonNewImage = (FloatingActionButton) findViewById(R.id.button_new_image);
+		buttonNewImage = findViewById(R.id.button_new_image);
 		buttonNewImage.setOnClickListener(this);
 	}
 	

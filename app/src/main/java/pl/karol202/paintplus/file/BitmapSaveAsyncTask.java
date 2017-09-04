@@ -41,9 +41,8 @@ public class BitmapSaveAsyncTask extends AsyncTask<BitmapSaveParams, Void, Bitma
 		listener = params[0].getListener();
 		filePath = params[0].getFilePath();
 		
-		Result result = new Result(params[0].getBitmap(),
-								   ImageLoader.saveBitmap(params[0].getBitmap(), filePath, params[0].getQuality()));
-		return result;
+		return new Result(params[0].getBitmap(),
+						  ImageLoader.saveBitmap(params[0].getBitmap(), filePath, params[0].getQuality()));
 	}
 	
 	@Override

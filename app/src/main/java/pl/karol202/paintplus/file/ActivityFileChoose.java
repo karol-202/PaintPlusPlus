@@ -67,14 +67,14 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 		if(state == null) init();
 		else initFromSavedState(state);
 		
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
 		if(actionBar == null) throw new RuntimeException("Cannot set action bar of activity.");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
-		recyclerFiles = (RecyclerView) findViewById(R.id.recycler_files);
+		recyclerFiles = findViewById(R.id.recycler_files);
 		recyclerFiles.setLayoutManager(new LinearLayoutManager(this));
 		recyclerFiles.setAdapter(adapter);
 		recyclerFiles.addItemDecoration(new ItemDivider(this));
@@ -178,7 +178,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 		return false;
 	}
 	
-	public File getCurrentDirectory()
+	File getCurrentDirectory()
 	{
 		return currentDirectory;
 	}

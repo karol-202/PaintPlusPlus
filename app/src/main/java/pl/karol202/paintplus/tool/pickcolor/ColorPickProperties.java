@@ -28,16 +28,16 @@ public class ColorPickProperties extends ToolProperties implements CompoundButto
 		view = inflater.inflate(R.layout.properties_color_pick, container, false);
 		colorPick = (ToolColorPick) tool;
 		
-		checkAverage = (CheckBox) view.findViewById(R.id.check_pick_average);
+		checkAverage = view.findViewById(R.id.check_pick_average);
 		checkAverage.setChecked(colorPick.getSize() != 0);
 		checkAverage.setOnCheckedChangeListener(this);
 		
-		seekBarSize = (SeekBar) view.findViewById(R.id.seekBar_pick_size);
+		seekBarSize = view.findViewById(R.id.seekBar_pick_size);
 		seekBarSize.setProgress(Math.max(0, colorPick.getSize() - 1));
 		seekBarSize.setOnSeekBarChangeListener(this);
 		seekBarSize.setOnTouchListener(new SeekBarTouchListener());
 		
-		textSize = (TextView) view.findViewById(R.id.pick_size);
+		textSize = view.findViewById(R.id.pick_size);
 		textSize.setText(String.valueOf(seekBarSize.getProgress() + 1));
 		
 		return view;

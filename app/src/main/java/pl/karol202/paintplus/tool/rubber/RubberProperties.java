@@ -28,15 +28,15 @@ public class RubberProperties extends ToolProperties implements SeekBar.OnSeekBa
 		view = inflater.inflate(R.layout.properties_rubber, container, false);
 		rubber = (ToolRubber) tool;
 		
-		seekRubberSize = (SeekBar) view.findViewById(R.id.seekBar_rubber_size);
+		seekRubberSize = view.findViewById(R.id.seekBar_rubber_size);
 		seekRubberSize.setProgress((int) rubber.getSize() - 1);
 		seekRubberSize.setOnSeekBarChangeListener(this);
 		seekRubberSize.setOnTouchListener(new SeekBarTouchListener());
 		
-		textRubberSize = (TextView) view.findViewById(R.id.rubber_size);
+		textRubberSize = view.findViewById(R.id.rubber_size);
 		textRubberSize.setText(String.valueOf(seekRubberSize.getProgress() + 1));
 		
-		checkSmooth = (CheckBox) view.findViewById(R.id.check_rubber_smooth);
+		checkSmooth = view.findViewById(R.id.check_rubber_smooth);
 		checkSmooth.setChecked(rubber.isSmooth());
 		checkSmooth.setOnCheckedChangeListener(this);
 		return view;

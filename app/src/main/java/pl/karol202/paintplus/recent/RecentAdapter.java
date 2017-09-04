@@ -26,9 +26,9 @@ class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder>
 		ViewHolder(View view)
 		{
 			super(view);
-			imageThumbnail = (ImageView) view.findViewById(R.id.image_recent_thumbnail);
-			textName = (TextView) view.findViewById(R.id.text_recent_name);
-			buttonOpen = (Button) view.findViewById(R.id.button_recent_open);
+			imageThumbnail = view.findViewById(R.id.image_recent_thumbnail);
+			textName = view.findViewById(R.id.text_recent_name);
+			buttonOpen = view.findViewById(R.id.button_recent_open);
 			buttonOpen.setOnClickListener(this);
 		}
 		

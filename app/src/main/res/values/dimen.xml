@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="toolbar_shadow_height">4dp</dimen>
+	<dimen name="layers_sheet_shadow_height">8dp</dimen>
+	<dimen name="save_footer_shadow_height">6dp</dimen>
+</resources>

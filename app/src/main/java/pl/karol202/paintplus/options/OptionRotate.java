@@ -18,7 +18,7 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 	private SeekBar seekBarAngle;
 	private TextView textAngle;
 	
-	public OptionRotate(Context context, Image image)
+	OptionRotate(Context context, Image image)
 	{
 		super(context, image);
 	}
@@ -34,11 +34,11 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		
-		seekBarAngle = (SeekBar) view.findViewById(R.id.seekBar_angle);
+		seekBarAngle = view.findViewById(R.id.seekBar_angle);
 		seekBarAngle.setProgress(angleToProgress(0));
 		seekBarAngle.setOnSeekBarChangeListener(this);
 		
-		textAngle = (TextView) view.findViewById(R.id.text_angle);
+		textAngle = view.findViewById(R.id.text_angle);
 		textAngle.setText("0°");
 		
 		dialog = dialogBuilder.create();

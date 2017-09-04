@@ -31,28 +31,28 @@ public class BrushProperties extends ToolProperties implements SeekBar.OnSeekBar
 		view = inflater.inflate(R.layout.properties_brush, container, false);
 		brush = (ToolBrush) tool;
 		
-		seekBrushSize = (SeekBar) view.findViewById(R.id.seekBar_brush_size);
+		seekBrushSize = view.findViewById(R.id.seekBar_brush_size);
 		seekBrushSize.setProgress((int) brush.getSize() - 1);
 		seekBrushSize.setOnSeekBarChangeListener(this);
 		seekBrushSize.setOnTouchListener(new SeekBarTouchListener());
 		
-		textBrushSize = (TextView) view.findViewById(R.id.brush_size);
+		textBrushSize = view.findViewById(R.id.brush_size);
 		textBrushSize.setText(String.valueOf(seekBrushSize.getProgress() + 1));
 		
-		seekBrushShapeOffset = (SeekBar) view.findViewById(R.id.seek_brush_shape_offset);
+		seekBrushShapeOffset = view.findViewById(R.id.seek_brush_shape_offset);
 		seekBrushShapeOffset.setProgress((int) brush.getShapeOffset() - 1);
 		seekBrushShapeOffset.setOnSeekBarChangeListener(this);
 		seekBrushShapeOffset.setOnTouchListener(new SeekBarTouchListener());
 		
-		textBrushShapeOffset = (TextView) view.findViewById(R.id.brush_shape_offset);
+		textBrushShapeOffset = view.findViewById(R.id.brush_shape_offset);
 		textBrushShapeOffset.setText(String.valueOf(seekBrushShapeOffset.getProgress() + 1));
 		
-		seekBrushTranslucency = (SeekBar) view.findViewById(R.id.seekBar_brush_translucency);
+		seekBrushTranslucency = view.findViewById(R.id.seekBar_brush_translucency);
 		seekBrushTranslucency.setProgress((int) ((1 - brush.getOpacity()) * 100));
 		seekBrushTranslucency.setOnSeekBarChangeListener(this);
 		seekBrushTranslucency.setOnTouchListener(new SeekBarTouchListener());
 		
-		textBrushTranslucency = (TextView) view.findViewById(R.id.brush_translucency);
+		textBrushTranslucency = view.findViewById(R.id.brush_translucency);
 		textBrushTranslucency.setText(String.format(Locale.US, "%1$d%%", seekBrushTranslucency.getProgress()));
 		return view;
 	}

@@ -32,23 +32,23 @@ public class MarkerProperties extends ToolProperties implements SeekBar.OnSeekBa
 		view = inflater.inflate(R.layout.properties_marker, container, false);
 		marker = (ToolMarker) tool;
 		
-		seekMarkerSize = (SeekBar) view.findViewById(R.id.seekBar_marker_size);
+		seekMarkerSize = view.findViewById(R.id.seekBar_marker_size);
 		seekMarkerSize.setProgress((int) (marker.getSize() - 1));
 		seekMarkerSize.setOnSeekBarChangeListener(this);
 		seekMarkerSize.setOnTouchListener(new SeekBarTouchListener());
 		
-		textMarkerSize = (TextView) view.findViewById(R.id.marker_size);
+		textMarkerSize = view.findViewById(R.id.marker_size);
 		textMarkerSize.setText(String.valueOf(seekMarkerSize.getProgress() + 1));
 		
-		seekMarkerTranslucency = (SeekBar) view.findViewById(R.id.seekBar_marker_translucency);
+		seekMarkerTranslucency = view.findViewById(R.id.seekBar_marker_translucency);
 		seekMarkerTranslucency.setProgress((int) ((1 - marker.getOpacity()) * 100));
 		seekMarkerTranslucency.setOnSeekBarChangeListener(this);
 		seekMarkerTranslucency.setOnTouchListener(new SeekBarTouchListener());
 		
-		textMarkerTranslucency = (TextView) view.findViewById(R.id.marker_translucency);
+		textMarkerTranslucency = view.findViewById(R.id.marker_translucency);
 		textMarkerTranslucency.setText(String.format(Locale.US, "%1$d%%", seekMarkerTranslucency.getProgress()));
 		
-		checkSmoothEdge = (CheckBox) view.findViewById(R.id.check_smooth_edge);
+		checkSmoothEdge = view.findViewById(R.id.check_smooth_edge);
 		checkSmoothEdge.setChecked(marker.isSmoothEdge());
 		checkSmoothEdge.setOnCheckedChangeListener(this);
 		return view;

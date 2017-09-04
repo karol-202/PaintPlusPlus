@@ -15,7 +15,8 @@
 		android:scaleType="fitXY"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toTopOf="parent"
-		android:layout_marginLeft="12dp" />
+		android:layout_marginLeft="12dp"
+		android:contentDescription="@string/desc_scale_down" />
 	
 	<ImageButton
 		android:layout_width="40dp"
@@ -28,7 +29,8 @@
 		android:scaleType="fitXY"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toTopOf="parent"
-		android:layout_marginRight="12dp" />
+		android:layout_marginRight="12dp"
+		android:contentDescription="@string/desc_scale_up" />
 	
 	<EditText
 		android:layout_width="0dp"

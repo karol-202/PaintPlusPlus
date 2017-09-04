@@ -216,4 +216,21 @@
 	<string name="gradient_repeatability_no_repeat">Brak</string>
 	<string name="dialog_gradient">Gradient</string>
 	<string name="gradient_revert">Odwróć</string>
+	<string name="desc_add_gradient_point">Dodaj punkt</string>
+	<string name="desc_colors_swap">Zamień kolory</string>
+	<string name="desc_delete_gradient_point">Usuń punkt</string>
+	<string name="desc_file_type">Typ pliku</string>
+	<string name="desc_file_type_directory">Folder</string>
+	<string name="desc_file_type_file">Inny plik</string>
+	<string name="desc_file_type_image">Obraz</string>
+	<string name="desc_layer_add">Dodaj warstwę</string>
+	<string name="desc_layer_handle">Uchwyt warstwy</string>
+	<string name="desc_layer_invisible">Pokaż warstwę</string>
+	<string name="desc_layer_menu">Menu warstwy</string>
+	<string name="desc_layer_visibility">Widzialność warstwy</string>
+	<string name="desc_layer_visible">Ukryj warstwę</string>
+	<string name="desc_polygon_less_sides">Mniej boków</string>
+	<string name="desc_polygon_more_sides">Więcej boków</string>
+	<string name="desc_scale_down">Zmniejsz</string>
+	<string name="desc_scale_up">Powiększ</string>
 </resources>

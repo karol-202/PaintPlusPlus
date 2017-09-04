@@ -28,10 +28,10 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 		}
 		ColorChannel channel = getItem(position);
 		
-		ImageView imageView = (ImageView) view.findViewById(R.id.image_color_channel);
+		ImageView imageView = view.findViewById(R.id.image_color_channel);
 		imageView.setImageResource(channel.getIcon());
 		
-		TextView textView = (TextView) view.findViewById(R.id.text_color_channel);
+		TextView textView = view.findViewById(R.id.text_color_channel);
 		textView.setText(channel.getName());
 		return view;
 	}

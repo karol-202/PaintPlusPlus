@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -144,6 +145,7 @@
 		android:layout_marginTop="0dp"
 		app:layout_constraintDimensionRatio="h,1:1"
 		android:layout_marginLeft="64dp"
-		android:layout_marginRight="64dp" />
+		android:layout_marginRight="64dp"
+		tools:ignore="ContentDescription" />
 
 </android.support.constraint.ConstraintLayout>

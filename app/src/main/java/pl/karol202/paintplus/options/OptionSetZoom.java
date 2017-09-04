@@ -41,13 +41,13 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 		
 		zoom = image.getZoom();
 		
-		buttonZoomOut = (ImageButton) view.findViewById(R.id.button_zoom_out);
+		buttonZoomOut = view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
 		
-		buttonZoomIn = (ImageButton) view.findViewById(R.id.button_zoom_in);
+		buttonZoomIn = view.findViewById(R.id.button_zoom_in);
 		buttonZoomIn.setOnClickListener(this);
 		
-		editTextZoom = (EditText) view.findViewById(R.id.edit_zoom);
+		editTextZoom = view.findViewById(R.id.edit_zoom);
 		updateZoom(zoom, true);
 		editTextZoom.addTextChangedListener(this);
 		

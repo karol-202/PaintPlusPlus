@@ -45,7 +45,7 @@ public class ColorsSet implements Parcelable
 		return secondColor;
 	}
 
-	public void setSecondColor(int secondColor)
+	void setSecondColor(int secondColor)
 	{
 		this.secondColor = secondColor;
 		listener.onColorsChanged();

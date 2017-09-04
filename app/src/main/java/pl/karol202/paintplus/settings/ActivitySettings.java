@@ -28,7 +28,7 @@ public class ActivitySettings extends AppCompatActivity
 		fragments = getSupportFragmentManager();
 		fragments.beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
 		
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
 		if(actionBar == null) throw new RuntimeException("Cannot set action bar of activity.");

@@ -15,7 +15,8 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_width="24dp"
 		android:layout_height="24dp"
-		android:layout_marginLeft="16dp" />
+		android:layout_marginLeft="16dp"
+		android:contentDescription="@string/desc_file_type" />
 	
 	<TextView
 		android:layout_width="wrap_content"

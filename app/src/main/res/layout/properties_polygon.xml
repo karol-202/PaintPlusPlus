@@ -26,7 +26,8 @@
 		android:layout_marginTop="12dp"
 		android:layout_width="32dp"
 		android:layout_height="32dp"
-		android:layout_marginLeft="12dp" />
+		android:layout_marginLeft="12dp"
+		android:contentDescription="@string/desc_polygon_less_sides" />
 	
 	<android.support.design.widget.TextInputLayout
 		android:layout_width="0dp"
@@ -57,7 +58,8 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_width="32dp"
 		android:layout_height="32dp"
-		android:layout_marginRight="8dp" />
+		android:layout_marginRight="8dp"
+		android:contentDescription="@string/desc_polygon_more_sides" />
 	
 	<CheckBox
 		android:text="@string/polygon_fill"

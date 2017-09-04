@@ -218,4 +218,21 @@
 	<string name="temp_100">100%</string>
 	<string name="temp_50_">50</string>
 	<string name="temp_100_">100</string>
+	<string name="desc_colors_swap">Swap colors</string>
+	<string name="desc_add_gradient_point">Add gradient point</string>
+	<string name="desc_delete_gradient_point">Delete gradient point</string>
+	<string name="desc_scale_down">Scale down</string>
+	<string name="desc_scale_up">Scale up</string>
+	<string name="desc_file_type">File type</string>
+	<string name="desc_file_type_file">Other file</string>
+	<string name="desc_file_type_directory">Directory</string>
+	<string name="desc_layer_handle">Layer handle</string>
+	<string name="desc_layer_visibility">Layer visibility</string>
+	<string name="desc_layer_visible">Hide layer</string>
+	<string name="desc_layer_invisible">Show layer</string>
+	<string name="desc_layer_menu">Layer menu</string>
+	<string name="desc_polygon_less_sides">Less sides</string>
+	<string name="desc_polygon_more_sides">More sides</string>
+	<string name="desc_layer_add">Add layer</string>
+	<string name="desc_file_type_image">Image</string>
 </resources>

@@ -25,10 +25,10 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 		
 		String fileName = getIntent().getStringExtra("fileName");
 		
-		editFileName = (EditText) findViewById(R.id.edit_file_name);
+		editFileName = findViewById(R.id.edit_file_name);
 		editFileName.setText(fileName != null ? fileName : "");
 		
-		buttonSave = (Button) findViewById(R.id.button_save);
+		buttonSave = findViewById(R.id.button_save);
 		buttonSave.setOnClickListener(this);
 	}
 	

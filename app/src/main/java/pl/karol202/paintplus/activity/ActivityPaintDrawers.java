@@ -114,11 +114,11 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	
 	void initDrawers()
 	{
-		layoutDrawer = (DrawerLayout) activity.findViewById(R.id.layout_drawer);
+		layoutDrawer = activity.findViewById(R.id.layout_drawer);
 		drawerAdapter = new DrawerAdapter(activity, layoutDrawer, activity.getToolbar());
 		layoutDrawer.addDrawerListener(drawerAdapter);
 		
-		drawerLeft = (ListView) activity.findViewById(R.id.drawer_left);
+		drawerLeft = activity.findViewById(R.id.drawer_left);
 		drawerLeft.setOnItemClickListener(this);
 		setLeftDrawerWidth();
 		

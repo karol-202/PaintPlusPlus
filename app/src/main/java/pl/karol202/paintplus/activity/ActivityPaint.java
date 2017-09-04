@@ -76,16 +76,16 @@ public class ActivityPaint extends AppCompatActivity
 		asyncManager = new AsyncManager(this);
 		recentImageCreator = new RecentImageCreator(this);
 		
-		mainContainer = (ViewGroup) findViewById(R.id.main_container);
+		mainContainer = findViewById(R.id.main_container);
 		
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
 		if(actionBar == null) throw new RuntimeException("Cannot set action bar of activity.");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		
-		paintView = (PaintView) findViewById(R.id.paint_view);
+		paintView = findViewById(R.id.paint_view);
 		
 		drawers.initDrawers();
 		layers.initLayers();

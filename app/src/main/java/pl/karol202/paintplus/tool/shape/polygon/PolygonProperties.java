@@ -44,13 +44,13 @@ public class PolygonProperties extends ShapeProperties
 		errorToFew = getActivity().getString(R.string.error_polygon_too_few_sides);
 		errorToMany = getActivity().getString(R.string.error_polygon_too_many_sides);
 		
-		buttonMinusSides = (ImageButton) view.findViewById(R.id.button_minus_polygon_sides);
+		buttonMinusSides = view.findViewById(R.id.button_minus_polygon_sides);
 		buttonMinusSides.setOnClickListener(this);
 		
-		buttonPlusSides = (ImageButton) view.findViewById(R.id.button_plus_polygon_sides);
+		buttonPlusSides = view.findViewById(R.id.button_plus_polygon_sides);
 		buttonPlusSides.setOnClickListener(this);
 		
-		editLayoutSides = (TextInputLayout) view.findViewById(R.id.edit_layout_polygon_sides);
+		editLayoutSides = view.findViewById(R.id.edit_layout_polygon_sides);
 		editLayoutSides.setHintEnabled(false);
 		
 		editSides = editLayoutSides.getEditText();
@@ -58,16 +58,16 @@ public class PolygonProperties extends ShapeProperties
 		editSides.setText(String.valueOf(polygon.getSides()));
 		editSides.addTextChangedListener(this);
 		
-		checkFill = (CheckBox) view.findViewById(R.id.check_polygon_fill);
+		checkFill = view.findViewById(R.id.check_polygon_fill);
 		checkFill.setChecked(polygon.isFill());
 		checkFill.setOnCheckedChangeListener(this);
 		
-		seekBarWidth = (SeekBar) view.findViewById(R.id.seek_polygon_width);
+		seekBarWidth = view.findViewById(R.id.seek_polygon_width);
 		seekBarWidth.setProgress(polygon.getLineWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
 		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
-		textWidth = (TextView) view.findViewById(R.id.polygon_width);
+		textWidth = view.findViewById(R.id.polygon_width);
 		textWidth.setText(String.valueOf(polygon.getLineWidth()));
 		
 		return view;

@@ -30,12 +30,12 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 		adapterShape = new SelectionShapeAdapter(getActivity());
 		adapterMode = new SelectionModeAdapter(getActivity());
 		
-		spinnerShape = (Spinner) view.findViewById(R.id.spinner_selection_shape);
+		spinnerShape = view.findViewById(R.id.spinner_selection_shape);
 		spinnerShape.setAdapter(adapterShape);
 		spinnerShape.setSelection(selection.getShape().ordinal());
 		spinnerShape.setOnItemSelectedListener(this);
 		
-		spinnerMode = (Spinner) view.findViewById(R.id.spinner_selection_mode);
+		spinnerMode = view.findViewById(R.id.spinner_selection_mode);
 		spinnerMode.setAdapter(adapterMode);
 		spinnerMode.setSelection(selection.getMode().ordinal());
 		spinnerMode.setOnItemSelectedListener(this);

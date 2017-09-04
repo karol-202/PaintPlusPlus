@@ -70,32 +70,32 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		adapterIn = new ColorChannelsAdapter(context, channelType);
 		adapterOut = new ColorChannelsAdapter(context, channelType);
 		
-		spinnerChannelIn = (Spinner) view.findViewById(R.id.spinner_curves_channel_in);
+		spinnerChannelIn = view.findViewById(R.id.spinner_curves_channel_in);
 		spinnerChannelIn.setAdapter(adapterIn);
 		spinnerChannelIn.setOnItemSelectedListener(this);
 		if(channelType == RGB) spinnerChannelIn.setSelection(0);
 		else if(channelType == HSV) spinnerChannelIn.setSelection(2);
 		
-		spinnerChannelOut = (Spinner) view.findViewById(R.id.spinner_curves_channel_out);
+		spinnerChannelOut = view.findViewById(R.id.spinner_curves_channel_out);
 		spinnerChannelOut.setAdapter(adapterOut);
 		spinnerChannelOut.setOnItemSelectedListener(this);
 		if(channelType == RGB) spinnerChannelOut.setSelection(0);
 		else if(channelType == HSV) spinnerChannelOut.setSelection(2);
 		
-		curvesView = (ColorCurvesView) view.findViewById(R.id.color_curves_view);
+		curvesView = view.findViewById(R.id.color_curves_view);
 		curvesView.setOnTouchListener(new SeekBarTouchListener());
 		curvesView.setOnCurveEditListener(this);
 		curvesView.setChannelType(channelType);
 		curvesView.setChannelIn((ColorChannel) spinnerChannelIn.getSelectedItem());
 		curvesView.setChannelOut((ColorChannel) spinnerChannelOut.getSelectedItem());
 		
-		textPoint = (TextView) view.findViewById(R.id.text_curve_point);
+		textPoint = view.findViewById(R.id.text_curve_point);
 		textPoint.setText(curvesView.getInfoText());
 		
-		buttonPreview = (Button) view.findViewById(R.id.button_curves_preview);
+		buttonPreview = view.findViewById(R.id.button_curves_preview);
 		buttonPreview.setOnTouchListener(this);
 		
-		buttonRestore = (Button) view.findViewById(R.id.button_curves_restore);
+		buttonRestore = view.findViewById(R.id.button_curves_restore);
 		buttonRestore.setOnClickListener(this);
 		
 		alertDialog = builder.show();

@@ -29,20 +29,20 @@ public class FillProperties extends ToolProperties implements SeekBar.OnSeekBarC
 		view = inflater.inflate(R.layout.properties_fill, container, false);
 		fill = (ToolFill) tool;
 		
-		seekBarThreshold = (SeekBar) view.findViewById(R.id.seekBar_fill_threshold);
+		seekBarThreshold = view.findViewById(R.id.seekBar_fill_threshold);
 		seekBarThreshold.setProgress((int) fill.getFillThreshold());
 		seekBarThreshold.setOnSeekBarChangeListener(this);
 		seekBarThreshold.setOnTouchListener(new SeekBarTouchListener());
 		
-		textThreshold = (TextView) view.findViewById(R.id.fill_threshold);
+		textThreshold = view.findViewById(R.id.fill_threshold);
 		textThreshold.setText(String.format(Locale.US, "%d%%", seekBarThreshold.getProgress()));
 		
-		seekBarTranslucency = (SeekBar) view.findViewById(R.id.seekBar_fill_translucency);
+		seekBarTranslucency = view.findViewById(R.id.seekBar_fill_translucency);
 		seekBarTranslucency.setProgress((int) ((1 - fill.getOpacity()) * 100));
 		seekBarTranslucency.setOnSeekBarChangeListener(this);
 		seekBarTranslucency.setOnTouchListener(new SeekBarTouchListener());
 		
-		textTranslucency = (TextView) view.findViewById(R.id.fill_translucency);
+		textTranslucency = view.findViewById(R.id.fill_translucency);
 		textTranslucency.setText(String.format(Locale.US, "%d%%", seekBarTranslucency.getProgress()));
 		return view;
 	}
