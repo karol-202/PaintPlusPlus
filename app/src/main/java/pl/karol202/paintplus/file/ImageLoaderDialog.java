@@ -1,17 +1,35 @@
 package pl.karol202.paintplus.file;
 
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
+import pl.karol202.paintplus.AsyncBlocker;
+import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 
-public class ImageLoaderDialog implements DialogInterface.OnClickListener
+public class ImageLoaderDialog
 {
 	public interface OnImageLoadListener
 	{
 		void onImageLoaded(Bitmap bitmap);
+	}
+	
+	private class ImageLoadAsyncBlocker implements AsyncBlocker
+	{
+		@Override
+		public void cancel()
+		{
+			onLoadingCancel();
+		}
+		
+		@Override
+		public int getMessage()
+		{
+			return R.string.dialog_load_wait_message;
+		}
 	}
 	
 	private Context context;
@@ -22,9 +40,14 @@ public class ImageLoaderDialog implements DialogInterface.OnClickListener
 	
 	private AlertDialog dialog;
 	
-	public ImageLoaderDialog(Context context, OnImageLoadListener listener)
+	private AsyncManager asyncManager;
+	private AsyncBlocker asyncBlocker;
+	private AsyncTask<BitmapLoadParams, Void, BitmapLoadResult> asyncTask;
+	
+	public ImageLoaderDialog(Context context, AsyncManager asyncManager, OnImageLoadListener listener)
 	{
 		this.context = context;
+		this.asyncManager = asyncManager;
 		this.listener = listener;
 	}
 	
@@ -34,8 +57,7 @@ public class ImageLoaderDialog implements DialogInterface.OnClickListener
 		this.bitmapSize = ImageLoader.getBitmapSize(path);
 		
 		boolean tooBig = ImageLoader.isBitmapTooBig(bitmapSize);
-		if(!tooBig)
-			listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(path));
+		if(!tooBig) listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(path));
 		else
 		{
 			bitmapSize = ImageLoader.scaleBitmapSizeIfNecessary(bitmapSize);
@@ -48,16 +70,42 @@ public class ImageLoaderDialog implements DialogInterface.OnClickListener
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.dialog_image_too_big);
 		builder.setMessage(context.getString(R.string.dialog_image_too_big_question, bitmapSize.x, bitmapSize.y));
-		builder.setPositiveButton(R.string.scale_down, this);
+		builder.setPositiveButton(R.string.scale_down, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i)
+			{
+				onAccept();
+			}
+		});
 		builder.setNegativeButton(R.string.cancel, null);
 		dialog = builder.create();
 		dialog.show();
 	}
 	
-	@Override
-	public void onClick(DialogInterface dialog, int which)
+	private void onAccept()
 	{
-		Bitmap bitmap = ImageLoader.openBitmapAndScale(path, bitmapSize);
+		asyncBlocker = new ImageLoadAsyncBlocker();
+		asyncManager.block(asyncBlocker);
+		BitmapLoadParams params = new BitmapLoadParams(new BitmapLoadAsyncTask.OnBitmapLoadListener() {
+			@Override
+			public void onBitmapLoad(Bitmap bitmap)
+			{
+				onBitmapLoaded(bitmap);
+			}
+		}, path, bitmapSize);
+		asyncTask = new BitmapLoadAsyncTask();
+		asyncTask.execute(params);
+	}
+	
+	private void onBitmapLoaded(Bitmap bitmap)
+	{
+		asyncManager.unblock(asyncBlocker);
 		listener.onImageLoaded(bitmap);
+	}
+	
+	private void onLoadingCancel()
+	{
+		asyncManager.unblock(asyncBlocker);
+		asyncTask.cancel(true);
 	}
 }

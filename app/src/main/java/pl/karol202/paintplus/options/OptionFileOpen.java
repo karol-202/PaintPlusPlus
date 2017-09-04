@@ -3,6 +3,7 @@ package pl.karol202.paintplus.options;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.Toast;
+import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
@@ -19,12 +20,14 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	
 	private ActivityPaint activity;
 	private OnFileEditListener listener;
+	private AsyncManager asyncManager;
 	private String filePath;
 	
-	public OptionFileOpen(ActivityPaint activity, Image image, OnFileEditListener listener)
+	public OptionFileOpen(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
 		super(activity, image);
 		this.activity = activity;
+		this.asyncManager = asyncManager;
 		this.listener = listener;
 	}
 	
@@ -45,7 +48,7 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	private void openFile(String filePath)
 	{
 		this.filePath = filePath;
-		new ImageLoaderDialog(context, this).loadBitmapAndAskForScalingIfTooBig(filePath);
+		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(filePath);
 	}
 	
 	@Override

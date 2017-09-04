@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.widget.Toast;
+import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
@@ -19,12 +20,14 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 	private static final int REQUEST_OPEN_LAYER = 3;
 	
 	private ActivityPaint activity;
+	private AsyncManager asyncManager;
 	private String fileName;
 	
-	public OptionLayerOpen(ActivityPaint activity, Image image)
+	public OptionLayerOpen(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
 		super(activity, image);
 		this.activity = activity;
+		this.asyncManager = asyncManager;
 		activity.registerActivityResultListener(REQUEST_OPEN_LAYER, this);
 	}
 	
@@ -43,7 +46,7 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 		String filePath = data.getStringExtra("filePath");
 		fileName = data.getStringExtra("fileName");
 		
-		new ImageLoaderDialog(context, this).loadBitmapAndAskForScalingIfTooBig(filePath);
+		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(filePath);
 	}
 	
 	@Override

@@ -128,7 +128,7 @@ class ActivityPaintActions
 			new OptionFileCapturePhoto(activity, image).execute();
 			return true;
 		case R.id.action_open_image:
-			new OptionFileOpen(activity, image, activity.getFileEditListener()).execute();
+			new OptionFileOpen(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
 			return true;
 		case R.id.action_save_image:
 			String path = image.getLastPath();
@@ -182,7 +182,7 @@ class ActivityPaintActions
 			new OptionLayerNew(activity, image).execute();
 			return true;
 		case R.id.action_open_layer:
-			new OptionLayerOpen(activity, image).execute();
+			new OptionLayerOpen(activity, image, activity.getAsyncManager()).execute();
 			return true;
 		case R.id.action_save_layer:
 			new OptionLayerSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();

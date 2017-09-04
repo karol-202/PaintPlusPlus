@@ -233,4 +233,5 @@
 	<string name="desc_polygon_more_sides">Więcej boków</string>
 	<string name="desc_scale_down">Zmniejsz</string>
 	<string name="desc_scale_up">Powiększ</string>
+	<string name="dialog_load_wait_message">Ładowanie...</string>
 </resources>

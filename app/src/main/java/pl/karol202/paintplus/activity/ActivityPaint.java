@@ -157,7 +157,7 @@ public class ActivityPaint extends AppCompatActivity
 	
 	private void loadImageIfPathIsPresent()
 	{
-		if(initPath != null) new OptionFileOpen(this, getImage(), recentImageCreator).execute(initPath);
+		if(initPath != null) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).execute(initPath);
 	}
 	
 	@Override
