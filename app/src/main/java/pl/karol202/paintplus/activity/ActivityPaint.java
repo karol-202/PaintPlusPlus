@@ -31,6 +31,9 @@ import java.util.HashMap;
 
 public class ActivityPaint extends AppCompatActivity
 {
+	public static final String PATH_KEY = "path";
+	public static final String OPEN_KEY = "open";
+	
 	private ActivityPaintActions actions;
 	private ActivityPaintDrawers drawers;
 	private ActivityPaintLayers layers;
@@ -42,6 +45,7 @@ public class ActivityPaint extends AppCompatActivity
 	private AppDataFragment dataFragment;
 	private ActionBar actionBar;
 	private String initPath;
+	private boolean openFile;
 	private RecentImageCreator recentImageCreator;
 
 	private ViewGroup mainContainer;
@@ -95,7 +99,9 @@ public class ActivityPaint extends AppCompatActivity
 	
 	private void readArguments(Bundle bundle)
 	{
-		if(bundle != null) initPath = bundle.getString("path");
+		if(bundle == null) return;
+		initPath = bundle.getString(PATH_KEY);
+		openFile = initPath == null && bundle.getBoolean(OPEN_KEY, false);
 	}
 	
 	private void initSystemUIVisibility()
@@ -153,11 +159,17 @@ public class ActivityPaint extends AppCompatActivity
 		drawers.postInitDrawers();
 		
 		loadImageIfPathIsPresent();
+		selectImageToOpenIfNeeded();
 	}
 	
 	private void loadImageIfPathIsPresent()
 	{
 		if(initPath != null) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).execute(initPath);
+	}
+	
+	private void selectImageToOpenIfNeeded()
+	{
+		if(openFile) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).execute();
 	}
 	
 	@Override

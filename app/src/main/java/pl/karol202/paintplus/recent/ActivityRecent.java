@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
@@ -88,6 +91,27 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	}
 	
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_recent, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+		case R.id.action_open_image:
+			selectImageToOpen();
+			break;
+		default: super.onOptionsItemSelected(item);
+		}
+		return true;
+	}
+	
+	@Override
 	public void onImageSelected(RecentImage image)
 	{
 		editImage(image.getPath());
@@ -102,7 +126,14 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	private void editImage(String path)
 	{
 		Intent intent = new Intent(this, ActivityPaint.class);
-		if(path != null) intent.putExtra("path", path);
+		if(path != null) intent.putExtra(ActivityPaint.PATH_KEY, path);
+		startActivity(intent);
+	}
+	
+	private void selectImageToOpen()
+	{
+		Intent intent = new Intent(this, ActivityPaint.class);
+		intent.putExtra(ActivityPaint.OPEN_KEY, true);
 		startActivity(intent);
 	}
 }
