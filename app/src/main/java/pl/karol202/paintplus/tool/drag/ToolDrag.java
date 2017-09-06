@@ -76,8 +76,7 @@ public class ToolDrag extends StandardTool
 		PointF snapped = new PointF(oldLayerX + deltaTouchX, oldLayerY + deltaTouchY);
 		helpersManager.snapPoint(snapped);
 		
-		layer.setX((int) snapped.x);
-		layer.setY((int) snapped.y);
+		layer.setPosition((int) snapped.x, (int) snapped.y);
 		return true;
 	}
 	

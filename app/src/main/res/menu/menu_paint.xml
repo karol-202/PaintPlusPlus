@@ -9,7 +9,7 @@
           android:icon="@drawable/ic_properties_white_24dp"
           android:title="@string/action_tool"
           android:orderInCategory="4"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_file"
           android:icon="@drawable/ic_file_black_24dp"

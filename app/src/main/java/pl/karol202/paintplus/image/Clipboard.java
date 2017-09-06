@@ -52,8 +52,7 @@ public class Clipboard
 	{
 		Layer layer = image.newLayer(bitmap.getWidth(), bitmap.getHeight(), defaultLayerName);
 		if(layer == null) return;
-		layer.setX(left);
-		layer.setY(top);
+		layer.setPosition(left, top);
 		layer.setBitmap(bitmap);
 	}
 	

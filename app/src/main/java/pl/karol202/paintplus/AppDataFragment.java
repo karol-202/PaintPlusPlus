@@ -1,7 +1,7 @@
 package pl.karol202.paintplus;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
@@ -13,7 +13,6 @@ public class AppDataFragment extends Fragment
 	private AsyncManager asyncManager;
 	private Image image;
 	private Tools tools;
-	private Tool tool;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -25,7 +24,6 @@ public class AppDataFragment extends Fragment
 		image.newImage(600, 600);
 		
 		tools = new Tools(image, asyncManager);
-		tool = tools.getTool(1);
 	}
 	
 	public void setAsyncManager(AsyncManager asyncManager)
@@ -43,13 +41,13 @@ public class AppDataFragment extends Fragment
 		return tools;
 	}
 	
-	public Tool getTool()
+	public Tool getCurrentTool()
 	{
-		return tool;
+		return tools.getCurrentTool();
 	}
-	
-	public void setTool(Tool tool)
+
+	public void setCurrentTool(Tool tool)
 	{
-		this.tool = tool;
+		tools.setCurrentTool(tool);
 	}
 }

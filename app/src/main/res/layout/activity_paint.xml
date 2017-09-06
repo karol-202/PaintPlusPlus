@@ -29,16 +29,12 @@
 			android:id="@+id/paint_view"
 			android:background="@color/paint_view_background" />
 		
-		<ListView
+		<android.support.v7.widget.RecyclerView
 			android:id="@+id/drawer_left"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="start"
-			android:background="@color/drawer_background"
-			android:divider="@android:color/transparent"
-			android:dividerHeight="0dp"
-			android:choiceMode="singleChoice"
-			android:clickable="true"/>
+			android:background="@color/drawer_background" />
 		
 		<android.support.constraint.ConstraintLayout
 			android:id="@+id/drawer_right"

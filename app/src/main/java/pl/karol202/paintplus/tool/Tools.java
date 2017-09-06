@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Tools
 {
 	private ArrayList<Tool> tools;
+	private Tool tool;
 	
 	public Tools(Image image, AsyncManager asyncManager)
 	{
@@ -32,9 +33,11 @@ public class Tools
 		tools.add(new ToolDrag(image));
 		tools.add(new ToolRubber(image));
 		tools.add(new ToolGradient(image));
+		
+		tool = tools.get(1);
 	}
 	
-	public Tool getTool(int id)
+	Tool getTool(int id)
 	{
 		return tools.get(id);
 	}
@@ -52,5 +55,20 @@ public class Tools
 	public ArrayList<Tool> getTools()
 	{
 		return tools;
+	}
+	
+	int getToolsAmount()
+	{
+		return tools.size();
+	}
+	
+	public Tool getCurrentTool()
+	{
+		return tool;
+	}
+	
+	public void setCurrentTool(Tool tool)
+	{
+		this.tool = tool;
 	}
 }

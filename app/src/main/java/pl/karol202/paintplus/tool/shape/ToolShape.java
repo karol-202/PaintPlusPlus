@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.graphics.*;
-import android.graphics.Region.Op;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
@@ -68,6 +67,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
 		
+		updateSelectionPath();
 		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
@@ -104,7 +104,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	@Override
 	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
-		return ToolCoordinateSpace.SCREEN_SPACE;
+		return ToolCoordinateSpace.LAYER_SPACE;
 	}
 	
 	@Override
@@ -116,21 +116,12 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	@Override
 	public void onLayerDraw(Canvas canvas)
 	{
-		layer = image.getSelectedLayer();
-		
-		canvas.scale(image.getZoom(), image.getZoom());
-		canvas.translate(-image.getViewX() + layer.getX(),
-						 -image.getViewY() + layer.getY());
-		shape.onScreenDraw(canvas);
-		
 		resetClipping(canvas);
+		shape.onScreenDraw(canvas, true);
+		
 		doLayerAndSelectionClipping(canvas);
 		doImageClipping(canvas);
-		canvas.translate(image.getViewX() - layer.getX(), image.getViewY() - layer.getY());
-		canvas.scale(1 / image.getZoom(), 1 / image.getZoom());
-		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Op.XOR);
-		
-		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), maskPaint);
+		shape.onScreenDraw(canvas, false);
 	}
 	
 	@Override

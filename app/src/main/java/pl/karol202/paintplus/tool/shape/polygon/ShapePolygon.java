@@ -168,10 +168,10 @@ public class ShapePolygon extends Shape
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public void onScreenDraw(Canvas canvas, boolean translucent)
 	{
 		if(path == null) return;
-		updateColor();
+		updateColor(translucent);
 		canvas.drawPath(path, getPaint());
 	}
 	

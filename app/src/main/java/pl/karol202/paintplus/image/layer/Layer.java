@@ -149,7 +149,7 @@ public class Layer
 		return name;
 	}
 	
-	public void setName(String name)
+	void setName(String name)
 	{
 		this.name = name;
 	}
@@ -159,7 +159,7 @@ public class Layer
 		return visible;
 	}
 	
-	public void setVisibility(boolean visible)
+	void setVisibility(boolean visible)
 	{
 		this.visible = visible;
 		if(listener != null) listener.onImageChanged();
@@ -180,19 +180,14 @@ public class Layer
 		return x;
 	}
 	
-	public void setX(int x)
-	{
-		this.x = x;
-		if(listener != null) listener.onImageChanged();
-	}
-	
 	public int getY()
 	{
 		return y;
 	}
 	
-	public void setY(int y)
+	public void setPosition(int x, int y)
 	{
+		this.x = x;
 		this.y = y;
 		if(listener != null) listener.onImageChanged();
 	}
@@ -202,7 +197,7 @@ public class Layer
 		return mode;
 	}
 	
-	public void setMode(LayerMode mode)
+	void setMode(LayerMode mode)
 	{
 		this.mode = mode;
 		mode.setLayer(this);
@@ -213,7 +208,7 @@ public class Layer
 		return opacity;
 	}
 	
-	public void setOpacity(float opacity)
+	void setOpacity(float opacity)
 	{
 		this.opacity = opacity;
 	}

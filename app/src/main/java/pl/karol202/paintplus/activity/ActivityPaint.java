@@ -299,23 +299,26 @@ public class ActivityPaint extends AppCompatActivity
 	
 	public Image getImage()
 	{
+		if(dataFragment == null) return null;
 		return dataFragment.getImage();
 	}
 	
 	public Tools getTools()
 	{
+		if(dataFragment == null) return null;
 		return dataFragment.getTools();
 	}
 	
 	public Tool getTool()
 	{
 		if(dataFragment == null) return null;
-		return dataFragment.getTool();
+		return dataFragment.getCurrentTool();
 	}
 	
 	public void setTool(Tool tool)
 	{
-		dataFragment.setTool(tool);
+		if(dataFragment == null) return;
+		dataFragment.setCurrentTool(tool);
 		paintView.onImageChanged();
 	}
 	

@@ -122,8 +122,7 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		if(layer == null) Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
 		else
 		{
-			layer.setX(x);
-			layer.setY(y);
+			layer.setPosition(x, y);
 			if(listener != null) listener.onLayerAdded();
 		}
 	}

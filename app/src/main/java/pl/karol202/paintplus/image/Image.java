@@ -103,8 +103,7 @@ public class Image
 		for(Layer layer : layers)
 		{
 			layer.scale(scaleX, scaleY, bilinear);
-			layer.setX((int) Math.round(layer.getX() * scaleX));
-			layer.setY((int) Math.round(layer.getY() * scaleY));
+			layer.setPosition((int) Math.round(layer.getX() * scaleX), (int) Math.round(layer.getY() * scaleY));
 		}
 		this.width = width;
 		this.height = height;
@@ -115,8 +114,8 @@ public class Image
 		for(Layer layer : layers)
 		{
 			layer.flip(direction);
-			if(direction == FLIP_HORIZONTALLY) layer.setX(width - layer.getX() - layer.getWidth());
-			else layer.setY(height - layer.getY() - layer.getHeight());
+			if(direction == FLIP_HORIZONTALLY) layer.setPosition(width - layer.getX() - layer.getWidth(), layer.getY());
+			else layer.setPosition(layer.getX(), height - layer.getY() - layer.getHeight());
 		}
 	}
 	

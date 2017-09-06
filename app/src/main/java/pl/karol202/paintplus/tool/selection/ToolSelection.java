@@ -20,7 +20,8 @@ public class ToolSelection extends StandardTool
 		MOVE
 	}
 	
-	private final int MAX_DISTANCE = 50;
+	private static final int MAX_DISTANCE = 50;
+	private static final float SELECTION_LINE_WIDTH = 2f;
 	
 	private ToolSelectionShape shape;
 	private ToolSelectionMode mode;
@@ -46,7 +47,6 @@ public class ToolSelection extends StandardTool
 		this.paint.setAntiAlias(true);
 		this.paint.setColor(Color.BLACK);
 		this.paint.setStyle(Paint.Style.STROKE);
-		this.paint.setStrokeWidth(2f);
 		
 		cleanUp();
 	}
@@ -314,6 +314,8 @@ public class ToolSelection extends StandardTool
 	public void onTopDraw(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
+		paint.setStrokeWidth(SELECTION_LINE_WIDTH / image.getZoom());
+		
 		if(shape == RECTANGLE) canvas.drawRect(rect, paint);
 		else if(shape == OVAL) canvas.drawOval(new RectF(rect), paint);
 	}

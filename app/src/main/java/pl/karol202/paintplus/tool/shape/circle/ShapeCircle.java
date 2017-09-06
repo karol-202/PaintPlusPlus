@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
@@ -142,10 +141,10 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
-	public void onScreenDraw(Canvas canvas)
+	public void onScreenDraw(Canvas canvas, boolean translucent)
 	{
 		if(center == null || radius == -1) return;
-		updateColor();
+		updateColor(translucent);
 		canvas.drawCircle(center.x, center.y, radius, getPaint());
 	}
 	

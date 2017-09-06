@@ -1,19 +1,19 @@
 package pl.karol202.paintplus.activity;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.res.Resources;
-import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSelect;
@@ -22,7 +22,7 @@ import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.ToolsAdapter;
 
-class ActivityPaintDrawers implements AdapterView.OnItemClickListener
+class ActivityPaintDrawers
 {
 	private class DrawerAdapter extends ActionBarDrawerToggle
 	{
@@ -97,9 +97,10 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	private DisplayMetrics displayMetrics;
 	private Resources resources;
 	private int screenWidthDp;
+	private ToolsAdapter toolsAdapter;
 	
 	private DrawerLayout layoutDrawer;
-	private ListView drawerLeft;
+	private RecyclerView drawerLeft;
 	private View drawerRight;
 	private ColorsSelect colorsSelect;
 	
@@ -119,7 +120,7 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		layoutDrawer.addDrawerListener(drawerAdapter);
 		
 		drawerLeft = activity.findViewById(R.id.drawer_left);
-		drawerLeft.setOnItemClickListener(this);
+		drawerLeft.setLayoutManager(new LinearLayoutManager(activity));
 		setLeftDrawerWidth();
 		
 		drawerRight = activity.findViewById(R.id.drawer_right);
@@ -147,7 +148,16 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 	void postInitDrawers()
 	{
 		drawerAdapter.syncState();
-		drawerLeft.setAdapter(new ToolsAdapter(activity, activity.getTools()));
+		
+		toolsAdapter = new ToolsAdapter(activity, activity.getTools(), new ToolsAdapter.OnToolSelectListener()
+		{
+			@Override
+			public void onToolSelect(Tool tool)
+			{
+				ActivityPaintDrawers.this.onToolSelect(tool);
+			}
+		});
+		drawerLeft.setAdapter(toolsAdapter);
 		
 		tryToAttachPropertiesFragment();
 		tryToAttachColorsFragment();
@@ -218,11 +228,9 @@ class ActivityPaintDrawers implements AdapterView.OnItemClickListener
 		return layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
 	}
 	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	public void onToolSelect(Tool newTool)
 	{
 		Tool previousTool = activity.getTool();
-		Tool newTool = activity.getTools().getTool(position);
 		
 		activity.setTool(newTool);
 		tryToAttachPropertiesFragment();

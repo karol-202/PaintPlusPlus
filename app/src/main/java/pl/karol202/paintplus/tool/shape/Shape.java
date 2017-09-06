@@ -9,7 +9,9 @@ import pl.karol202.paintplus.image.Image;
 
 public abstract class Shape
 {
-	private final int MAX_TOUCH_DISTANCE_DP = 25;
+	private static final int MAX_TOUCH_DISTANCE_DP = 25;
+	
+	private static final float TRANSLUCENT_SHAPE_OPACITY = 0.5f;
 	
 	private boolean smooth;
 	private float opacity;
@@ -45,7 +47,7 @@ public abstract class Shape
 	
 	public abstract void onTouchStop(int x, int y);
 	
-	public abstract void onScreenDraw(Canvas canvas);
+	public abstract void onScreenDraw(Canvas canvas, boolean translucent);
 	
 	public abstract void apply(Canvas imageCanvas);
 	
@@ -58,15 +60,16 @@ public abstract class Shape
 	
 	protected void update()
 	{
-		updateColor();
+		updateColor(false);
 		paint.setAntiAlias(smooth);
 		image.updateImage();
 	}
 	
-	protected void updateColor()
+	protected void updateColor(boolean translucent)
 	{
 		paint.setColor(colors.getFirstColor());
-		paint.setAlpha((int) (opacity * 255));
+		if(translucent) paint.setAlpha((int) (opacity * 255 * TRANSLUCENT_SHAPE_OPACITY));
+		else paint.setAlpha((int) (opacity * 255));
 	}
 	
 	protected void cleanUp()
