@@ -22,6 +22,7 @@ public class ToolRubber extends StandardTool
 	private float lastY;
 	private boolean pathCreated;
 	private boolean editStarted;
+	private Rect dirtyRect;
 	
 	public ToolRubber(Image image)
 	{
@@ -101,6 +102,8 @@ public class ToolRubber extends StandardTool
 		pathCreated = false;
 		editStarted = true;
 		layer.setTemporaryHidden(true);
+		
+		expandDirtyRectByPoint((int) x, (int) y);
 		return true;
 	}
 	
@@ -112,6 +115,8 @@ public class ToolRubber extends StandardTool
 		lastX = x;
 		lastY = y;
 		pathCreated = true;
+		
+		expandDirtyRectByPoint((int) x, (int) y);
 		return true;
 	}
 	
@@ -137,7 +142,36 @@ public class ToolRubber extends StandardTool
 		pathCreated = false;
 		editStarted = false;
 		layer.setTemporaryHidden(false);
+		
+		dirtyRect = null;
 		return true;
+	}
+	
+	private void expandDirtyRectByPoint(int x, int y)
+	{
+		if(dirtyRect == null) dirtyRect = new Rect();
+		dirtyRect.left = (int) Math.min(dirtyRect.left, x - size);
+		dirtyRect.top = (int) Math.min(dirtyRect.top, y - size);
+		dirtyRect.right = (int) Math.max(dirtyRect.right, x + size);
+		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, y + size);
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		if(dirtyRect != null) dirtyRect.setEmpty();
 	}
 	
 	@Override

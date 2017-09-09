@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.drag;
 
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
@@ -15,9 +16,12 @@ public class ToolDrag extends StandardTool
 	private float oldTouchX;
 	private float oldTouchY;
 	
+	private Rect dirtyRect;
+	
 	public ToolDrag(Image image)
 	{
 		super(image);
+		dirtyRect = new Rect();
 	}
 	
 	@Override
@@ -77,13 +81,41 @@ public class ToolDrag extends StandardTool
 		helpersManager.snapPoint(snapped);
 		
 		layer.setPosition((int) snapped.x, (int) snapped.y);
+		
+		expandDirtyRect();
 		return true;
+	}
+	
+	private void expandDirtyRect()
+	{
+		dirtyRect.left = Math.min(dirtyRect.left, layer.getX());
+		dirtyRect.top = Math.min(dirtyRect.top, layer.getY());
+		dirtyRect.right = Math.max(dirtyRect.right, layer.getX() + layer.getWidth());
+		dirtyRect.bottom = Math.max(dirtyRect.bottom, layer.getY() + layer.getHeight());
 	}
 	
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
 		return true;
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		dirtyRect.setEmpty();
 	}
 	
 	@Override

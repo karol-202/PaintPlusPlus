@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.tool.marker;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
@@ -18,6 +19,8 @@ public class ToolMarker extends StandardTool
 	private ColorsSet colors;
 	
 	private MarkerAdapterQuadraticPath adapterQuadraticPath;
+	
+	private Rect dirtyRect;
 
 	public ToolMarker(Image image)
 	{
@@ -73,6 +76,8 @@ public class ToolMarker extends StandardTool
 		doLayerAndSelectionClipping(canvas);
 		
 		getCurrentAdapter().onBeginDraw(x, y);
+		
+		expandDirtyRectByPoint((int) x, (int) y);
 		return true;
 	}
 	
@@ -80,6 +85,8 @@ public class ToolMarker extends StandardTool
 	public boolean onTouchMove(float x, float y)
 	{
 		getCurrentAdapter().onDraw(x, y);
+		
+		expandDirtyRectByPoint((int) x, (int) y);
 		return true;
 	}
 	
@@ -87,7 +94,36 @@ public class ToolMarker extends StandardTool
 	public boolean onTouchStop(float x, float y)
 	{
 		getCurrentAdapter().onEndDraw(x, y);
+		
+		dirtyRect = null;
 		return true;
+	}
+	
+	private void expandDirtyRectByPoint(int x, int y)
+	{
+		if(dirtyRect == null) dirtyRect = new Rect();
+		dirtyRect.left = (int) Math.min(dirtyRect.left, x - size);
+		dirtyRect.top = (int) Math.min(dirtyRect.top, y - size);
+		dirtyRect.right = (int) Math.max(dirtyRect.right, x + size);
+		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, y + size);
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		if(dirtyRect != null) dirtyRect.setEmpty();
 	}
 	
 	@Override

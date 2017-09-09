@@ -25,6 +25,7 @@ public class ToolBrush extends StandardTool
 	private float lastY;
 	private Path path;
 	private float pathDistance;
+	private Rect dirtyRect;
 
 	public ToolBrush(Image image)
 	{
@@ -93,6 +94,8 @@ public class ToolBrush extends StandardTool
 		
 		lastX = -1;
 		lastY = -1;
+		
+		dirtyRect = new Rect();
 		return true;
 	}
 	
@@ -135,6 +138,8 @@ public class ToolBrush extends StandardTool
 		lastX = -1;
 		lastY = -1;
 		pathDistance = 0;
+		
+		dirtyRect = null;
 		return true;
 	}
 	
@@ -161,6 +166,35 @@ public class ToolBrush extends StandardTool
 		oval.right = x + size / 2;
 		oval.bottom = y + size / 2;
 		canvas.drawOval(oval, paint);
+		
+		expandDirtyRectByPoint(oval);
+	}
+	
+	private void expandDirtyRectByPoint(RectF point)
+	{
+		if(dirtyRect == null) return;
+		dirtyRect.left = (int) Math.min(dirtyRect.left, point.left);
+		dirtyRect.top = (int) Math.min(dirtyRect.top, point.top);
+		dirtyRect.right = (int) Math.max(dirtyRect.right, point.right);
+		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, point.bottom);
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		if(dirtyRect != null) dirtyRect.setEmpty();
 	}
 	
 	@Override

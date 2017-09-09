@@ -185,6 +185,21 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 	
 	@Override
+	public boolean providesDirtyRegion()
+	{
+		return false;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return null;
+	}
+	
+	@Override
+	public void resetDirtyRegion() { }
+	
+	@Override
 	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return layerVisible;

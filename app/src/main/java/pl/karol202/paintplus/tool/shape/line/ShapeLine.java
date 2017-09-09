@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.shape.line;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
@@ -116,6 +117,16 @@ public class ShapeLine extends Shape
 		PointF snapped = new PointF(point);
 		getHelpersManager().snapPoint(snapped);
 		end = new Point((int) snapped.x, (int) snapped.y);
+	}
+	
+	@Override
+	public void expandDirtyRect(Rect dirtyRect)
+	{
+		if(start == null || end == null) return;
+		dirtyRect.left = Math.min(dirtyRect.left, Math.min(start.x, end.x) - lineWidth);
+		dirtyRect.top = Math.min(dirtyRect.top, Math.min(start.y, end.y) - lineWidth);
+		dirtyRect.right = Math.max(dirtyRect.right, Math.max(start.x, end.x) + lineWidth);
+		dirtyRect.bottom = Math.max(dirtyRect.bottom, Math.max(start.y, end.y) + lineWidth);
 	}
 	
 	@Override

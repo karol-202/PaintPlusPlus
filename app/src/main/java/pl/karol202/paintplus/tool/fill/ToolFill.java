@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.fill;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.Region;
 import android.os.AsyncTask;
 import pl.karol202.paintplus.AsyncBlocker;
@@ -9,8 +10,8 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
@@ -95,6 +96,21 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	{
 		canvas.clipRect(0, 0, canvas.getWidth(), canvas.getHeight(), Region.Op.UNION);
 	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return false;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return null;
+	}
+	
+	@Override
+	public void resetDirtyRegion() { }
 	
 	@Override
 	public boolean doesOnLayerDraw(boolean layerVisible)

@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.image.Image;
@@ -46,6 +47,8 @@ public abstract class Shape
 	public abstract void onTouchMove(int x, int y);
 	
 	public abstract void onTouchStop(int x, int y);
+	
+	public abstract void expandDirtyRect(Rect dirtyRect);
 	
 	public abstract void onScreenDraw(Canvas canvas, boolean translucent);
 	

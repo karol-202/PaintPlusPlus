@@ -168,6 +168,15 @@ public class ShapePolygon extends Shape
 	}
 	
 	@Override
+	public void expandDirtyRect(Rect dirtyRect)
+	{
+		dirtyRect.left = Math.min(dirtyRect.left, (int) (center.x - radiusOCC - lineWidth));
+		dirtyRect.top = Math.min(dirtyRect.top, (int) (center.y - radiusOCC - lineWidth));
+		dirtyRect.right = Math.max(dirtyRect.right, (int) (center.x + radiusOCC + lineWidth));
+		dirtyRect.bottom = Math.max(dirtyRect.bottom, (int) (center.y + radiusOCC + lineWidth));
+	}
+	
+	@Override
 	public void onScreenDraw(Canvas canvas, boolean translucent)
 	{
 		if(path == null) return;

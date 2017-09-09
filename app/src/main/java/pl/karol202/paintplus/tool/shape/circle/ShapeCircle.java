@@ -1,9 +1,6 @@
 package pl.karol202.paintplus.tool.shape.circle;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.PointF;
+import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
@@ -138,6 +135,15 @@ public class ShapeCircle extends Shape
 		PointF snapped = new PointF(point);
 		getHelpersManager().snapPoint(snapped);
 		center = new Point((int) snapped.x, (int) snapped.y);
+	}
+	
+	@Override
+	public void expandDirtyRect(Rect dirtyRect)
+	{
+		dirtyRect.left = Math.min(dirtyRect.left, (int) (center.x - radius - circleWidth));
+		dirtyRect.top = Math.min(dirtyRect.top, (int) (center.y - radius - circleWidth));
+		dirtyRect.right = Math.max(dirtyRect.right, (int) (center.x + radius + circleWidth));
+		dirtyRect.bottom = Math.max(dirtyRect.bottom, (int) (center.y + radius + circleWidth));
 	}
 	
 	@Override

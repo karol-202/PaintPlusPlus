@@ -20,8 +20,11 @@ public class ToolSelection extends StandardTool
 		MOVE
 	}
 	
-	private static final int MAX_DISTANCE = 50;
-	private static final float SELECTION_LINE_WIDTH = 2f;
+	private final int MAX_DISTANCE_DP = 50;
+	private final float SELECTION_LINE_WIDTH_DP = 1f;
+	
+	private final int MAX_DISTANCE_PX;
+	private final float SELECTION_LINE_WIDTH_PX;
 	
 	private ToolSelectionShape shape;
 	private ToolSelectionMode mode;
@@ -31,6 +34,7 @@ public class ToolSelection extends StandardTool
 	private boolean editMode;
 	private boolean rectCreated;
 	private Paint paint;
+	private Rect dirtyRect;
 	
 	private MoveType movingType;
 	private Rect rectAtBeginning;
@@ -39,6 +43,9 @@ public class ToolSelection extends StandardTool
 	public ToolSelection(Image image)
 	{
 		super(image);
+		MAX_DISTANCE_PX = (int) (MAX_DISTANCE_DP * image.SCREEN_DENSITY);
+		SELECTION_LINE_WIDTH_PX = (int) (SELECTION_LINE_WIDTH_DP * image.SCREEN_DENSITY);
+		
 		this.shape = RECTANGLE;
 		this.mode = ToolSelectionMode.NEW;
 		
@@ -105,6 +112,8 @@ public class ToolSelection extends StandardTool
 			rectAtBeginning = new Rect(rect);
 			movingStart = new Point(x, y);
 		}
+		expandDirtyRect();
+		
 		return true;
 	}
 	
@@ -121,10 +130,10 @@ public class ToolSelection extends StandardTool
 		int rightDist = Math.abs(rect.right - x);
 		int bottomDist = Math.abs(rect.bottom - y);
 		
-		boolean left = leftDist < MAX_DISTANCE;
-		boolean top = topDist < MAX_DISTANCE;
-		boolean right = rightDist < MAX_DISTANCE;
-		boolean bottom = bottomDist < MAX_DISTANCE;
+		boolean left = leftDist < (MAX_DISTANCE_PX / image.getZoom());
+		boolean top = topDist < (MAX_DISTANCE_PX / image.getZoom());
+		boolean right = rightDist < (MAX_DISTANCE_PX / image.getZoom());
+		boolean bottom = bottomDist < (MAX_DISTANCE_PX / image.getZoom());
 		boolean xInside = x > rect.left && x < rect.right;
 		boolean yInside = y > rect.top && y < rect.bottom;
 		
@@ -155,6 +164,7 @@ public class ToolSelection extends StandardTool
 			setBottom(y);
 		}
 		else move(x, y);
+		expandDirtyRect();
 		
 		return true;
 	}
@@ -173,6 +183,7 @@ public class ToolSelection extends StandardTool
 		else move(x, y);
 		correctBounds();
 		rectCreated = true;
+		dirtyRect = null;
 		
 		return true;
 	}
@@ -260,6 +271,15 @@ public class ToolSelection extends StandardTool
 		}
 	}
 	
+	private void expandDirtyRect()
+	{
+		if(dirtyRect == null) dirtyRect = new Rect();
+		dirtyRect.left = Math.min(dirtyRect.left, rect.left);
+		dirtyRect.top = Math.min(dirtyRect.top, rect.top);
+		dirtyRect.right = Math.max(dirtyRect.right, rect.right);
+		dirtyRect.bottom = Math.max(dirtyRect.bottom, rect.bottom);
+	}
+	
 	void applySelection()
 	{
 		if(shape == RECTANGLE) selection.commitSelectionRectangle(rect, mode.getOp());
@@ -281,6 +301,24 @@ public class ToolSelection extends StandardTool
 		rect.top = -1;
 		rect.right = -1;
 		rect.bottom = -1;
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		if(dirtyRect != null) dirtyRect.setEmpty();
 	}
 	
 	@Override
@@ -314,7 +352,7 @@ public class ToolSelection extends StandardTool
 	public void onTopDraw(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
-		paint.setStrokeWidth(SELECTION_LINE_WIDTH / image.getZoom());
+		paint.setStrokeWidth(SELECTION_LINE_WIDTH_PX / image.getZoom());
 		
 		if(shape == RECTANGLE) canvas.drawRect(rect, paint);
 		else if(shape == OVAL) canvas.drawOval(new RectF(rect), paint);

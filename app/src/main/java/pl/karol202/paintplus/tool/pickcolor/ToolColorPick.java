@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.pickcolor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.image.Image;
@@ -125,6 +126,21 @@ public class ToolColorPick extends StandardTool
 	{
 		return selection.isEmpty() || selection.containsPoint(x + image.getSelectedLayerX(), y + image.getSelectedLayerY());
 	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return false;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return null;
+	}
+	
+	@Override
+	public void resetDirtyRegion() { }
 	
 	@Override
 	public boolean doesOnLayerDraw(boolean layerVisible)

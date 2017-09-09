@@ -17,6 +17,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	private Shapes shapes;
 	private OnShapeEditListener shapeEditListener;
 	private Paint maskPaint;
+	private Rect dirtyRect;
 	
 	public ToolShape(Image image)
 	{
@@ -72,6 +73,8 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 		doLayerAndSelectionClipping(canvas);
 		
 		shape.onTouchStart((int) x, (int) y);
+		
+		expandDirtyRect();
 		return true;
 	}
 	
@@ -79,6 +82,8 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	public boolean onTouchMove(float x, float y)
 	{
 		shape.onTouchMove((int) x, (int) y);
+		
+		expandDirtyRect();
 		return true;
 	}
 	
@@ -86,7 +91,33 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	public boolean onTouchStop(float x, float y)
 	{
 		shape.onTouchStop((int) x, (int) y);
+		
+		dirtyRect = null;
 		return true;
+	}
+	
+	private void expandDirtyRect()
+	{
+		if(dirtyRect == null) dirtyRect = new Rect();
+		shape.expandDirtyRect(dirtyRect);
+	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return true;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return dirtyRect;
+	}
+	
+	@Override
+	public void resetDirtyRegion()
+	{
+		if(dirtyRect != null) dirtyRect.setEmpty();
 	}
 	
 	@Override

@@ -239,8 +239,50 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		}
 		
 		boolean result = tool.onTouch(event, getContext());
-		if(result) invalidate();
-		return result;
+		if(!result) return false;
+		
+		if(!tool.providesDirtyRegion()) invalidate();
+		else invalidateDirtyRegion(tool);
+		
+		return true;
+	}
+	
+	private void invalidateDirtyRegion(Tool tool)
+	{
+		Rect rect = tool.getDirtyRegion();
+		if(rect == null)
+		{
+			invalidate();
+			return;
+		}
+		rect = transformDirtyRectToScreenSpace(tool, rect);
+		invalidate(rect);
+		tool.resetDirtyRegion();
+	}
+	
+	private Rect transformDirtyRectToScreenSpace(Tool tool, Rect oldRect)
+	{
+		Rect rect = new Rect(oldRect);
+		switch(tool.getCoordinateSpace())
+		{
+		case LAYER_SPACE:
+			rect.left -= image.getSelectedLayerX();
+			rect.top -= image.getSelectedLayerY();
+			rect.right -= image.getSelectedLayerX();
+			rect.bottom -= image.getSelectedLayerY();
+		case IMAGE_SPACE:
+			rect.left -= image.getViewX();
+			rect.top -= image.getViewY();
+			rect.right -= image.getViewX();
+			rect.bottom -= image.getViewY();
+			break;
+		case SCREEN_SPACE: return rect;
+		}
+		rect.left *= image.getZoom();
+		rect.top *= image.getZoom();
+		rect.right *= image.getZoom();
+		rect.bottom *= image.getZoom();
+		return oldRect;
 	}
 	
 	@Override

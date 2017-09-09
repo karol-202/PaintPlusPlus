@@ -2,14 +2,15 @@ package pl.karol202.paintplus.tool.pan;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.Tool;
+import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolPan implements Tool
@@ -144,6 +145,21 @@ public class ToolPan implements Tool
 		this.gestureDetector = new GestureDetectorCompat(context, gestureListener);
 		this.scaleGestureDetector = new ScaleGestureDetector(context, scaleGestureListener);
 	}
+	
+	@Override
+	public boolean providesDirtyRegion()
+	{
+		return false;
+	}
+	
+	@Override
+	public Rect getDirtyRegion()
+	{
+		return null;
+	}
+	
+	@Override
+	public void resetDirtyRegion() { }
 	
 	@Override
 	public boolean doesOnLayerDraw(boolean layerVisible)
