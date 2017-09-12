@@ -236,4 +236,5 @@
 	<string name="desc_layer_add">Add layer</string>
 	<string name="desc_file_type_image">Image</string>
 	<string name="dialog_load_wait_message">Loading...</string>
+	<string name="no_images">You have no recent images</string>
 </resources>

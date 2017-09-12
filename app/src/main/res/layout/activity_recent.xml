@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
@@ -14,21 +15,58 @@
 	<include layout="@layout/toolbar_shadow"/>
 	
 	<android.support.v7.widget.RecyclerView
+		android:id="@+id/recycler_recent"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:id="@+id/recycler_recent"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		android:clipToPadding="false"
 		android:padding="4dp"
-		android:clipToPadding="false"/>
+		android:visibility="visible"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+	
+	<android.support.constraint.ConstraintLayout
+		android:id="@+id/view_no_images"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/no_images_background"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+		
+		<ImageView
+			android:id="@+id/image_no_images"
+			android:layout_width="192dp"
+			android:layout_height="192dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/palette_192dp"
+			tools:ignore="ContentDescription" />
+		
+		<TextView
+			android:id="@+id/text_no_images"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="0dp"
+			android:layout_marginLeft="0dp"
+			android:layout_marginRight="0dp"
+			android:layout_marginTop="0dp"
+			android:text="@string/no_images"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintVertical_bias="0.78" />
+	
+	</android.support.constraint.ConstraintLayout>
 	
 	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/button_new_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_margin="16dp"
 		android:clickable="true"
 		app:fabSize="normal"
-		app:srcCompat="@drawable/ic_add_white_24dp"
-		android:id="@+id/button_new_image"
 		app:layout_anchor="@+id/recycler_recent"
 		app:layout_anchorGravity="bottom|right"
-		android:layout_margin="16dp"/>
+		app:srcCompat="@drawable/ic_add_white_24dp" />
+
 </android.support.design.widget.CoordinatorLayout>

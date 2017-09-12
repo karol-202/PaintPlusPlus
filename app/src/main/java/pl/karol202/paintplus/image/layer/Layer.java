@@ -95,15 +95,16 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
-	public void drawLayer(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)
+	public Bitmap drawLayer(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)
 	{
 		Matrix layerMatrix = new Matrix(imageMatrix);
 		layerMatrix.preTranslate(x, y);
 		
 		mode.startDrawing(bitmap, canvas);
-		mode.setRectClipping(clipRect);
+		if(clipRect != null) mode.setRectClipping(clipRect);
 		mode.addLayer(layerMatrix);
-		mode.apply();
+		if(clipRect != null) mode.resetClipping();
+		return mode.apply();
 	}
 	
 	public void setImageChangeListener(OnImageChangeListener listener)

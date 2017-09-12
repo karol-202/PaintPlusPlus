@@ -242,4 +242,9 @@ class RecentLoader
 	{
 		return images;
 	}
+	
+	int getImagesAmount()
+	{
+		return images.size();
+	}
 }

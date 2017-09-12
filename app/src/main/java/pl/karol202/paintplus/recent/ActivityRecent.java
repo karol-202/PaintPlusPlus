@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -43,13 +45,16 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 			loader.removeRecentImage(imageId);
 			loader.save();
 			adapter.notifyItemRemoved(imageId);
+			animateNoImagesView();
 		}
 	}
 	
 	private RecentAdapter adapter;
 	private RecentLoader loader;
+	private int animationDuration;
 	
 	private Toolbar toolbar;
+	private View viewNoImages;
 	private RecyclerView recyclerRecent;
 	private FloatingActionButton buttonNewImage;
 	
@@ -62,11 +67,14 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		FirebaseAnalytics.getInstance(this);
 		loader = new RecentLoader(this);
 		adapter = new RecentAdapter(this, loader.getImages(), this);
+		animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 		
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		if(getSupportActionBar() == null) throw new RuntimeException("Cannot set action bar of activity.");
 		
+		viewNoImages = findViewById(R.id.view_no_images);
+
 		recyclerRecent = findViewById(R.id.recycler_recent);
 		recyclerRecent.setAdapter(adapter);
 		recyclerRecent.setLayoutManager(new BlockableLinearLayoutManager(this));
@@ -88,6 +96,7 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		super.onResume();
 		loader.load();
 		adapter.notifyDataSetChanged();
+		updateNoImagesViewImmediately();
 	}
 	
 	@Override
@@ -135,5 +144,34 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		Intent intent = new Intent(this, ActivityPaint.class);
 		intent.putExtra(ActivityPaint.OPEN_KEY, true);
 		startActivity(intent);
+	}
+	
+	private void animateNoImagesView()
+	{
+		if(loader.getImagesAmount() != 0) return;
+		
+		AlphaAnimation animation = new AlphaAnimation(0, 1);
+		animation.setDuration(animationDuration);
+		animation.setAnimationListener(new Animation.AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation)
+			{
+				viewNoImages.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) { }
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) { }
+		});
+		
+		viewNoImages.startAnimation(animation);
+	}
+	
+	private void updateNoImagesViewImmediately()
+	{
+		boolean visible = loader.getImagesAmount() == 0;
+		viewNoImages.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 	}
 }

@@ -234,4 +234,5 @@
 	<string name="desc_scale_down">Zmniejsz</string>
 	<string name="desc_scale_up">Powiększ</string>
 	<string name="dialog_load_wait_message">Ładowanie...</string>
+	<string name="no_images">Nie masz żadnych ostatnich obrazów</string>
 </resources>

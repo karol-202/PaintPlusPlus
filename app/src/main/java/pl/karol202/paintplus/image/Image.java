@@ -150,12 +150,12 @@ public class Image
 	{
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
-		RectF clipRect = new RectF();
+		Matrix matrix = new Matrix();
 		
 		ArrayList<Layer> reversed = new ArrayList<>(layers);
 		Collections.reverse(reversed);
 		for(Layer layer : reversed)
-			if(layer.isVisible()) layer.drawLayer(bitmap, canvas, clipRect, imageMatrix);
+			if(layer.isVisible()) bitmap = layer.drawLayer(bitmap, canvas, null, matrix);
 		return bitmap;
 	}
 	
