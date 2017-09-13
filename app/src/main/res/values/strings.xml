@@ -237,4 +237,6 @@
 	<string name="desc_file_type_image">Image</string>
 	<string name="dialog_load_wait_message">Loading...</string>
 	<string name="no_images">You have no recent images</string>
+	<string name="layer_mode_difference">Difference</string>
+	<string name="layer_mode_subtraction">Subtraction</string>
 </resources>

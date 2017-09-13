@@ -235,4 +235,6 @@
 	<string name="desc_scale_up">Powiększ</string>
 	<string name="dialog_load_wait_message">Ładowanie...</string>
 	<string name="no_images">Nie masz żadnych ostatnich obrazów</string>
+	<string name="layer_mode_difference">Różnica</string>
+	<string name="layer_mode_subtraction">Odejmowanie</string>
 </resources>

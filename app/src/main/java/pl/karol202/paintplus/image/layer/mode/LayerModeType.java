@@ -6,6 +6,8 @@ public enum LayerModeType
 {
 	MODE_STANDARD(R.string.layer_mode_standard, LayerModeDefault.class),
 	MODE_ADD(R.string.layer_mode_add, LayerModeAdd.class),
+	MODE_SUBTRACTION(R.string.layer_mode_subtraction, LayerModeSubtraction.class),
+	MODE_DIFFERENCE(R.string.layer_mode_difference, LayerModeDifference.class),
 	MODE_MULTIPLY(R.string.layer_mode_multiply, LayerModeMultiply.class);
 	
 	private static boolean antialiasing;

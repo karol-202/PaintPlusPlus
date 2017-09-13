@@ -36,15 +36,22 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 		if(layer == null) throw new NullPointerException("Layer is null");
 		this.bitmapDst = bitmapDst;
 		
-		bitmapSrc = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
-		canvasSrc = new Canvas(bitmapSrc);
-		
-		updateOutAllocationIfOutdated();
+		updateSrcIfOutdated();
+		canvasSrc.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		updateOutIfOutdated();
 		
 		paint.setFilterBitmap(LayerModeType.isAntialiasing());
 	}
 	
-	private void updateOutAllocationIfOutdated()
+	private void updateSrcIfOutdated()
+	{
+		if(bitmapSrc != null && bitmapSrc.getWidth() == bitmapDst.getWidth() && bitmapSrc.getHeight() == bitmapDst.getHeight())
+			return;
+		bitmapSrc = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
+		canvasSrc = new Canvas(bitmapSrc);
+	}
+	
+	private void updateOutIfOutdated()
 	{
 		if(bitmapOut != null && bitmapOut.getWidth() == bitmapDst.getWidth() && bitmapOut.getHeight() == bitmapDst.getHeight())
 			return;
