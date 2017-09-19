@@ -155,7 +155,7 @@ public class Image
 		ArrayList<Layer> reversed = new ArrayList<>(layers);
 		Collections.reverse(reversed);
 		for(Layer layer : reversed)
-			if(layer.isVisible()) bitmap = layer.drawLayer(bitmap, canvas, null, matrix);
+			if(layer.isVisible()) bitmap = layer.drawLayerAndReturnBitmap(bitmap, canvas, null, matrix);
 		return bitmap;
 	}
 	

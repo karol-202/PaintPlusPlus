@@ -95,7 +95,7 @@ public class Layer
 		y -= (source.getHeight() - oldHeight) / 2;
 	}
 	
-	public Bitmap drawLayer(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)
+	public Bitmap drawLayerAndReturnBitmap(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)
 	{
 		Matrix layerMatrix = new Matrix(imageMatrix);
 		layerMatrix.preTranslate(x, y);

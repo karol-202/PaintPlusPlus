@@ -33,7 +33,7 @@ public class LayerModeSubtraction extends LayerModeRenderscript<LayerModeSubtrac
 		@Override
 		protected void run(Allocation src, Allocation out)
 		{
-			script.forEach_sum(src, out);
+			script.forEach_subtract(src, out);
 		}
 	}
 	
