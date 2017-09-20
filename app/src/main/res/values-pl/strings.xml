@@ -237,4 +237,6 @@
 	<string name="no_images">Nie masz żadnych ostatnich obrazów</string>
 	<string name="layer_mode_difference">Różnica</string>
 	<string name="layer_mode_subtraction">Odejmowanie</string>
+	<string name="layer_mode_darker">Ciemniejsze</string>
+	<string name="layer_mode_lighter">Jaśniejsze</string>
 </resources>

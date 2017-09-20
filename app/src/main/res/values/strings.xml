@@ -239,4 +239,6 @@
 	<string name="no_images">You have no recent images</string>
 	<string name="layer_mode_difference">Difference</string>
 	<string name="layer_mode_subtraction">Subtraction</string>
+	<string name="layer_mode_darker">Darker</string>
+	<string name="layer_mode_lighter">Lighter</string>
 </resources>

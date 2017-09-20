@@ -4,26 +4,35 @@ import pl.karol202.paintplus.R;
 
 public enum LayerModeType
 {
-	MODE_STANDARD(R.string.layer_mode_standard, LayerModeDefault.class),
-	MODE_ADD(R.string.layer_mode_add, LayerModeAdd.class),
-	MODE_SUBTRACTION(R.string.layer_mode_subtraction, LayerModeSubtraction.class),
-	MODE_DIFFERENCE(R.string.layer_mode_difference, LayerModeDifference.class),
-	MODE_MULTIPLY(R.string.layer_mode_multiply, LayerModeMultiply.class);
+	MODE_STANDARD(R.string.layer_mode_standard, 0, LayerModeDefault.class),
+	MODE_ADD(R.string.layer_mode_add, 1, LayerModeAdd.class),
+	MODE_SUBTRACTION(R.string.layer_mode_subtraction, 1, LayerModeSubtraction.class),
+	MODE_DIFFERENCE(R.string.layer_mode_difference, 1, LayerModeDifference.class),
+	MODE_MULTIPLY(R.string.layer_mode_multiply, 1, LayerModeMultiply.class),
+	MODE_LIGHTER(R.string.layer_mode_lighter, 2, LayerModeLighter.class),
+	MODE_DARKER(R.string.layer_mode_darker, 2, LayerModeDarker.class);
 	
 	private static boolean antialiasing;
 	
 	private int name;
+	private int category;
 	private Class<? extends LayerMode> layerMode;
 	
-	LayerModeType(int name, Class<? extends LayerMode> layerMode)
+	LayerModeType(int name, int category, Class<? extends LayerMode> layerMode)
 	{
 		this.name = name;
+		this.category = category;
 		this.layerMode = layerMode;
 	}
 	
 	public int getName()
 	{
 		return name;
+	}
+	
+	public int getCategory()
+	{
+		return category;
 	}
 	
 	public Class<? extends LayerMode> getLayerModeClass()
