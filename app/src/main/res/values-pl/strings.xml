@@ -239,4 +239,6 @@
 	<string name="layer_mode_subtraction">Odejmowanie</string>
 	<string name="layer_mode_darker">Ciemniejsze</string>
 	<string name="layer_mode_lighter">Jaśniejsze</string>
+	<string name="layer_mode_overlay">Nakładanie</string>
+	<string name="layer_mode_screen">Ekran</string>
 </resources>

@@ -5,12 +5,14 @@ import pl.karol202.paintplus.R;
 public enum LayerModeType
 {
 	MODE_STANDARD(R.string.layer_mode_standard, 0, LayerModeDefault.class),
-	MODE_ADD(R.string.layer_mode_add, 1, LayerModeAdd.class),
-	MODE_SUBTRACTION(R.string.layer_mode_subtraction, 1, LayerModeSubtraction.class),
-	MODE_DIFFERENCE(R.string.layer_mode_difference, 1, LayerModeDifference.class),
-	MODE_MULTIPLY(R.string.layer_mode_multiply, 1, LayerModeMultiply.class),
-	MODE_LIGHTER(R.string.layer_mode_lighter, 2, LayerModeLighter.class),
-	MODE_DARKER(R.string.layer_mode_darker, 2, LayerModeDarker.class);
+	MODE_SCREEN(R.string.layer_mode_screen, 1, LayerModeScreen.class),
+	MODE_OVERLAY(R.string.layer_mode_overlay, 1, LayerModeOverlay.class),
+	MODE_ADD(R.string.layer_mode_add, 2, LayerModeAdd.class),
+	MODE_SUBTRACTION(R.string.layer_mode_subtraction, 2, LayerModeSubtraction.class),
+	MODE_DIFFERENCE(R.string.layer_mode_difference, 2, LayerModeDifference.class),
+	MODE_MULTIPLY(R.string.layer_mode_multiply, 2, LayerModeMultiply.class),
+	MODE_LIGHTER(R.string.layer_mode_lighter, 3, LayerModeLighter.class),
+	MODE_DARKER(R.string.layer_mode_darker, 3, LayerModeDarker.class);
 	
 	private static boolean antialiasing;
 	

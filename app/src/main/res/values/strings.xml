@@ -241,4 +241,6 @@
 	<string name="layer_mode_subtraction">Subtraction</string>
 	<string name="layer_mode_darker">Darker</string>
 	<string name="layer_mode_lighter">Lighter</string>
+	<string name="layer_mode_screen">Screen</string>
+	<string name="layer_mode_overlay">Overlay</string>
 </resources>

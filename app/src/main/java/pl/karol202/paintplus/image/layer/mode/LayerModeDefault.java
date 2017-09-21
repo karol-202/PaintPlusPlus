@@ -1,83 +1,23 @@
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.graphics.*;
+import android.graphics.PorterDuff;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class LayerModeDefault implements LayerMode
+public class LayerModeDefault extends LayerModeSimple
 {
-	private Layer layer;
-	private Paint paint;
-	
-	private Bitmap bitmapOut;
-	private Canvas canvasOut;
-	
 	public LayerModeDefault()
 	{
-		this.paint = new Paint();
+		super();
 	}
 	
 	public LayerModeDefault(Layer layer)
 	{
-		this();
-		this.layer = layer;
+		super(layer);
 	}
 	
 	@Override
-	public void startDrawing(Bitmap bitmapDst, Canvas canvasDst)
+	protected PorterDuff.Mode getMode()
 	{
-		if(layer == null) throw new NullPointerException("Layer is null");
-		updateOutIfOutdated(bitmapDst);
-		canvasOut.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		
-		canvasOut.drawBitmap(bitmapDst, 0, 0, null);
-		
-		paint.setFilterBitmap(LayerModeType.isAntialiasing());
-		paint.setAlpha((int) (layer.getOpacity() * 255f));
-	}
-	
-	private void updateOutIfOutdated(Bitmap bitmapDst)
-	{
-		if(bitmapOut != null && bitmapOut.getWidth() == bitmapDst.getWidth() && bitmapOut.getHeight() == bitmapDst.getHeight())
-			return;
-		bitmapOut = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
-		canvasOut = new Canvas(bitmapOut);
-	}
-	
-	@Override
-	public void addLayer(Matrix matrixLayer)
-	{
-		canvasOut.drawBitmap(layer.getBitmap(), matrixLayer, paint);
-	}
-	
-	@Override
-	public void addTool(Bitmap bitmapTool)
-	{
-		canvasOut.drawBitmap(bitmapTool, 0, 0, paint);
-	}
-	
-	@Override
-	public void setRectClipping(RectF clipRect)
-	{
-		if(canvasOut.getSaveCount() > 0) canvasOut.restoreToCount(1);
-		canvasOut.save();
-		canvasOut.clipRect(clipRect);
-	}
-	
-	@Override
-	public void resetClipping()
-	{
-		canvasOut.restore();
-	}
-	
-	@Override
-	public Bitmap apply()
-	{
-		return bitmapOut;
-	}
-	
-	@Override
-	public void setLayer(Layer layer)
-	{
-		this.layer = layer;
+		return PorterDuff.Mode.SRC_OVER;
 	}
 }
