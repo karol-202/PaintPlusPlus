@@ -29,9 +29,10 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:26.0.1'
+    compile 'com.android.support:preference-v7:26.0.1'
+    compile 'com.android.support:preference-v14:26.0.1'
     compile 'com.android.support:design:26.0.1'
     compile 'com.android.support:recyclerview-v7:26.0.1'
-    compile 'com.github.karol-202:AndroidClearChroma:1.8.1'
     compile 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
     compile 'com.google.firebase:firebase-core:11.2.0'
     compile 'com.google.firebase:firebase-crash:11.2.0'

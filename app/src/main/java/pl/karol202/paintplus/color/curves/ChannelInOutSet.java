@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.color;
+package pl.karol202.paintplus.color.curves;
 
 public class ChannelInOutSet
 {

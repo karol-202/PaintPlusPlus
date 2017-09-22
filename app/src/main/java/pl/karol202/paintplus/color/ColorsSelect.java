@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.color.picker.ActivityColorSelect;
 import pl.karol202.paintplus.image.Image;
 
 public class ColorsSelect extends Fragment implements View.OnClickListener, ColorsSet.OnColorsChangeListener

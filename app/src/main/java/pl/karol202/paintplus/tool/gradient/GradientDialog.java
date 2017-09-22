@@ -13,7 +13,8 @@ import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.color.ActivityColorSelect;
+import pl.karol202.paintplus.color.picker.ActivityColorSelect;
+import pl.karol202.paintplus.util.ColorPreviewView;
 import pl.karol202.paintplus.util.ImageToggleButton;
 
 import java.util.Locale;
@@ -64,7 +65,7 @@ class GradientDialog
 		});
 		builder.setNegativeButton(R.string.cancel, null);
 		
-		gradientView = (GradientView) view.findViewById(R.id.gradient_view);
+		gradientView = view.findViewById(R.id.gradient_view);
 		gradientView.setGradientUpdateListener(new GradientView.OnGradientEditorUpdateListener() {
 			@Override
 			public void onGradientPositionUpdated(float position)
@@ -86,10 +87,10 @@ class GradientDialog
 		});
 		gradientView.setGradient(gradient);
 		
-		textGradientPosition = (TextView) view.findViewById(R.id.text_gradient_position);
+		textGradientPosition = view.findViewById(R.id.text_gradient_position);
 		textGradientPosition.setText("");
 		
-		buttonAdd = (ImageToggleButton) view.findViewById(R.id.button_add_gradient_point);
+		buttonAdd = view.findViewById(R.id.button_add_gradient_point);
 		buttonAdd.setOnCheckedChangeListener(new ImageToggleButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(ImageToggleButton button, boolean checked)
@@ -98,7 +99,7 @@ class GradientDialog
 			}
 		});
 		
-		buttonDelete = (ImageButton) view.findViewById(R.id.button_delete_gradient_point);
+		buttonDelete = view.findViewById(R.id.button_delete_gradient_point);
 		buttonDelete.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v)
@@ -108,7 +109,7 @@ class GradientDialog
 		});
 		buttonDelete.setEnabled(false);
 		
-		colorPreviewView = (ColorPreviewView) view.findViewById(R.id.gradient_color);
+		colorPreviewView = view.findViewById(R.id.gradient_color);
 		colorPreviewView.setColor(gradientView.getSelectedColor());
 		colorPreviewView.setOnClickListener(new View.OnClickListener() {
 			@Override

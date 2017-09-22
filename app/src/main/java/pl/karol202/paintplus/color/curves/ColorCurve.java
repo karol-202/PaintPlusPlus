@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.color;
+package pl.karol202.paintplus.color.curves;
 
 import android.graphics.Point;
 import pl.karol202.paintplus.util.Utils;

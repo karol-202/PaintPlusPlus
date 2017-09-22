@@ -1,11 +1,11 @@
-package pl.karol202.paintplus.color;
+package pl.karol202.paintplus.color.curves;
 
 import pl.karol202.paintplus.R;
 
 import java.util.ArrayList;
 
-import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
-import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
+import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.HSV;
+import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.RGB;
 
 public enum ColorChannel
 {

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.color;
+package pl.karol202.paintplus.color.curves;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 
 public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 {

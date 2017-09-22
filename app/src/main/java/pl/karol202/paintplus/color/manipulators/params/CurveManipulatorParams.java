@@ -1,8 +1,8 @@
 package pl.karol202.paintplus.color.manipulators.params;
 
-import pl.karol202.paintplus.color.ChannelInOutSet;
-import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
-import pl.karol202.paintplus.color.ColorCurve;
+import pl.karol202.paintplus.color.curves.ChannelInOutSet;
+import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.curves.ColorCurve;
 
 import java.util.ArrayList;
 

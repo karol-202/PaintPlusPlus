@@ -243,4 +243,8 @@
 	<string name="layer_mode_lighter">Lighter</string>
 	<string name="layer_mode_screen">Screen</string>
 	<string name="layer_mode_overlay">Overlay</string>
+	<string name="channel_r" translatable="false">R</string>
+	<string name="channel_g" translatable="false">G</string>
+	<string name="channel_b" translatable="false">B</string>
+	<string name="channel_a" translatable="false">A</string>
 </resources>

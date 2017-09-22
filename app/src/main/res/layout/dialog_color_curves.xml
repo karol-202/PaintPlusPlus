@@ -53,7 +53,7 @@
 			app:layout_constraintLeft_toLeftOf="@+id/spinner_curves_channel_in"
 			android:layout_marginRight="16dp" />
 		
-		<pl.karol202.paintplus.color.ColorCurvesView
+		<pl.karol202.paintplus.color.curves.ColorCurvesView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:id="@+id/color_curves_view"

@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.color;
+package pl.karol202.paintplus.color.curves;
 
 import android.content.Context;
 import android.graphics.*;
@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import com.google.firebase.crash.FirebaseCrash;
-import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.util.Utils;
 

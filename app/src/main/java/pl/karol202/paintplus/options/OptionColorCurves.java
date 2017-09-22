@@ -13,11 +13,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorChannel;
-import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
-import pl.karol202.paintplus.color.ColorChannelsAdapter;
-import pl.karol202.paintplus.color.ColorCurvesView;
-import pl.karol202.paintplus.color.OnCurveEditListener;
+import pl.karol202.paintplus.color.curves.ColorChannel;
+import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.curves.ColorChannelsAdapter;
+import pl.karol202.paintplus.color.curves.ColorCurvesView;
+import pl.karol202.paintplus.color.curves.OnCurveEditListener;
 import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
@@ -26,8 +26,8 @@ import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
-import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.HSV;
-import static pl.karol202.paintplus.color.ColorChannel.ColorChannelType.RGB;
+import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.HSV;
+import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.RGB;
 
 public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener,
 														 View.OnTouchListener, View.OnClickListener, OnCurveEditListener

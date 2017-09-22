@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.tool.gradient;
+package pl.karol202.paintplus.util;
 
 import android.content.Context;
 import android.graphics.*;
@@ -53,7 +53,7 @@ public class ColorPreviewView extends View
 		canvas.drawRect(1, 1, canvas.getWidth() - 1, canvas.getHeight() - 1, paint);
 	}
 	
-	void setColor(int color)
+	public void setColor(int color)
 	{
 		paint.setColor(color);
 		invalidate();

@@ -7,7 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.image.Clipboard;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
