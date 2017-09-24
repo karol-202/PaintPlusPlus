@@ -167,6 +167,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 			if(drawTool) layerMode.addTool(createOnLayerToolBitmap(tool, layer));
 			
 			screenBitmap = layerMode.apply();
+			if(layerMode.replacesBitmap()) screenCanvas = new Canvas(screenBitmap);
 		}
 		
 		if(tool.doesOnTopDraw())

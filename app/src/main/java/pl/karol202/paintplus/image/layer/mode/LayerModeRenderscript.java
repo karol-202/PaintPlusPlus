@@ -104,4 +104,10 @@ public abstract class LayerModeRenderscript<S extends LayerScript> implements La
 	{
 		this.layer = layer;
 	}
+	
+	@Override
+	public boolean replacesBitmap()
+	{
+		return true;
+	}
 }

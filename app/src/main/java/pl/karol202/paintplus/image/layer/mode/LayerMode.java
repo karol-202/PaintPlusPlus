@@ -21,4 +21,6 @@ public interface LayerMode
 	Bitmap apply();
 	
 	void setLayer(Layer layer);
+	
+	boolean replacesBitmap();
 }

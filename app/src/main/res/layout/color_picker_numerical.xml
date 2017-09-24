@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<pl.karol202.paintplus.util.ColorPreviewView
+		android:id="@+id/view_colors_numerical_color"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@+id/guideline3" />
+	
+	<include
+		android:id="@+id/colors_numerical_channel_a"
+		layout="@layout/color_picker_channel"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="0dp"
+		android:layout_marginTop="32dp"
+		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_b"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/view_colors_numerical_color" />
+	
+	<include
+		layout="@layout/color_picker_channel"
+		android:id="@+id/colors_numerical_channel_b"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/colors_numerical_channel_a"
+		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_c"
+		android:layout_marginRight="0dp"
+		app:layout_constraintRight_toRightOf="parent" />
+	
+	<include
+		layout="@layout/color_picker_channel"
+		android:id="@+id/colors_numerical_channel_c"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/colors_numerical_channel_b"
+		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_d"
+		android:layout_marginRight="0dp"
+		app:layout_constraintRight_toRightOf="parent" />
+	
+	<include
+		layout="@layout/color_picker_channel"
+		android:id="@+id/colors_numerical_channel_d"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/colors_numerical_channel_c"
+		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_e"
+		android:layout_marginRight="0dp"
+		app:layout_constraintRight_toRightOf="parent" />
+	
+	<include
+		layout="@layout/color_picker_channel"
+		android:id="@+id/colors_numerical_channel_e"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/colors_numerical_channel_d"
+		android:layout_marginBottom="32dp"
+		app:layout_constraintBottom_toTopOf="@+id/bottom_bar_color_picker"
+		android:layout_marginRight="0dp"
+		app:layout_constraintRight_toRightOf="parent" />
+	
+	<android.support.constraint.Guideline
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/guideline3"
+		android:orientation="horizontal"
+		app:layout_constraintGuide_percent="0.4"
+		tools:layout_editor_absoluteY="227dp"
+		tools:layout_editor_absoluteX="0dp" />
+	
+	<View
+		android:id="@+id/bottom_bar_shadow"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/bottom_bar_shadow_height"
+		android:layout_marginBottom="0dp"
+		android:layout_marginLeft="0dp"
+		android:layout_marginRight="0dp"
+		android:background="@drawable/bottom_bar_shadow"
+		app:layout_constraintBottom_toTopOf="@+id/bottom_bar_color_picker"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent" />
+	
+	<android.support.design.widget.BottomNavigationView
+		android:id="@+id/bottom_bar_color_picker"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="0dp"
+		android:layout_marginLeft="0dp"
+		android:layout_marginRight="0dp"
+		app:itemBackground="@color/bottom_bar_background"
+		app:itemIconTint="@color/color_mode_item_tint"
+		app:itemTextColor="@color/color_mode_item_tint"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:menu="@menu/menu_color_picker" />
+
+</android.support.constraint.ConstraintLayout>

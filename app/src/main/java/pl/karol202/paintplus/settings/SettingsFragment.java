@@ -18,7 +18,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
 	public void onDisplayPreferenceDialog(Preference preference)
 	{
 		DialogFragment fragment;
-		if (preference instanceof SeekBarPreference) {
+		if(preference instanceof SeekBarPreference)
+		{
 			fragment = SeekBarPreferenceDialogFragmentCompat.newInstance(preference);
 			fragment.setTargetFragment(this, 0);
 			fragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");

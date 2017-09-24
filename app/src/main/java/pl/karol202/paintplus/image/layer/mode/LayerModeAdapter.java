@@ -39,7 +39,7 @@ public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
 		else view = convertView;
 		LayerModeType mode = getItem(position);
 		
-		int backgroundColor = ResourcesCompat.getColor(getContext().getResources(), R.color.drawer_background, null);
+		int backgroundColor = ResourcesCompat.getColor(getContext().getResources(), R.color.layer_mode_item_background, null);
 		if(dropdown) view.setBackgroundColor(backgroundColor);
 		
 		TextView textView = view.findViewById(R.id.text_layer_mode_name);

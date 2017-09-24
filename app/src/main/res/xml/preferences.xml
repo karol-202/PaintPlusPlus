@@ -11,12 +11,4 @@
 		android:title="@string/preference_view_smooth"
 		android:summary="@string/preference_view_smooth_summary"
 		android:defaultValue="true"/>
-	<ListPreference
-		android:key="preference_color_mode"
-		android:title="@string/preference_color_mode"
-		android:summary="%s"
-		android:dialogTitle="@string/preference_color_mode_dialog"
-		android:entries="@array/color_modes"
-		android:entryValues="@array/color_modes"
-		android:defaultValue="@string/color_mode_default"/>
 </PreferenceScreen>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/mode_rgb"
+		android:icon="@drawable/ic_folder_white_24dp"
+		android:title="@string/color_mode_rgb"/>
+	<item android:id="@+id/mode_hsv"
+		android:icon="@drawable/ic_folder_white_24dp"
+		android:title="@string/color_mode_hsv"/>
+	<item android:id="@+id/mode_cmyk"
+		android:icon="@drawable/ic_folder_white_24dp"
+		android:title="@string/color_mode_cmyk"/>
+</menu>

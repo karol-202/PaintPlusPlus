@@ -196,7 +196,6 @@
 	<string name="brightness">Brightness</string>
 	<string name="contrast">Contrast</string>
 	<string name="selection_shape">Shape</string>
-	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Can\'t save file</string>
 	<string name="open">Open</string>
 	<string name="dialog_image_too_big">Image is too big</string>
@@ -247,4 +246,15 @@
 	<string name="channel_g" translatable="false">G</string>
 	<string name="channel_b" translatable="false">B</string>
 	<string name="channel_a" translatable="false">A</string>
+	<string name="channel_h" translatable="false">H</string>
+	<string name="channel_s" translatable="false">S</string>
+	<string name="channel_v" translatable="false">V</string>
+	<string name="channel_l" translatable="false">L</string>
+	<string name="channel_c" translatable="false">C</string>
+	<string name="channel_m" translatable="false">M</string>
+	<string name="channel_y" translatable="false">Y</string>
+	<string name="channel_k" translatable="false">K</string>
+	<string name="color_mode_rgb" translatable="false">RGB</string>
+	<string name="color_mode_hsv" translatable="false">HSV</string>
+	<string name="color_mode_cmyk" translatable="false">CMYK</string>
 </resources>

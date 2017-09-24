@@ -21,6 +21,9 @@
 	<color name="image_toggle_button_ripple">#42000000</color>
 	<color name="image_toggle_button_selected">#18000000</color>
 	<color name="colored_image_button_disabled">#8000e676</color>
+	<color name="layer_mode_item_background">#F8F8F8</color>
+	<color name="bottom_bar_background">#F8F8F8</color>
+	<color name="text_default">#8A000000</color>
 	
 	<color name="red">#FF0000</color>
 	<color name="green">#00FF00</color>

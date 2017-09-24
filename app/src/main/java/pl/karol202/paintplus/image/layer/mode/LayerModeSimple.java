@@ -8,8 +8,8 @@ public abstract class LayerModeSimple implements LayerMode
 	private Layer layer;
 	private Paint paint;
 	
-	private Bitmap bitmapOut;
-	private Canvas canvasOut;
+	private Bitmap bitmapDst;
+	private Canvas canvasDst;
 	
 	public LayerModeSimple()
 	{
@@ -28,59 +28,55 @@ public abstract class LayerModeSimple implements LayerMode
 	public void startDrawing(Bitmap bitmapDst, Canvas canvasDst)
 	{
 		if(layer == null) throw new NullPointerException("Layer is null");
-		updateOutIfOutdated(bitmapDst);
-		canvasOut.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		
-		canvasOut.drawBitmap(bitmapDst, 0, 0, null);
+		this.bitmapDst = bitmapDst;
+		this.canvasDst = canvasDst;
 		
 		paint.setFilterBitmap(LayerModeType.isAntialiasing());
 		paint.setXfermode(new PorterDuffXfermode(getMode()));
 		paint.setAlpha((int) (layer.getOpacity() * 255f));
 	}
 	
-	private void updateOutIfOutdated(Bitmap bitmapDst)
-	{
-		if(bitmapOut != null && bitmapOut.getWidth() == bitmapDst.getWidth() && bitmapOut.getHeight() == bitmapDst.getHeight())
-			return;
-		bitmapOut = Bitmap.createBitmap(bitmapDst.getWidth(), bitmapDst.getHeight(), Bitmap.Config.ARGB_8888);
-		canvasOut = new Canvas(bitmapOut);
-	}
-	
 	@Override
 	public void addLayer(Matrix matrixLayer)
 	{
-		canvasOut.drawBitmap(layer.getBitmap(), matrixLayer, paint);
+		canvasDst.drawBitmap(layer.getBitmap(), matrixLayer, paint);
 	}
 	
 	@Override
 	public void addTool(Bitmap bitmapTool)
 	{
-		canvasOut.drawBitmap(bitmapTool, 0, 0, paint);
+		canvasDst.drawBitmap(bitmapTool, 0, 0, paint);
 	}
 	
 	@Override
 	public void setRectClipping(RectF clipRect)
 	{
-		if(canvasOut.getSaveCount() > 0) canvasOut.restoreToCount(1);
-		canvasOut.save();
-		canvasOut.clipRect(clipRect);
+		if(canvasDst.getSaveCount() > 0) canvasDst.restoreToCount(1);
+		canvasDst.save();
+		canvasDst.clipRect(clipRect);
 	}
 	
 	@Override
 	public void resetClipping()
 	{
-		canvasOut.restore();
+		canvasDst.restore();
 	}
 	
 	@Override
 	public Bitmap apply()
 	{
-		return bitmapOut;
+		return bitmapDst;
 	}
 	
 	@Override
 	public void setLayer(Layer layer)
 	{
 		this.layer = layer;
+	}
+	
+	@Override
+	public boolean replacesBitmap()
+	{
+		return false;
 	}
 }

@@ -39,17 +39,17 @@ public class ColorPickerFragment extends Fragment
 		activityColorSelect = (ActivityColorSelect) context;
 	}
 	
-	boolean isUsingAlpha()
+	public boolean isUsingAlpha()
 	{
 		return useAlpha;
 	}
 	
-	int getCurrentColor()
+	public int getCurrentColor()
 	{
 		return activityColorSelect.getCurrentColor();
 	}
 	
-	void setCurrentColor(int color)
+	protected void setCurrentColor(int color)
 	{
 		activityColorSelect.setCurrentColor(color);
 	}

@@ -195,7 +195,6 @@
 	<string name="restore">Przywróć</string>
 	<string name="brightness">Jasność</string>
 	<string name="contrast">Kontrast</string>
-	<string name="color_mode_default">RGB</string>
 	<string name="message_cannot_save_file">Nie można zapisać pliku</string>
 	<string name="open">Otwórz</string>
 	<string name="selection_shape">Kształt</string>
