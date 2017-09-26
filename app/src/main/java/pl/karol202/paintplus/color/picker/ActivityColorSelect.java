@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.picker.numerical.ColorNumericalFragment;
+import pl.karol202.paintplus.color.picker.panel.ColorPanelFragment;
 
 public class ActivityColorSelect extends AppCompatActivity
 {

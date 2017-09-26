@@ -2,8 +2,8 @@ package pl.karol202.paintplus.color.picker.numerical;
 
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.util.CMYKToRGB;
-import pl.karol202.paintplus.util.RGBToCMYK;
+import pl.karol202.paintplus.color.CMYKToRGB;
+import pl.karol202.paintplus.color.RGBToCMYK;
 
 class ColorModeCMYK extends ColorMode
 {
@@ -33,10 +33,10 @@ class ColorModeCMYK extends ColorMode
 	void createChannels()
 	{
 		channelAlpha = new ColorChannel(R.string.channel_a, 255, useAlpha);
-		channelCyan = new ColorChannel(R.string.channel_c, 255, true);
-		channelMagenta = new ColorChannel(R.string.channel_m, 255, true);
-		channelYellow = new ColorChannel(R.string.channel_y, 255, true);
-		channelBlack = new ColorChannel(R.string.channel_k, 255, true);
+		channelCyan = new ColorChannel(R.string.channel_c, 255);
+		channelMagenta = new ColorChannel(R.string.channel_m, 255);
+		channelYellow = new ColorChannel(R.string.channel_y, 255);
+		channelBlack = new ColorChannel(R.string.channel_k, 255);
 		
 		channelViewAlpha = new ColorChannelViews(pickerInterface.getChannelViewA(), channelAlpha, this);
 		channelViewCyan = new ColorChannelViews(pickerInterface.getChannelViewB(), channelCyan, this);

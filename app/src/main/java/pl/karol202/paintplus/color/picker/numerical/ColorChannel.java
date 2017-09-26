@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.color.picker.numerical;
 
-class ColorChannel
+public class ColorChannel
 {
 	private int name;
 	private int maxValue;
@@ -8,7 +8,12 @@ class ColorChannel
 	private boolean active;
 	private int value;
 	
-	ColorChannel(int name, int maxValue, boolean active)
+	public ColorChannel(int name, int maxValue)
+	{
+		this(name, maxValue, true);
+	}
+	
+	public ColorChannel(int name, int maxValue, boolean active)
 	{
 		this.name = name;
 		this.maxValue = maxValue;
@@ -16,27 +21,27 @@ class ColorChannel
 		this.active = active;
 	}
 	
-	int getName()
+	public int getName()
 	{
 		return name;
 	}
 	
-	int getMaxValue()
+	public int getMaxValue()
 	{
 		return maxValue;
 	}
 	
-	boolean isActive()
+	public boolean isActive()
 	{
 		return active;
 	}
 	
-	int getValue()
+	public int getValue()
 	{
 		return value;
 	}
 	
-	void setValue(int value)
+	public void setValue(int value)
 	{
 		this.value = value;
 	}

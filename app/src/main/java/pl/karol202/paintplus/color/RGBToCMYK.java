@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.util;
+package pl.karol202.paintplus.color;
 
 public class RGBToCMYK
 {

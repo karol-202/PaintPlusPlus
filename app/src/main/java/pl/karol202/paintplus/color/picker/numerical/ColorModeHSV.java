@@ -2,8 +2,8 @@ package pl.karol202.paintplus.color.picker.numerical;
 
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.util.HSVToRGB;
-import pl.karol202.paintplus.util.RGBToHSV;
+import pl.karol202.paintplus.color.HSVToRGB;
+import pl.karol202.paintplus.color.RGBToHSV;
 
 class ColorModeHSV extends ColorMode
 {
@@ -32,9 +32,9 @@ class ColorModeHSV extends ColorMode
 	void createChannels()
 	{
 		channelAlpha = new ColorChannel(R.string.channel_a, 255, useAlpha);
-		channelHue = new ColorChannel(R.string.channel_h, 359, true);
-		channelSaturation = new ColorChannel(R.string.channel_s, 100, true);
-		channelValue = new ColorChannel(R.string.channel_v, 100, true);
+		channelHue = new ColorChannel(R.string.channel_h, 359);
+		channelSaturation = new ColorChannel(R.string.channel_s, 100);
+		channelValue = new ColorChannel(R.string.channel_v, 100);
 		
 		channelViewAlpha = new ColorChannelViews(pickerInterface.getChannelViewA(), channelAlpha, this);
 		channelViewHue = new ColorChannelViews(pickerInterface.getChannelViewB(), channelHue, this);
