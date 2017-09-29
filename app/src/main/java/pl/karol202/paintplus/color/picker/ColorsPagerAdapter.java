@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.color.picker;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
@@ -12,16 +11,16 @@ public class ColorsPagerAdapter extends FragmentPagerAdapter
 {
 	private class TabFragment
 	{
-		private Fragment fragment;
+		private ColorPickerFragment fragment;
 		private int icon;
 		
-		TabFragment(Fragment fragment, int icon)
+		TabFragment(ColorPickerFragment fragment, int icon)
 		{
 			this.fragment = fragment;
 			this.icon = icon;
 		}
 		
-		Fragment getFragment()
+		ColorPickerFragment getFragment()
 		{
 			return fragment;
 		}
@@ -41,7 +40,7 @@ public class ColorsPagerAdapter extends FragmentPagerAdapter
 	}
 	
 	@Override
-	public Fragment getItem(int position)
+	public ColorPickerFragment getItem(int position)
 	{
 		return fragments.get(position).getFragment();
 	}
@@ -58,7 +57,7 @@ public class ColorsPagerAdapter extends FragmentPagerAdapter
 		return null;
 	}
 	
-	void addFragment(Fragment fragment, int icon)
+	void addFragment(ColorPickerFragment fragment, int icon)
 	{
 		fragments.add(new TabFragment(fragment, icon));
 	}

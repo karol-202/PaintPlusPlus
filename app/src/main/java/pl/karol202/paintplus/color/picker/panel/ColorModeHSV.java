@@ -6,8 +6,7 @@ class ColorModeHSV extends ColorMode
 	private ColorChannel channelSaturation;
 	private ColorChannel channelValue;
 	
-	@Override
-	void createChannels()
+	ColorModeHSV()
 	{
 		channelHue = new ColorChannel(this, ColorChannel.ColorChannelType.HUE);
 		channelSaturation = new ColorChannel(this, ColorChannel.ColorChannelType.SATURATION);
@@ -21,5 +20,11 @@ class ColorModeHSV extends ColorMode
 		else if(mainChannel == channelSaturation) return new ChannelXYSet(channelHue, channelValue);
 		else if(mainChannel == channelValue) return new ChannelXYSet(channelHue, channelSaturation);
 		else return null;
+	}
+	
+	@Override
+	ColorChannel[] getChannels()
+	{
+		return new ColorChannel[] { channelHue, channelSaturation, channelValue };
 	}
 }

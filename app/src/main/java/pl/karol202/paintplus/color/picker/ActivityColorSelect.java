@@ -3,12 +3,14 @@ package pl.karol202.paintplus.color.picker;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.picker.numerical.ColorNumericalFragment;
@@ -26,10 +28,12 @@ public class ActivityColorSelect extends AppCompatActivity
 	
 	private ActionBar actionBar;
 	private ColorsPagerAdapter adapter;
+	private ColorPickerFragment currentFragment;
 	
 	private Toolbar toolbar;
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
+	private BottomNavigationView bottomBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -43,6 +47,7 @@ public class ActivityColorSelect extends AppCompatActivity
 		initToolbar();
 		initViewPager();
 		initTabLayout();
+		initBottomBar();
 		
 		setResultColor();
 	}
@@ -62,8 +67,8 @@ public class ActivityColorSelect extends AppCompatActivity
 	
 	private void initPagerAdapter()
 	{
-		Fragment numericalFragment = new ColorNumericalFragment();
-		Fragment panelFragment = new ColorPanelFragment();
+		ColorPickerFragment numericalFragment = new ColorNumericalFragment();
+		ColorPickerFragment panelFragment = new ColorPanelFragment();
 		
 		Bundle args = new Bundle();
 		args.putBoolean("useAlpha", useAlpha);
@@ -95,7 +100,44 @@ public class ActivityColorSelect extends AppCompatActivity
 	{
 		tabLayout = findViewById(R.id.colors_tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
+		tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab)
+			{
+				currentFragment = adapter.getItem(tab.getPosition());
+				updateBottomBar();
+			}
+			
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) { }
+			
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) { }
+		});
 		adapter.setupTabLayoutIcons(tabLayout);
+		currentFragment = adapter.getItem(0);
+	}
+	
+	private void initBottomBar()
+	{
+		bottomBar = findViewById(R.id.bottom_bar_color_picker);
+		bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(@NonNull MenuItem item)
+			{
+				return currentFragment.onColorModeSelected(item.getItemId());
+			}
+		});
+	}
+	
+	private void updateBottomBar()
+	{
+		Menu menu = bottomBar.getMenu();
+		for(int i = 0; i < menu.size(); i++)
+		{
+			MenuItem item = menu.getItem(i);
+			item.setEnabled(currentFragment.isColorModeSupported(item.getItemId()));
+		}
 	}
 	
 	@Override

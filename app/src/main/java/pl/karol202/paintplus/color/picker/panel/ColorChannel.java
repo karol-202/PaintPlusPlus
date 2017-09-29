@@ -13,14 +13,14 @@ class ColorChannel
 		SATURATION(R.string.channel_s, 100),
 		VALUE(R.string.channel_v, 100);
 		
+		private int name;
+		private int maxValue;
+		
 		ColorChannelType(int name, int maxValue)
 		{
 			this.name = name;
 			this.maxValue = maxValue;
 		}
-		
-		private int name;
-		private int maxValue;
 		
 		public int getName()
 		{
@@ -52,6 +52,16 @@ class ColorChannel
 	ColorChannelType getType()
 	{
 		return type;
+	}
+	
+	int getName()
+	{
+		return type.getName();
+	}
+	
+	int getMaxValue()
+	{
+		return type.getMaxValue();
 	}
 	
 	int getValue()

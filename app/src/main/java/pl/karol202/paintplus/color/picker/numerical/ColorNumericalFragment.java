@@ -1,10 +1,7 @@
 package pl.karol202.paintplus.color.picker.numerical;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import pl.karol202.paintplus.R;
@@ -25,7 +22,6 @@ public class ColorNumericalFragment extends ColorPickerFragment
 	private View channelViewC;
 	private View channelViewD;
 	private View channelViewE;
-	private BottomNavigationView bottomBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -44,28 +40,33 @@ public class ColorNumericalFragment extends ColorPickerFragment
 		channelViewD = view.findViewById(R.id.colors_numerical_channel_d);
 		channelViewE = view.findViewById(R.id.colors_numerical_channel_e);
 		
-		bottomBar = view.findViewById(R.id.bottom_bar_color_picker);
-		bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(@NonNull MenuItem item)
-			{
-				switch(item.getItemId())
-				{
-				case R.id.mode_rgb: colorModeRGB.updateChannels(); break;
-				case R.id.mode_hsv: colorModeHSV.updateChannels(); break;
-				case R.id.mode_cmyk: colorModeCMYK.updateChannels(); break;
-				default: return false;
-				}
-				return true;
-			}
-		});
-		
 		colorModeRGB = new ColorModeRGB(pickerInterface);
 		colorModeHSV = new ColorModeHSV(pickerInterface);
 		colorModeCMYK = new ColorModeCMYK(pickerInterface);
 		colorModeRGB.updateChannels();
 		
 		return view;
+	}
+	
+	@Override
+	protected boolean onColorModeSelected(int actionId)
+	{
+		switch(actionId)
+		{
+		case R.id.mode_rgb: colorModeRGB.updateChannels(); break;
+		case R.id.mode_hsv: colorModeHSV.updateChannels(); break;
+		case R.id.mode_cmyk: colorModeCMYK.updateChannels(); break;
+		default: return false;
+		}
+		return true;
+	}
+	
+	@Override
+	protected boolean isColorModeSupported(int actionId)
+	{
+		return actionId == R.id.mode_rgb ||
+			   actionId == R.id.mode_hsv ||
+			   actionId == R.id.mode_cmyk;
 	}
 	
 	void updateColor(int color)

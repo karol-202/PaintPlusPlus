@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-public class ColorPickerFragment extends Fragment
+public abstract class ColorPickerFragment extends Fragment
 {
 	private ActivityColorSelect activityColorSelect;
 	private boolean useAlpha;
@@ -38,6 +38,10 @@ public class ColorPickerFragment extends Fragment
 			throw new IllegalStateException("ColorPickerFragment must be attached to ActivityColorSelect.");
 		activityColorSelect = (ActivityColorSelect) context;
 	}
+	
+	protected abstract boolean onColorModeSelected(int actionId);
+	
+	protected abstract boolean isColorModeSupported(int actionId);
 	
 	public boolean isUsingAlpha()
 	{

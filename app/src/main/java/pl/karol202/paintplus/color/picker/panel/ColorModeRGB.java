@@ -6,8 +6,7 @@ class ColorModeRGB extends ColorMode
 	private ColorChannel channelGreen;
 	private ColorChannel channelBlue;
 	
-	@Override
-	void createChannels()
+	ColorModeRGB()
 	{
 		channelRed = new ColorChannel(this, ColorChannel.ColorChannelType.RED);
 		channelGreen = new ColorChannel(this, ColorChannel.ColorChannelType.GREEN);
@@ -21,5 +20,11 @@ class ColorModeRGB extends ColorMode
 		else if(mainChannel == channelGreen) return new ChannelXYSet(channelRed, channelBlue);
 		else if(mainChannel == channelBlue) return new ChannelXYSet(channelRed, channelGreen);
 		else return null;
+	}
+	
+	@Override
+	ColorChannel[] getChannels()
+	{
+		return new ColorChannel[] { channelRed, channelGreen, channelBlue };
 	}
 }

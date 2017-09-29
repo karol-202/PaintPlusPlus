@@ -30,6 +30,29 @@
 		android:id="@+id/colors_view_pager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_alignParentBottom="true"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		app:layout_behavior="pl.karol202.paintplus.color.picker.BottomBarBehaviour">
+		
+		<View
+			android:id="@+id/bottom_bar_shadow"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/bottom_bar_shadow_height"
+			android:background="@drawable/bottom_bar_shadow" />
+		
+		<android.support.design.widget.BottomNavigationView
+			android:id="@+id/bottom_bar_color_picker"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:itemBackground="@color/bottom_bar_background"
+			app:itemIconTint="@color/color_mode_item_tint"
+			app:itemTextColor="@color/color_mode_item_tint"
+			app:menu="@menu/menu_color_picker" />
+	</LinearLayout>
 	
 </android.support.design.widget.CoordinatorLayout>
