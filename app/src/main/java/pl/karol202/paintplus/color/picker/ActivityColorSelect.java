@@ -105,7 +105,10 @@ public class ActivityColorSelect extends AppCompatActivity
 			public void onTabSelected(TabLayout.Tab tab)
 			{
 				currentFragment = adapter.getItem(tab.getPosition());
+				currentFragment.onTabSelected();
 				updateBottomBar();
+				if(!currentFragment.isColorModeSupported(bottomBar.getSelectedItemId()))
+					bottomBar.setSelectedItemId(R.id.mode_hsv);
 			}
 			
 			@Override
@@ -125,7 +128,8 @@ public class ActivityColorSelect extends AppCompatActivity
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item)
 			{
-				return currentFragment.onColorModeSelected(item.getItemId());
+				for(int i = 0; i < adapter.getCount(); i++) adapter.getItem(i).onColorModeSelected(item.getItemId());
+				return true;
 			}
 		});
 	}

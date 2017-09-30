@@ -3,27 +3,64 @@ package pl.karol202.paintplus.color.picker.panel;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import pl.karol202.paintplus.util.Utils;
 
 import static pl.karol202.paintplus.color.picker.panel.ColorChannel.ColorChannelType.*;
 
 public class ColorPickerSquarePanel extends View
 {
-	private static final int[] HUE_COLORS = new int[] { Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED };
+	interface OnColorPanelUpdateListener
+	{
+		void onChannelsValueChanged();
+	}
 	
+	private static final int[] HUE_COLORS = new int[] { Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED };
+	
+	private final float LEFT_MARGIN_DP = 10;
+	private final float TOP_MARGIN_DP = 10;
+	private final float RIGHT_MARGIN_DP = 10;
+	private final float BOTTOM_MARGIN_DP = 10;
+	private final float INDICATOR_RING_RADIUS_DP = 6;
+	private final float INDICATOR_RING_THICKNESS_DP = 2;
+	
+	private final float LEFT_MARGIN_PX;
+	private final float TOP_MARGIN_PX;
+	private final float RIGHT_MARGIN_PX;
+	private final float BOTTOM_MARGIN_PX;
+	private final float INDICATOR_RING_RADIUS_PX;
+	private final float INDICATOR_RING_THICKNESS_PX;
+	
+	private OnColorPanelUpdateListener listener;
 	private ColorMode mode;
 	private ColorChannel channelMain;
 	private ColorChannel channelX;
 	private ColorChannel channelY;
 	
-	private Shader shader;
-	private Paint paint;
+	private Shader panelShader;
+	private Paint panelPaint;
+	
+	private Paint indicatorPaint;
 	
 	public ColorPickerSquarePanel(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		
-		paint = new Paint();
+		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
+		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
+		RIGHT_MARGIN_PX = Utils.dpToPixels(context, RIGHT_MARGIN_DP);
+		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
+		INDICATOR_RING_RADIUS_PX = Utils.dpToPixels(context, INDICATOR_RING_RADIUS_DP);
+		INDICATOR_RING_THICKNESS_PX = Utils.dpToPixels(context, INDICATOR_RING_THICKNESS_DP);
+		
+		panelPaint = new Paint();
+		
+		indicatorPaint = new Paint();
+		indicatorPaint.setColor(Color.DKGRAY);
+		indicatorPaint.setStyle(Paint.Style.STROKE);
+		indicatorPaint.setStrokeWidth(INDICATOR_RING_THICKNESS_PX);
 	}
 	
 	@Override
@@ -32,26 +69,25 @@ public class ColorPickerSquarePanel extends View
 		super.onDraw(canvas);
 		if(mode == null) return;
 		drawPanel(canvas);
+		drawIndicator(canvas);
 	}
 	
 	private void drawPanel(Canvas canvas)
 	{
-		if(shader == null) updatePaint();
-		canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+		if(panelShader == null) updatePaint();
+		canvas.drawRect(LEFT_MARGIN_PX, TOP_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, panelPaint);
 	}
 	
 	private void updatePaint()
 	{
-		shader = createComposeShader();
-		paint.setShader(shader);
+		panelShader = createComposeShader();
+		panelPaint.setShader(panelShader);
 	}
 	
 	private Shader createComposeShader()
 	{
 		Shader shaderX = createXShader();
 		Shader shaderY = createYShader();
-		
-		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		
 		PorterDuff.Mode porterDuffMode = null;
 		if(mode instanceof ColorModeRGB) porterDuffMode = PorterDuff.Mode.ADD;
@@ -61,15 +97,15 @@ public class ColorPickerSquarePanel extends View
 	
 	private Shader createXShader()
 	{
-		return new LinearGradient(0, 0, getWidth(), 0, getLeftColor(), getRightColor(), Shader.TileMode.CLAMP);
+		return new LinearGradient(LEFT_MARGIN_PX, 0, getWidth() - RIGHT_MARGIN_PX, 0, getLeftColor(), getRightColor(), Shader.TileMode.CLAMP);
 	}
 	
 	private Shader createYShader()
 	{
 		if(channelMain.getType() == SATURATION || channelMain.getType() == VALUE)
-			return new LinearGradient(0, 0, 0, getHeight(), HUE_COLORS, null, Shader.TileMode.CLAMP);
+			return new LinearGradient(0, TOP_MARGIN_PX, 0, getHeight() - BOTTOM_MARGIN_PX, HUE_COLORS, null, Shader.TileMode.CLAMP);
 		else
-			return new LinearGradient(0, 0, 0, getHeight(), getTopColor(), getBottomColor(), Shader.TileMode.CLAMP);
+			return new LinearGradient(0, TOP_MARGIN_PX, 0, getHeight() - BOTTOM_MARGIN_PX, getTopColor(), getBottomColor(), Shader.TileMode.CLAMP);
 	}
 	
 	private int getLeftColor()
@@ -79,7 +115,7 @@ public class ColorPickerSquarePanel extends View
 		else if(channelMain.getType() == BLUE) return getARGBColor(1, 0, 0, getMainChannelValue());
 		else if(channelMain.getType() == HUE) return getARGBColor(1, 0, 0, 0);
 		else if(channelMain.getType() == SATURATION) return getARGBColor(1, 0, 0, 0);
-		else if(channelMain.getType() == VALUE) return getARGBColor(1 - getMainChannelValue(), getMainChannelValue(),
+		else if(channelMain.getType() == VALUE) return getARGBColor(1, getMainChannelValue(),
 																	getMainChannelValue(), getMainChannelValue());
 		else return Color.BLACK;
 	}
@@ -97,19 +133,19 @@ public class ColorPickerSquarePanel extends View
 	
 	private int getBottomColor()
 	{
-		if(channelMain.getType() == RED) return getRGBColor(getMainChannelValue(), 0, 0);
-		else if(channelMain.getType() == GREEN) return getRGBColor(0, getMainChannelValue(), 0);
-		else if(channelMain.getType() == BLUE) return getRGBColor(0, 0, getMainChannelValue());
+		if(channelMain.getType() == RED) return getRGBColor(0, 0, 0);
+		else if(channelMain.getType() == GREEN) return getRGBColor(0, 0, 0);
+		else if(channelMain.getType() == BLUE) return getRGBColor(0, 0, 0);
 		else if(channelMain.getType() == HUE) return getRGBColor(1, 1, 1);
 		else return Color.BLACK;
 	}
 	
 	private int getTopColor()
 	{
-		if(channelMain.getType() == RED) return getRGBColor(getMainChannelValue(), 1, 0);
-		else if(channelMain.getType() == GREEN) return getRGBColor(1, getMainChannelValue(), 0);
-		else if(channelMain.getType() == BLUE) return getRGBColor(1, 0, getMainChannelValue());
-		else if(channelMain.getType() == HUE) return Color.HSVToColor(new float[] { getMainChannelValue(), 1, 1 });
+		if(channelMain.getType() == RED) return getRGBColor(0, 1, 0);
+		else if(channelMain.getType() == GREEN) return getRGBColor(1, 0, 0);
+		else if(channelMain.getType() == BLUE) return getRGBColor(1, 0, 0);
+		else if(channelMain.getType() == HUE) return Color.HSVToColor(new float[] { channelMain.getValue(), 1, 1 });
 		else return Color.BLACK;
 	}
 	
@@ -128,6 +164,29 @@ public class ColorPickerSquarePanel extends View
 		return channelMain.getValue() / (float) channelMain.getMaxValue();
 	}
 	
+	private void drawIndicator(Canvas canvas)
+	{
+		float x = Utils.map(channelX.getValue(), 0, channelX.getMaxValue(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX);
+		float y = Utils.map(channelY.getValue(), channelY.getMaxValue(), 0, TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX);
+		
+		canvas.drawCircle(x, y, INDICATOR_RING_RADIUS_PX, indicatorPaint);
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		float x = Utils.map(event.getX(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, 0, channelX.getMaxValue());
+		float y = Utils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channelY.getMaxValue(), 0);
+		x = Utils.clamp(x, 0, channelX.getMaxValue());
+		y = Utils.clamp(y, 0, channelY.getMaxValue());
+		channelX.setValue(Math.round(x));
+		channelY.setValue(Math.round(y));
+		if(listener != null) listener.onChannelsValueChanged();
+		
+		invalidate();
+		return true;
+	}
+	
 	void setModeAndMainChannel(ColorMode mode, ColorChannel channelMain)
 	{
 		if(channelMain.getMode() != mode) throw new IllegalArgumentException("Main channel must be channel of mode.");
@@ -138,7 +197,18 @@ public class ColorPickerSquarePanel extends View
 		channelX = set.getChannelX();
 		channelY = set.getChannelY();
 		
-		shader = null;
+		panelShader = null;
+		invalidate();
+	}
+	
+	void setOnColorPanelUpdateListener(OnColorPanelUpdateListener listener)
+	{
+		this.listener = listener;
+	}
+	
+	void update()
+	{
+		panelShader = null;
 		invalidate();
 	}
 }

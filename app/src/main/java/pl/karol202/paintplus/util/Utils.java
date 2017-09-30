@@ -18,6 +18,11 @@ public class Utils
 		return v1 + value * (v2 - v1);
 	}
 	
+	public static float clamp(float value, float min, float max)
+	{
+		return Math.min(Math.max(value, min), max);
+	}
+	
 	public static float dpToPixels(Context context, float dp)
 	{
 		return dpToPixels(context.getResources().getDisplayMetrics(), dp);

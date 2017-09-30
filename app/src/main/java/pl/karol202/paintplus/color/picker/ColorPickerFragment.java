@@ -39,9 +39,11 @@ public abstract class ColorPickerFragment extends Fragment
 		activityColorSelect = (ActivityColorSelect) context;
 	}
 	
-	protected abstract boolean onColorModeSelected(int actionId);
+	protected abstract void onColorModeSelected(int actionId);
 	
 	protected abstract boolean isColorModeSupported(int actionId);
+	
+	protected abstract void onTabSelected();
 	
 	public boolean isUsingAlpha()
 	{

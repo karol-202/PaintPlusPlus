@@ -14,6 +14,7 @@ public class ColorNumericalFragment extends ColorPickerFragment
 	private ColorMode colorModeRGB;
 	private ColorMode colorModeHSV;
 	private ColorMode colorModeCMYK;
+	private ColorMode currentColorMode;
 	
 	private View view;
 	private ColorPreviewView colorView;
@@ -43,22 +44,20 @@ public class ColorNumericalFragment extends ColorPickerFragment
 		colorModeRGB = new ColorModeRGB(pickerInterface);
 		colorModeHSV = new ColorModeHSV(pickerInterface);
 		colorModeCMYK = new ColorModeCMYK(pickerInterface);
-		colorModeRGB.updateChannels();
+		setCurrentColorMode(colorModeRGB);
 		
 		return view;
 	}
 	
 	@Override
-	protected boolean onColorModeSelected(int actionId)
+	protected void onColorModeSelected(int actionId)
 	{
 		switch(actionId)
 		{
-		case R.id.mode_rgb: colorModeRGB.updateChannels(); break;
-		case R.id.mode_hsv: colorModeHSV.updateChannels(); break;
-		case R.id.mode_cmyk: colorModeCMYK.updateChannels(); break;
-		default: return false;
+		case R.id.mode_rgb: setCurrentColorMode(colorModeRGB); break;
+		case R.id.mode_hsv: setCurrentColorMode(colorModeHSV); break;
+		case R.id.mode_cmyk: setCurrentColorMode(colorModeCMYK); break;
 		}
-		return true;
 	}
 	
 	@Override
@@ -69,10 +68,24 @@ public class ColorNumericalFragment extends ColorPickerFragment
 			   actionId == R.id.mode_cmyk;
 	}
 	
+	@Override
+	protected void onTabSelected()
+	{
+		currentColorMode.updateChannels();
+		
+		colorView.setColor(getCurrentColor());
+	}
+	
 	void updateColor(int color)
 	{
 		setCurrentColor(color);
 		colorView.setColor(color);
+	}
+	
+	private void setCurrentColorMode(ColorMode colorMode)
+	{
+		this.currentColorMode = colorMode;
+		colorMode.updateChannels();
 	}
 	
 	View getChannelViewA()

@@ -40,8 +40,23 @@ public class ColorPanelFragment extends ColorPickerFragment
 		colorView.setColor(getCurrentColor());
 		
 		squarePanel = view.findViewById(R.id.color_picker_square_panel);
+		squarePanel.setOnColorPanelUpdateListener(new ColorPickerSquarePanel.OnColorPanelUpdateListener() {
+			@Override
+			public void onChannelsValueChanged()
+			{
+				updateColor();
+			}
+		});
 		
 		bar = view.findViewById(R.id.color_picker_bar);
+		bar.setOnColorBarUpdateListener(new ColorPickerBar.OnColorBarUpdateListener() {
+			@Override
+			public void onChannelValueChanged()
+			{
+				updateColor();
+				squarePanel.update();
+			}
+		});
 		
 		spinnerChannel = view.findViewById(R.id.spinner_color_picker_channel);
 		spinnerChannel.setAdapter(channelsAdapter);
@@ -61,15 +76,13 @@ public class ColorPanelFragment extends ColorPickerFragment
 	}
 	
 	@Override
-	protected boolean onColorModeSelected(int actionId)
+	protected void onColorModeSelected(int actionId)
 	{
 		switch(actionId)
 		{
 		case R.id.mode_rgb: setMode(modeRGB); break;
 		case R.id.mode_hsv: setMode(modeHSV); break;
-		default: return false;
 		}
-		return true;
 	}
 	
 	@Override
@@ -77,6 +90,25 @@ public class ColorPanelFragment extends ColorPickerFragment
 	{
 		return actionId == R.id.mode_rgb ||
 				actionId == R.id.mode_hsv;
+	}
+	
+	@Override
+	protected void onTabSelected()
+	{
+		currentMode.setColor(getCurrentColor());
+		
+		colorView.setColor(getCurrentColor());
+		squarePanel.update();
+		bar.update();
+	}
+	
+	private void updateColor()
+	{
+		if(currentMode == modeHSV) modeRGB.setColor(currentMode.getColor());
+		else if(currentMode == modeRGB) modeHSV.setColor(currentMode.getColor());
+		
+		colorView.setColor(currentMode.getColor());
+		setCurrentColor(currentMode.getColor());
 	}
 	
 	private void setMode(ColorMode mode)

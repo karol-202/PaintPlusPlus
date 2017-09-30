@@ -107,22 +107,7 @@ public class GradientView extends View
 		BOTTOM_BAR_HEIGHT_PX = Utils.dpToPixels(context, BOTTOM_BAR_HEIGHT_DP);
 		TRIANGLE_Y_OFFSET_PX = Utils.dpToPixels(context, TRIANGLE_Y_OFFSET_DP) + TOP_MARGIN_PX;
 		HEIGHT_PX = Utils.dpToPixels(context, HEIGHT_DP) + TOP_MARGIN_PX;
-		
-		TRIANGLE_OUTER_PATH.moveTo(0, 0);
-		TRIANGLE_OUTER_PATH.lineTo(10, 20);
-		TRIANGLE_OUTER_PATH.lineTo(-10, 20);
-		TRIANGLE_OUTER_PATH.close();
-		
-		TRIANGLE_INNER_PATH.moveTo(0, 4.5f);
-		TRIANGLE_INNER_PATH.lineTo(7, 18);
-		TRIANGLE_INNER_PATH.lineTo(-7, 18);
-		TRIANGLE_INNER_PATH.close();
-		
-		float scale = context.getResources().getDisplayMetrics().density;
-		Matrix matrix = new Matrix();
-		matrix.preScale(scale, scale);
-		TRIANGLE_OUTER_PATH.transform(matrix);
-		TRIANGLE_INNER_PATH.transform(matrix);
+		initTriangles(context);
 		
 		gradient = null;
 		
@@ -154,6 +139,25 @@ public class GradientView extends View
 		triangleInnerSelectedPaint = new Paint();
 		triangleInnerSelectedPaint.setAntiAlias(true);
 		triangleInnerSelectedPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.gradient_point_selected, null));
+	}
+	
+	private void initTriangles(Context context)
+	{
+		TRIANGLE_OUTER_PATH.moveTo(0, 0);
+		TRIANGLE_OUTER_PATH.lineTo(10, 20);
+		TRIANGLE_OUTER_PATH.lineTo(-10, 20);
+		TRIANGLE_OUTER_PATH.close();
+		
+		TRIANGLE_INNER_PATH.moveTo(0, 4.5f);
+		TRIANGLE_INNER_PATH.lineTo(7, 18);
+		TRIANGLE_INNER_PATH.lineTo(-7, 18);
+		TRIANGLE_INNER_PATH.close();
+		
+		float scale = context.getResources().getDisplayMetrics().density;
+		Matrix matrix = new Matrix();
+		matrix.preScale(scale, scale);
+		TRIANGLE_OUTER_PATH.transform(matrix);
+		TRIANGLE_INNER_PATH.transform(matrix);
 	}
 	
 	@Override
