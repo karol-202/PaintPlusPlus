@@ -5,4 +5,8 @@
 	<declare-styleable name="imageToggleButton">
 		<attr name="checked" format="boolean"/>
 	</declare-styleable>
+	
+	<declare-styleable name="DualColorPreviewView">
+		<attr name="dividerPosition" format="float|fraction"/>
+	</declare-styleable>
 </resources>

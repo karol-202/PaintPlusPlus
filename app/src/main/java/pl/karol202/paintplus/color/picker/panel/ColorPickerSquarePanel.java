@@ -47,6 +47,7 @@ public class ColorPickerSquarePanel extends View
 	{
 		super(context, attrs);
 		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		checkForEditMode();
 		
 		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
 		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
@@ -63,10 +64,18 @@ public class ColorPickerSquarePanel extends View
 		indicatorPaint.setStrokeWidth(INDICATOR_RING_THICKNESS_PX);
 	}
 	
+	private void checkForEditMode()
+	{
+		if(!isInEditMode()) return;
+		ColorMode mode = new ColorModeHSV();
+		setModeAndMainChannel(mode, mode.getChannels()[0]);
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
+		
 		if(mode == null) return;
 		drawPanel(canvas);
 		drawIndicator(canvas);

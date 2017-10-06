@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.picker.ColorPickerFragment;
-import pl.karol202.paintplus.util.ColorPreviewView;
+import pl.karol202.paintplus.color.picker.DualColorPreviewView;
 
 public class ColorPanelFragment extends ColorPickerFragment
 {
@@ -20,7 +20,7 @@ public class ColorPanelFragment extends ColorPickerFragment
 	private ColorChannelsAdapter channelsAdapter;
 	
 	private View view;
-	private ColorPreviewView colorView;
+	private DualColorPreviewView colorView;
 	private ColorPickerSquarePanel squarePanel;
 	private ColorPickerBar bar;
 	private Spinner spinnerChannel;
@@ -37,7 +37,8 @@ public class ColorPanelFragment extends ColorPickerFragment
 		view = inflater.inflate(R.layout.color_picker_panel, container, false);
 		
 		colorView = view.findViewById(R.id.view_colors_panel_color);
-		colorView.setColor(getCurrentColor());
+		colorView.setOldColor(getCurrentColor());
+		colorView.setNewColor(getCurrentColor());
 		
 		squarePanel = view.findViewById(R.id.color_picker_square_panel);
 		squarePanel.setOnColorPanelUpdateListener(new ColorPickerSquarePanel.OnColorPanelUpdateListener() {
@@ -97,7 +98,7 @@ public class ColorPanelFragment extends ColorPickerFragment
 	{
 		currentMode.setColor(getCurrentColor());
 		
-		colorView.setColor(getCurrentColor());
+		colorView.setNewColor(getCurrentColor());
 		squarePanel.update();
 		bar.update();
 	}
@@ -107,7 +108,7 @@ public class ColorPanelFragment extends ColorPickerFragment
 		if(currentMode == modeHSV) modeRGB.setColor(currentMode.getColor());
 		else if(currentMode == modeRGB) modeHSV.setColor(currentMode.getColor());
 		
-		colorView.setColor(currentMode.getColor());
+		colorView.setNewColor(currentMode.getColor());
 		setCurrentColor(currentMode.getColor());
 	}
 	

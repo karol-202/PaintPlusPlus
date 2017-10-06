@@ -43,6 +43,8 @@ public class ColorPickerBar extends View
 	public ColorPickerBar(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		checkForEditMode();
+		
 		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
 		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
 		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
@@ -62,6 +64,11 @@ public class ColorPickerBar extends View
 		indicatorLinePaint = new Paint();
 		indicatorLinePaint.setStrokeWidth(INDICATOR_LINE_WIDTH_PX);
 		indicatorLinePaint.setColor(Color.DKGRAY);
+	}
+	
+	private void checkForEditMode()
+	{
+		setChannel(new ColorModeHSV().getChannels()[0]);
 	}
 	
 	private void initTriangles(Context context)

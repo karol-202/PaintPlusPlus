@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
-	<pl.karol202.paintplus.util.ColorPreviewView
+	<pl.karol202.paintplus.color.picker.DualColorPreviewView
 		android:id="@+id/view_colors_numerical_color"
 		android:layout_width="0dp"
 		android:layout_height="0dp"

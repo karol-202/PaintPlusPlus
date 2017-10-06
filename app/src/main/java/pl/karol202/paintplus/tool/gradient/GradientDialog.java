@@ -14,7 +14,6 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.color.picker.ActivityColorSelect;
-import pl.karol202.paintplus.util.ColorPreviewView;
 import pl.karol202.paintplus.util.ImageToggleButton;
 
 import java.util.Locale;

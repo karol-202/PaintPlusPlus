@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.util;
+package pl.karol202.paintplus.tool.gradient;
 
 import android.content.Context;
 import android.graphics.*;
@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import pl.karol202.paintplus.R;
 
-public class ColorPreviewView extends View
+class ColorPreviewView extends View
 {
 	private Rect checkerboardRect;
 	private Paint checkerboardPaint;
@@ -53,7 +53,7 @@ public class ColorPreviewView extends View
 		canvas.drawRect(1, 1, canvas.getWidth() - 1, canvas.getHeight() - 1, paint);
 	}
 	
-	public void setColor(int color)
+	void setColor(int color)
 	{
 		paint.setColor(color);
 		invalidate();

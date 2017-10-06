@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.picker.ColorPickerFragment;
-import pl.karol202.paintplus.util.ColorPreviewView;
+import pl.karol202.paintplus.color.picker.DualColorPreviewView;
 
 public class ColorNumericalFragment extends ColorPickerFragment
 {
@@ -17,7 +17,7 @@ public class ColorNumericalFragment extends ColorPickerFragment
 	private ColorMode currentColorMode;
 	
 	private View view;
-	private ColorPreviewView colorView;
+	private DualColorPreviewView colorView;
 	private View channelViewA;
 	private View channelViewB;
 	private View channelViewC;
@@ -33,7 +33,8 @@ public class ColorNumericalFragment extends ColorPickerFragment
 		pickerInterface = new ColorPickerNumericalInterface(ColorNumericalFragment.this);
 		
 		colorView = view.findViewById(R.id.view_colors_numerical_color);
-		colorView.setColor(getCurrentColor());
+		colorView.setOldColor(getCurrentColor());
+		colorView.setNewColor(getCurrentColor());
 		
 		channelViewA = view.findViewById(R.id.colors_numerical_channel_a);
 		channelViewB = view.findViewById(R.id.colors_numerical_channel_b);
@@ -73,13 +74,13 @@ public class ColorNumericalFragment extends ColorPickerFragment
 	{
 		currentColorMode.updateChannels();
 		
-		colorView.setColor(getCurrentColor());
+		colorView.setNewColor(getCurrentColor());
 	}
 	
 	void updateColor(int color)
 	{
 		setCurrentColor(color);
-		colorView.setColor(color);
+		colorView.setNewColor(color);
 	}
 	
 	private void setCurrentColorMode(ColorMode colorMode)
