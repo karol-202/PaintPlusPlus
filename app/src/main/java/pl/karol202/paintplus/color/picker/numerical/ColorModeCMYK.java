@@ -32,11 +32,11 @@ class ColorModeCMYK extends ColorMode
 	@Override
 	void createChannels()
 	{
-		channelAlpha = new ColorChannel(R.string.channel_a, 255, useAlpha);
-		channelCyan = new ColorChannel(R.string.channel_c, 255);
-		channelMagenta = new ColorChannel(R.string.channel_m, 255);
-		channelYellow = new ColorChannel(R.string.channel_y, 255);
-		channelBlack = new ColorChannel(R.string.channel_k, 255);
+		channelAlpha = new ColorChannel(R.string.channel_a, 255, R.color.black, useAlpha);
+		channelCyan = new ColorChannel(R.string.channel_c, 255, R.color.cyan);
+		channelMagenta = new ColorChannel(R.string.channel_m, 255, R.color.magenta);
+		channelYellow = new ColorChannel(R.string.channel_y, 255, R.color.yellow);
+		channelBlack = new ColorChannel(R.string.channel_k, 255, R.color.black);
 		
 		channelViewAlpha = new ColorChannelViews(pickerInterface.getChannelViewA(), channelAlpha, this);
 		channelViewCyan = new ColorChannelViews(pickerInterface.getChannelViewB(), channelCyan, this);

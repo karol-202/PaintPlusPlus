@@ -1,5 +1,7 @@
 package pl.karol202.paintplus.color.picker.numerical;
 
+import android.graphics.PorterDuff;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -57,11 +59,18 @@ class ColorChannelViews
 		
 		textChannelName.setText(channel.getName());
 		
+		seekBarChannelValue.getProgressDrawable().setColorFilter(getSeekBarColor(), PorterDuff.Mode.SRC_ATOP);
+		seekBarChannelValue.getThumb().setColorFilter(getSeekBarColor(), PorterDuff.Mode.SRC_ATOP);
 		seekBarChannelValue.setOnSeekBarChangeListener(null);
 		seekBarChannelValue.setMax(channel.getMaxValue());
 		seekBarChannelValue.setProgress(channel.getValue());
 		seekBarChannelValue.setOnSeekBarChangeListener(new SeekBarListener());
 		
 		textChannelValue.setText(String.valueOf(channel.getValue()));
+	}
+	
+	private int getSeekBarColor()
+	{
+		return ResourcesCompat.getColor(channelView.getResources(), channel.getSeekBarColorId(), null);
 	}
 }

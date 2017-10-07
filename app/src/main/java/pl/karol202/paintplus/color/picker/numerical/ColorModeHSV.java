@@ -31,10 +31,10 @@ class ColorModeHSV extends ColorMode
 	@Override
 	void createChannels()
 	{
-		channelAlpha = new ColorChannel(R.string.channel_a, 255, useAlpha);
-		channelHue = new ColorChannel(R.string.channel_h, 359);
-		channelSaturation = new ColorChannel(R.string.channel_s, 100);
-		channelValue = new ColorChannel(R.string.channel_v, 100);
+		channelAlpha = new ColorChannel(R.string.channel_a, 255, pl.karol202.paintplus.R.color.black, useAlpha);
+		channelHue = new ColorChannel(R.string.channel_h, 359, R.color.color_accent);
+		channelSaturation = new ColorChannel(R.string.channel_s, 100, R.color.color_accent);
+		channelValue = new ColorChannel(R.string.channel_v, 100, R.color.color_accent);
 		
 		channelViewAlpha = new ColorChannelViews(pickerInterface.getChannelViewA(), channelAlpha, this);
 		channelViewHue = new ColorChannelViews(pickerInterface.getChannelViewB(), channelHue, this);

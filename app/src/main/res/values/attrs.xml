@@ -7,6 +7,6 @@
 	</declare-styleable>
 	
 	<declare-styleable name="DualColorPreviewView">
-		<attr name="dividerPosition" format="float|fraction"/>
+		<attr name="dividerPosition" format="float"/>
 	</declare-styleable>
 </resources>

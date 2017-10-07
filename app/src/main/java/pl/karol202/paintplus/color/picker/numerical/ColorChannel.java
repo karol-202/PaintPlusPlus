@@ -1,47 +1,54 @@
 package pl.karol202.paintplus.color.picker.numerical;
 
-public class ColorChannel
+class ColorChannel
 {
 	private int name;
 	private int maxValue;
+	private int seekBarColorId;
 	
 	private boolean active;
 	private int value;
 	
-	public ColorChannel(int name, int maxValue)
+	ColorChannel(int name, int maxValue, int seekBarColorId)
 	{
-		this(name, maxValue, true);
+		this(name, maxValue, seekBarColorId, true);
 	}
 	
-	public ColorChannel(int name, int maxValue, boolean active)
+	ColorChannel(int name, int maxValue, int seekBarColorId, boolean active)
 	{
 		this.name = name;
 		this.maxValue = maxValue;
+		this.seekBarColorId = seekBarColorId;
 		
 		this.active = active;
 	}
 	
-	public int getName()
+	int getName()
 	{
 		return name;
 	}
 	
-	public int getMaxValue()
+	int getMaxValue()
 	{
 		return maxValue;
 	}
 	
-	public boolean isActive()
+	int getSeekBarColorId()
+	{
+		return seekBarColorId;
+	}
+	
+	boolean isActive()
 	{
 		return active;
 	}
 	
-	public int getValue()
+	int getValue()
 	{
 		return value;
 	}
 	
-	public void setValue(int value)
+	void setValue(int value)
 	{
 		this.value = value;
 	}

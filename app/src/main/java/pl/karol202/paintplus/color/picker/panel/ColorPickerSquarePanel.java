@@ -2,9 +2,11 @@ package pl.karol202.paintplus.color.picker.panel;
 
 import android.content.Context;
 import android.graphics.*;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.util.Utils;
 
 import static pl.karol202.paintplus.color.picker.panel.ColorChannel.ColorChannelType.*;
@@ -24,6 +26,7 @@ public class ColorPickerSquarePanel extends View
 	private final float BOTTOM_MARGIN_DP = 10;
 	private final float INDICATOR_RING_RADIUS_DP = 6;
 	private final float INDICATOR_RING_THICKNESS_DP = 2;
+	private final float BORDER_WIDTH_DP = 1;
 	
 	private final float LEFT_MARGIN_PX;
 	private final float TOP_MARGIN_PX;
@@ -31,12 +34,15 @@ public class ColorPickerSquarePanel extends View
 	private final float BOTTOM_MARGIN_PX;
 	private final float INDICATOR_RING_RADIUS_PX;
 	private final float INDICATOR_RING_THICKNESS_PX;
+	private final float BORDER_WIDTH_PX;
 	
 	private OnColorPanelUpdateListener listener;
 	private ColorMode mode;
 	private ColorChannel channelMain;
 	private ColorChannel channelX;
 	private ColorChannel channelY;
+	
+	private Paint borderPaint;
 	
 	private Shader panelShader;
 	private Paint panelPaint;
@@ -55,6 +61,12 @@ public class ColorPickerSquarePanel extends View
 		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
 		INDICATOR_RING_RADIUS_PX = Utils.dpToPixels(context, INDICATOR_RING_RADIUS_DP);
 		INDICATOR_RING_THICKNESS_PX = Utils.dpToPixels(context, INDICATOR_RING_THICKNESS_DP);
+		BORDER_WIDTH_PX = Utils.dpToPixels(context, BORDER_WIDTH_DP);
+		
+		borderPaint = new Paint();
+		borderPaint.setColor(ContextCompat.getColor(context, R.color.border));
+		borderPaint.setStyle(Paint.Style.STROKE);
+		borderPaint.setStrokeWidth(BORDER_WIDTH_PX);
 		
 		panelPaint = new Paint();
 		
@@ -77,8 +89,17 @@ public class ColorPickerSquarePanel extends View
 		super.onDraw(canvas);
 		
 		if(mode == null) return;
+		drawBorder(canvas);
 		drawPanel(canvas);
 		drawIndicator(canvas);
+	}
+	
+	private void drawBorder(Canvas canvas)
+	{
+		canvas.drawRect(LEFT_MARGIN_PX - (float) Math.floor(BORDER_WIDTH_PX / 2),
+						TOP_MARGIN_PX - (float) Math.floor(BORDER_WIDTH_PX / 2),
+						getWidth() - RIGHT_MARGIN_PX + (float) Math.floor(BORDER_WIDTH_PX / 2),
+						getHeight() - BOTTOM_MARGIN_PX + (float) Math.floor(BORDER_WIDTH_PX / 2), borderPaint);
 	}
 	
 	private void drawPanel(Canvas canvas)

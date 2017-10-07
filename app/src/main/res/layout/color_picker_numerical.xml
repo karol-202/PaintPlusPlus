@@ -13,7 +13,8 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@+id/guideline3" />
+		app:layout_constraintBottom_toTopOf="@+id/guideline3"
+		app:dividerPosition="0.3"/>
 	
 	<include
 		android:id="@+id/colors_numerical_channel_a"
@@ -25,7 +26,7 @@
 		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_b"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/view_colors_numerical_color" />
+		app:layout_constraintTop_toBottomOf="@+id/guideline3" />
 	
 	<include
 		layout="@layout/color_picker_channel"
@@ -77,8 +78,6 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/guideline3"
 		android:orientation="horizontal"
-		app:layout_constraintGuide_percent="0.4"
-		tools:layout_editor_absoluteY="227dp"
-		tools:layout_editor_absoluteX="0dp" />
+		app:layout_constraintGuide_percent="0.29982364" />
 
 </android.support.constraint.ConstraintLayout>

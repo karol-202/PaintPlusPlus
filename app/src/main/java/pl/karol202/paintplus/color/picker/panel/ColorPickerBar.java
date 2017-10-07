@@ -2,9 +2,11 @@ package pl.karol202.paintplus.color.picker.panel;
 
 import android.content.Context;
 import android.graphics.*;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.util.Utils;
 
 public class ColorPickerBar extends View
@@ -18,18 +20,24 @@ public class ColorPickerBar extends View
 	
 	private final float LEFT_MARGIN_DP = 12;
 	private final float TOP_MARGIN_DP = 10;
+	private final float RIGHT_MARGIN_DP = 1;
 	private final float BOTTOM_MARGIN_DP = 10;
 	private final float INDICATOR_LINE_WIDTH_DP = 2;
+	private final float BORDER_WIDTH_DP = 1;
 	private final Path TRIANGLE_OUTER_PATH = new Path();
 	private final Path TRIANGLE_INNER_PATH = new Path();
 	
 	private final float LEFT_MARGIN_PX;
 	private final float TOP_MARGIN_PX;
+	private final float RIGHT_MARGIN_PX;
 	private final float BOTTOM_MARGIN_PX;
 	private final float INDICATOR_LINE_WIDTH_PX;
+	private final float BORDER_WIDTH_PX;
 	
 	private OnColorBarUpdateListener listener;
 	private ColorChannel channel;
+	
+	private Paint borderPaint;
 	
 	private Paint barPaint;
 	private Shader barShader;
@@ -47,9 +55,16 @@ public class ColorPickerBar extends View
 		
 		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
 		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
+		RIGHT_MARGIN_PX = Utils.dpToPixels(context, RIGHT_MARGIN_DP);
 		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
 		INDICATOR_LINE_WIDTH_PX = Utils.dpToPixels(context, INDICATOR_LINE_WIDTH_DP);
+		BORDER_WIDTH_PX = Utils.dpToPixels(context, BORDER_WIDTH_DP);
 		initTriangles(context);
+		
+		borderPaint = new Paint();
+		borderPaint.setColor(ContextCompat.getColor(context, R.color.border));
+		borderPaint.setStyle(Paint.Style.STROKE);
+		borderPaint.setStrokeWidth(BORDER_WIDTH_PX);
 		
 		barPaint = new Paint();
 		
@@ -95,14 +110,23 @@ public class ColorPickerBar extends View
 	{
 		super.onDraw(canvas);
 		if(channel == null) return;
+		drawBorder(canvas);
 		drawBar(canvas);
 		drawIndicator(canvas);
+	}
+	
+	private void drawBorder(Canvas canvas)
+	{
+		canvas.drawRect(LEFT_MARGIN_PX - (float) Math.floor(BORDER_WIDTH_PX / 2),
+						TOP_MARGIN_PX - (float) Math.floor(BORDER_WIDTH_PX / 2),
+						getWidth() - RIGHT_MARGIN_PX + (float) Math.floor(BORDER_WIDTH_PX / 2),
+						getHeight() - BOTTOM_MARGIN_PX + (float) Math.floor(BORDER_WIDTH_PX / 2), borderPaint);
 	}
 	
 	private void drawBar(Canvas canvas)
 	{
 		if(barShader == null) updatePaint();
-		canvas.drawRect(LEFT_MARGIN_PX, TOP_MARGIN_PX, getWidth(), getHeight() - BOTTOM_MARGIN_PX, barPaint);
+		canvas.drawRect(LEFT_MARGIN_PX, TOP_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, barPaint);
 	}
 	
 	private void updatePaint()

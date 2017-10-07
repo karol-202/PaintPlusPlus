@@ -24,10 +24,10 @@ class ColorModeRGB extends ColorMode
 	@Override
 	void createChannels()
 	{
-		channelAlpha = new ColorChannel(R.string.channel_a, 255, useAlpha);
-		channelRed = new ColorChannel(R.string.channel_r, 255);
-		channelGreen = new ColorChannel(R.string.channel_g, 255);
-		channelBlue = new ColorChannel(R.string.channel_b, 255);
+		channelAlpha = new ColorChannel(R.string.channel_a, 255, R.color.black, useAlpha);
+		channelRed = new ColorChannel(R.string.channel_r, 255, R.color.red);
+		channelGreen = new ColorChannel(R.string.channel_g, 255, R.color.green);
+		channelBlue = new ColorChannel(R.string.channel_b, 255, R.color.blue);
 		
 		channelViewAlpha = new ColorChannelViews(pickerInterface.getChannelViewA(), channelAlpha, this);
 		channelViewRed = new ColorChannelViews(pickerInterface.getChannelViewB(), channelRed, this);
