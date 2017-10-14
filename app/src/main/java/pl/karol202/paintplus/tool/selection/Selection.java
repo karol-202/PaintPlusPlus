@@ -5,6 +5,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Region.Op;
+import pl.karol202.paintplus.history.ActionSelectionChange;
+import pl.karol202.paintplus.image.Image;
 
 import java.util.ArrayList;
 
@@ -18,14 +20,16 @@ public class Selection
 	}
 	
 	private ArrayList<OnSelectionChangeListener> listeners;
+	private Image image;
 	private Rect imageRect;
 	private Region region;
 	private Path path;
 	private boolean empty;
 	
-	public Selection()
+	public Selection(Image image)
 	{
 		this.listeners = new ArrayList<>();
+		this.image = image;
 	}
 	
 	public void init(int width, int height)
@@ -43,8 +47,13 @@ public class Selection
 	
 	public void selectNothing()
 	{
+		ActionSelectionChange action = new ActionSelectionChange(this);
+		
 		region.setEmpty();
 		updatePath();
+		
+		action.setCurrentRegion();
+		image.addHistoryAction(action);
 	}
 	
 	public void revert()
@@ -54,12 +63,19 @@ public class Selection
 	
 	void commitSelectionRectangle(Rect rect, Op op)
 	{
+		ActionSelectionChange action = new ActionSelectionChange(this);
+		
 		region.op(rect, op);
 		updatePath();
+		
+		action.setCurrentRegion();
+		image.addHistoryAction(action);
 	}
 	
 	void commitSelectionOval(Rect rect, Op op)
 	{
+		ActionSelectionChange action = new ActionSelectionChange(this);
+		
 		RectF rectF = new RectF(rect);
 		Path ovalPath = new Path();
 		ovalPath.addOval(rectF, CW);
@@ -69,6 +85,9 @@ public class Selection
 		
 		region.op(ovalRegion, op);
 		updatePath();
+		
+		action.setCurrentRegion();
+		image.addHistoryAction(action);
 	}
 	
 	private void updatePath()
@@ -89,6 +108,11 @@ public class Selection
 		return region.contains(x, y);
 	}
 	
+	public Image getImage()
+	{
+		return image;
+	}
+	
 	public Rect getBounds()
 	{
 		return region.getBounds();
@@ -97,6 +121,12 @@ public class Selection
 	public Region getRegion()
 	{
 		return region;
+	}
+	
+	public void setRegion(Region region)
+	{
+		this.region = region;
+		updatePath();
 	}
 	
 	public Path getPath()

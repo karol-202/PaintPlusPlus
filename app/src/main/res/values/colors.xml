@@ -25,6 +25,9 @@
 	<color name="bottom_bar_background">#F8F8F8</color>
 	<color name="text_default">#8A000000</color>
 	<color name="text_disabled">#61000000</color>
+	<color name="history_current_position">#1E88E5</color>
+	<color name="button_icon_active">#8A000000</color>
+	<color name="button_icon_inactive">#61000000</color>
 	
 	<color name="red">#FF0000</color>
 	<color name="green">#00FF00</color>

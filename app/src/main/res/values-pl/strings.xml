@@ -240,4 +240,10 @@
 	<string name="layer_mode_lighter">Jaśniejsze</string>
 	<string name="layer_mode_overlay">Nakładanie</string>
 	<string name="layer_mode_screen">Ekran</string>
+	<string name="action_undo">Cofnij</string>
+	<string name="action_redo">Ponów</string>
+	<string name="history_action_selection_change">Zmiana zaznaczenia</string>
+	<string name="history_current_position">Aktualna pozycja</string>
+	<string name="action_history">Historia</string>
+	<string name="activity_history">Historia zmian</string>
 </resources>

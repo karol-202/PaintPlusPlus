@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
+import pl.karol202.paintplus.history.ActivityHistoryHelper;
+import pl.karol202.paintplus.history.History;
+import pl.karol202.paintplus.history.OnHistoryUpdateListener;
 import pl.karol202.paintplus.image.Clipboard;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
@@ -17,10 +20,10 @@ import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 class ActivityPaintActions
 {
 	private ActivityPaint activity;
-	private PaintView paintView;
-	private Image image;
 	private MenuInflater menuInflater;
 	private PackageManager packageManager;
+	private PaintView paintView;
+	private Image image;
 	
 	ActivityPaintActions(ActivityPaint activity)
 	{
@@ -31,13 +34,20 @@ class ActivityPaintActions
 	
 	void inflateMenu(Menu menu)
 	{
-		paintView = activity.getPaintView();
 		menuInflater.inflate(R.menu.menu_paint, menu);
+		paintView = activity.getPaintView();
 		image = activity.getImage();
 		image.addOnSelectionChangeListener(new OnSelectionChangeListener()
 		{
 			@Override
 			public void onSelectionChanged()
+			{
+				activity.invalidateOptionsMenu();
+			}
+		});
+		image.setOnHistoryUpdateListener(new OnHistoryUpdateListener() {
+			@Override
+			public void onHistoryUpdated()
 			{
 				activity.invalidateOptionsMenu();
 			}
@@ -52,6 +62,7 @@ class ActivityPaintActions
 		preparePhotoCaptureOption(menu);
 		prepareFileOpenOption(menu);
 		prepareFileSaveOption(menu);
+		prepareHistoryOptions(menu);
 		prepareClipboardOptions(menu);
 		prepareSnapOptions(menu);
 	}
@@ -86,6 +97,13 @@ class ActivityPaintActions
 		menu.findItem(R.id.action_save_image).setEnabled(savingAs && knownPath);
 	}
 	
+	private void prepareHistoryOptions(Menu menu)
+	{
+		History history = image.getHistory();
+		menu.findItem(R.id.action_undo).setEnabled(history.canUndo());
+		menu.findItem(R.id.action_redo).setEnabled(history.canRedo());
+	}
+	
 	private void prepareClipboardOptions(Menu menu)
 	{
 		Selection selection = image.getSelection();
@@ -93,7 +111,7 @@ class ActivityPaintActions
 		menu.findItem(R.id.action_copy).setEnabled(!selection.isEmpty());
 		
 		Clipboard clipboard = image.getClipboard();
-		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty() || image.getLayersAmount() < Image.MAX_LAYERS);
+		menu.findItem(R.id.action_paste).setEnabled(!clipboard.isEmpty() && image.getLayersAmount() < Image.MAX_LAYERS);
 	}
 	
 	private void prepareSnapOptions(Menu menu)
@@ -138,6 +156,15 @@ class ActivityPaintActions
 			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
 			return true;
 		
+		case R.id.action_undo:
+			image.undo();
+			return true;
+		case R.id.action_redo:
+			image.redo();
+			return true;
+		case R.id.action_history:
+			new ActivityHistoryHelper(image.getHistory(), activity).startActivity();
+			return true;
 		case R.id.action_cut:
 			image.cut();
 			activity.invalidateOptionsMenu();

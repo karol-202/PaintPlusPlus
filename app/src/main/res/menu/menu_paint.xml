@@ -52,20 +52,35 @@
           app:showAsAction="never">
 
         <menu>
+	        <item android:id="@+id/action_undo"
+		          android:icon="@drawable/ic_undo_black_24dp"
+		          android:title="@string/action_undo"
+		          android:orderInCategory="1"
+		          app:showAsAction="never"/>
+	        <item android:id="@+id/action_redo"
+		          android:icon="@drawable/ic_redo_black_24dp"
+		          android:title="@string/action_redo"
+		          android:orderInCategory="2"
+		          app:showAsAction="never"/>
+	        <item android:id="@+id/action_history"
+		          android:icon="@drawable/ic_history_black_24dp"
+		          android:title="@string/action_history"
+		          android:orderInCategory="3"
+		          app:showAsAction="never"/>
             <item android:id="@+id/action_cut"
                   android:icon="@drawable/ic_cut_black_24dp"
                   android:title="@string/action_cut"
-                  android:orderInCategory="1"
+                  android:orderInCategory="4"
                   app:showAsAction="never"/>
             <item android:id="@+id/action_copy"
                   android:icon="@drawable/ic_copy_black_24dp"
                   android:title="@string/action_copy"
-                  android:orderInCategory="2"
+                  android:orderInCategory="5"
                   app:showAsAction="never"/>
             <item android:id="@+id/action_paste"
                   android:icon="@drawable/ic_paste_black_24dp"
                   android:title="@string/action_paste"
-                  android:orderInCategory="3"
+                  android:orderInCategory="6"
                   app:showAsAction="never"/>
         </menu>
     </item>

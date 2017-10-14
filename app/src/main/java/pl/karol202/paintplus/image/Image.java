@@ -5,6 +5,9 @@ import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.history.Action;
+import pl.karol202.paintplus.history.History;
+import pl.karol202.paintplus.history.OnHistoryUpdateListener;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
@@ -43,6 +46,7 @@ public class Image
 	private Selection selection;
 	private Clipboard clipboard;
 	private HelpersManager helpersManager;
+	private History history;
 	
 	private float viewX;
 	private float viewY;
@@ -58,9 +62,10 @@ public class Image
 		
 		this.layers = new ArrayList<>();
 		this.colorsSet = ColorsSet.getDefault();
-		this.selection = new Selection();
+		this.selection = new Selection(this);
 		this.clipboard = new Clipboard(this, context.getString(R.string.pasted_layer));
 		this.helpersManager = new HelpersManager(this, context.getResources());
+		this.history = new History();
 		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
@@ -320,6 +325,23 @@ public class Image
 		selection.revert();
 	}
 	
+	public void undo()
+	{
+		if(!history.canUndo()) return;
+		history.undo();
+	}
+	
+	public void redo()
+	{
+		if(!history.canRedo()) return;
+		history.redo();
+	}
+	
+	public void addHistoryAction(Action action)
+	{
+		history.addAction(action);
+	}
+	
 	public void setOnImageChangeListener(OnImageChangeListener listener)
 	{
 		this.listener = listener;
@@ -329,6 +351,11 @@ public class Image
 	public void addOnSelectionChangeListener(OnSelectionChangeListener listener)
 	{
 		selection.addListener(listener);
+	}
+	
+	public void setOnHistoryUpdateListener(OnHistoryUpdateListener listener)
+	{
+		history.setHistoryUpdateListener(listener);
 	}
 	
 	public ColorsSet getColorsSet()
@@ -349,6 +376,11 @@ public class Image
 	public HelpersManager getHelpersManager()
 	{
 		return helpersManager;
+	}
+	
+	public History getHistory()
+	{
+		return history;
 	}
 	
 	public float getViewX()
