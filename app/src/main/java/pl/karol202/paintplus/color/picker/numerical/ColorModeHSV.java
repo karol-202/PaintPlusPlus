@@ -59,8 +59,6 @@ class ColorModeHSV extends ColorMode
 		channelViewSaturation.update();
 		channelViewValue.update();
 		channelViewEmpty.update();
-		
-		onColorChanged();
 	}
 	
 	@Override

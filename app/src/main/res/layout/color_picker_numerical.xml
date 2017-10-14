@@ -22,7 +22,7 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginRight="0dp"
-		android:layout_marginTop="32dp"
+		android:layout_marginTop="16dp"
 		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_b"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
@@ -68,16 +68,41 @@
 		android:layout_height="wrap_content"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/colors_numerical_channel_d"
-		android:layout_marginBottom="32dp"
-		app:layout_constraintBottom_toBottomOf="parent"
 		android:layout_marginRight="0dp"
-		app:layout_constraintRight_toRightOf="parent" />
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginBottom="8dp"
+		app:layout_constraintBottom_toTopOf="@+id/edit_color_hex" />
 	
 	<android.support.constraint.Guideline
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/guideline3"
 		android:orientation="horizontal"
-		app:layout_constraintGuide_percent="0.29982364" />
+		app:layout_constraintGuide_percent="0.3" />
+	
+	<TextView
+		android:id="@+id/text_color_hex_hash"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:text="@string/hash"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		app:layout_constraintTop_toTopOf="@+id/edit_color_hex"
+		app:layout_constraintRight_toLeftOf="@+id/edit_color_hex"
+		android:layout_marginRight="0dp" />
+	
+	<EditText
+		android:id="@+id/edit_color_hex"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="16dp"
+		android:layout_marginRight="32dp"
+		android:digits="0123456789aAbBcCdDeEfF"
+		android:ems="10"
+		android:inputType="textNoSuggestions"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginLeft="32dp"
+		app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

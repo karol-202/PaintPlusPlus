@@ -257,4 +257,5 @@
 	<string name="color_mode_rgb" translatable="false">RGB</string>
 	<string name="color_mode_hsv" translatable="false">HSV</string>
 	<string name="color_mode_cmyk" translatable="false">CMYK</string>
+	<string name="hash">#</string>
 </resources>

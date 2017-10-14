@@ -48,6 +48,6 @@ class ColorPickerNumericalInterface
 	
 	void setColor(int color)
 	{
-		fragment.updateColor(color);
+		fragment.updateColor(color, true);
 	}
 }

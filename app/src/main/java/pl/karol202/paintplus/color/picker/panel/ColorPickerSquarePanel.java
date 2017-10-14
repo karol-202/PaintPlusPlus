@@ -205,6 +205,8 @@ public class ColorPickerSquarePanel extends View
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
+		if(event.getAction() == MotionEvent.ACTION_DOWN) getParent().requestDisallowInterceptTouchEvent(true);
+		else if(event.getAction() == MotionEvent.ACTION_UP) getParent().requestDisallowInterceptTouchEvent(false);
 		float x = Utils.map(event.getX(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, 0, channelX.getMaxValue());
 		float y = Utils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channelY.getMaxValue(), 0);
 		x = Utils.clamp(x, 0, channelX.getMaxValue());
