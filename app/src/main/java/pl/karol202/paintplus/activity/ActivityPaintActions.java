@@ -163,7 +163,7 @@ class ActivityPaintActions
 			image.redo();
 			return true;
 		case R.id.action_history:
-			new ActivityHistoryHelper(image.getHistory(), activity).startActivity();
+			new ActivityHistoryHelper(image, activity).startActivity();
 			return true;
 		case R.id.action_cut:
 			image.cut();

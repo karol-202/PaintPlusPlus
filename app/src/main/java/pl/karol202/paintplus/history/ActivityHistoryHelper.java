@@ -2,16 +2,17 @@ package pl.karol202.paintplus.history;
 
 import android.content.Context;
 import android.content.Intent;
+import pl.karol202.paintplus.image.Image;
 
 public class ActivityHistoryHelper
 {
-	private static History history;//Is there any way to remove this ugly static veriable?
+	private static Image image;//Is there any way to remove this ugly static veriable?
 	
 	private Context context;
 	
-	public ActivityHistoryHelper(History history, Context context)
+	public ActivityHistoryHelper(Image image, Context context)
 	{
-		ActivityHistoryHelper.history = history;
+		ActivityHistoryHelper.image = image;
 		this.context = context;
 	}
 	
@@ -21,11 +22,11 @@ public class ActivityHistoryHelper
 		context.startActivity(intent);
 	}
 	
-	static History getHistory()
+	static Image getImage()
 	{
-		if(history == null) throw new NullPointerException("History object has been already used.");
-		History history = ActivityHistoryHelper.history;
-		ActivityHistoryHelper.history = null;
-		return history;
+		if(image == null) throw new NullPointerException("Image object has been already used.");
+		Image image = ActivityHistoryHelper.image;
+		ActivityHistoryHelper.image = null;
+		return image;
 	}
 }

@@ -1,60 +1,98 @@
 package pl.karol202.paintplus.history;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Region;
+import android.graphics.*;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 public class ActionSelectionChange extends Action
 {
-	private Selection selection;
+	private static final float SELECTION_LINE_WIDTH = 2f;
+	
 	private Region oldRegion;
 	private Region newRegion;
-	private Bitmap bitmap;
 	
-	public ActionSelectionChange(Selection selection)
+	private Bitmap bitmap;
+	private Canvas canvas;
+	private Rect bitmapRect;
+	private Paint selectionPaint;
+	
+	public ActionSelectionChange(Image image)
 	{
 		super();
-		this.selection = selection;
-		this.oldRegion = new Region(selection.getRegion());
-		
-		createBitmap();
+		createBitmap(image);
+		createSelectionPaint();
 	}
 	
-	private void createBitmap()
+	private void createBitmap(Image image)
 	{
-		int bitmapSize = (int) Math.floor(HistoryActionViewHolder.PREVIEW_SIZE_DP * selection.getImage().SCREEN_DENSITY);
+		int bitmapSize = (int) Math.floor(HistoryActionViewHolder.PREVIEW_SIZE_DP * image.SCREEN_DENSITY);
 		bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
-		showOldRegionOnBitmap();
+		canvas = new Canvas(bitmap);
+		bitmapRect = new Rect(0, 0, bitmapSize, bitmapSize);
 	}
 	
-	private void showOldRegionOnBitmap()
+	private void createSelectionPaint()
+	{
+		selectionPaint = new Paint();
+		selectionPaint.setColor(Color.DKGRAY);
+		selectionPaint.setStyle(Paint.Style.STROKE);
+		selectionPaint.setStrokeWidth(SELECTION_LINE_WIDTH);
+	}
+	
+	private void showOldRegionOnBitmap(Image image)
 	{
 		bitmap.eraseColor(Color.TRANSPARENT);
+		canvas.drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
+		canvas.drawPath(transformSelectionPath(image, oldRegion), selectionPaint);
 	}
 	
-	private void showNewRegionOnBitmap()
+	private void showNewRegionOnBitmap(Image image)
 	{
 		if(newRegion == null) return;
 		bitmap.eraseColor(Color.TRANSPARENT);
+		canvas.drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
+		canvas.drawPath(transformSelectionPath(image, newRegion), selectionPaint);
+	}
+	
+	private RectF transformImageRect(Image image)
+	{
+		float max = Math.max(image.getWidth(), image.getHeight());
+		float ratio = bitmapRect.width() / max;
+		RectF rect = new RectF(0, 0, image.getWidth() * ratio, image.getHeight() * ratio);
+		rect.offset(bitmapRect.centerX() - rect.centerX(), bitmapRect.centerY() - rect.centerY());
+		return rect;
+	}
+	
+	private Path transformSelectionPath(Image image, Region region)
+	{
+		RectF rect = transformImageRect(image);
+		Matrix matrix = new Matrix();
+		matrix.postScale(rect.width() / image.getWidth(), rect.height() / image.getHeight());
+		matrix.postTranslate(rect.left, rect.top);
+		
+		Path path = region.getBoundaryPath();
+		path.transform(matrix);
+		return path;
 	}
 	
 	@Override
-	boolean undo()
+	boolean undo(Image image)
 	{
-		if(!super.undo()) return false;
+		if(!super.undo(image)) return false;
+		Selection selection = image.getSelection();
 		selection.setRegion(oldRegion);
-		showNewRegionOnBitmap();
+		showNewRegionOnBitmap(image);
 		return true;
 	}
 	
 	@Override
-	boolean redo()
+	boolean redo(Image image)
 	{
-		if(!super.redo() || newRegion == null) return false;
+		if(!super.redo(image) || newRegion == null) return false;
+		Selection selection = image.getSelection();
 		selection.setRegion(newRegion);
-		showOldRegionOnBitmap();
+		showOldRegionOnBitmap(image);
 		return true;
 	}
 	
@@ -70,8 +108,14 @@ public class ActionSelectionChange extends Action
 		return R.string.history_action_selection_change;
 	}
 	
-	public void setCurrentRegion()
+	public void setOldRegion(Image image)
 	{
-		this.newRegion = new Region(selection.getRegion());
+		this.oldRegion = new Region(image.getSelection().getRegion());
+		showOldRegionOnBitmap(image);
+	}
+	
+	public void setNewRegion(Image image)
+	{
+		this.newRegion = new Region(image.getSelection().getRegion());
 	}
 }

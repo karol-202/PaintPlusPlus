@@ -31,33 +31,5 @@
 		android:layout_marginBottom="0dp"
 		app:layout_constraintLeft_toRightOf="@+id/image_history_action_preview"
 		android:layout_marginLeft="16dp" />
-	
-	<ImageButton
-		android:id="@+id/button_history_action_undo"
-		android:layout_width="48dp"
-		android:layout_height="48dp"
-		android:layout_marginBottom="0dp"
-		android:layout_marginRight="0dp"
-		android:layout_marginTop="0dp"
-		android:background="?attr/borderlessSelectableBackground"
-		android:contentDescription="@string/action_undo"
-		android:tint="@color/button_icon"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintRight_toLeftOf="@+id/button_history_action_redo"
-		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/ic_undo_black_24dp" />
-	
-	<ImageButton
-		android:id="@+id/button_history_action_redo"
-		android:layout_width="48dp"
-		android:layout_height="48dp"
-		android:layout_marginBottom="0dp"
-		android:layout_marginRight="0dp"
-		android:layout_marginTop="0dp"
-		android:background="?attr/borderlessSelectableBackground"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/ic_redo_black_24dp"
-		android:contentDescription="@string/action_redo" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.history;
 
 import android.graphics.Bitmap;
+import pl.karol202.paintplus.image.Image;
 
 public abstract class Action
 {
@@ -11,14 +12,14 @@ public abstract class Action
 		done = true;
 	}
 	
-	boolean undo()
+	boolean undo(Image image)
 	{
 		if(!done) return false;
 		done = false;
 		return true;
 	}
 	
-	boolean redo()
+	boolean redo(Image image)
 	{
 		if(done) return false;
 		done = true;

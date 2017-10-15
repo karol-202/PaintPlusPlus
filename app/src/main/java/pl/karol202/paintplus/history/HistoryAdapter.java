@@ -27,13 +27,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder>
 		int layout = viewType == VIEW_TYPE_ACTION ? R.layout.item_history_action : R.layout.item_history_current_position;
 		View view = LayoutInflater.from(context).inflate(layout, viewGroup, false);
 		
-		if(viewType == VIEW_TYPE_ACTION) return new HistoryActionViewHolder(view, new OnHistoryUpdateListener() {
-			@Override
-			public void onHistoryUpdated()
-			{
-				HistoryAdapter.this.notifyDataSetChanged();
-			}
-		});
+		if(viewType == VIEW_TYPE_ACTION) return new HistoryActionViewHolder(view);
 		else return new HistoryCurrentPositionViewHolder(view);
 	}
 	

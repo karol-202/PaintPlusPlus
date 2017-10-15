@@ -99,6 +99,8 @@ public class Image
 		this.width = width;
 		this.height = height;
 		for(Layer layer : layers) layer.offset(-x, -y);
+		updateImage();
+		updateMatrix();
 	}
 	
 	public void scale(int width, int height, boolean bilinear)
@@ -112,6 +114,8 @@ public class Image
 		}
 		this.width = width;
 		this.height = height;
+		updateImage();
+		updateMatrix();
 	}
 	
 	public void flip(int direction)
@@ -325,16 +329,26 @@ public class Image
 		selection.revert();
 	}
 	
+	public boolean canUndo()
+	{
+		return history.canUndo();
+	}
+	
+	public boolean canRedo()
+	{
+		return history.canRedo();
+	}
+	
 	public void undo()
 	{
 		if(!history.canUndo()) return;
-		history.undo();
+		history.undo(this);
 	}
 	
 	public void redo()
 	{
 		if(!history.canRedo()) return;
-		history.redo();
+		history.redo(this);
 	}
 	
 	public void addHistoryAction(Action action)

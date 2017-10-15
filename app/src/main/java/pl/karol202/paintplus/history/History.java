@@ -1,5 +1,7 @@
 package pl.karol202.paintplus.history;
 
+import pl.karol202.paintplus.image.Image;
+
 import java.util.Stack;
 
 public class History
@@ -34,18 +36,18 @@ public class History
 		return !followingActions.empty() && followingActions.peek() == action;
 	}
 	
-	public void undo()
+	public void undo(Image image)
 	{
 		Action action = previousActions.pop();
-		if(!action.undo()) throw new IllegalStateException("Cannot undo this action.");
+		if(!action.undo(image)) throw new IllegalStateException("Cannot undo this action.");
 		followingActions.push(action);
 		if(listener != null) listener.onHistoryUpdated();
 	}
 	
-	public void redo()
+	public void redo(Image image)
 	{
 		Action action = followingActions.pop();
-		if(!action.redo()) throw new IllegalStateException("Cannot redo this action.");
+		if(!action.redo(image)) throw new IllegalStateException("Cannot redo this action.");
 		previousActions.push(action);
 		if(listener != null) listener.onHistoryUpdated();
 	}
