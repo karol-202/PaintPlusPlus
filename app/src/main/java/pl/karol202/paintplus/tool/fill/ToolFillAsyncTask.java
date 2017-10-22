@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -20,6 +21,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private final float COLOR_COMPARISION_CONST = (float) Math.sqrt(3 * Math.pow(255, 2));
 	
 	private OnFillCompleteListener listener;
+	private Image image;
 	private Bitmap bitmap;
 	private Selection selection;
 	
@@ -29,6 +31,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private float threshold;
 	private int x;
 	private int y;
+	private ActionLayerChange historyAction;
 	
 	@Override
 	protected Bitmap doInBackground(FillParams... paramsArray)
@@ -36,13 +39,12 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		if(paramsArray.length != 1)
 			throw new IllegalArgumentException("There must be only one params object passed to ToolFillAsyncTask.");
 		FillParams params = paramsArray[0];
-		Image image = params.getImage();
+		image = params.getImage();
 		ColorsSet colorsSet = image.getColorsSet();
-		
 		listener = params.getListener();
 		bitmap = image.getSelectedBitmap();
 		if(bitmap == null) throw new NullPointerException("There is no selected layer.");
-		bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);//TODO Try to remove copying of bitmap.
 		selection = image.getSelection();
 		
 		selectedLayerX = image.getSelectedLayerX();
@@ -51,6 +53,8 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		threshold = params.getThreshold();
 		x = params.getX();
 		y = params.getY();
+		historyAction = new ActionLayerChange(image);
+		historyAction.setLayerChange(image.getSelectedLayerIndex(), bitmap);
 		
 		fill();
 		return bitmap;
@@ -116,6 +120,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	protected void onPostExecute(Bitmap bitmap)
 	{
 		super.onPostExecute(bitmap);
+		historyAction.applyAction(image);
 		if(listener != null) listener.onFillComplete(bitmap);
 	}
 }

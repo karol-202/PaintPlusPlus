@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.shape;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
@@ -16,7 +17,6 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	
 	private Shapes shapes;
 	private OnShapeEditListener shapeEditListener;
-	private Paint maskPaint;
 	private Rect dirtyRect;
 	
 	public ToolShape(Image image)
@@ -24,9 +24,6 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 		super(image);
 		
 		this.shapes = new Shapes(image, this);
-		this.maskPaint = new Paint();
-		this.maskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-		this.maskPaint.setColor(Color.argb(160, 208, 208, 208));
 		
 		setShape(shapes.getShape(0));
 	}
@@ -160,7 +157,11 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	
 	public void apply()
 	{
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), shape.getDirtyRect());
+		
 		shape.apply(canvas);
+		action.applyAction(image);
 	}
 	
 	public void cancel()

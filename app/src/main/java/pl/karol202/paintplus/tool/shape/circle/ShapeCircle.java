@@ -155,6 +155,14 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
+	public Rect getDirtyRect()
+	{
+		int halfSize = (int) radius + circleWidth;
+		return new Rect(center.x - halfSize, center.y - halfSize,
+					   center.x + halfSize, center.y + halfSize);
+	}
+	
+	@Override
 	public void apply(Canvas imageCanvas)
 	{
 		if(center == null || radius == -1) return;

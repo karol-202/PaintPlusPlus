@@ -263,4 +263,5 @@
 	<string name="history_current_position">Current position</string>
 	<string name="action_history">History</string>
 	<string name="activity_history">History of changes</string>
+	<string name="history_action_bitmap_change">Layer change</string>
 </resources>

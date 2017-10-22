@@ -2,10 +2,12 @@ package pl.karol202.paintplus.tool.rubber;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.Utils;
 
 public class ToolRubber extends StandardTool
 {
@@ -22,7 +24,8 @@ public class ToolRubber extends StandardTool
 	private float lastY;
 	private boolean pathCreated;
 	private boolean editStarted;
-	private Rect dirtyRect;
+	private Rect viewDirtyRect;
+	private Rect historyDirtyRect;
 	
 	public ToolRubber(Image image)
 	{
@@ -103,27 +106,38 @@ public class ToolRubber extends StandardTool
 		editStarted = true;
 		layer.setTemporaryHidden(true);
 		
-		expandDirtyRectByPoint((int) x, (int) y);
+		viewDirtyRect = new Rect();
+		historyDirtyRect = new Rect();
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
 		return true;
 	}
 	
 	@Override
 	public boolean onTouchMove(float x, float y)
 	{
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
+		
+		//TODO Smooth rubber
 		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
 		
 		lastX = x;
 		lastY = y;
 		pathCreated = true;
-		
-		expandDirtyRectByPoint((int) x, (int) y);
 		return true;
 	}
 	
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
+		
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
+		
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), historyDirtyRect);
 		
 		if(pathCreated) canvas.drawPath(path, pathPaint);
 		else
@@ -136,6 +150,7 @@ public class ToolRubber extends StandardTool
 			canvas.drawOval(oval, ovalPaint);
 		}
 		
+		action.applyAction(image);
 		path.reset();
 		lastX = -1;
 		lastY = -1;
@@ -143,17 +158,22 @@ public class ToolRubber extends StandardTool
 		editStarted = false;
 		layer.setTemporaryHidden(false);
 		
-		dirtyRect = null;
+		viewDirtyRect = null;
+		historyDirtyRect = null;
 		return true;
 	}
 	
-	private void expandDirtyRectByPoint(int x, int y)
+	private void expandDirtyRectByPoint(Rect dirtyRect, int x, int y)
 	{
-		if(dirtyRect == null) dirtyRect = new Rect();
-		dirtyRect.left = (int) Math.min(dirtyRect.left, x - size);
-		dirtyRect.top = (int) Math.min(dirtyRect.top, y - size);
-		dirtyRect.right = (int) Math.max(dirtyRect.right, x + size);
-		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, y + size);
+		int halfSize = Utils.roundAwayFromZero(size / 2);
+		if(dirtyRect.isEmpty()) dirtyRect.set(x - halfSize, y - halfSize, x + halfSize, y + halfSize);
+		else
+		{
+			dirtyRect.left = Math.min(dirtyRect.left, x - halfSize);
+			dirtyRect.top = Math.min(dirtyRect.top, y - halfSize);
+			dirtyRect.right = Math.max(dirtyRect.right, x + halfSize);
+			dirtyRect.bottom = Math.max(dirtyRect.bottom, y + halfSize);
+		}
 	}
 	
 	@Override
@@ -165,13 +185,13 @@ public class ToolRubber extends StandardTool
 	@Override
 	public Rect getDirtyRegion()
 	{
-		return dirtyRect;
+		return viewDirtyRect;
 	}
 	
 	@Override
 	public void resetDirtyRegion()
 	{
-		if(dirtyRect != null) dirtyRect.setEmpty();
+		if(viewDirtyRect != null) viewDirtyRect.setEmpty();
 	}
 	
 	@Override

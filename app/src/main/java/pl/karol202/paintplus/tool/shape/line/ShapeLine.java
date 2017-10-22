@@ -138,6 +138,15 @@ public class ShapeLine extends Shape
 	}
 	
 	@Override
+	public Rect getDirtyRect()
+	{
+		return new Rect(Math.min(start.x, end.x) - lineWidth,
+						Math.min(start.y, end.y) - lineWidth,
+						Math.max(start.x, end.y) + lineWidth,
+						Math.max(start.x, end.y) + lineWidth);
+	}
+	
+	@Override
 	public void apply(Canvas imageCanvas)
 	{
 		if(start == null || end == null) return;

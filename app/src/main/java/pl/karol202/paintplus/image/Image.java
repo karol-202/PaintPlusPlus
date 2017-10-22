@@ -86,6 +86,7 @@ public class Image
 		updateLayersPreview();
 		
 		selection.init(width, height);
+		history.clear();
 	}
 	
 	public void openImage(Bitmap bitmap)
@@ -190,6 +191,11 @@ public class Image
 		return true;
 	}
 	
+	public int getLayerIndex(Layer layer)
+	{
+		return layers.indexOf(layer);
+	}
+	
 	public int getSelectedLayerIndex()
 	{
 		return selectedLayer;
@@ -257,6 +263,11 @@ public class Image
 	public int getLayersAmount()
 	{
 		return layers.size();
+	}
+	
+	public Layer getLayerAtIndex(int layerIndex)
+	{
+		return layers.get(layerIndex);
 	}
 	
 	public Bitmap getSelectedBitmap()

@@ -9,8 +9,7 @@ public class ActionSelectionChange extends Action
 {
 	private static final float SELECTION_LINE_WIDTH = 2f;
 	
-	private Region oldRegion;
-	private Region newRegion;
+	private Region region;
 	
 	private Bitmap bitmap;
 	private Canvas canvas;
@@ -40,19 +39,11 @@ public class ActionSelectionChange extends Action
 		selectionPaint.setStrokeWidth(SELECTION_LINE_WIDTH);
 	}
 	
-	private void showOldRegionOnBitmap(Image image)
+	private void showRegionOnBitmap(Image image)
 	{
 		bitmap.eraseColor(Color.TRANSPARENT);
 		canvas.drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
-		canvas.drawPath(transformSelectionPath(image, oldRegion), selectionPaint);
-	}
-	
-	private void showNewRegionOnBitmap(Image image)
-	{
-		if(newRegion == null) return;
-		bitmap.eraseColor(Color.TRANSPARENT);
-		canvas.drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
-		canvas.drawPath(transformSelectionPath(image, newRegion), selectionPaint);
+		canvas.drawPath(transformSelectionPath(image, region), selectionPaint);
 	}
 	
 	private RectF transformImageRect(Image image)
@@ -79,21 +70,33 @@ public class ActionSelectionChange extends Action
 	@Override
 	boolean undo(Image image)
 	{
-		if(!super.undo(image)) return false;
+		if(!super.undo(image) || region == null) return false;
 		Selection selection = image.getSelection();
-		selection.setRegion(oldRegion);
-		showNewRegionOnBitmap(image);
+		Region newRegion = selection.getRegion();
+		selection.setRegion(region);
+		region = newRegion;
+		
+		showRegionOnBitmap(image);
 		return true;
 	}
 	
 	@Override
 	boolean redo(Image image)
 	{
-		if(!super.redo(image) || newRegion == null) return false;
+		if(!super.redo(image) || region == null) return false;
 		Selection selection = image.getSelection();
-		selection.setRegion(newRegion);
-		showOldRegionOnBitmap(image);
+		Region oldRegion = selection.getRegion();
+		selection.setRegion(region);
+		region = oldRegion;
+		
+		showRegionOnBitmap(image);
 		return true;
+	}
+	
+	@Override
+	public void applyAction(Image image)
+	{
+		if(region != null) super.applyAction(image);
 	}
 	
 	@Override
@@ -110,12 +113,8 @@ public class ActionSelectionChange extends Action
 	
 	public void setOldRegion(Image image)
 	{
-		this.oldRegion = new Region(image.getSelection().getRegion());
-		showOldRegionOnBitmap(image);
-	}
-	
-	public void setNewRegion(Image image)
-	{
-		this.newRegion = new Region(image.getSelection().getRegion());
+		if(applied) throw new IllegalStateException("Cannot alter history.");
+		this.region = new Region(image.getSelection().getRegion());
+		showRegionOnBitmap(image);
 	}
 }

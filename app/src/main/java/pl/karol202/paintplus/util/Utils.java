@@ -23,6 +23,11 @@ public class Utils
 		return Math.min(Math.max(value, min), max);
 	}
 	
+	public static int roundAwayFromZero(float value)
+	{
+		return (int) (value > 0 ? Math.ceil(value) : Math.floor(value));
+	}
+	
 	public static float dpToPixels(Context context, float dp)
 	{
 		return dpToPixels(context.getResources().getDisplayMetrics(), dp);

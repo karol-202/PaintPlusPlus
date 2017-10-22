@@ -228,7 +228,7 @@ class ActivityPaintDrawers
 		return layoutDrawer.isDrawerOpen(drawerLeft) || layoutDrawer.isDrawerOpen(drawerRight);
 	}
 	
-	public void onToolSelect(Tool newTool)
+	private void onToolSelect(Tool newTool)
 	{
 		Tool previousTool = activity.getTool();
 		

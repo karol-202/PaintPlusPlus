@@ -3,6 +3,7 @@ package pl.karol202.paintplus.tool.brush;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -25,7 +26,9 @@ public class ToolBrush extends StandardTool
 	private float lastY;
 	private Path path;
 	private float pathDistance;
-	private Rect dirtyRect;
+	private Rect viewDirtyRect;
+	private Rect historyDirtyRect;
+	private ActionLayerChange historyAction;
 
 	public ToolBrush(Image image)
 	{
@@ -82,6 +85,10 @@ public class ToolBrush extends StandardTool
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
+		
+		historyAction = new ActionLayerChange(image);
+		historyAction.setLayerChange(image.getSelectedLayerIndex(), layer.getBitmap());
+		
 		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
@@ -95,7 +102,8 @@ public class ToolBrush extends StandardTool
 		lastX = -1;
 		lastY = -1;
 		
-		dirtyRect = new Rect();
+		viewDirtyRect = new Rect();
+		historyDirtyRect = new Rect();
 		return true;
 	}
 	
@@ -139,7 +147,11 @@ public class ToolBrush extends StandardTool
 		lastY = -1;
 		pathDistance = 0;
 		
-		dirtyRect = null;
+		historyAction.setDirtyRect(historyDirtyRect);
+		historyAction.applyAction(image);
+		
+		viewDirtyRect = null;
+		historyDirtyRect = null;
 		return true;
 	}
 	
@@ -167,16 +179,21 @@ public class ToolBrush extends StandardTool
 		oval.bottom = y + size / 2;
 		canvas.drawOval(oval, paint);
 		
-		expandDirtyRectByPoint(oval);
+		expandDirtyRectByPoint(viewDirtyRect, oval);
+		expandDirtyRectByPoint(historyDirtyRect, oval);
 	}
 	
-	private void expandDirtyRectByPoint(RectF point)
+	private void expandDirtyRectByPoint(Rect dirtyRect, RectF point)
 	{
 		if(dirtyRect == null) return;
-		dirtyRect.left = (int) Math.min(dirtyRect.left, point.left);
-		dirtyRect.top = (int) Math.min(dirtyRect.top, point.top);
-		dirtyRect.right = (int) Math.max(dirtyRect.right, point.right);
-		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, point.bottom);
+		if(dirtyRect.isEmpty()) dirtyRect.set((int) point.left, (int) point.top, (int) point.right, (int) point.bottom);
+		else
+		{
+			dirtyRect.left = (int) Math.min(dirtyRect.left, point.left);
+			dirtyRect.top = (int) Math.min(dirtyRect.top, point.top);
+			dirtyRect.right = (int) Math.max(dirtyRect.right, point.right);
+			dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, point.bottom);
+		}
 	}
 	
 	@Override
@@ -188,13 +205,13 @@ public class ToolBrush extends StandardTool
 	@Override
 	public Rect getDirtyRegion()
 	{
-		return dirtyRect;
+		return viewDirtyRect;
 	}
 	
 	@Override
 	public void resetDirtyRegion()
 	{
-		if(dirtyRect != null) dirtyRect.setEmpty();
+		if(viewDirtyRect != null) viewDirtyRect.setEmpty();
 	}
 	
 	@Override

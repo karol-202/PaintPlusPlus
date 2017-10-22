@@ -185,6 +185,17 @@ public class ShapePolygon extends Shape
 	}
 	
 	@Override
+	public Rect getDirtyRect()
+	{
+		if(path == null) return null;
+		RectF rectF = new RectF();
+		path.computeBounds(rectF, false);
+		Rect rect = new Rect();
+		rectF.roundOut(rect);
+		return rect;
+	}
+	
+	@Override
 	public void apply(Canvas imageCanvas)
 	{
 		if(path == null) return;

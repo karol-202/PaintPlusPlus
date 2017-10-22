@@ -26,16 +26,6 @@ public class History
 		return !followingActions.empty();
 	}
 	
-	boolean canActionBeUndoneNow(Action action)
-	{
-		return !previousActions.empty() && previousActions.peek() == action;
-	}
-	
-	boolean canActionBeRedoneNow(Action action)
-	{
-		return !followingActions.empty() && followingActions.peek() == action;
-	}
-	
 	public void undo(Image image)
 	{
 		Action action = previousActions.pop();
@@ -57,6 +47,12 @@ public class History
 		previousActions.push(action);
 		followingActions.clear();
 		if(listener != null) listener.onHistoryUpdated();
+	}
+	
+	public void clear()
+	{
+		previousActions.clear();
+		followingActions.clear();
 	}
 	
 	int getPreviousActionsAmount()

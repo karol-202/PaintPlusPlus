@@ -4,10 +4,12 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.util.Utils;
 
 public class ToolMarker extends StandardTool
 {
@@ -20,7 +22,8 @@ public class ToolMarker extends StandardTool
 	
 	private MarkerAdapterQuadraticPath adapterQuadraticPath;
 	
-	private Rect dirtyRect;
+	private Rect viewDirtyRect;
+	private Rect historyDirtyRect;
 
 	public ToolMarker(Image image)
 	{
@@ -75,37 +78,53 @@ public class ToolMarker extends StandardTool
 		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
 		
-		getCurrentAdapter().onBeginDraw(x, y);
+		viewDirtyRect = new Rect();
+		historyDirtyRect = new Rect();
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
 		
-		expandDirtyRectByPoint((int) x, (int) y);
+		getCurrentAdapter().onBeginDraw(x, y);
 		return true;
 	}
 	
 	@Override
 	public boolean onTouchMove(float x, float y)
 	{
-		getCurrentAdapter().onDraw(x, y);
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
 		
-		expandDirtyRectByPoint((int) x, (int) y);
+		getCurrentAdapter().onDraw(x, y);
 		return true;
 	}
 	
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
-		getCurrentAdapter().onEndDraw(x, y);
+		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
+		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
 		
-		dirtyRect = null;
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), historyDirtyRect);
+		
+		viewDirtyRect = null;
+		historyDirtyRect = null;
+		
+		getCurrentAdapter().onEndDraw(x, y);
+		action.applyAction(image);
 		return true;
 	}
 	
-	private void expandDirtyRectByPoint(int x, int y)
+	private void expandDirtyRectByPoint(Rect dirtyRect, int x, int y)
 	{
-		if(dirtyRect == null) dirtyRect = new Rect();
-		dirtyRect.left = (int) Math.min(dirtyRect.left, x - size);
-		dirtyRect.top = (int) Math.min(dirtyRect.top, y - size);
-		dirtyRect.right = (int) Math.max(dirtyRect.right, x + size);
-		dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, y + size);
+		int halfSize = Utils.roundAwayFromZero(size / 2);
+		if(dirtyRect.isEmpty()) dirtyRect.set(x - halfSize, y - halfSize, x + halfSize, y + halfSize);
+		else
+		{
+			dirtyRect.left = Math.min(dirtyRect.left, x - halfSize);
+			dirtyRect.top = Math.min(dirtyRect.top, y - halfSize);
+			dirtyRect.right = Math.max(dirtyRect.right, x + halfSize);
+			dirtyRect.bottom = Math.max(dirtyRect.bottom, y + halfSize);
+		}
 	}
 	
 	@Override
@@ -117,13 +136,13 @@ public class ToolMarker extends StandardTool
 	@Override
 	public Rect getDirtyRegion()
 	{
-		return dirtyRect;
+		return viewDirtyRect;
 	}
 	
 	@Override
 	public void resetDirtyRegion()
 	{
-		if(dirtyRect != null) dirtyRect.setEmpty();
+		if(viewDirtyRect != null) viewDirtyRect.setEmpty();
 	}
 	
 	@Override

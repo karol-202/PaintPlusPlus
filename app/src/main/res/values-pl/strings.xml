@@ -246,4 +246,5 @@
 	<string name="history_current_position">Aktualna pozycja</string>
 	<string name="action_history">Historia</string>
 	<string name="activity_history">Historia zmian</string>
+	<string name="history_action_bitmap_change">Zmiana warstwy</string>
 </resources>

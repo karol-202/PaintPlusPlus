@@ -2,6 +2,7 @@ package pl.karol202.paintplus.tool.gradient;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
@@ -260,7 +261,11 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	
 	void apply()
 	{
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		
 		shape.applyGradient(canvas);
+		action.applyAction(image);
 		cancel();
 	}
 	

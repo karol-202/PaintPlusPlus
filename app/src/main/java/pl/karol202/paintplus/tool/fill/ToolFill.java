@@ -145,7 +145,7 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	@Override
 	public void onFillComplete(Bitmap bitmap)
 	{
-		canvas.drawBitmap(bitmap, 0, 0, null);
+		canvas.drawBitmap(bitmap, 0, 0, null);//TODO Paint opacity = strength
 		image.updateImage();
 		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
