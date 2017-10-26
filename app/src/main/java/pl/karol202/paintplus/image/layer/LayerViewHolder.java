@@ -22,6 +22,7 @@ import android.widget.*;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerNameChange;
+import pl.karol202.paintplus.history.action.ActionLayerVisibilityChange;
 
 public class LayerViewHolder extends RecyclerView.ViewHolder
 		implements OnLongClickListener, OnTouchListener, OnClickListener, OnMenuItemClickListener
@@ -199,6 +200,10 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	private void toggleVisibility()
 	{
+		ActionLayerVisibilityChange action = new ActionLayerVisibilityChange(adapter.getImage());
+		action.setLayerBeforeChange(layer);
+		action.applyAction();
+		
 		layer.setVisibility(!layer.isVisible());
 		if(adapter.getImage().isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
 				R.drawable.ic_visible_white_24dp :

@@ -249,4 +249,6 @@
 	<string name="history_action_bitmap_change">Zmiana warstwy</string>
 	<string name="history_action_cut">Wycinanie</string>
 	<string name="history_action_layer_name_change">Zmiana nazwy warstwy</string>
+	<string name="history_action_layer_hide">Ukrycie warstwy</string>
+	<string name="history_action_layer_show">Pokazanie warstwy</string>
 </resources>

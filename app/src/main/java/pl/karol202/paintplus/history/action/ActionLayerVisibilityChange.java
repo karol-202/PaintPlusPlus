@@ -7,12 +7,12 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerNameChange extends Action
+public class ActionLayerVisibilityChange extends Action
 {
 	private int layerId;
-	private String name;
+	private boolean hideLayer;//True, if action caused hide of the layer and undo will show the layer again.
 	
-	public ActionLayerNameChange(Image image)
+	public ActionLayerVisibilityChange(Image image)
 	{
 		super(image);
 		this.layerId = -1;
@@ -39,10 +39,7 @@ public class ActionLayerNameChange extends Action
 	{
 		if(!super.undo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
-		
-		String newName = layer.getName();
-		layer.setName(name);
-		name = newName;
+		layer.setVisibility(hideLayer);
 		return true;
 	}
 	
@@ -51,10 +48,7 @@ public class ActionLayerNameChange extends Action
 	{
 		if(!super.redo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
-		
-		String oldName = layer.getName();
-		layer.setName(name);
-		name = oldName;
+		layer.setVisibility(!hideLayer);
 		return true;
 	}
 	
@@ -67,14 +61,14 @@ public class ActionLayerNameChange extends Action
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_name_change;
+		return hideLayer ? R.string.history_action_layer_hide : R.string.history_action_layer_show;
 	}
 	
-	public void setLayer(Layer layer)
+	public void setLayerBeforeChange(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.layerId = getTemporaryImage().getLayerIndex(layer);
-		this.name = layer.getName();
+		this.hideLayer = layer.isVisible();
 		updateBitmap(getTemporaryImage());
 	}
 }

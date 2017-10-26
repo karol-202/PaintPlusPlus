@@ -160,7 +160,7 @@ public class Layer
 		return visible;
 	}
 	
-	void setVisibility(boolean visible)
+	public void setVisibility(boolean visible)
 	{
 		this.visible = visible;
 		if(listener != null) listener.onImageChanged();
