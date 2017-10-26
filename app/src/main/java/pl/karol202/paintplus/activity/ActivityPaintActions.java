@@ -50,6 +50,7 @@ class ActivityPaintActions
 			public void onHistoryUpdated()
 			{
 				activity.invalidateOptionsMenu();
+				image.updateImage();
 			}
 		});
 	}

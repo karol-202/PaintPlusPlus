@@ -2,7 +2,7 @@ package pl.karol202.paintplus.tool.shape;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.ActionLayerChange;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
@@ -161,7 +161,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), shape.getDirtyRect());
 		
 		shape.apply(canvas);
-		action.applyAction(image);
+		action.applyAction();
 	}
 	
 	public void cancel()

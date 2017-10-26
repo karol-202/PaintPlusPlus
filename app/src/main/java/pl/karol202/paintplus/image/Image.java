@@ -5,7 +5,7 @@ import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
-import pl.karol202.paintplus.history.Action;
+import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.history.History;
 import pl.karol202.paintplus.history.OnHistoryUpdateListener;
 import pl.karol202.paintplus.image.layer.Layer;

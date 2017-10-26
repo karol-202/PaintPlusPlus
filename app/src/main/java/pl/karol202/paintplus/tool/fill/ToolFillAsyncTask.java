@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.history.ActionLayerChange;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -120,7 +120,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	protected void onPostExecute(Bitmap bitmap)
 	{
 		super.onPostExecute(bitmap);
-		historyAction.applyAction(image);
+		historyAction.applyAction();
 		if(listener != null) listener.onFillComplete(bitmap);
 	}
 }

@@ -2,7 +2,7 @@ package pl.karol202.paintplus.tool.rubber;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.ActionLayerChange;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -150,7 +150,7 @@ public class ToolRubber extends StandardTool
 			canvas.drawOval(oval, ovalPaint);
 		}
 		
-		action.applyAction(image);
+		action.applyAction();
 		path.reset();
 		lastX = -1;
 		lastY = -1;

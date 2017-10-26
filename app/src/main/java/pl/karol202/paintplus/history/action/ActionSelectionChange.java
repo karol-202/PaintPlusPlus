@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.history;
+package pl.karol202.paintplus.history.action;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
@@ -11,24 +11,12 @@ public class ActionSelectionChange extends Action
 	
 	private Region region;
 	
-	private Bitmap bitmap;
-	private Canvas canvas;
-	private Rect bitmapRect;
 	private Paint selectionPaint;
 	
 	public ActionSelectionChange(Image image)
 	{
-		super();
-		createBitmap(image);
+		super(image);
 		createSelectionPaint();
-	}
-	
-	private void createBitmap(Image image)
-	{
-		int bitmapSize = (int) Math.floor(HistoryActionViewHolder.PREVIEW_SIZE_DP * image.SCREEN_DENSITY);
-		bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
-		canvas = new Canvas(bitmap);
-		bitmapRect = new Rect(0, 0, bitmapSize, bitmapSize);
 	}
 	
 	private void createSelectionPaint()
@@ -41,17 +29,17 @@ public class ActionSelectionChange extends Action
 	
 	private void showRegionOnBitmap(Image image)
 	{
-		bitmap.eraseColor(Color.TRANSPARENT);
-		canvas.drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
-		canvas.drawPath(transformSelectionPath(image, region), selectionPaint);
+		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
+		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
+		getPreviewCanvas().drawPath(transformSelectionPath(image, region), selectionPaint);
 	}
 	
 	private RectF transformImageRect(Image image)
 	{
 		float max = Math.max(image.getWidth(), image.getHeight());
-		float ratio = bitmapRect.width() / max;
+		float ratio = getPreviewRect().width() / max;
 		RectF rect = new RectF(0, 0, image.getWidth() * ratio, image.getHeight() * ratio);
-		rect.offset(bitmapRect.centerX() - rect.centerX(), bitmapRect.centerY() - rect.centerY());
+		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
 	
@@ -68,7 +56,7 @@ public class ActionSelectionChange extends Action
 	}
 	
 	@Override
-	boolean undo(Image image)
+	public boolean undo(Image image)
 	{
 		if(!super.undo(image) || region == null) return false;
 		Selection selection = image.getSelection();
@@ -81,7 +69,7 @@ public class ActionSelectionChange extends Action
 	}
 	
 	@Override
-	boolean redo(Image image)
+	public boolean redo(Image image)
 	{
 		if(!super.redo(image) || region == null) return false;
 		Selection selection = image.getSelection();
@@ -94,27 +82,21 @@ public class ActionSelectionChange extends Action
 	}
 	
 	@Override
-	public void applyAction(Image image)
+	boolean canApplyAction()
 	{
-		if(region != null) super.applyAction(image);
+		return region != null;
 	}
 	
 	@Override
-	Bitmap getActionPreview()
-	{
-		return bitmap;
-	}
-	
-	@Override
-	int getActionName()
+	public int getActionName()
 	{
 		return R.string.history_action_selection_change;
 	}
 	
-	public void setOldRegion(Image image)
+	public void setOldRegion()
 	{
-		if(applied) throw new IllegalStateException("Cannot alter history.");
-		this.region = new Region(image.getSelection().getRegion());
-		showRegionOnBitmap(image);
+		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
+		this.region = new Region(getTemporaryImage().getSelection().getRegion());
+		showRegionOnBitmap(getTemporaryImage());
 	}
 }

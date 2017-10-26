@@ -5,7 +5,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Region.Op;
-import pl.karol202.paintplus.history.ActionSelectionChange;
+import pl.karol202.paintplus.history.action.ActionSelectionChange;
 import pl.karol202.paintplus.image.Image;
 
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ public class Selection
 	public void selectNothing()
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
-		action.setOldRegion(image);
-		action.applyAction(image);
+		action.setOldRegion();
+		action.applyAction();
 		
 		region.setEmpty();
 		updatePath();
@@ -63,8 +63,8 @@ public class Selection
 	void commitSelectionRectangle(Rect rect, Op op)
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
-		action.setOldRegion(image);
-		action.applyAction(image);
+		action.setOldRegion();
+		action.applyAction();
 		
 		region.op(rect, op);
 		updatePath();
@@ -73,8 +73,8 @@ public class Selection
 	void commitSelectionOval(Rect rect, Op op)
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
-		action.setOldRegion(image);
-		action.applyAction(image);
+		action.setOldRegion();
+		action.applyAction();
 		
 		RectF rectF = new RectF(rect);
 		Path ovalPath = new Path();

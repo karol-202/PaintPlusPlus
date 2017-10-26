@@ -21,6 +21,7 @@ import android.view.View.OnTouchListener;
 import android.widget.*;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerNameChange;
 
 public class LayerViewHolder extends RecyclerView.ViewHolder
 		implements OnLongClickListener, OnTouchListener, OnClickListener, OnMenuItemClickListener
@@ -257,6 +258,9 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
+				ActionLayerNameChange action = new ActionLayerNameChange(adapter.getImage());
+				action.setLayer(layer);
+				action.applyAction();
 				layer.setName(editTextName.getText().toString());
 				adapter.notifyDataSetChanged();
 			}

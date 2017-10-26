@@ -264,4 +264,6 @@
 	<string name="action_history">History</string>
 	<string name="activity_history">History of changes</string>
 	<string name="history_action_bitmap_change">Layer change</string>
+	<string name="history_action_cut">Cutting</string>
+	<string name="history_action_layer_name_change">Layer name change</string>
 </resources>

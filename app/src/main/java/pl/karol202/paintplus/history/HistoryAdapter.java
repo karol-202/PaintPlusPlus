@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.Action;
 
 class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder>
 {

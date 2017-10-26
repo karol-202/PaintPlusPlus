@@ -4,10 +4,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.Action;
 
-class HistoryActionViewHolder extends HistoryViewHolder
+public class HistoryActionViewHolder extends HistoryViewHolder
 {
-	static final int PREVIEW_SIZE_DP = 60;
+	public static final int PREVIEW_SIZE_DP = 60;
 	
 	private ImageView imagePreview;
 	private TextView textName;

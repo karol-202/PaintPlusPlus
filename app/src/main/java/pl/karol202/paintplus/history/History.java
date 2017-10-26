@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.history;
 
+import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.image.Image;
 
 import java.util.Stack;

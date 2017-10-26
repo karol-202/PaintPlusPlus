@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.history;
+package pl.karol202.paintplus.history.action;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
@@ -11,19 +11,13 @@ public class ActionLayerChange extends Action
 	private Rect dirtyRect;
 	private Bitmap bitmap;
 	
-	private Image temporaryImage;
 	private Paint bitmapPaint;
-	
-	private Bitmap previewBitmap;
-	private Canvas previewCanvas;
-	private Rect previewRect;
 	
 	public ActionLayerChange(Image image)
 	{
-		super();
-		this.temporaryImage = image;
+		super(image);
+		this.layerId = -1;
 		createPaint();
-		createBitmap(image);
 	}
 	
 	private void createPaint()
@@ -32,29 +26,21 @@ public class ActionLayerChange extends Action
 		bitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 	}
 	
-	private void createBitmap(Image image)
-	{
-		int bitmapSize = (int) Math.floor(HistoryActionViewHolder.PREVIEW_SIZE_DP * image.SCREEN_DENSITY);
-		previewBitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
-		previewCanvas = new Canvas(previewBitmap);
-		previewRect = new Rect(0, 0, bitmapSize, bitmapSize);
-	}
-	
 	private void updateBitmap(Image image)
 	{
 		if(bitmap == null) return;
 		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
-		previewBitmap.eraseColor(Color.TRANSPARENT);
-		previewCanvas.drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
-		previewCanvas.drawBitmap(bitmap, null, transformDirtyRect(layerBitmap), bitmapPaint);
+		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
+		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
+		getPreviewCanvas().drawBitmap(bitmap, null, transformDirtyRect(layerBitmap), bitmapPaint);
 	}
 	
 	private RectF transformLayerRect(Bitmap layerBitmap)
 	{
 		float max = Math.max(layerBitmap.getWidth(), layerBitmap.getHeight());
-		float ratio = previewRect.width() / max;
+		float ratio = getPreviewRect().width() / max;
 		RectF rect = new RectF(0, 0, layerBitmap.getWidth() * ratio, layerBitmap.getHeight() * ratio);
-		rect.offset(previewRect.centerX() - rect.centerX(), previewRect.centerY() - rect.centerY());
+		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
 	
@@ -71,7 +57,7 @@ public class ActionLayerChange extends Action
 	}
 	
 	@Override
-	boolean undo(Image image)
+	public boolean undo(Image image)
 	{
 		if(!super.undo(image) || bitmap == null) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
@@ -84,7 +70,7 @@ public class ActionLayerChange extends Action
 	}
 	
 	@Override
-	boolean redo(Image image)
+	public boolean redo(Image image)
 	{
 		if(!super.redo(image) || bitmap == null) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
@@ -97,28 +83,21 @@ public class ActionLayerChange extends Action
 	}
 	
 	@Override
-	public void applyAction(Image image)
+	boolean canApplyAction()
 	{
-		if(bitmap != null && checkIfBitmapChanged()) super.applyAction(image);
-		temporaryImage = null;
+		return layerId != -1 && bitmap != null && checkIfBitmapChanged();
 	}
 	
 	private boolean checkIfBitmapChanged()
 	{
 		if(bitmap == null) return false;
-		Layer layer = temporaryImage.getLayerAtIndex(layerId);
+		Layer layer = getTemporaryImage().getLayerAtIndex(layerId);
 		Bitmap oldBitmap = Bitmap.createBitmap(layer.getBitmap(), dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		return !bitmap.sameAs(oldBitmap);
 	}
 	
 	@Override
-	Bitmap getActionPreview()
-	{
-		return previewBitmap;
-	}
-	
-	@Override
-	int getActionName()
+	public int getActionName()
 	{
 		return R.string.history_action_bitmap_change;
 	}
@@ -130,17 +109,17 @@ public class ActionLayerChange extends Action
 	
 	public void setLayerChange(int layerId, Bitmap bitmapBeforeChange, Rect dirtyRect)
 	{
-		if(applied) throw new IllegalStateException("Cannot alter history.");
+		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.layerId = layerId;
 		this.bitmap = bitmapBeforeChange;
 		setDirtyRect(dirtyRect);
-		updateBitmap(temporaryImage);
+		updateBitmap(getTemporaryImage());
 	}
 	
 	public void setDirtyRect(Rect dirtyRect)
 	{
-		if(applied) throw new IllegalStateException("Cannot alter history.");
-		Layer layer = temporaryImage.getLayerAtIndex(layerId);
+		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
+		Layer layer = getTemporaryImage().getLayerAtIndex(layerId);
 		this.dirtyRect = clipRect(layer, dirtyRect);
 		if(bitmap != null && isRectApplicableForThisAction(dirtyRect))
 			bitmap = Bitmap.createBitmap(bitmap, dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());

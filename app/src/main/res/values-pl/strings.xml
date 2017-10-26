@@ -247,4 +247,6 @@
 	<string name="action_history">Historia</string>
 	<string name="activity_history">Historia zmian</string>
 	<string name="history_action_bitmap_change">Zmiana warstwy</string>
+	<string name="history_action_cut">Wycinanie</string>
+	<string name="history_action_layer_name_change">Zmiana nazwy warstwy</string>
 </resources>
