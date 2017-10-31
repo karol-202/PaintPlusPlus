@@ -1,8 +1,8 @@
 package pl.karol202.paintplus.image.layer;
 
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +10,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerPropertiesChange;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
@@ -19,6 +21,7 @@ import java.util.Locale;
 class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener, DialogInterface.OnClickListener
 {
 	private Context context;
+	private Image image;
 	private Layer layer;
 	private LayerModeAdapter adapter;
 	
@@ -30,9 +33,10 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	private SeekBar seekBarOpacity;
 	private TextView textOpacity;
 	
-	LayerPropertiesDialog(Context context, Layer layer)
+	LayerPropertiesDialog(Context context, Image image, Layer layer)
 	{
 		this.context = context;
+		this.image = image;
 		this.layer = layer;
 		
 		layerMode = layer.getMode();
@@ -112,6 +116,10 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
+		ActionLayerPropertiesChange action = new ActionLayerPropertiesChange(image);
+		action.setLayerBeforeChange(layer);
+		action.applyAction();
+		
 		layer.setMode(layerMode);
 		layer.setOpacity(opacity);
 	}

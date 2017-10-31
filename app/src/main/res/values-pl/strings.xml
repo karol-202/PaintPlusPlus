@@ -251,4 +251,8 @@
 	<string name="history_action_layer_name_change">Zmiana nazwy warstwy</string>
 	<string name="history_action_layer_hide">Ukrycie warstwy</string>
 	<string name="history_action_layer_show">Pokazanie warstwy</string>
+	<string name="history_action_layer_properties_change">Zmiana właściwości warstwy</string>
+	<string name="history_action_layer_add">Dodanie warstwy</string>
+	<string name="history_action_paste">Wklejenie</string>
+	<string name="history_action_layer_duplicate">Duplikacja warstwy</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
 
@@ -111,6 +112,14 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		newLayer.setOpacity(layer.getOpacity());
 		if(!image.addLayer(newLayer, layerIndex))
 			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+		else createDuplicateHistoryAction(newLayer);
+	}
+	
+	private void createDuplicateHistoryAction(Layer newLayer)
+	{
+		ActionLayerDuplicate action = new ActionLayerDuplicate(image);
+		action.setLayer(newLayer);
+		action.applyAction();
 	}
 	
 	void joinWithNextLayer(Layer firstLayer)

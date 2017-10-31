@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.GraphicsHelper;
@@ -124,6 +125,10 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		{
 			layer.setPosition(x, y);
 			if(listener != null) listener.onLayerAdded();
+			
+			ActionLayerAdd action = new ActionLayerAdd(image);
+			action.setLayer(layer);
+			action.applyAction();
 		}
 	}
 	

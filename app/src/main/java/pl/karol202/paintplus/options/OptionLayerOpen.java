@@ -10,6 +10,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoaderDialog;
+import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -52,13 +53,22 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
-		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
-		else
+		if(bitmap == null)
 		{
-			Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), fileName, Color.TRANSPARENT);
-			layer.setBitmap(bitmap);
-			if(!image.addLayer(layer, 0))
-				Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
+			return;
 		}
+		Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), fileName, Color.TRANSPARENT);
+		layer.setBitmap(bitmap);
+		if(!image.addLayer(layer, 0))
+			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+		else createLayerAddHistoryAction(layer);
+	}
+	
+	private void createLayerAddHistoryAction(Layer layer)
+	{
+		ActionLayerAdd action = new ActionLayerAdd(image);
+		action.setLayer(layer);
+		action.applyAction();
 	}
 }

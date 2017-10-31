@@ -17,5 +17,6 @@ App has following features:
 * Loading image from file and saving to file
 * Capturing photo from camera
 * Copying and pasting
+* History (undo and redo)
 * Image and layer manipulation functions (like scaling, rotating, flipping)
 * Advanced colors editing based on color curves.

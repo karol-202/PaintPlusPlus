@@ -2,6 +2,7 @@ package pl.karol202.paintplus.image;
 
 import android.graphics.*;
 import pl.karol202.paintplus.history.action.ActionCut;
+import pl.karol202.paintplus.history.action.ActionPaste;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -63,6 +64,10 @@ public class Clipboard
 		if(layer == null) return;
 		layer.setPosition(left, top);
 		layer.setBitmap(bitmap);
+		
+		ActionPaste action = new ActionPaste(image);
+		action.setLayer(layer);
+		action.applyAction();
 	}
 	
 	public boolean isEmpty()

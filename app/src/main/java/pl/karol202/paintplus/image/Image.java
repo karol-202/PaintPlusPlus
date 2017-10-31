@@ -236,7 +236,6 @@ public class Image
 		int index = layers.indexOf(layer);
 		if(index <= selectedLayer && selectedLayer != 0) selectedLayer--;
 		layers.remove(layer);
-		if(layers.size() == 0) selection.selectNothing();
 		updateLayersPreview();
 	}
 	

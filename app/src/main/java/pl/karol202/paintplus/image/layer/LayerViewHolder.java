@@ -228,7 +228,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		switch(item.getItemId())
 		{
 		case R.id.action_layer_properties:
-			new LayerPropertiesDialog(adapter.getContext(), layer).show();
+			new LayerPropertiesDialog(adapter.getContext(), adapter.getImage(), layer).show();
 			return true;
 		case R.id.action_layer_change_name:
 			showNameDialog();

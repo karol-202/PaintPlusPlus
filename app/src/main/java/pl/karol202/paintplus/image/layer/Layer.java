@@ -198,7 +198,7 @@ public class Layer
 		return mode;
 	}
 	
-	void setMode(LayerMode mode)
+	public void setMode(LayerMode mode)
 	{
 		this.mode = mode;
 		mode.setLayer(this);
@@ -209,7 +209,7 @@ public class Layer
 		return opacity;
 	}
 	
-	void setOpacity(float opacity)
+	public void setOpacity(float opacity)
 	{
 		this.opacity = opacity;
 	}

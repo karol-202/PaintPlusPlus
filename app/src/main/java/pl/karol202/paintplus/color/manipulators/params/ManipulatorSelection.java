@@ -14,12 +14,12 @@ public class ManipulatorSelection
 		this.bounds = bounds;
 	}
 	
-	//Returns array of bytes corresponding to pixels of selection in given bounds.
+	//Creates array of bytes corresponding to pixels of selection in given bounds.
 	//0 - false, 1 - true
 	public static ManipulatorSelection fromSelection(Selection selection, Rect layerBounds)
 	{
 		Rect bounds = selection.getBounds();
-		if(!bounds.intersect(layerBounds)) return null;
+		if(bounds.isEmpty() || !bounds.intersect(layerBounds)) return null;
 		
 		byte[] array = new byte[bounds.width() * bounds.height()];
 		for(int x = bounds.left; x < bounds.right; x++)
