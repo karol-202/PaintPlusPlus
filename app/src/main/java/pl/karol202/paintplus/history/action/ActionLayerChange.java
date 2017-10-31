@@ -35,15 +35,6 @@ public class ActionLayerChange extends Action
 		getPreviewCanvas().drawBitmap(bitmap, null, transformDirtyRect(layerBitmap), bitmapPaint);
 	}
 	
-	private RectF transformLayerRect(Bitmap layerBitmap)
-	{
-		float max = Math.max(layerBitmap.getWidth(), layerBitmap.getHeight());
-		float ratio = getPreviewRect().width() / max;
-		RectF rect = new RectF(0, 0, layerBitmap.getWidth() * ratio, layerBitmap.getHeight() * ratio);
-		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
-		return rect;
-	}
-	
 	private RectF transformDirtyRect(Bitmap layerBitmap)
 	{
 		RectF layerRect = transformLayerRect(layerBitmap);

@@ -21,6 +21,7 @@ import android.view.View.OnTouchListener;
 import android.widget.*;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerDelete;
 import pl.karol202.paintplus.history.action.ActionLayerNameChange;
 import pl.karol202.paintplus.history.action.ActionLayerVisibilityChange;
 
@@ -266,6 +267,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 				ActionLayerNameChange action = new ActionLayerNameChange(adapter.getImage());
 				action.setLayer(layer);
 				action.applyAction();
+				
 				layer.setName(editTextName.getText().toString());
 				adapter.notifyDataSetChanged();
 			}
@@ -284,6 +286,10 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
+				ActionLayerDelete action = new ActionLayerDelete(adapter.getImage());
+				action.setLayerBeforeDeleting(layer);
+				action.applyAction();
+				
 				adapter.getImage().deleteLayer(layer);
 				adapter.notifyDataSetChanged();
 			}

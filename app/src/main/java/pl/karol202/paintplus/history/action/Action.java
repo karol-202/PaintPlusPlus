@@ -3,6 +3,7 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import pl.karol202.paintplus.history.HistoryActionViewHolder;
 import pl.karol202.paintplus.image.Image;
 
@@ -32,6 +33,15 @@ public abstract class Action
 		previewBitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
 		previewCanvas = new Canvas(previewBitmap);
 		previewRect = new Rect(0, 0, bitmapSize, bitmapSize);
+	}
+	
+	RectF transformLayerRect(Bitmap layerBitmap)
+	{
+		float max = Math.max(layerBitmap.getWidth(), layerBitmap.getHeight());
+		float ratio = getPreviewRect().width() / max;
+		RectF rect = new RectF(0, 0, layerBitmap.getWidth() * ratio, layerBitmap.getHeight() * ratio);
+		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
+		return rect;
 	}
 	
 	public boolean undo(Image image)

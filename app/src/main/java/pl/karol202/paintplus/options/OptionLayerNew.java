@@ -127,7 +127,7 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 			if(listener != null) listener.onLayerAdded();
 			
 			ActionLayerAdd action = new ActionLayerAdd(image);
-			action.setLayer(layer);
+			action.setLayerAfterAdding(layer);
 			action.applyAction();
 		}
 	}

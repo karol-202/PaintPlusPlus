@@ -272,4 +272,6 @@
 	<string name="history_action_layer_add">Layer adding</string>
 	<string name="history_action_paste">Pasting</string>
 	<string name="history_action_layer_duplicate">Layer duplication</string>
+	<string name="history_action_layer_delete">Layer deleting</string>
+	<string name="history_action_layer_order_move">Layer order</string>
 </resources>

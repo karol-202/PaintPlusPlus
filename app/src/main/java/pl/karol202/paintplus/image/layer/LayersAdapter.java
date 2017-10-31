@@ -10,6 +10,7 @@ import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
+import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
 
@@ -99,6 +100,10 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		
 		image.selectLayer(layers.indexOf(selected));
 		image.updateImage();
+		
+		ActionLayerOrderMove action = new ActionLayerOrderMove(image);
+		action.setSourceAndDestinationLayerPos(layerId, target);
+		action.applyAction();
 	}
 	
 	void duplicateLayer(Layer layer)
@@ -118,7 +123,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	private void createDuplicateHistoryAction(Layer newLayer)
 	{
 		ActionLayerDuplicate action = new ActionLayerDuplicate(image);
-		action.setLayer(newLayer);
+		action.setLayerAfterAdding(newLayer);
 		action.applyAction();
 	}
 	

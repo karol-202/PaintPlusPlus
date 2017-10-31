@@ -66,7 +66,7 @@ public class Clipboard
 		layer.setBitmap(bitmap);
 		
 		ActionPaste action = new ActionPaste(image);
-		action.setLayer(layer);
+		action.setLayerAfterAdding(layer);
 		action.applyAction();
 	}
 	

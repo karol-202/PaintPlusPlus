@@ -68,7 +68,7 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 	private void createLayerAddHistoryAction(Layer layer)
 	{
 		ActionLayerAdd action = new ActionLayerAdd(image);
-		action.setLayer(layer);
+		action.setLayerAfterAdding(layer);
 		action.applyAction();
 	}
 }

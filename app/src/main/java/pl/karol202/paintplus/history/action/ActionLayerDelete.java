@@ -6,12 +6,12 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerAdd extends Action
+public class ActionLayerDelete extends Action
 {
 	private Layer layer;
 	private int layerPosition;
 	
-	public ActionLayerAdd(Image image)
+	public ActionLayerDelete(Image image)
 	{
 		super(image);
 	}
@@ -27,7 +27,7 @@ public class ActionLayerAdd extends Action
 	public boolean undo(Image image)
 	{
 		if(!super.undo(image)) return false;
-		image.deleteLayer(layer);
+		image.addLayer(layer, layerPosition);
 		return true;
 	}
 	
@@ -35,7 +35,7 @@ public class ActionLayerAdd extends Action
 	public boolean redo(Image image)
 	{
 		if(!super.redo(image)) return false;
-		image.addLayer(layer, layerPosition);
+		image.deleteLayer(layer);
 		return true;
 	}
 	
@@ -48,10 +48,10 @@ public class ActionLayerAdd extends Action
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_add;
+		return R.string.history_action_layer_delete;
 	}
 	
-	public void setLayerAfterAdding(Layer layer)
+	public void setLayerBeforeDeleting(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.layer = layer;
