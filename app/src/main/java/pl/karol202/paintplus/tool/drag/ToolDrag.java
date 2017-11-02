@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerDrag;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -97,6 +98,13 @@ public class ToolDrag extends StandardTool
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
+		int deltaX = Math.round(layer.getX() - oldLayerX);
+		int deltaY = Math.round(layer.getY() - oldLayerY);
+		
+		ActionLayerDrag action = new ActionLayerDrag(image);
+		action.setLayerAndDragDelta(layer, deltaX, deltaY);
+		action.applyAction();
+		
 		return true;
 	}
 	
