@@ -276,4 +276,5 @@
 	<string name="history_action_layer_order_move">Layer order</string>
 	<string name="history_action_layer_join">Layer joining</string>
 	<string name="history_action_layer_drag">Layer drag</string>
+	<string name="history_action_image_flip">Image flip</string>
 </resources>

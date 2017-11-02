@@ -259,4 +259,5 @@
 	<string name="history_action_layer_order_move">Zmiana kolejności warstw</string>
 	<string name="history_action_layer_join">Połączenie warstw</string>
 	<string name="history_action_layer_drag">Przesunięcie warstwy</string>
+	<string name="history_action_image_flip">Odwrócenie obrazu</string>
 </resources>

@@ -21,6 +21,7 @@ import pl.karol202.paintplus.color.curves.OnCurveEditListener;
 import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -110,6 +111,9 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	
 	private void applyChanges()
 	{
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		
 		Selection selection = image.getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 		
@@ -118,6 +122,8 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		
 		Bitmap bitmapOut = manipulator.run(oldBitmap, params);
 		layer.setBitmap(bitmapOut);
+		
+		action.applyAction();
 	}
 	
 	private void revertChanges()

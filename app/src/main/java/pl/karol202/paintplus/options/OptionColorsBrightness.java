@@ -14,6 +14,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -84,14 +85,8 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		if(seekBar == seekBarBrightness)
-		{
-			textBrightness.setText(getText(seekBarBrightness));
-		}
-		else if(seekBar == seekBarContrast)
-		{
-			textContrast.setText(getText(seekBarContrast));
-		}
+		if(seekBar == seekBarBrightness) textBrightness.setText(getText(seekBarBrightness));
+		else if(seekBar == seekBarContrast) textContrast.setText(getText(seekBarContrast));
 	}
 	
 	@Override
@@ -109,6 +104,9 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	
 	private void applyChanges()
 	{
+		ActionLayerChange action = new ActionLayerChange(image);
+		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		
 		Selection selection = image.getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 		
@@ -118,6 +116,8 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		
 		Bitmap bitmapOut = manipulator.run(oldBitmap, params);
 		layer.setBitmap(bitmapOut);
+		
+		action.applyAction();
 	}
 	
 	private void revertChanges()
