@@ -10,6 +10,7 @@ import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
+import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
@@ -151,6 +152,14 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		image.deleteLayer(firstLayer);
 		image.deleteLayer(secondLayer);
 		image.addLayer(resultLayer, firstIndex);
+		createJoinHistoryAction(firstLayer, secondLayer, firstIndex);
+	}
+	
+	private void createJoinHistoryAction(Layer firstLayer, Layer secondLayer, int resultLayerId)
+	{
+		ActionLayerJoin action = new ActionLayerJoin(image);
+		action.setLayers(firstLayer, secondLayer, resultLayerId);
+		action.applyAction();
 	}
 	
 	private LayerMode copyLayerMode(LayerMode mode)

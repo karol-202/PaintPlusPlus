@@ -257,4 +257,5 @@
 	<string name="history_action_layer_duplicate">Duplikacja warstwy</string>
 	<string name="history_action_layer_delete">Usunięcie warstwy</string>
 	<string name="history_action_layer_order_move">Zmiana kolejności warstw</string>
+	<string name="history_action_layer_join">Połączenie warstw</string>
 </resources>
