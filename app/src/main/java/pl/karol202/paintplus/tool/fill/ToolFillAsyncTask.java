@@ -120,7 +120,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	protected void onPostExecute(Bitmap bitmap)
 	{
 		super.onPostExecute(bitmap);
-		historyAction.applyAction();
 		if(listener != null) listener.onFillComplete(bitmap);
+		historyAction.applyAction();
 	}
 }

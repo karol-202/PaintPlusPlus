@@ -260,4 +260,6 @@
 	<string name="history_action_layer_join">Połączenie warstw</string>
 	<string name="history_action_layer_drag">Przesunięcie warstwy</string>
 	<string name="history_action_image_flip">Odwrócenie obrazu</string>
+	<string name="history_action_image_resize">Zmiana wielkości obrazu</string>
+	<string name="history_action_image_scale">Skalowanie obrazu</string>
 </resources>
