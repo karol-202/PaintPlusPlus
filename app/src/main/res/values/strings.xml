@@ -279,4 +279,7 @@
 	<string name="history_action_image_flip">Image flip</string>
 	<string name="history_action_image_resize">Image resize</string>
 	<string name="history_action_image_scale">Image scaling</string>
+	<string name="history_action_color_curves">Color curves</string>
+	<string name="history_action_brightness">Brightness</string>
+	<string name="history_action_colors_invert">Colors inverting</string>
 </resources>

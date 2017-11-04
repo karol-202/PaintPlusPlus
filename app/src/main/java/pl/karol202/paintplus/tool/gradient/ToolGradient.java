@@ -261,7 +261,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	
 	void apply()
 	{
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_gradient);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
 		
 		shape.applyGradient(canvas);

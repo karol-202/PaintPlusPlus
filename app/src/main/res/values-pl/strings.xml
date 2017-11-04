@@ -262,4 +262,7 @@
 	<string name="history_action_image_flip">Odwrócenie obrazu</string>
 	<string name="history_action_image_resize">Zmiana wielkości obrazu</string>
 	<string name="history_action_image_scale">Skalowanie obrazu</string>
+	<string name="history_action_color_curves">Krzywe kolorów</string>
+	<string name="history_action_brightness">Jasność</string>
+	<string name="history_action_colors_invert">Odwrócenie kolorów</string>
 </resources>

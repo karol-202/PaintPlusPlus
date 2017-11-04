@@ -136,7 +136,7 @@ public class ToolRubber extends StandardTool
 		
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 		
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_rubber);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), historyDirtyRect);
 		
 		if(pathCreated) canvas.drawPath(path, pathPaint);

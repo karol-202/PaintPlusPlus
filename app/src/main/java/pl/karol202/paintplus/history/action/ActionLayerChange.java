@@ -7,6 +7,7 @@ import pl.karol202.paintplus.image.layer.Layer;
 
 public class ActionLayerChange extends Action
 {
+	private int name;
 	private int layerId;
 	private Rect dirtyRect;
 	private Bitmap bitmap;
@@ -15,7 +16,13 @@ public class ActionLayerChange extends Action
 	
 	public ActionLayerChange(Image image)
 	{
+		this(image, R.string.history_action_layer_name_change);
+	}
+	
+	public ActionLayerChange(Image image, int name)
+	{
 		super(image);
+		this.name = name;
 		this.layerId = -1;
 		createPaint();
 	}
@@ -90,7 +97,7 @@ public class ActionLayerChange extends Action
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_bitmap_change;
+		return name;
 	}
 	
 	public void setLayerChange(int layerId, Bitmap bitmapBeforeChange)

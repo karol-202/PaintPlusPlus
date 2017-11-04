@@ -157,7 +157,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	
 	public void apply()
 	{
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_shape);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), shape.getDirtyRect());
 		
 		shape.apply(canvas);

@@ -98,13 +98,13 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which == DialogInterface.BUTTON_POSITIVE) applyChanges();
+		if(which == DialogInterface.BUTTON_POSITIVE) applyChanges(true);
 		else if(which == DialogInterface.BUTTON_NEGATIVE) revertChanges();
 	}
 	
-	private void applyChanges()
+	private void applyChanges(boolean applyToHistory)
 	{
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.history_action_brightness);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
 		
 		Selection selection = image.getSelection();
@@ -117,7 +117,7 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		Bitmap bitmapOut = manipulator.run(oldBitmap, params);
 		layer.setBitmap(bitmapOut);
 		
-		action.applyAction();
+		if(applyToHistory) action.applyAction();
 	}
 	
 	private void revertChanges()
@@ -130,12 +130,13 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			applyChanges();
+			applyChanges(false);
 			dialog.hide();
 			v.getParent().requestDisallowInterceptTouchEvent(true);
 		}
 		else if(event.getAction() == MotionEvent.ACTION_UP)
 		{
+			revertChanges();
 			dialog.show();
 			v.getParent().requestDisallowInterceptTouchEvent(false);
 		}

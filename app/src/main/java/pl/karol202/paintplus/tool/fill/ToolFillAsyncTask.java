@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
@@ -53,7 +54,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 		threshold = params.getThreshold();
 		x = params.getX();
 		y = params.getY();
-		historyAction = new ActionLayerChange(image);
+		historyAction = new ActionLayerChange(image, R.string.tool_fill);
 		historyAction.setLayerChange(image.getSelectedLayerIndex(), bitmap);
 		
 		fill();

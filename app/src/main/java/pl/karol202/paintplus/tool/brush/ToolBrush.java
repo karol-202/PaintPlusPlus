@@ -86,7 +86,7 @@ public class ToolBrush extends StandardTool
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
 		
-		historyAction = new ActionLayerChange(image);
+		historyAction = new ActionLayerChange(image, R.string.tool_brush);
 		historyAction.setLayerChange(image.getSelectedLayerIndex(), layer.getBitmap());
 		
 		resetClipping(canvas);

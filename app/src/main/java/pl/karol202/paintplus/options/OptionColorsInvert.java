@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.manipulators.ColorsInvert;
 import pl.karol202.paintplus.color.manipulators.params.InvertParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
@@ -24,7 +25,7 @@ public class OptionColorsInvert extends Option
 		Bitmap bitmapIn = layer.getBitmap();
 		Selection selection = image.getSelection();
 		
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.history_action_colors_invert);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
 		
 		ColorsInvert invert = new ColorsInvert();

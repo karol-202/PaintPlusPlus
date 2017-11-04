@@ -1,7 +1,8 @@
 package pl.karol202.paintplus.image;
 
 import android.graphics.*;
-import pl.karol202.paintplus.history.action.ActionCut;
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.history.action.ActionPaste;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
@@ -27,7 +28,7 @@ public class Clipboard
 	{
 		copy(selectedLayer);
 		
-		ActionCut action = new ActionCut(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.history_action_cut);
 		action.setLayerChange(image.getLayerIndex(selectedLayer), selectedLayer.getBitmap(), selection.getBounds());
 		
 		Paint paint = new Paint();

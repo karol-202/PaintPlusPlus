@@ -103,7 +103,7 @@ public class ToolMarker extends StandardTool
 		expandDirtyRectByPoint(viewDirtyRect, (int) x, (int) y);
 		expandDirtyRectByPoint(historyDirtyRect, (int) x, (int) y);
 		
-		ActionLayerChange action = new ActionLayerChange(image);
+		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_marker);
 		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), historyDirtyRect);
 		
 		viewDirtyRect = null;
