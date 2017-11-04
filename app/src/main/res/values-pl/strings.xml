@@ -269,4 +269,8 @@
 	<string name="history_action_layer_resize">Zmiana wielkości warstwy</string>
 	<string name="history_action_layer_scale">Skalowanie warstwy</string>
 	<string name="history_action_layer_rotate">Obrót warstwy</string>
+	<string name="dialog_are_you_sure">Czy jesteś pewien?</string>
+	<string name="dialog_unsaved_changes">Wszystkie niezapisane zmiany zostaną utracone</string>
+	<string name="dialog_open_file_positive">Tak, otwórz plik</string>
+	<string name="dialog_capture_photo_positive">Zrób zdjęcie</string>
 </resources>

@@ -17,7 +17,7 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 	private RadioButton radioHorizontal;
 	private RadioButton radioVertical;
 	
-	public OptionFlip(Context context, Image image)
+	OptionFlip(Context context, Image image)
 	{
 		super(context, image);
 	}

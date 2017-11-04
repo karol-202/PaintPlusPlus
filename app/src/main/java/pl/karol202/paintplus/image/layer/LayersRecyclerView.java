@@ -37,13 +37,13 @@ public class LayersRecyclerView extends RecyclerView
 		int width = getMeasuredWidth();
 		int height = getMeasuredHeight();
 		
-		if(height > maxHeight) height = maxHeight;
+		if(height > maxHeight && maxHeight != 0) height = maxHeight;
 		setMeasuredDimension(width, height);
 	}
 	
 	public void setMaxHeight(int maxHeight)
 	{
-		this.maxHeight = maxHeight;
+		if(maxHeight >= 0) this.maxHeight = maxHeight;
 	}
 	
 	public void setAllowScrolling(boolean allowScrolling)

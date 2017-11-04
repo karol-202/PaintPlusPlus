@@ -1,7 +1,9 @@
 package pl.karol202.paintplus.options;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
@@ -34,18 +36,29 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	@Override
 	public void execute()
 	{
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
+		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
+		dialogBuilder.setPositiveButton(R.string.dialog_open_file_positive, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				startFileOpenActivity();
+			}
+		});
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
+		dialogBuilder.show();
+	}
+	
+	private void startFileOpenActivity()
+	{
 		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
 		
 		Intent intent = new Intent(context, ActivityFileOpen.class);
 		activity.startActivityForResult(intent, REQUEST_OPEN_FILE);
 	}
 	
-	public void execute(String filePath)
-	{
-		openFile(filePath);
-	}
-	
-	private void openFile(String filePath)
+	public void openFile(String filePath)
 	{
 		this.filePath = filePath;
 		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(filePath);

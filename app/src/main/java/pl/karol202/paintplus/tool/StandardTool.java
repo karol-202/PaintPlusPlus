@@ -100,7 +100,7 @@ public abstract class StandardTool implements Tool
 		
 		canvas.save();
 		canvas.clipRect(-layer.getX(), -layer.getY(),
-				  layer.getWidth() - layer.getX(), layer.getHeight() - layer.getY());
+				  image.getWidth() - layer.getX(), image.getHeight() - layer.getY());
 	}
 	
 	protected void doSelectionClipping(Canvas canvas)

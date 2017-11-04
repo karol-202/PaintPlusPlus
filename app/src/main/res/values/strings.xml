@@ -286,4 +286,8 @@
 	<string name="history_action_layer_resize">Layer resizing</string>
 	<string name="history_action_layer_scale">Layer scaling</string>
 	<string name="history_action_layer_rotate">Layer rotation</string>
+	<string name="dialog_are_you_sure">Are you sure?</string>
+	<string name="dialog_unsaved_changes">All unsaved changes will be lost</string>
+	<string name="dialog_open_file_positive">Yes, open file</string>
+	<string name="dialog_capture_photo_positive">Yes, capture photo</string>
 </resources>

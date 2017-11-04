@@ -1,10 +1,12 @@
 package pl.karol202.paintplus.options;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -37,10 +39,36 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 	@Override
 	public void execute()
 	{
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
+		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
+		dialogBuilder.setPositiveButton(R.string.dialog_capture_photo_positive, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				capturePhoto();
+			}
+		});
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
+		dialogBuilder.show();
+	}
+	
+	private void capturePhoto()
+	{
+		tryToCreatePhotoFile();
+		
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if(intent.resolveActivity(activity.getPackageManager()) == null)
 			throw new RuntimeException("Cannot resolve camera activity.");
 		
+		Uri photoUri = FileProvider.getUriForFile(context, "pl.karol202.paintplus", photoFile);
+		intent.putExtra(EXTRA_OUTPUT, photoUri);
+		activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
+		activity.startActivityForResult(intent, REQUEST_CAPTURE_PHOTO);
+	}
+	
+	private void tryToCreatePhotoFile()
+	{
 		try
 		{
 			photoFile = createPhotoFile();
@@ -49,11 +77,6 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		{
 			throw new RuntimeException("Cannot create temporary file for photo.", ex);
 		}
-		
-		Uri photoUri = FileProvider.getUriForFile(context, "pl.karol202.paintplus", photoFile);
-		intent.putExtra(EXTRA_OUTPUT, photoUri);
-		activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
-		activity.startActivityForResult(intent, REQUEST_CAPTURE_PHOTO);
 	}
 	
 	private File createPhotoFile() throws IOException

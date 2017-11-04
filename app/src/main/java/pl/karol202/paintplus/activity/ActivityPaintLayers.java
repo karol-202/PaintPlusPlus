@@ -14,7 +14,7 @@ import pl.karol202.paintplus.util.Utils;
 
 class ActivityPaintLayers implements View.OnClickListener
 {
-	private final float KEYLINE = 16f / 9f;
+	private final float KEYLINE_3_2 = 3f / 2f;
 	private final int SHEET_PANEL_SIZE_DP = 56;
 	
 	private ActivityPaint activity;
@@ -60,9 +60,8 @@ class ActivityPaintLayers implements View.OnClickListener
 	
 	void updateView()
 	{
-		int activityWidth = decorView.getWidth();
 		int activityHeight = decorView.getHeight();
-		int maxSheetHeight = activityHeight - (int) (activityWidth / KEYLINE);
+		int maxSheetHeight = (int) (activityHeight / KEYLINE_3_2);
 		int maxRecyclerHeight = maxSheetHeight - sheetPanelSizePx;
 		recyclerLayers.setMaxHeight(maxRecyclerHeight);
 	}
