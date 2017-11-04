@@ -265,4 +265,8 @@
 	<string name="history_action_color_curves">Krzywe kolorów</string>
 	<string name="history_action_brightness">Jasność</string>
 	<string name="history_action_colors_invert">Odwrócenie kolorów</string>
+	<string name="history_action_layer_flip">Odwrócenie warstwy</string>
+	<string name="history_action_layer_resize">Zmiana wielkości warstwy</string>
+	<string name="history_action_layer_scale">Skalowanie warstwy</string>
+	<string name="history_action_layer_rotate">Obrót warstwy</string>
 </resources>

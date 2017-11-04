@@ -273,7 +273,7 @@
 	<string name="history_action_paste">Pasting</string>
 	<string name="history_action_layer_duplicate">Layer duplication</string>
 	<string name="history_action_layer_delete">Layer deleting</string>
-	<string name="history_action_layer_order_move">Layer order</string>
+	<string name="history_action_layer_order_move">Layer order change</string>
 	<string name="history_action_layer_join">Layer joining</string>
 	<string name="history_action_layer_drag">Layer drag</string>
 	<string name="history_action_image_flip">Image flip</string>
@@ -282,4 +282,8 @@
 	<string name="history_action_color_curves">Color curves</string>
 	<string name="history_action_brightness">Brightness</string>
 	<string name="history_action_colors_invert">Colors inverting</string>
+	<string name="history_action_layer_flip">Layer flip</string>
+	<string name="history_action_layer_resize">Layer resizing</string>
+	<string name="history_action_layer_scale">Layer scaling</string>
+	<string name="history_action_layer_rotate">Layer rotation</string>
 </resources>

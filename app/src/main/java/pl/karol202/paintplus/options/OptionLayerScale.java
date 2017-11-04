@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerScale;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -36,6 +37,10 @@ public class OptionLayerScale extends OptionScale
 	@Override
 	protected void applySize(int width, int height, boolean smooth)
 	{
+		ActionLayerScale action = new ActionLayerScale(image);
+		action.setLayerBeforeScaling(layer);
+		action.applyAction();
+		
 		layer.scale(width, height, smooth);
 	}
 }

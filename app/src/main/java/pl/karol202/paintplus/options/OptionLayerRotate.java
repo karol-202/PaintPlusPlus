@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -24,6 +25,10 @@ public class OptionLayerRotate extends OptionRotate
 	@Override
 	protected void rotate(float angle)
 	{
+		ActionLayerRotate action = new ActionLayerRotate(image);
+		action.setLayerBeforeRotation(layer);
+		action.applyAction();
+		
 		layer.rotate(angle);
 	}
 }

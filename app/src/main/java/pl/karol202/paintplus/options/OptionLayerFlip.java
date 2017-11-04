@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerFlip;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -24,6 +25,10 @@ public class OptionLayerFlip extends OptionFlip
 	@Override
 	protected void flip(int direction)
 	{
+		ActionLayerFlip action = new ActionLayerFlip(image);
+		action.setLayerAndFlipDirection(image.getLayerIndex(layer), direction);
+		action.applyAction();
+		
 		layer.flip(direction);
 	}
 }

@@ -2,6 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.history.action.ActionLayerResize;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -60,6 +61,10 @@ public class OptionLayerResize extends OptionResize
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
+		ActionLayerResize action = new ActionLayerResize(image);
+		action.setLayerBeforeResize(layer);
+		action.applyAction();
+		
 		layer.resize(x, y, width, height);
 	}
 }
