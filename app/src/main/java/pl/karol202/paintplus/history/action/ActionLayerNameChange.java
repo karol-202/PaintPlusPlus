@@ -51,7 +51,8 @@ public class ActionLayerNameChange extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && !name.equals(layer.getName());
 	}
 	
 	@Override
@@ -63,8 +64,8 @@ public class ActionLayerNameChange extends Action
 	public void setLayer(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.layerId = getTemporaryImage().getLayerIndex(layer);
+		this.layerId = getImage().getLayerIndex(layer);
 		this.name = layer.getName();
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

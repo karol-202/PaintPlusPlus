@@ -55,7 +55,7 @@ public class ActionLayerAdd extends Action
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.layer = layer;
-		this.layerPosition = getTemporaryImage().getLayerIndex(layer);
+		this.layerPosition = getImage().getLayerIndex(layer);
 		updateBitmap();
 	}
 }

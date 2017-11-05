@@ -65,7 +65,8 @@ public class ActionLayerPropertiesChange extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && (mode != layer.getMode() || opacity != layer.getOpacity());
 	}
 	
 	@Override
@@ -77,9 +78,9 @@ public class ActionLayerPropertiesChange extends Action
 	public void setLayerBeforeChange(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.layerId = getTemporaryImage().getLayerIndex(layer);
+		this.layerId = getImage().getLayerIndex(layer);
 		this.mode = layer.getMode();
 		this.opacity = layer.getOpacity();
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

@@ -78,7 +78,7 @@ public abstract class Action
 		return applied;
 	}
 	
-	Image getTemporaryImage()
+	Image getImage()
 	{
 		return temporaryImage;
 	}

@@ -64,6 +64,6 @@ public class ActionImageFlip extends Action
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.direction = direction;
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

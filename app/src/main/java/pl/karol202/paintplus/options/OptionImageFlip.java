@@ -23,8 +23,9 @@ public class OptionImageFlip extends OptionFlip
 	{
 		ActionImageFlip action = new ActionImageFlip(image);
 		action.setDirectionBeforeFlip(direction);
-		action.applyAction();
 		
 		image.flip(direction);
+		
+		action.applyAction();
 	}
 }

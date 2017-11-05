@@ -1,11 +1,13 @@
 package pl.karol202.paintplus.activity;
 
 import android.annotation.TargetApi;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,7 @@ import pl.karol202.paintplus.AppDataFragment;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.OptionFileOpen;
 import pl.karol202.paintplus.recent.OnFileEditListener;
@@ -41,6 +44,7 @@ public class ActivityPaint extends AppCompatActivity
 	private View decorView;
 	private FragmentManager fragments;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
+	private HashMap<Integer, PermissionGrantListener> permissionListeners;
 	private AsyncManager asyncManager;
 	private AppDataFragment dataFragment;
 	private ActionBar actionBar;
@@ -77,6 +81,7 @@ public class ActivityPaint extends AppCompatActivity
 		
 		fragments = getSupportFragmentManager();
 		resultListeners = new HashMap<>();
+		permissionListeners = new HashMap<>();
 		asyncManager = new AsyncManager(this);
 		recentImageCreator = new RecentImageCreator(this);
 		
@@ -248,6 +253,22 @@ public class ActivityPaint extends AppCompatActivity
 		super.onActivityResult(requestCode, resultCode, data);
 		if(!resultListeners.containsKey(requestCode)) return;
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
+	}
+	
+	void registerPermissionGrantListener(int requestCode, PermissionGrantListener listener)
+	{
+		if(permissionListeners.containsKey(requestCode))
+			throw new RuntimeException("requestCode is already used: " + requestCode);
+		permissionListeners.put(requestCode, listener);
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+	{
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if(!permissionListeners.containsKey(requestCode)) return;
+		if(grantResults[0] == PackageManager.PERMISSION_GRANTED) permissionListeners.get(requestCode).onPermissionGrant();
+		permissionListeners.remove(requestCode);
 	}
 	
 	boolean isAnyDrawerOpen()

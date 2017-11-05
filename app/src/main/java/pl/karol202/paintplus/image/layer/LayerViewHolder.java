@@ -1,14 +1,15 @@
 package pl.karol202.paintplus.image.layer;
 
 import android.animation.Animator.AnimatorListener;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -203,7 +204,6 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	{
 		ActionLayerVisibilityChange action = new ActionLayerVisibilityChange(adapter.getImage());
 		action.setLayerBeforeChange(layer);
-		action.applyAction();
 		
 		layer.setVisibility(!layer.isVisible());
 		if(adapter.getImage().isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
@@ -212,6 +212,8 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		else buttonLayerVisibility.setImageResource(layer.isVisible() ?
 				R.drawable.ic_visible_black_24dp :
 				R.drawable.ic_invisible_black_24dp);
+		
+		action.applyAction();
 	}
 	
 	private void showMenu()
@@ -247,6 +249,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		return false;
 	}
 	
+	@SuppressLint("InflateParams")
 	private void showNameDialog()
 	{
 		LayoutInflater inflater = LayoutInflater.from(adapter.getContext());
@@ -266,10 +269,11 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			{
 				ActionLayerNameChange action = new ActionLayerNameChange(adapter.getImage());
 				action.setLayer(layer);
-				action.applyAction();
 				
 				layer.setName(editTextName.getText().toString());
 				adapter.notifyDataSetChanged();
+				
+				action.applyAction();
 			}
 		});
 		builder.setNegativeButton(R.string.cancel, null);
@@ -288,10 +292,11 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			{
 				ActionLayerDelete action = new ActionLayerDelete(adapter.getImage());
 				action.setLayerBeforeDeleting(layer);
-				action.applyAction();
 				
 				adapter.getImage().deleteLayer(layer);
 				adapter.notifyDataSetChanged();
+				
+				action.applyAction();
 			}
 		});
 		builder.setNegativeButton(R.string.cancel, null);

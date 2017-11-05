@@ -160,6 +160,6 @@ public class ActionLayerJoin extends Action
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.state = new ActionStateDone(topLayer, bottomLayer, resultLayerId);
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

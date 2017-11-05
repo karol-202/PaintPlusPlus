@@ -46,7 +46,7 @@ public class ActionLayerDrag extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1 && deltaX != 0 && deltaY != 0;
+		return layerId != -1 && (deltaX != 0 || deltaY != 0);
 	}
 	
 	@Override
@@ -58,9 +58,9 @@ public class ActionLayerDrag extends Action
 	public void setLayerAndDragDelta(Layer layer, int deltaX, int deltaY)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.layerId = getTemporaryImage().getLayerIndex(layer);
+		this.layerId = getImage().getLayerIndex(layer);
 		this.deltaX = deltaX;
 		this.deltaY = deltaY;
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

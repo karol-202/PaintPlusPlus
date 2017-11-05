@@ -84,7 +84,8 @@ public class ActionSelectionChange extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return region != null;
+		Region newRegion = getImage().getSelection().getRegion();
+		return region != null && !region.equals(newRegion);
 	}
 	
 	@Override
@@ -96,7 +97,7 @@ public class ActionSelectionChange extends Action
 	public void setOldRegion()
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.region = new Region(getTemporaryImage().getSelection().getRegion());
-		showRegionOnBitmap(getTemporaryImage());
+		this.region = new Region(getImage().getSelection().getRegion());
+		showRegionOnBitmap(getImage());
 	}
 }

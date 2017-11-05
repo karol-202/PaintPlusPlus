@@ -27,8 +27,9 @@ public class OptionLayerFlip extends OptionFlip
 	{
 		ActionLayerFlip action = new ActionLayerFlip(image);
 		action.setLayerAndFlipDirection(image.getLayerIndex(layer), direction);
-		action.applyAction();
 		
 		layer.flip(direction);
+		
+		action.applyAction();
 	}
 }

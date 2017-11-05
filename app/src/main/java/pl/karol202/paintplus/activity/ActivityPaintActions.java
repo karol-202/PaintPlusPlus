@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.activity;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.history.ActivityHistoryHelper;
 import pl.karol202.paintplus.history.History;
@@ -147,14 +149,32 @@ class ActivityPaintActions
 			new OptionFileCapturePhoto(activity, image).execute();
 			return true;
 		case R.id.action_open_image:
-			new OptionFileOpen(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
+			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+				@Override
+				public void onPermissionGrant()
+				{
+					new OptionFileOpen(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
+				}
+			});
 			return true;
 		case R.id.action_save_image:
-			String path = image.getLastPath();
-			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(path);
+			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+				@Override
+				public void onPermissionGrant()
+				{
+					String path = image.getLastPath();
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(path);
+				}
+			});
 			return true;
 		case R.id.action_save_image_as:
-			new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
+			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+				@Override
+				public void onPermissionGrant()
+				{
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
+				}
+			});
 			return true;
 		
 		case R.id.action_undo:

@@ -34,8 +34,9 @@ public class OptionImageScale extends OptionScale
 	protected void applySize(int width, int height, boolean smooth)
 	{
 		ActionImageScale action = new ActionImageScale(image);
-		action.applyAction();
 		
 		image.scale(width, height, smooth);
+		
+		action.applyAction();
 	}
 }

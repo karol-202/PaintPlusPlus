@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.image.layer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +46,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		init();
 	}
 	
+	@SuppressLint("InflateParams")
 	private void init()
 	{
 		LayoutInflater inflater = LayoutInflater.from(context);
@@ -118,9 +120,10 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	{
 		ActionLayerPropertiesChange action = new ActionLayerPropertiesChange(image);
 		action.setLayerBeforeChange(layer);
-		action.applyAction();
 		
 		layer.setMode(layerMode);
 		layer.setOpacity(opacity);
+		
+		action.applyAction();
 	}
 }

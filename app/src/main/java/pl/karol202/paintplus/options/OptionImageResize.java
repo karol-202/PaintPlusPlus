@@ -58,9 +58,10 @@ public class OptionImageResize extends OptionResize
 	protected void applySize(int x, int y, int width, int height)
 	{
 		ActionImageResize action = new ActionImageResize(image);
-		action.setResize(image.getWidth(), image.getHeight(), x, y);
-		action.applyAction();
+		action.setDataBeforeResizing(image.getWidth(), image.getHeight(), x, y);
 		
 		image.resize(x, y, width, height);
+		
+		action.applyAction();
 	}
 }

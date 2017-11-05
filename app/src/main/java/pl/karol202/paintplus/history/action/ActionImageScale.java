@@ -138,7 +138,7 @@ public class ActionImageScale extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return true;
+		return width != getImage().getWidth() || height != getImage().getHeight();
 	}
 	
 	@Override

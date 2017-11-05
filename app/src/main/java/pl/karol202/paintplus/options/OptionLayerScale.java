@@ -39,8 +39,9 @@ public class OptionLayerScale extends OptionScale
 	{
 		ActionLayerScale action = new ActionLayerScale(image);
 		action.setLayerBeforeScaling(layer);
-		action.applyAction();
 		
 		layer.scale(width, height, smooth);
+		
+		action.applyAction();
 	}
 }

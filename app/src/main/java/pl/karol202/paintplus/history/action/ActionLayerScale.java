@@ -53,7 +53,9 @@ public class ActionLayerScale extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1 && bitmap != null;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && bitmap != null && (bitmap.getWidth() != layer.getWidth() ||
+												   bitmap.getHeight() != layer.getHeight());
 	}
 	
 	@Override
@@ -65,8 +67,8 @@ public class ActionLayerScale extends Action
 	public void setLayerBeforeScaling(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.layerId = getTemporaryImage().getLayerIndex(layer);
+		this.layerId = getImage().getLayerIndex(layer);
 		this.bitmap = layer.getBitmap();
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

@@ -61,7 +61,8 @@ public class ActionImageResize extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return width != -1 && height != -1;
+		return width != -1 && height != -1 && (width != getImage().getWidth() || height != getImage().getHeight() ||
+											   resizingDeltaX != 0 || resizingDeltaY != 0);
 	}
 	
 	@Override
@@ -70,13 +71,13 @@ public class ActionImageResize extends Action
 		return R.string.history_action_image_resize;
 	}
 
-	public void setResize(int oldWidth, int oldHeight, int resizingDeltaX, int resizingDeltaY)
+	public void setDataBeforeResizing(int oldWidth, int oldHeight, int resizingDeltaX, int resizingDeltaY)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.width = oldWidth;
 		this.height = oldHeight;
 		this.resizingDeltaX = resizingDeltaX;
 		this.resizingDeltaY = resizingDeltaY;
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

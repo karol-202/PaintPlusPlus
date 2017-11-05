@@ -89,7 +89,7 @@ public class ActionLayerChange extends Action
 	private boolean checkIfBitmapChanged()
 	{
 		if(bitmap == null) return false;
-		Layer layer = getTemporaryImage().getLayerAtIndex(layerId);
+		Layer layer = getImage().getLayerAtIndex(layerId);
 		Bitmap oldBitmap = Bitmap.createBitmap(layer.getBitmap(), dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		return !bitmap.sameAs(oldBitmap);
 	}
@@ -111,13 +111,13 @@ public class ActionLayerChange extends Action
 		this.layerId = layerId;
 		this.bitmap = bitmapBeforeChange;
 		setDirtyRect(dirtyRect);
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 	
 	public void setDirtyRect(Rect dirtyRect)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		Layer layer = getTemporaryImage().getLayerAtIndex(layerId);
+		Layer layer = getImage().getLayerAtIndex(layerId);
 		this.dirtyRect = clipRect(layer, dirtyRect);
 		if(bitmap != null && isRectApplicableForThisAction(dirtyRect))
 			bitmap = Bitmap.createBitmap(bitmap, dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());

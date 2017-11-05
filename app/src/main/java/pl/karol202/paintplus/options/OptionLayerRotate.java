@@ -27,8 +27,9 @@ public class OptionLayerRotate extends OptionRotate
 	{
 		ActionLayerRotate action = new ActionLayerRotate(image);
 		action.setLayerBeforeRotation(layer);
-		action.applyAction();
 		
 		layer.rotate(angle);
+		
+		action.applyAction();
 	}
 }

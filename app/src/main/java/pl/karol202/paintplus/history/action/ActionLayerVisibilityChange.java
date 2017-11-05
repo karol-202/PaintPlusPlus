@@ -45,7 +45,8 @@ public class ActionLayerVisibilityChange extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && hideLayer != layer.isVisible();
 	}
 	
 	@Override
@@ -57,8 +58,8 @@ public class ActionLayerVisibilityChange extends Action
 	public void setLayerBeforeChange(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.layerId = getTemporaryImage().getLayerIndex(layer);
+		this.layerId = getImage().getLayerIndex(layer);
 		this.hideLayer = layer.isVisible();
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

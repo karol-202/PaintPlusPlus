@@ -58,7 +58,7 @@ public class ActionLayerOrderMove extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return sourceLayerPos != -1 && destinationLayerPos != -1;
+		return sourceLayerPos != -1 && destinationLayerPos != -1 && sourceLayerPos != destinationLayerPos;
 	}
 	
 	@Override
@@ -72,6 +72,6 @@ public class ActionLayerOrderMove extends Action
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.sourceLayerPos = sourcePos;
 		this.destinationLayerPos = destinationPos;
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

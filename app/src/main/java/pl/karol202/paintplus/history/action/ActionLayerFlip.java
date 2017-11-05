@@ -65,6 +65,6 @@ public class ActionLayerFlip extends Action
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.layerId = layerId;
 		this.direction = direction;
-		updateBitmap(getTemporaryImage());
+		updateBitmap(getImage());
 	}
 }

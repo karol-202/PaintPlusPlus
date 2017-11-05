@@ -49,10 +49,11 @@ public class Selection
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
 		action.setOldRegion();
-		action.applyAction();
 		
 		region.setEmpty();
 		updatePath();
+		
+		action.applyAction();
 	}
 	
 	public void revert()
@@ -64,17 +65,17 @@ public class Selection
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
 		action.setOldRegion();
-		action.applyAction();
 		
 		region.op(rect, op);
 		updatePath();
+		
+		action.applyAction();
 	}
 	
 	void commitSelectionOval(Rect rect, Op op)
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
 		action.setOldRegion();
-		action.applyAction();
 		
 		RectF rectF = new RectF(rect);
 		Path ovalPath = new Path();
@@ -85,6 +86,8 @@ public class Selection
 		
 		region.op(ovalRegion, op);
 		updatePath();
+		
+		action.applyAction();
 	}
 	
 	private void updatePath()

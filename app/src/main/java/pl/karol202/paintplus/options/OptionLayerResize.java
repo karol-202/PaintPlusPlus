@@ -63,8 +63,9 @@ public class OptionLayerResize extends OptionResize
 	{
 		ActionLayerResize action = new ActionLayerResize(image);
 		action.setLayerBeforeResize(layer);
-		action.applyAction();
 		
 		layer.resize(x, y, width, height);
+		
+		action.applyAction();
 	}
 }
