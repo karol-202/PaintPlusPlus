@@ -42,6 +42,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private Matrix checkerboardMatrix;
 	private ArrayList<Layer> reversedLayers;
+	private Matrix layerMatrix;
 	private Path boundsPath;
 	private RectF imageRect;
 	
@@ -83,6 +84,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		checkerboardPaint.setShader(checkerboardShader);
 		checkerboardPaint.setFilterBitmap(false);
 		
+		layerMatrix = new Matrix();
 		imageRect = new RectF();
 	}
 	
@@ -157,7 +159,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 			
 			if(drawLayer)
 			{
-				Matrix layerMatrix = new Matrix(image.getImageMatrix());
+				layerMatrix.set(image.getImageMatrix());
 				layerMatrix.preTranslate(layer.getX(), layer.getY());
 				
 				layerMode.setRectClipping(imageRect);
@@ -283,7 +285,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		rect.top *= image.getZoom();
 		rect.right *= image.getZoom();
 		rect.bottom *= image.getZoom();
-		return oldRect;
+		return rect;
 	}
 	
 	@Override

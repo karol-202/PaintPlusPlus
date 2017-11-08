@@ -185,13 +185,17 @@ public class ShapePolygon extends Shape
 	}
 	
 	@Override
-	public Rect getDirtyRect()
+	public Rect getBoundsOfShape()
 	{
 		if(path == null) return null;
 		RectF rectF = new RectF();
 		path.computeBounds(rectF, false);
 		Rect rect = new Rect();
 		rectF.roundOut(rect);
+		rect.left -= lineWidth;
+		rect.top -= lineWidth;
+		rect.right += lineWidth;
+		rect.bottom += lineWidth;
 		return rect;
 	}
 	

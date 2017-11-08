@@ -155,7 +155,7 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
-	public Rect getDirtyRect()
+	public Rect getBoundsOfShape()
 	{
 		int halfSize = (int) radius + circleWidth;
 		return new Rect(center.x - halfSize, center.y - halfSize,

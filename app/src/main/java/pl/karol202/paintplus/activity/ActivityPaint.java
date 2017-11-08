@@ -32,7 +32,7 @@ import pl.karol202.paintplus.util.GraphicsHelper;
 
 import java.util.HashMap;
 
-public class ActivityPaint extends AppCompatActivity
+public class ActivityPaint extends AppCompatActivity implements PermissionRequest.PermissionGrantingActivity
 {
 	public static final String PATH_KEY = "path";
 	public static final String OPEN_KEY = "open";
@@ -174,7 +174,7 @@ public class ActivityPaint extends AppCompatActivity
 	
 	private void selectImageToOpenIfNeeded()
 	{
-		if(openFile) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).execute();
+		if(openFile) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).executeWithoutAsking();
 	}
 	
 	@Override
@@ -255,7 +255,8 @@ public class ActivityPaint extends AppCompatActivity
 		resultListeners.get(requestCode).onActivityResult(resultCode, data);
 	}
 	
-	void registerPermissionGrantListener(int requestCode, PermissionGrantListener listener)
+	@Override
+	public void registerPermissionGrantListener(int requestCode, PermissionGrantListener listener)
 	{
 		if(permissionListeners.containsKey(requestCode))
 			throw new RuntimeException("requestCode is already used: " + requestCode);

@@ -118,12 +118,13 @@ public class ActivityColorSelect extends AppCompatActivity
 			public void onTabReselected(TabLayout.Tab tab) { }
 		});
 		adapter.setupTabLayoutIcons(tabLayout);
-		currentFragment = adapter.getItem(0);
+		currentFragment = adapter.getItem(tabLayout.getSelectedTabPosition());
 	}
 	
 	private void initBottomBar()
 	{
 		bottomBar = findViewById(R.id.bottom_bar_color_picker);
+		bottomBar.setSelectedItemId(R.id.mode_hsv);
 		bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item)

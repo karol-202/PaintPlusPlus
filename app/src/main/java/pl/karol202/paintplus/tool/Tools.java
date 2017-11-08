@@ -34,7 +34,7 @@ public class Tools
 		tools.add(new ToolRubber(image));
 		tools.add(new ToolGradient(image));
 		
-		tool = tools.get(1);
+		tool = tools.get(0);
 	}
 	
 	Tool getTool(int id)

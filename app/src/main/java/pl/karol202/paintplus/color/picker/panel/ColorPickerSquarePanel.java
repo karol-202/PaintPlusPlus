@@ -71,6 +71,7 @@ public class ColorPickerSquarePanel extends View
 		panelPaint = new Paint();
 		
 		indicatorPaint = new Paint();
+		indicatorPaint.setAntiAlias(true);
 		indicatorPaint.setColor(Color.DKGRAY);
 		indicatorPaint.setStyle(Paint.Style.STROKE);
 		indicatorPaint.setStrokeWidth(INDICATOR_RING_THICKNESS_PX);

@@ -138,7 +138,7 @@ public class ShapeLine extends Shape
 	}
 	
 	@Override
-	public Rect getDirtyRect()
+	public Rect getBoundsOfShape()
 	{
 		return new Rect(Math.min(start.x, end.x) - lineWidth,
 						Math.min(start.y, end.y) - lineWidth,

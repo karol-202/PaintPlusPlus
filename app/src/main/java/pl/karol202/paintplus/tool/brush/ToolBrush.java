@@ -34,7 +34,7 @@ public class ToolBrush extends StandardTool
 	{
 		super(image);
 		this.size = 25;
-		this.shapeOffset = 10;
+		this.shapeOffset = 7;
 		this.opacity = 1;
 		
 		this.colors = image.getColorsSet();
@@ -141,6 +141,7 @@ public class ToolBrush extends StandardTool
 		else path.lineTo(x, y);
 		
 		drawPointsOnPath();
+		drawPoint(x, y);
 		
 		path.reset();
 		lastX = -1;
@@ -161,7 +162,7 @@ public class ToolBrush extends StandardTool
 		float[] point = new float[2];
 		while(pathDistance <= pathMeasure.getLength())
 		{
-			pathMeasure.getPosTan(pathDistance, point, null);
+			if(!pathMeasure.getPosTan(pathDistance, point, null)) break;
 			drawPoint(point[0], point[1]);
 			pathDistance += shapeOffset;
 		}

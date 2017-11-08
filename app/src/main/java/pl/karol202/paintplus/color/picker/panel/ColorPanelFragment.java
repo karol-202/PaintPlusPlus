@@ -72,7 +72,7 @@ public class ColorPanelFragment extends ColorPickerFragment
 			public void onNothingSelected(AdapterView<?> adapterView) { }
 		});
 		
-		setMode(modeRGB);
+		setMode(modeHSV);
 		return view;
 	}
 	

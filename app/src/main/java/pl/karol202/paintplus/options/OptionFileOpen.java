@@ -50,6 +50,11 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 		dialogBuilder.show();
 	}
 	
+	public void executeWithoutAsking()
+	{
+		startFileOpenActivity();
+	}
+	
 	private void startFileOpenActivity()
 	{
 		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);

@@ -1,7 +1,10 @@
 package pl.karol202.paintplus.recent;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +19,17 @@ import android.view.animation.Animation;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.activity.PermissionRequest;
+import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener;
+import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity;
 import pl.karol202.paintplus.util.BlockableLinearLayoutManager;
+
+import java.util.HashMap;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 
-public class ActivityRecent extends AppCompatActivity implements OnImageSelectListener, View.OnClickListener
+public class ActivityRecent extends AppCompatActivity implements OnImageSelectListener, View.OnClickListener, PermissionGrantingActivity
 {
 	private class SwipeCallback extends ItemTouchHelper.SimpleCallback
 	{
@@ -52,6 +60,7 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	private RecentAdapter adapter;
 	private RecentLoader loader;
 	private int animationDuration;
+	private HashMap<Integer, PermissionGrantListener> permissionListeners;
 	
 	private Toolbar toolbar;
 	private View viewNoImages;
@@ -68,6 +77,7 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		loader = new RecentLoader(this);
 		adapter = new RecentAdapter(this, loader.getImages(), this);
 		animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+		permissionListeners = new HashMap<>();
 		
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -141,9 +151,16 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	
 	private void selectImageToOpen()
 	{
-		Intent intent = new Intent(this, ActivityPaint.class);
-		intent.putExtra(ActivityPaint.OPEN_KEY, true);
-		startActivity(intent);
+		new PermissionRequest<>(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener()
+		{
+			@Override
+			public void onPermissionGrant()
+			{
+				Intent intent = new Intent(ActivityRecent.this, ActivityPaint.class);
+				intent.putExtra(ActivityPaint.OPEN_KEY, true);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private void animateNoImagesView()
@@ -173,5 +190,22 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	{
 		boolean visible = loader.getImagesAmount() == 0;
 		viewNoImages.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+	}
+	
+	@Override
+	public void registerPermissionGrantListener(int requestCode, PermissionGrantListener listener)
+	{
+		if(permissionListeners.containsKey(requestCode))
+			throw new RuntimeException("requestCode is already used: " + requestCode);
+		permissionListeners.put(requestCode, listener);
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+	{
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if(!permissionListeners.containsKey(requestCode)) return;
+		if(grantResults[0] == PackageManager.PERMISSION_GRANTED) permissionListeners.get(requestCode).onPermissionGrant();
+		permissionListeners.remove(requestCode);
 	}
 }

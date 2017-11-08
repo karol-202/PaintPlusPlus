@@ -149,7 +149,7 @@ class ActivityPaintActions
 			new OptionFileCapturePhoto(activity, image).execute();
 			return true;
 		case R.id.action_open_image:
-			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
 				@Override
 				public void onPermissionGrant()
 				{
@@ -158,7 +158,7 @@ class ActivityPaintActions
 			});
 			return true;
 		case R.id.action_save_image:
-			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
 				@Override
 				public void onPermissionGrant()
 				{
@@ -168,7 +168,7 @@ class ActivityPaintActions
 			});
 			return true;
 		case R.id.action_save_image_as:
-			new PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
 				@Override
 				public void onPermissionGrant()
 				{

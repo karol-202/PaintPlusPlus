@@ -68,7 +68,7 @@ public class ColorNumericalFragment extends ColorPickerFragment
 		colorModeRGB = new ColorModeRGB(pickerInterface);
 		colorModeHSV = new ColorModeHSV(pickerInterface);
 		colorModeCMYK = new ColorModeCMYK(pickerInterface);
-		setCurrentColorMode(colorModeRGB);
+		setCurrentColorMode(colorModeHSV);
 		
 		return view;
 	}

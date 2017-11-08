@@ -52,7 +52,7 @@ public abstract class Shape
 	
 	public abstract void onScreenDraw(Canvas canvas, boolean translucent);
 	
-	public abstract Rect getDirtyRect();
+	public abstract Rect getBoundsOfShape();
 	
 	public abstract void apply(Canvas imageCanvas);
 	
