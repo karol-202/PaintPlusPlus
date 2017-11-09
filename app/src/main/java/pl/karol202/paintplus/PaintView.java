@@ -266,18 +266,21 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	private Rect transformDirtyRectToScreenSpace(Tool tool, Rect oldRect)
 	{
 		Rect rect = new Rect(oldRect);
+		System.out.println("Dirty rect old: " + rect);
 		switch(tool.getCoordinateSpace())
 		{
 		case LAYER_SPACE:
-			rect.left -= image.getSelectedLayerX();
-			rect.top -= image.getSelectedLayerY();
-			rect.right -= image.getSelectedLayerX();
-			rect.bottom -= image.getSelectedLayerY();
+			rect.left += image.getSelectedLayerX();
+			rect.top += image.getSelectedLayerY();
+			rect.right += image.getSelectedLayerX();
+			rect.bottom += image.getSelectedLayerY();
+			System.out.println("Dirty rect after layer transform: " + rect);
 		case IMAGE_SPACE:
 			rect.left -= image.getViewX();
 			rect.top -= image.getViewY();
 			rect.right -= image.getViewX();
 			rect.bottom -= image.getViewY();
+			System.out.println("Dirty rect after image translation: " + rect);
 			break;
 		case SCREEN_SPACE: return rect;
 		}
@@ -285,6 +288,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 		rect.top *= image.getZoom();
 		rect.right *= image.getZoom();
 		rect.bottom *= image.getZoom();
+		System.out.println("Dirty rect after image scales: " + rect);
 		return rect;
 	}
 	

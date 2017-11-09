@@ -121,7 +121,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		ActionLayerPropertiesChange action = new ActionLayerPropertiesChange(image);
 		action.setLayerBeforeChange(layer);
 		
-		layer.setMode(layerMode);
+		if(layerMode.getClass() != layer.getMode().getClass()) layer.setMode(layerMode);
 		layer.setOpacity(opacity);
 		
 		action.applyAction();

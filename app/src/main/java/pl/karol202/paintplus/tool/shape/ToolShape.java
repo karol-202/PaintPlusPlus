@@ -1,9 +1,11 @@
 package pl.karol202.paintplus.tool.shape;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -61,9 +63,9 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
-		canvas = image.getSelectedCanvas();
+		image.lockLayers();
+		updateLayer();
 		if(canvas == null) return false;
-		layer = image.getSelectedLayer();
 		
 		updateSelectionPath();
 		resetClipping(canvas);
@@ -90,6 +92,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 		shape.onTouchStop((int) x, (int) y);
 		
 		dirtyRect = null;
+		image.unlockLayers();
 		return true;
 	}
 	
@@ -144,6 +147,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	@Override
 	public void onLayerDraw(Canvas canvas)
 	{
+		updateLayer();
 		resetClipping(canvas);
 		shape.onScreenDraw(canvas, true);
 		
@@ -154,6 +158,18 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	
 	@Override
 	public void onTopDraw(Canvas canvas) { }
+	
+	@Override
+	protected void updateLayer()
+	{
+		Layer newLayer = image.getSelectedLayer();
+		if(layer == null) layer = newLayer;
+		if(newLayer != layer)
+			shape.offsetShape(layer.getX() - newLayer.getX(), layer.getY() - newLayer.getY());
+		layer = newLayer;
+		
+		canvas = image.getSelectedCanvas();
+	}
 	
 	public void apply()
 	{

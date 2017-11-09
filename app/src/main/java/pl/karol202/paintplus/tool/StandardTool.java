@@ -96,7 +96,7 @@ public abstract class StandardTool implements Tool
 	
 	protected void doImageClipping(Canvas canvas)
 	{
-		layer = image.getSelectedLayer();
+		updateLayer();
 		
 		canvas.save();
 		canvas.clipRect(-layer.getX(), -layer.getY(),
@@ -111,7 +111,7 @@ public abstract class StandardTool implements Tool
 	
 	protected void doLayerAndSelectionClipping(Canvas canvas)
 	{
-		layer = image.getSelectedLayer();
+		updateLayer();
 		
 		if(selectionPath == null) updateSelectionPath();
 		canvas.save();
@@ -123,5 +123,10 @@ public abstract class StandardTool implements Tool
 	{
 		selectionPath = new Path(image.getSelection().getPath());
 		selectionPath.offset(-layer.getX(), -layer.getY());
+	}
+	
+	protected void updateLayer()
+	{
+		layer = image.getSelectedLayer();
 	}
 }

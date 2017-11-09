@@ -33,6 +33,7 @@ public class ToolPan implements Tool
 		{
 			image.setViewX(image.getViewX() + (distanceX / image.getZoom()));
 			image.setViewY(image.getViewY() + (distanceY / image.getZoom()));
+			checkLimits();
 			
 			return true;
 		}
@@ -60,6 +61,7 @@ public class ToolPan implements Tool
 			
 			image.setViewX(image.getViewX() + ((lastFocusX - detector.getFocusX()) / image.getZoom()));
 			image.setViewY(image.getViewY() + ((lastFocusY - detector.getFocusY()) / image.getZoom()));
+			checkLimits();
 
 			lastFocusX = detector.getFocusX();
 			lastFocusY = detector.getFocusY();
@@ -190,6 +192,19 @@ public class ToolPan implements Tool
 	
 	@Override
 	public void onTopDraw(Canvas canvas) { }
+	
+	private void checkLimits()
+	{
+		int xMin = (int) (-image.getViewportWidth() / image.getZoom());
+		int xMax = image.getWidth();
+		if(image.getViewX() < xMin) image.setViewX(xMin);
+		else if(image.getViewX() > xMax) image.setViewX(xMax);
+		
+		int yMin = (int) (-image.getViewportHeight() / image.getZoom());
+		int yMax = image.getHeight();
+		if(image.getViewY() < yMin) image.setViewY(yMin);
+		else if(image.getViewY() > yMax) image.setViewY(yMax);
+	}
 	
 	float getZoom()
 	{

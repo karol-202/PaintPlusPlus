@@ -4,6 +4,7 @@ import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -110,9 +111,8 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
-		layer = image.getSelectedLayer();
+		updateLayer();
 		if(layer == null) return false;
-		canvas = image.getSelectedCanvas();
 		
 		updateSelectionPath();
 		resetClipping(canvas);
@@ -257,6 +257,25 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		pointDrawRect.right = point.x + innerSize;
 		pointDrawRect.bottom = point.y + innerSize;
 		canvas.drawOval(pointDrawRect, pointInnerPaint);
+	}
+	
+	@Override
+	protected void updateLayer()
+	{
+		Layer newLayer = image.getSelectedLayer();
+		if(layer == null) layer = newLayer;
+		if(newLayer != layer)
+			offsetGradient(layer.getX() - newLayer.getX(), layer.getY() - newLayer.getY());
+		layer = newLayer;
+		
+		canvas = image.getSelectedCanvas();
+	}
+	
+	private void offsetGradient(int x, int y)
+	{
+		if(firstPoint == null || secondPoint == null) return;
+		firstPoint.offset(x, y);
+		secondPoint.offset(x, y);
 	}
 	
 	void apply()

@@ -87,7 +87,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		imageLayerPreview.setImageBitmap(layer.getBitmap());
 		buttonLayerVisibility.setContentDescription(getVisibilityButtonDescription());
 		
-		if(adapter.getImage().isLayerSelected(layer))
+		if(adapter.isLayerSelected(layer))
 		{
 			setViewBackground(true);
 			imageLayerHandle.setImageResource(R.drawable.ic_drag_handle_white_24dp);
@@ -155,7 +155,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 	
 	private void select()
 	{
-		if(adapter.getImage().isLayerSelected(layer)) return;
+		if(adapter.isLayerSelected(layer) || adapter.areLayersLocked()) return;
 		adapter.notifyItemChanged(adapter.getImage().getSelectedLayerIndex());
 		adapter.getImage().selectLayer(layer);
 		bind(layer);
@@ -182,11 +182,17 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		
 		if(!ghost && event.getAction() == MotionEvent.ACTION_DOWN)
 		{
+			if(adapter.areLayersLocked()) return false;
 			handle.setViewHolder(this);
 			handle.onTouchStart(x, y);
 		}
 		else if(ghost)
 		{
+			if(adapter.areLayersLocked())
+			{
+				handle.onTouchCancel();
+				return false;
+			}
 			if(event.getAction() == MotionEvent.ACTION_MOVE) handle.onTouchMove(x, y);
 			else if(event.getAction() == MotionEvent.ACTION_UP) handle.onTouchStop(x, y);
 		}
@@ -206,7 +212,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		action.setLayerBeforeChange(layer);
 		
 		layer.setVisibility(!layer.isVisible());
-		if(adapter.getImage().isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
+		if(adapter.isLayerSelected(layer)) buttonLayerVisibility.setImageResource(layer.isVisible() ?
 				R.drawable.ic_visible_white_24dp :
 				R.drawable.ic_invisible_white_24dp);
 		else buttonLayerVisibility.setImageResource(layer.isVisible() ?
@@ -221,6 +227,8 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		PopupMenu menu = new PopupMenu(adapter.getContext(), buttonLayerMenu);
 		menu.setOnMenuItemClickListener(this);
 		menu.inflate(R.menu.menu_layer);
+		if(adapter.areLayersLocked())
+			for(int i = 0; i < menu.getMenu().size(); i++) menu.getMenu().getItem(i).setEnabled(false);
 		if(adapter.isLastLayer(layer)) menu.getMenu().findItem(R.id.action_join).setEnabled(false);
 		menu.show();
 	}

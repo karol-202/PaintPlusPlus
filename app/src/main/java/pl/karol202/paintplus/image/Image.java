@@ -54,6 +54,7 @@ public class Image
 	private Matrix imageMatrix;
 	private int viewportWidth;
 	private int viewportHeight;
+	private boolean layersLocked;
 	
 	public Image(Context context)
 	{
@@ -69,6 +70,7 @@ public class Image
 		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
+		this.layersLocked = false;
 		updateMatrix();
 	}
 	
@@ -486,5 +488,20 @@ public class Image
 	public void setViewportHeight(int viewportHeight)
 	{
 		this.viewportHeight = viewportHeight;
+	}
+	
+	public boolean areLayersLocked()
+	{
+		return layersLocked;
+	}
+	
+	public void lockLayers()
+	{
+		this.layersLocked = true;
+	}
+	
+	public void unlockLayers()
+	{
+		this.layersLocked = false;
 	}
 }

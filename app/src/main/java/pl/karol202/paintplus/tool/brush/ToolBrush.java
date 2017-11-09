@@ -82,6 +82,7 @@ public class ToolBrush extends StandardTool
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
+		image.lockLayers();
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
@@ -153,6 +154,7 @@ public class ToolBrush extends StandardTool
 		
 		viewDirtyRect = null;
 		historyDirtyRect = null;
+		image.unlockLayers();
 		return true;
 	}
 	

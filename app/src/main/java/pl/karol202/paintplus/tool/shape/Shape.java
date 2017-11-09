@@ -58,6 +58,8 @@ public abstract class Shape
 	
 	public abstract void cancel();
 	
+	public abstract void offsetShape(int x, int y);
+	
 	protected float calcDistance(Point point, int x, int y)
 	{
 		return (float) Math.hypot(point.x - x, point.y - y);

@@ -91,6 +91,14 @@ class LayerHandle implements Animator.AnimatorListener
 		activity.setScrollingBlocked(false);
 	}
 	
+	void onTouchCancel()
+	{
+		if(layer == null) return;
+		
+		viewHolder.setViewOffsetWithAnimation(0, oldOffsetY, this);
+		activity.setScrollingBlocked(false);
+	}
+	
 	private int getCurrentPosition(float y)
 	{
 		float deltaY = Math.round(y - oldTouchY);

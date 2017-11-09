@@ -9,12 +9,12 @@ import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.R
 
 public enum ColorChannel
 {
-	RED(R.string.channel__red, R.drawable.ic_channel_red, RGB, 255),
-	GREEN(R.string.channel__green, R.drawable.ic_channel_green, RGB, 255),
-	BLUE(R.string.channel__blue, R.drawable.ic_channel_blue, RGB, 255),
-	HUE(R.string.channel__hue, R.drawable.ic_channel_hue, HSV, 359),
-	SATURATION(R.string.channel__saturation, R.drawable.ic_channel_saturation, HSV, 100),
-	VALUE(R.string.channel__value, R.drawable.ic_channel_value, HSV, 100);
+	RED(R.string.channel__red, R.drawable.ic_channel_red_24dp, RGB, 255),
+	GREEN(R.string.channel__green, R.drawable.ic_channel_green_24dp, RGB, 255),
+	BLUE(R.string.channel__blue, R.drawable.ic_channel_blue_24dp, RGB, 255),
+	HUE(R.string.channel__hue, R.drawable.ic_channel_hue_24dp, HSV, 359),
+	SATURATION(R.string.channel__saturation, R.drawable.ic_channel_saturation_24dp, HSV, 100),
+	VALUE(R.string.channel__value, R.drawable.ic_channel_value_24dp, HSV, 100);
 	
 	public enum ColorChannelType
 	{

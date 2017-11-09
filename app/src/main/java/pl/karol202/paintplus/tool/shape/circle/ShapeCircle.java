@@ -178,6 +178,12 @@ public class ShapeCircle extends Shape
 	}
 	
 	@Override
+	public void offsetShape(int x, int y)
+	{
+		if(center != null) center.offset(x, y);
+	}
+	
+	@Override
 	public void update()
 	{
 		getPaint().setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);

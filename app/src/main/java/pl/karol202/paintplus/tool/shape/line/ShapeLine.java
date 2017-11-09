@@ -162,6 +162,14 @@ public class ShapeLine extends Shape
 	}
 	
 	@Override
+	public void offsetShape(int x, int y)
+	{
+		if(start == null || end == null) return;
+		start.offset(x, y);
+		end.offset(x, y);
+	}
+	
+	@Override
 	public void update()
 	{
 		getPaint().setStrokeWidth(lineWidth);

@@ -7,7 +7,6 @@ import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
-import pl.karol202.paintplus.util.Utils;
 
 public class ToolRubber extends StandardTool
 {
@@ -78,6 +77,7 @@ public class ToolRubber extends StandardTool
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
+		image.lockLayers();
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
@@ -160,12 +160,14 @@ public class ToolRubber extends StandardTool
 		
 		viewDirtyRect = null;
 		historyDirtyRect = null;
+		image.unlockLayers();
 		return true;
 	}
 	
 	private void expandDirtyRectByPoint(Rect dirtyRect, int x, int y)
 	{
-		int halfSize = Utils.roundAwayFromZero(size / 2);
+		if(dirtyRect == null) return;
+		int halfSize = (int) Math.ceil(size * 0.6f);
 		if(dirtyRect.isEmpty()) dirtyRect.set(x - halfSize, y - halfSize, x + halfSize, y + halfSize);
 		else
 		{

@@ -92,6 +92,16 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		return layers.indexOf(layer) == layers.size() - 1;
 	}
 	
+	boolean isLayerSelected(Layer layer)
+	{
+		return image.isLayerSelected(layer);
+	}
+	
+	boolean areLayersLocked()
+	{
+		return image.areLayersLocked();
+	}
+	
 	void moveLayer(int layerId, int target)
 	{
 		Layer selected = image.getSelectedLayer();
