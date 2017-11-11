@@ -235,7 +235,7 @@
 	<string name="desc_layer_add">Add layer</string>
 	<string name="desc_file_type_image">Image</string>
 	<string name="dialog_load_wait_message">Loading…</string>
-	<string name="no_images">You have no recent images</string>
+	<string name="no_images">It\'s time to draw something</string>
 	<string name="layer_mode_difference">Difference</string>
 	<string name="layer_mode_subtraction">Subtraction</string>
 	<string name="layer_mode_darker">Darker</string>
@@ -290,4 +290,7 @@
 	<string name="dialog_unsaved_changes">All unsaved changes will be lost</string>
 	<string name="dialog_open_file_positive">Yes, open file</string>
 	<string name="dialog_capture_photo_positive">Yes, capture photo</string>
+	<string name="select_all">Select all</string>
+	<string name="select_nothing">Remove selection</string>
+	<string name="selection_invert">Invert selection</string>
 </resources>

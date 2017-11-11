@@ -29,7 +29,8 @@ public class ManipulatorSelection
 				int arrayY = y - bounds.top;
 				array[arrayY * bounds.width() + arrayX] = (byte) (selection.containsPoint(x, y) ? 1 : 0);
 			}
-		
+			
+		bounds.offset(-layerBounds.left, -layerBounds.top);
 		return new ManipulatorSelection(array, bounds);
 	}
 	

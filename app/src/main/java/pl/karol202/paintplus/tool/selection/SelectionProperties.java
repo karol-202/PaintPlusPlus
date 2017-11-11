@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.Spinner;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 
-public class SelectionProperties extends ToolProperties implements OnItemSelectedListener, OnSelectionEditListener
+public class SelectionProperties extends ToolProperties
 {
 	private ToolSelection selection;
 	private SelectionShapeAdapter adapterShape;
@@ -17,6 +18,9 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 	private View view;
 	private Spinner spinnerShape;
 	private Spinner spinnerMode;
+	private Button buttonSelectAll;
+	private Button buttonSelectNothing;
+	private Button buttonInvertSelection;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -26,19 +30,76 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 		setHasOptionsMenu(true);
 		
 		selection = (ToolSelection) tool;
-		selection.setSelectionListener(this);
+		selection.setSelectionListener(new OnSelectionEditListener() {
+			@Override
+			public void onStartSelectionEditing()
+			{
+				getActivity().invalidateOptionsMenu();
+			}
+		});
 		adapterShape = new SelectionShapeAdapter(getActivity());
 		adapterMode = new SelectionModeAdapter(getActivity());
 		
 		spinnerShape = view.findViewById(R.id.spinner_selection_shape);
 		spinnerShape.setAdapter(adapterShape);
 		spinnerShape.setSelection(selection.getShape().ordinal());
-		spinnerShape.setOnItemSelectedListener(this);
+		spinnerShape.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				onShapeSelected(position);
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+			
+			}
+		});
 		
 		spinnerMode = view.findViewById(R.id.spinner_selection_mode);
 		spinnerMode.setAdapter(adapterMode);
 		spinnerMode.setSelection(selection.getMode().ordinal());
-		spinnerMode.setOnItemSelectedListener(this);
+		spinnerMode.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				onModeSelected(position);
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> parent)
+			{
+			
+			}
+		});
+		
+		buttonSelectAll = view.findViewById(R.id.button_selection_all);
+		buttonSelectAll.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				selection.selectAll();
+			}
+		});
+		
+		buttonSelectNothing = view.findViewById(R.id.button_selection_nothing);
+		buttonSelectNothing.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				selection.selectNothing();
+			}
+		});
+		
+		buttonInvertSelection = view.findViewById(R.id.button_selection_invert);
+		buttonInvertSelection.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				selection.invertSelection();
+			}
+		});
 		
 		return view;
 	}
@@ -70,13 +131,6 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-	{
-		if(parent == spinnerShape) onShapeSelected(position);
-		else if(parent == spinnerMode) onModeSelected(position);
-	}
-	
 	private void onShapeSelected(int position)
 	{
 		ToolSelectionShape shape = ToolSelectionShape.values()[position];
@@ -87,14 +141,5 @@ public class SelectionProperties extends ToolProperties implements OnItemSelecte
 	{
 		ToolSelectionMode mode = ToolSelectionMode.values()[position];
 		selection.setMode(mode);
-	}
-	
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) { }
-	
-	@Override
-	public void onStartSelectionEditing()
-	{
-		getActivity().invalidateOptionsMenu();
 	}
 }

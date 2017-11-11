@@ -232,8 +232,8 @@
 	<string name="desc_polygon_more_sides">Więcej boków</string>
 	<string name="desc_scale_down">Zmniejsz</string>
 	<string name="desc_scale_up">Powiększ</string>
-	<string name="dialog_load_wait_message">Ładowanie...</string>
-	<string name="no_images">Nie masz żadnych ostatnich obrazów</string>
+	<string name="dialog_load_wait_message">Ładowanie…</string>
+	<string name="no_images">Pora coś narysować</string>
 	<string name="layer_mode_difference">Różnica</string>
 	<string name="layer_mode_subtraction">Odejmowanie</string>
 	<string name="layer_mode_darker">Ciemniejsze</string>
@@ -273,4 +273,7 @@
 	<string name="dialog_unsaved_changes">Wszystkie niezapisane zmiany zostaną utracone</string>
 	<string name="dialog_open_file_positive">Tak, otwórz plik</string>
 	<string name="dialog_capture_photo_positive">Zrób zdjęcie</string>
+	<string name="select_all">Zaznacz wszystko</string>
+	<string name="select_nothing">Usuń zaznaczenie</string>
+	<string name="selection_invert">Odwróć zaznaczenie</string>
 </resources>

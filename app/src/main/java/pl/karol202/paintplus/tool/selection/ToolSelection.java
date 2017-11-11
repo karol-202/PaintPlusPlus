@@ -303,6 +303,21 @@ public class ToolSelection extends StandardTool
 		rect.bottom = -1;
 	}
 	
+	void selectAll()
+	{
+		selection.selectAll();
+	}
+	
+	void selectNothing()
+	{
+		selection.selectNothing();
+	}
+	
+	void invertSelection()
+	{
+		selection.revert();
+	}
+	
 	@Override
 	public boolean providesDirtyRegion()
 	{
