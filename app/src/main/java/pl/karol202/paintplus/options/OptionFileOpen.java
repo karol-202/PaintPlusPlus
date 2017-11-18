@@ -3,14 +3,16 @@ package pl.karol202.paintplus.options;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoaderDialog;
+import pl.karol202.paintplus.file.explorer.FileExplorer;
+import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.recent.OnFileEditListener;
 
@@ -23,7 +25,8 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	private ActivityPaint activity;
 	private OnFileEditListener listener;
 	private AsyncManager asyncManager;
-	private String filePath;
+	
+	private Uri uri;
 	
 	public OptionFileOpen(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
@@ -59,23 +62,23 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	{
 		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
 		
-		Intent intent = new Intent(context, ActivityFileOpen.class);
-		activity.startActivityForResult(intent, REQUEST_OPEN_FILE);
-	}
-	
-	public void openFile(String filePath)
-	{
-		this.filePath = filePath;
-		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(filePath);
+		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
+		explorer.openFile(REQUEST_OPEN_FILE);
 	}
 	
 	@Override
-	public void onActivityResult(int resultCode, Intent data)
+	public void onActivityResult(int resultCode, Intent intent)
 	{
 		activity.unregisterActivityResultListener(REQUEST_OPEN_FILE);
 		if(resultCode != RESULT_OK) return;
-		String filePath = data.getStringExtra("filePath");
-		openFile(filePath);
+		openFile(intent.getData());
+	}
+	
+	public void openFile(Uri uri)
+	{
+		this.uri = uri;
+		System.out.println(uri.getPath());
+		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
 	
 	@Override
@@ -85,10 +88,10 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 		else
 		{
 			image.openImage(bitmap);
-			image.setLastPath(filePath);
+			image.setLastUri(uri);
 			image.centerView();
 			
-			if(listener != null) listener.onFileEdited(filePath, bitmap);
+			if(listener != null) listener.onFileEdited(uri, bitmap);
 		}
 	}
 }

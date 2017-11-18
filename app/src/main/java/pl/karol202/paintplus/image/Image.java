@@ -2,12 +2,13 @@ package pl.karol202.paintplus.image;
 
 import android.content.Context;
 import android.graphics.*;
+import android.net.Uri;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.helpers.HelpersManager;
-import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.history.History;
 import pl.karol202.paintplus.history.OnHistoryUpdateListener;
+import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
@@ -35,7 +36,7 @@ public class Image
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
-	private String lastPath;
+	private Uri lastUri;
 	private ArrayList<Layer> layers;
 	private int selectedLayer;
 	private int width;
@@ -76,7 +77,7 @@ public class Image
 	
 	public void newImage(int width, int height)
 	{
-		this.lastPath = null;
+		this.lastUri = null;
 		this.width = width;
 		this.height = height;
 		
@@ -246,14 +247,14 @@ public class Image
 		return DEFAULT_LAYER_NAME;
 	}
 	
-	public String getLastPath()
+	public Uri getLastUri()
 	{
-		return lastPath;
+		return lastUri;
 	}
 	
-	public void setLastPath(String lastPath)
+	public void setLastUri(Uri lastUri)
 	{
-		this.lastPath = lastPath;
+		this.lastUri = lastUri;
 	}
 	
 	public ArrayList<Layer> getLayers()

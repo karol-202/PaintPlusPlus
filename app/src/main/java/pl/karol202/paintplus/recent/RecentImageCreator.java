@@ -2,6 +2,8 @@ package pl.karol202.paintplus.recent;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import pl.karol202.paintplus.file.UriMetadata;
 
 public class RecentImageCreator implements OnFileEditListener
 {
@@ -15,21 +17,22 @@ public class RecentImageCreator implements OnFileEditListener
 	}
 	
 	@Override
-	public void onFileEdited(String path, Bitmap bitmap)
+	public void onFileEdited(Uri uri, Bitmap bitmap)
 	{
 		RecentLoader loader = new RecentLoader(context);
 		loader.load();
-		loader.addOrUpdateRecentImage(createRecentImage(path, bitmap));
+		loader.addOrUpdateRecentImage(createRecentImage(uri, bitmap));
 		loader.save();
 	}
 	
-	private RecentImage createRecentImage(String path, Bitmap originalBitmap)
+	private RecentImage createRecentImage(Uri uri, Bitmap originalBitmap)
 	{
-		String[] parts = path.split("/");
+		UriMetadata metadata = new UriMetadata(context, uri);
+		String[] parts = metadata.getDisplayName().split("/");
 		String name = parts[parts.length - 1];
 		Bitmap thumbnail = createThumbnail(originalBitmap);
 		
-		return new RecentImage(path, null, thumbnail, name, System.currentTimeMillis());
+		return new RecentImage(uri, null, thumbnail, name, System.currentTimeMillis());
 	}
 	
 	private Bitmap createThumbnail(Bitmap originalBitmap)

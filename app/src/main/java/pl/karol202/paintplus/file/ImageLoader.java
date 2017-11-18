@@ -8,17 +8,17 @@ import android.graphics.Point;
 import com.google.firebase.crash.FirebaseCrash;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
-import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 
 public class ImageLoader
 {
-	static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
-	static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
+	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
+	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp" };
 	
-	public static Bitmap openBitmapAndScaleIfNecessary(String path)
+	public static Bitmap openBitmapAndScaleIfNecessary(FileDescriptor fileDescriptor)
 	{
-		Bitmap bitmap = BitmapFactory.decodeFile(path);
+		Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
 		if(bitmap == null) return null;
 		
 		Point bitmapSize = new Point(bitmap.getWidth(), bitmap.getHeight());
@@ -30,9 +30,9 @@ public class ImageLoader
 		else return bitmap;
 	}
 	
-	static Bitmap openBitmapAndScale(String path, Point targetSize)
+	static Bitmap openBitmapAndScale(FileDescriptor fileDescriptor, Point targetSize)
 	{
-		Bitmap bitmap = BitmapFactory.decodeFile(path);
+		Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
 		if(bitmap == null) return null;
 		
 		return Bitmap.createScaledBitmap(bitmap, targetSize.x, targetSize.y, true);
@@ -44,12 +44,12 @@ public class ImageLoader
 		return size.x > maxSize || size.y > maxSize;
 	}
 	
-	static Point getBitmapSize(String path)
+	static Point getBitmapSize(FileDescriptor fileDescriptor)
 	{
 		Options options = new Options();
 		options.inJustDecodeBounds = true;
 		
-		BitmapFactory.decodeFile(path, options);
+		BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
 		return new Point(options.outWidth,options.outHeight);
 	}
 	
@@ -68,14 +68,12 @@ public class ImageLoader
 		else return originalSize;
 	}
 	
-	public static boolean saveBitmap(Bitmap bitmap, String path, int quality)
+	public static boolean saveBitmap(Bitmap bitmap, FileDescriptor fileDescriptor, String name, int quality)
 	{
 		try
 		{
-			File file = new File(path);
-			file.createNewFile();
-			FileOutputStream fos = new FileOutputStream(file);
-			CompressFormat format = getExtension(path);
+			FileOutputStream fos = new FileOutputStream(fileDescriptor);
+			CompressFormat format = getExtension(name);
 			bitmap.compress(format, quality, fos);
 			fos.close();
 			return true;
@@ -88,9 +86,9 @@ public class ImageLoader
 		}
 	}
 	
-	private static CompressFormat getExtension(String path)
+	private static CompressFormat getExtension(String name)
 	{
-		String[] parts = path.split("\\.");
+		String[] parts = name.split("\\.");
 		String extension = parts[parts.length - 1].toLowerCase();
 		switch(extension)
 		{

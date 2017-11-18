@@ -7,26 +7,25 @@ public class BitmapSaveAsyncTask extends AsyncTask<BitmapSaveParams, Void, Bitma
 {
 	public interface OnBitmapSaveListener
 	{
-		void onBitmapSaved(boolean saved, String filePath, Bitmap bitmap);
+		void onBitmapSaved(boolean saved, Bitmap bitmap);
 	}
 	
 	private OnBitmapSaveListener listener;
-	private String filePath;
 	
 	@Override
 	protected BitmapSaveResult doInBackground(BitmapSaveParams... params)
 	{
+		BitmapSaveParams param = params[0];
 		listener = params[0].getListener();
-		filePath = params[0].getFilePath();
 		
-		return new BitmapSaveResult(params[0].getBitmap(),
-						  ImageLoader.saveBitmap(params[0].getBitmap(), filePath, params[0].getQuality()));
+		return new BitmapSaveResult(param.getBitmap(),
+						            ImageLoader.saveBitmap(param.getBitmap(), param.getFileDescriptor(), param.getName(), param.getQuality()));
 	}
 	
 	@Override
 	protected void onPostExecute(BitmapSaveResult result)
 	{
 		super.onPostExecute(result);
-		listener.onBitmapSaved(result.isSaved(), filePath, result.getBitmap());
+		listener.onBitmapSaved(result.isSaved(), result.getBitmap());
 	}
 }

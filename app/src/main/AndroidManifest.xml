@@ -34,10 +34,10 @@
 		    android:name=".history.ActivityHistory"
 		    android:label="@string/activity_history"/>
 		<activity
-			android:name=".file.ActivityFileOpen"
+			android:name=".file.explorer.ActivityFileOpen"
 			android:label="@string/activity_file_open" />
 	    <activity
-		    android:name=".file.ActivityFileSave"
+		    android:name=".file.explorer.ActivityFileSave"
 		    android:label="@string/activity_file_save" />
 	    <activity
 		    android:name=".settings.ActivitySettings"

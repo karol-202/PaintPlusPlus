@@ -3,16 +3,18 @@ package pl.karol202.paintplus.file;
 import android.graphics.Point;
 import pl.karol202.paintplus.file.BitmapLoadAsyncTask.OnBitmapLoadListener;
 
+import java.io.FileDescriptor;
+
 class BitmapLoadParams
 {
 	private OnBitmapLoadListener listener;
-	private String filePath;
+	private FileDescriptor fileDescriptor;
 	private Point bitmapSize;
 	
-	BitmapLoadParams(OnBitmapLoadListener listener, String filePath, Point bitmapSize)
+	BitmapLoadParams(OnBitmapLoadListener listener, FileDescriptor fileDescriptor, Point bitmapSize)
 	{
 		this.listener = listener;
-		this.filePath = filePath;
+		this.fileDescriptor = fileDescriptor;
 		this.bitmapSize = bitmapSize;
 	}
 	
@@ -21,9 +23,9 @@ class BitmapLoadParams
 		return listener;
 	}
 	
-	String getFilePath()
+	FileDescriptor getFileDescriptor()
 	{
-		return filePath;
+		return fileDescriptor;
 	}
 	
 	Point getBitmapSize()

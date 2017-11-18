@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.AsyncTask;
 
+import java.io.FileDescriptor;
+
 class BitmapLoadAsyncTask extends AsyncTask<BitmapLoadParams, Void, BitmapLoadResult>
 {
 	interface OnBitmapLoadListener
@@ -17,10 +19,10 @@ class BitmapLoadAsyncTask extends AsyncTask<BitmapLoadParams, Void, BitmapLoadRe
 	protected BitmapLoadResult doInBackground(BitmapLoadParams... params)
 	{
 		listener = params[0].getListener();
-		String filePath = params[0].getFilePath();
+		FileDescriptor fileDescriptor = params[0].getFileDescriptor();
 		Point bitmapSize = params[0].getBitmapSize();
 		
-		Bitmap bitmap = ImageLoader.openBitmapAndScale(filePath, bitmapSize);
+		Bitmap bitmap = ImageLoader.openBitmapAndScale(fileDescriptor, bitmapSize);
 		return new BitmapLoadResult(bitmap);
 	}
 	

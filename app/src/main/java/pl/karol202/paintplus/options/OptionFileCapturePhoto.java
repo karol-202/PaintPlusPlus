@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ImageLoader;
+import pl.karol202.paintplus.file.UriUtils;
 import pl.karol202.paintplus.image.Image;
 
 import java.io.File;
@@ -94,7 +96,9 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
 		
-		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(photoFile.getAbsolutePath());
+		Uri uri = Uri.fromFile(photoFile);
+		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor());
 		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 		else
 		{
@@ -102,6 +106,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 			image.centerView();
 		}
 		
+		UriUtils.closeFileDescriptor(fileDescriptor);
 		photoFile.delete();
 	}
 }

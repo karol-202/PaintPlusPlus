@@ -3,6 +3,7 @@ package pl.karol202.paintplus.activity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 
 public class ActivityPaint extends AppCompatActivity implements PermissionRequest.PermissionGrantingActivity
 {
-	public static final String PATH_KEY = "path";
+	public static final String URI_KEY = "path";
 	public static final String OPEN_KEY = "open";
 	
 	private ActivityPaintActions actions;
@@ -48,7 +49,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	private AsyncManager asyncManager;
 	private AppDataFragment dataFragment;
 	private ActionBar actionBar;
-	private String initPath;
+	private Uri initUri;
 	private boolean openFile;
 	private RecentImageCreator recentImageCreator;
 
@@ -105,8 +106,8 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	private void readArguments(Bundle bundle)
 	{
 		if(bundle == null) return;
-		initPath = bundle.getString(PATH_KEY);
-		openFile = initPath == null && bundle.getBoolean(OPEN_KEY, false);
+		initUri = bundle.getParcelable(URI_KEY);
+		openFile = initUri == null && bundle.getBoolean(OPEN_KEY, false);
 	}
 	
 	private void initSystemUIVisibility()
@@ -169,7 +170,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	
 	private void loadImageIfPathIsPresent()
 	{
-		if(initPath != null) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).openFile(initPath);
+		if(initUri != null) new OptionFileOpen(this, getImage(), asyncManager, recentImageCreator).openFile(initUri);
 	}
 	
 	private void selectImageToOpenIfNeeded()

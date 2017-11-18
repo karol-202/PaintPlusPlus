@@ -3,6 +3,7 @@ package pl.karol202.paintplus.recent;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 
-public class ActivityRecent extends AppCompatActivity implements OnImageSelectListener, View.OnClickListener, PermissionGrantingActivity
+public class ActivityRecent extends AppCompatActivity implements PermissionGrantingActivity
 {
 	private class SwipeCallback extends ItemTouchHelper.SimpleCallback
 	{
@@ -72,10 +73,16 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recent);
+		initFirebaseIfNotDebug();
 		
-		FirebaseAnalytics.getInstance(this);
 		loader = new RecentLoader(this);
-		adapter = new RecentAdapter(this, loader.getImages(), this);
+		adapter = new RecentAdapter(this, loader.getImages(), new OnImageSelectListener() {
+			@Override
+			public void onImageSelected(RecentImage image)
+			{
+				editImage(image.getUri());
+			}
+		});
 		animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 		permissionListeners = new HashMap<>();
 		
@@ -91,7 +98,18 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		attachSwipingFeature();
 		
 		buttonNewImage = findViewById(R.id.button_new_image);
-		buttonNewImage.setOnClickListener(this);
+		buttonNewImage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				editImage(null);
+			}
+		});
+	}
+	
+	private void initFirebaseIfNotDebug()
+	{
+		if(!getResources().getBoolean(R.bool.debug)) FirebaseAnalytics.getInstance(this);
 	}
 	
 	private void attachSwipingFeature()
@@ -130,22 +148,10 @@ public class ActivityRecent extends AppCompatActivity implements OnImageSelectLi
 		return true;
 	}
 	
-	@Override
-	public void onImageSelected(RecentImage image)
-	{
-		editImage(image.getPath());
-	}
-	
-	@Override
-	public void onClick(View v)
-	{
-		editImage(null);
-	}
-	
-	private void editImage(String path)
+	private void editImage(Uri uri)
 	{
 		Intent intent = new Intent(this, ActivityPaint.class);
-		if(path != null) intent.putExtra(ActivityPaint.PATH_KEY, path);
+		if(uri != null) intent.putExtra(ActivityPaint.URI_KEY, uri);
 		startActivity(intent);
 	}
 	

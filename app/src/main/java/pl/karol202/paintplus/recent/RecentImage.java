@@ -1,19 +1,20 @@
 package pl.karol202.paintplus.recent;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 class RecentImage implements Comparable<RecentImage>
 {
-	private String path;
-	private String thumbnailPath;
+	private Uri uri;
+	private Uri thumbnailUri;
 	private Bitmap thumbnail;
 	private String name;
 	private long date;
 	
-	RecentImage(String path, String thumbnailPath, Bitmap thumbnail, String name, long date)
+	RecentImage(Uri uri, Uri thumbnailUri, Bitmap thumbnail, String name, long date)
 	{
-		this.path = path;
-		this.thumbnailPath = thumbnailPath;
+		this.uri = uri;
+		this.thumbnailUri = thumbnailUri;
 		this.thumbnail = thumbnail;
 		this.name = name;
 		this.date = date;
@@ -27,14 +28,14 @@ class RecentImage implements Comparable<RecentImage>
 		
 		RecentImage that = (RecentImage) o;
 		
-		if(path != null ? !path.equals(that.path) : that.path != null) return false;
+		if(uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
 		return name != null ? name.equals(that.name) : that.name == null;
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		int result = path != null ? path.hashCode() : 0;
+		int result = uri != null ? uri.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		return result;
 	}
@@ -46,19 +47,19 @@ class RecentImage implements Comparable<RecentImage>
 		return date < o.date ? 1 : -1;
 	}
 	
-	String getPath()
+	Uri getUri()
 	{
-		return path;
+		return uri;
 	}
 	
-	String getThumbnailPath()
+	Uri getThumbnailUri()
 	{
-		return thumbnailPath;
+		return thumbnailUri;
 	}
 	
-	void setThumbnailPath(String thumbnailPath)
+	void setThumbnailUri(Uri thumbnailUri)
 	{
-		this.thumbnailPath = thumbnailPath;
+		this.thumbnailUri = thumbnailUri;
 	}
 	
 	Bitmap getThumbnail()

@@ -3,12 +3,15 @@ package pl.karol202.paintplus.recent;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.util.Xml;
 import com.google.firebase.crash.FirebaseCrash;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 import pl.karol202.paintplus.file.ImageLoader;
+import pl.karol202.paintplus.file.UriUtils;
 
 import java.io.*;
 import java.text.ParseException;
@@ -102,14 +105,14 @@ class RecentLoader
 	{
 		checkTag();
 		
-		String path = readPath();
-		String thumbnailPath = readThumbnailPath();
-		Bitmap thumbnail = loadThumbnail(thumbnailPath);
+		Uri uri = readUri();
+		Uri thumbnailUri = readThumbnailUri();
+		Bitmap thumbnail = loadThumbnail(thumbnailUri);
 		String name = readName();
 		long date = readDate();
 		if(thumbnail == null) return;
 		
-		images.add(new RecentImage(path, thumbnailPath, thumbnail, name, date));
+		images.add(new RecentImage(uri, thumbnailUri, thumbnail, name, date));
 	}
 	
 	private void checkTag() throws IOException, XmlPullParserException
@@ -117,27 +120,30 @@ class RecentLoader
 		parser.require(XmlPullParser.START_TAG, null, "image");
 	}
 	
-	private String readPath() throws ParseException, IOException, XmlPullParserException
+	private Uri readUri() throws ParseException, IOException, XmlPullParserException
 	{
 		checkTag();
 		
-		String path = parser.getAttributeValue(null, "path");
-		if(path == null || path.isEmpty()) throw new ParseException("Attribute not found: path", parser.getLineNumber());
-		return path;
+		String uriString = parser.getAttributeValue(null, "path");
+		if(uriString == null || uriString.isEmpty()) throw new ParseException("Attribute not found: path", parser.getLineNumber());
+		return Uri.parse(uriString);
 	}
 	
-	private String readThumbnailPath() throws ParseException, IOException, XmlPullParserException
+	private Uri readThumbnailUri() throws ParseException, IOException, XmlPullParserException
 	{
 		checkTag();
 		
-		String path = parser.getAttributeValue(null, "thumbnailPath");
-		if(path == null || path.isEmpty()) throw new ParseException("Attribute not found: thumbnailPath", parser.getLineNumber());
-		return path;
+		String uriString = parser.getAttributeValue(null, "thumbnailPath");
+		if(uriString == null || uriString.isEmpty()) throw new ParseException("Attribute not found: thumbnailPath", parser.getLineNumber());
+		return Uri.parse(uriString);
 	}
 	
-	private Bitmap loadThumbnail(String path)
+	private Bitmap loadThumbnail(Uri uri)
 	{
-		return BitmapFactory.decodeFile(path);
+		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor());
+		UriUtils.closeFileDescriptor(fileDescriptor);
+		return bitmap;
 	}
 	
 	private String readName() throws IOException, XmlPullParserException, ParseException
@@ -200,23 +206,26 @@ class RecentLoader
 	private void saveImage(RecentImage image) throws IOException
 	{
 		serializer.startTag(null, "image");
-		serializer.attribute(null, "path", image.getPath());
-		serializer.attribute(null, "thumbnailPath", getThumbnailPath(image));
+		serializer.attribute(null, "path", image.getUri().toString());
+		serializer.attribute(null, "thumbnailPath", saveThumbnailAndGetPath(image).toString());
 		serializer.attribute(null, "name", image.getName());
 		serializer.attribute(null, "date", String.valueOf(image.getDate()));
 		serializer.endTag(null, "image");
 	}
 	
-	private String getThumbnailPath(RecentImage image) throws IOException
+	private Uri saveThumbnailAndGetPath(RecentImage image) throws IOException
 	{
-		if(image.getThumbnailPath() != null) return image.getThumbnailPath();
+		if(image.getThumbnailUri() != null) return image.getThumbnailUri();
 		
 		String fileName = String.format("_%s", image.getName());
 		File file = new File(context.getFilesDir(), fileName);
-		String path = file.getAbsolutePath();
 		Bitmap bitmap = image.getThumbnail();
-		ImageLoader.saveBitmap(bitmap, path, 70);
-		return path;
+		
+		Uri uri = Uri.fromFile(file);
+		ParcelFileDescriptor fileDescriptor = UriUtils.createFileSaveDescriptor(context, uri);
+		ImageLoader.saveBitmap(bitmap, fileDescriptor.getFileDescriptor(), fileName, 70);
+		fileDescriptor.close();
+		return uri;
 	}
 	
 	void addOrUpdateRecentImage(RecentImage image)
@@ -224,9 +233,10 @@ class RecentLoader
 		if(!images.contains(image)) images.add(image);
 		else
 		{
+			//Find old entry about the same file and update it.
 			int indexOfExisting = images.indexOf(image);
 			RecentImage existing = images.get(indexOfExisting);
-			existing.setThumbnailPath(null);
+			existing.setThumbnailUri(null);
 			existing.setThumbnail(image.getThumbnail());
 			existing.setDate(image.getDate());
 		}

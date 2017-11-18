@@ -96,7 +96,7 @@ class ActivityPaintActions
 		menu.findItem(R.id.action_save_image_as).setEnabled(savingAs);
 		menu.findItem(R.id.action_save_layer).setEnabled(savingAs);
 		
-		boolean knownPath = image.getLastPath() != null;
+		boolean knownPath = image.getLastUri() != null;
 		menu.findItem(R.id.action_save_image).setEnabled(savingAs && knownPath);
 	}
 	
@@ -162,8 +162,7 @@ class ActivityPaintActions
 				@Override
 				public void onPermissionGrant()
 				{
-					String path = image.getLastPath();
-					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(path);
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(image.getLastUri());
 				}
 			});
 			return true;

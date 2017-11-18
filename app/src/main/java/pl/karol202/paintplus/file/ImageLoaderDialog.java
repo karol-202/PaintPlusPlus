@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AlertDialog;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
@@ -35,7 +37,7 @@ public class ImageLoaderDialog
 	private Context context;
 	private OnImageLoadListener listener;
 	
-	private String path;
+	private ParcelFileDescriptor fileDescriptor;
 	private Point bitmapSize;
 	
 	private AlertDialog dialog;
@@ -51,13 +53,17 @@ public class ImageLoaderDialog
 		this.listener = listener;
 	}
 	
-	public void loadBitmapAndAskForScalingIfTooBig(String path)
+	public void loadBitmapAndAskForScalingIfTooBig(Uri uri)
 	{
-		this.path = path;
-		this.bitmapSize = ImageLoader.getBitmapSize(path);
+		this.fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		this.bitmapSize = ImageLoader.getBitmapSize(fileDescriptor.getFileDescriptor());
 		
 		boolean tooBig = ImageLoader.isBitmapTooBig(bitmapSize);
-		if(!tooBig) listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(path));
+		if(!tooBig)
+		{
+			listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor()));
+			UriUtils.closeFileDescriptor(fileDescriptor);
+		}
 		else
 		{
 			bitmapSize = ImageLoader.scaleBitmapSizeIfNecessary(bitmapSize);
@@ -92,7 +98,7 @@ public class ImageLoaderDialog
 			{
 				onBitmapLoaded(bitmap);
 			}
-		}, path, bitmapSize);
+		}, fileDescriptor.getFileDescriptor(), bitmapSize);
 		asyncTask = new BitmapLoadAsyncTask();
 		asyncTask.execute(params);
 	}
@@ -101,11 +107,15 @@ public class ImageLoaderDialog
 	{
 		asyncManager.unblock(asyncBlocker);
 		listener.onImageLoaded(bitmap);
+		
+		UriUtils.closeFileDescriptor(fileDescriptor);
 	}
 	
 	private void onLoadingCancel()
 	{
 		asyncManager.unblock(asyncBlocker);
 		asyncTask.cancel(true);
+		
+		UriUtils.closeFileDescriptor(fileDescriptor);
 	}
 }

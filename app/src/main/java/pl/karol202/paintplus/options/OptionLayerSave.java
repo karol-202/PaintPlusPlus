@@ -3,7 +3,9 @@ package pl.karol202.paintplus.options;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 import pl.karol202.paintplus.AsyncBlocker;
@@ -11,9 +13,12 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.ActivityFileSave;
 import pl.karol202.paintplus.file.BitmapSaveAsyncTask;
 import pl.karol202.paintplus.file.BitmapSaveParams;
+import pl.karol202.paintplus.file.UriMetadata;
+import pl.karol202.paintplus.file.UriUtils;
+import pl.karol202.paintplus.file.explorer.FileExplorer;
+import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.recent.OnFileEditListener;
@@ -31,6 +36,8 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	private int quality;
 	
 	private AsyncTask asyncTask;
+	private Uri uri;
+	private ParcelFileDescriptor parcelFileDescriptor;
 	
 	public OptionLayerSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
@@ -41,33 +48,35 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 		this.quality = preferences.getInt(ActivitySettings.KEY_JPG_QUALITY, 100);
-		
-		this.activity.registerActivityResultListener(REQUEST_SAVE_LAYER, this);
 	}
 	
 	@Override
 	public void execute()
 	{
-		Intent intent = new Intent(context, ActivityFileSave.class);
-		activity.startActivityForResult(intent, REQUEST_SAVE_LAYER);
+		activity.registerActivityResultListener(REQUEST_SAVE_LAYER, this);
+		
+		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
+		explorer.saveFile(REQUEST_SAVE_LAYER);
 	}
 	
 	@Override
-	public void onActivityResult(int resultCode, Intent data)
+	public void onActivityResult(int resultCode, Intent intent)
 	{
 		activity.unregisterActivityResultListener(REQUEST_SAVE_LAYER);
 		if(resultCode != RESULT_OK) return;
-		String filePath = data.getStringExtra("filePath");
+		uri = intent.getData();
 		
-		saveBitmapAsynchronously(filePath);
+		saveBitmapAsynchronously();
 	}
 	
-	private void saveBitmapAsynchronously(String filePath)
+	private void saveBitmapAsynchronously()
 	{
 		asyncManager.block(this);
 		
 		Layer layer = image.getSelectedLayer();
-		BitmapSaveParams params = new BitmapSaveParams(this, layer.getBitmap(), filePath, quality);
+		parcelFileDescriptor = UriUtils.createFileSaveDescriptor(context, uri);
+		UriMetadata metadata = new UriMetadata(context, uri);
+		BitmapSaveParams params = new BitmapSaveParams(this, layer.getBitmap(), metadata.getDisplayName(), parcelFileDescriptor.getFileDescriptor(), quality);
 		asyncTask = new BitmapSaveAsyncTask().execute(params);
 	}
 	
@@ -85,10 +94,11 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	}
 	
 	@Override
-	public void onBitmapSaved(boolean saved, String filePath, Bitmap bitmap)
+	public void onBitmapSaved(boolean saved, Bitmap bitmap)
 	{
 		asyncManager.unblock(this);
 		if(!saved) Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
-		else if(listener != null) listener.onFileEdited(filePath, bitmap);
+		else if(listener != null) listener.onFileEdited(uri, bitmap);
+		UriUtils.closeFileDescriptor(parcelFileDescriptor);
 	}
 }

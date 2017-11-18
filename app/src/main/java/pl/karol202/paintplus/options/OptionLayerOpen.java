@@ -3,13 +3,15 @@ package pl.karol202.paintplus.options;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.widget.Toast;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.ActivityFileOpen;
 import pl.karol202.paintplus.file.ImageLoaderDialog;
+import pl.karol202.paintplus.file.explorer.FileExplorer;
+import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
@@ -22,32 +24,33 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 	
 	private ActivityPaint activity;
 	private AsyncManager asyncManager;
-	private String fileName;
+	
+	private Uri uri;
 	
 	public OptionLayerOpen(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
 		super(activity, image);
 		this.activity = activity;
 		this.asyncManager = asyncManager;
-		activity.registerActivityResultListener(REQUEST_OPEN_LAYER, this);
 	}
 	
 	@Override
 	public void execute()
 	{
-		Intent intent = new Intent(context, ActivityFileOpen.class);
-		activity.startActivityForResult(intent, REQUEST_OPEN_LAYER);
+		activity.registerActivityResultListener(REQUEST_OPEN_LAYER, this);
+		
+		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
+		explorer.openFile(REQUEST_OPEN_LAYER);
 	}
 	
 	@Override
-	public void onActivityResult(int resultCode, Intent data)
+	public void onActivityResult(int resultCode, Intent intent)
 	{
 		activity.unregisterActivityResultListener(REQUEST_OPEN_LAYER);
 		if(resultCode != RESULT_OK) return;
-		String filePath = data.getStringExtra("filePath");
-		fileName = data.getStringExtra("fileName");
+		uri = intent.getData();
 		
-		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(filePath);
+		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
 	
 	@Override
@@ -58,7 +61,7 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 			Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), fileName, Color.TRANSPARENT);
+		Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), "xyz", Color.TRANSPARENT);
 		layer.setBitmap(bitmap);
 		if(!image.addLayer(layer, 0))
 			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
