@@ -24,7 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import com.google.firebase.crash.FirebaseCrash;
+import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.util.ItemDivider;
@@ -152,7 +152,7 @@ public abstract class ActivityFileChoose extends AppCompatActivity implements Fi
 	{
 		if(!file.exists() || !file.isDirectory())
 		{
-			FirebaseCrash.report(new RuntimeException("The specified path must be a directory."));
+			ErrorHandler.report(new RuntimeException("The specified path must be a directory."));
 			return;
 		}
 		previousDirectories.push(currentDirectory);

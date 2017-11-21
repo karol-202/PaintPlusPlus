@@ -19,6 +19,7 @@ package pl.karol202.paintplus.file;
 import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.support.v4.provider.DocumentFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,9 +44,9 @@ public class UriUtils
 		}
 		catch(FileNotFoundException e)
 		{
-			e.printStackTrace();
+			System.err.println(e.getMessage());
+			return null;
 		}
-		return null;
 	}
 	
 	public static void closeFileDescriptor(ParcelFileDescriptor fileDescriptor)
@@ -59,5 +60,10 @@ public class UriUtils
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void deleteDocument(Context context, Uri uri)
+	{
+		DocumentFile.fromSingleUri(context, uri).delete();
 	}
 }

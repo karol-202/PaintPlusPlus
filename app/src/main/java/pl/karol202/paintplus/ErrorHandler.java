@@ -14,33 +14,23 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.file;
+package pl.karol202.paintplus;
 
-import android.graphics.Bitmap;
+import com.google.firebase.crash.FirebaseCrash;
 
-public class BitmapSaveResult
+public class ErrorHandler
 {
-	public enum Result
+	private static boolean enableReporting = true;
+	
+	public static void disableReporting()
 	{
-		SUCCESSFUL, UNSUPPORTED_FORMAT, ERROR
+		ErrorHandler.enableReporting = false;
+		FirebaseCrash.setCrashCollectionEnabled(false);
 	}
 	
-	private Bitmap bitmap;
-	private Result result;
-	
-	BitmapSaveResult(Bitmap bitmap, Result result)
+	public static void report(Exception e)
 	{
-		this.bitmap = bitmap;
-		this.result = result;
-	}
-	
-	public Bitmap getBitmap()
-	{
-		return bitmap;
-	}
-	
-	public Result getResult()
-	{
-		return result;
+		e.printStackTrace();
+		if(enableReporting) FirebaseCrash.report(e);
 	}
 }

@@ -93,7 +93,6 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	public void openFile(Uri uri)
 	{
 		this.uri = uri;
-		System.out.println(uri.getPath());
 		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
 	

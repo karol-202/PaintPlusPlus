@@ -22,10 +22,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Xml;
-import com.google.firebase.crash.FirebaseCrash;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.file.UriUtils;
 
@@ -66,8 +66,7 @@ class RecentLoader
 		}
 		catch(XmlPullParserException | IOException | ParseException e)
 		{
-			e.printStackTrace();
-			FirebaseCrash.report(e);
+			ErrorHandler.report(e);
 		}
 	}
 	
@@ -126,7 +125,7 @@ class RecentLoader
 		Bitmap thumbnail = loadThumbnail(thumbnailUri);
 		String name = readName();
 		long date = readDate();
-		if(thumbnail == null) return;
+		if(!checkIfImageExists(uri) || thumbnail == null) return;
 		
 		images.add(new RecentImage(uri, thumbnailUri, thumbnail, name, date));
 	}
@@ -157,6 +156,7 @@ class RecentLoader
 	private Bitmap loadThumbnail(Uri uri)
 	{
 		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		if(fileDescriptor == null) return null;
 		Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor.getFileDescriptor());
 		UriUtils.closeFileDescriptor(fileDescriptor);
 		return bitmap;
@@ -179,6 +179,12 @@ class RecentLoader
 		if(dateString == null || dateString.isEmpty())
 			throw new ParseException("Attribute not found: date", parser.getLineNumber());
 		return Long.parseLong(dateString);
+	}
+	
+	private boolean checkIfImageExists(Uri uri)
+	{
+		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		return fileDescriptor != null;
 	}
 	
 	void save()

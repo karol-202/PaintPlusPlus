@@ -30,7 +30,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.firebase.crash.FirebaseCrash;
+import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSelect;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
@@ -187,7 +187,7 @@ class ActivityPaintDrawers
 		}
 		catch(Exception e)
 		{
-			FirebaseCrash.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
+			ErrorHandler.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
 													  "Probably the fragment class does not contain " +
 													  "default constructor.", e));
 		}
@@ -219,7 +219,7 @@ class ActivityPaintDrawers
 		}
 		catch(Exception e)
 		{
-			FirebaseCrash.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
+			ErrorHandler.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
 													  "Probably the fragment class does not contain " +
 													  "default constructor.", e));
 		}

@@ -72,12 +72,18 @@ public class ImageLoaderDialog
 	public void loadBitmapAndAskForScalingIfTooBig(Uri uri)
 	{
 		this.fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		if(fileDescriptor == null)
+		{
+			if(listener != null) listener.onImageLoaded(null);
+			return;
+		}
 		this.bitmapSize = ImageLoader.getBitmapSize(fileDescriptor.getFileDescriptor());
 		
 		boolean tooBig = ImageLoader.isBitmapTooBig(bitmapSize);
 		if(!tooBig)
 		{
-			listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor()));
+			if(listener != null)
+				listener.onImageLoaded(ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor()));
 			UriUtils.closeFileDescriptor(fileDescriptor);
 		}
 		else
@@ -122,7 +128,7 @@ public class ImageLoaderDialog
 	private void onBitmapLoaded(Bitmap bitmap)
 	{
 		asyncManager.unblock(asyncBlocker);
-		listener.onImageLoaded(bitmap);
+		if(listener != null) listener.onImageLoaded(bitmap);
 		
 		UriUtils.closeFileDescriptor(fileDescriptor);
 	}

@@ -18,7 +18,6 @@ package pl.karol202.paintplus.options;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
@@ -29,10 +28,7 @@ import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.BitmapSaveAsyncTask;
-import pl.karol202.paintplus.file.BitmapSaveParams;
-import pl.karol202.paintplus.file.UriMetadata;
-import pl.karol202.paintplus.file.UriUtils;
+import pl.karol202.paintplus.file.*;
 import pl.karol202.paintplus.file.explorer.FileExplorer;
 import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
@@ -110,11 +106,24 @@ public class OptionLayerSave extends Option implements ActivityResultListener, A
 	}
 	
 	@Override
-	public void onBitmapSaved(boolean saved, Bitmap bitmap)
+	public void onBitmapSaved(BitmapSaveResult result)
 	{
 		asyncManager.unblock(this);
-		if(!saved) Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
-		else if(listener != null) listener.onFileEdited(uri, bitmap);
 		UriUtils.closeFileDescriptor(parcelFileDescriptor);
+		
+		switch(result.getResult())
+		{
+		case SUCCESSFUL:
+			if(listener != null) listener.onFileEdited(uri, result.getBitmap());
+			break;
+		case ERROR:
+			UriUtils.deleteDocument(context, uri);
+			Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
+			break;
+		case UNSUPPORTED_FORMAT:
+			UriUtils.deleteDocument(context, uri);
+			Toast.makeText(activity, R.string.message_unsupported_format, Toast.LENGTH_SHORT).show();
+			break;
+		}
 	}
 }

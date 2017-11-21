@@ -114,6 +114,15 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		
 		Uri uri = Uri.fromFile(photoFile);
 		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		
+		if(fileDescriptor != null) openBitmap(fileDescriptor);
+		
+		UriUtils.closeFileDescriptor(fileDescriptor);
+		photoFile.delete();
+	}
+	
+	private void openBitmap(ParcelFileDescriptor fileDescriptor)
+	{
 		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor());
 		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
 		else
@@ -121,8 +130,5 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 			image.openImage(bitmap);
 			image.centerView();
 		}
-		
-		UriUtils.closeFileDescriptor(fileDescriptor);
-		photoFile.delete();
 	}
 }

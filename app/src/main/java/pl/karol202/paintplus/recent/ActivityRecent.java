@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -34,11 +35,13 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.PermissionRequest;
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener;
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity;
+import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.util.BlockableLinearLayoutManager;
 
 import java.util.HashMap;
@@ -90,6 +93,7 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recent);
 		initFirebaseIfNotDebug();
+		ImageLoader.setTemporaryFileLocation(getExternalFilesDir(Environment.DIRECTORY_PICTURES));
 		
 		loader = new RecentLoader(this);
 		adapter = new RecentAdapter(this, loader.getImages(), new OnImageSelectListener() {
@@ -125,7 +129,8 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 	
 	private void initFirebaseIfNotDebug()
 	{
-		if(!getResources().getBoolean(R.bool.debug)) FirebaseAnalytics.getInstance(this);
+		if(getResources().getBoolean(R.bool.debug)) ErrorHandler.disableReporting();
+		else FirebaseAnalytics.getInstance(this);
 	}
 	
 	private void attachSwipingFeature()

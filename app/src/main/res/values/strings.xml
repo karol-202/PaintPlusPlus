@@ -155,8 +155,8 @@
 	<string name="message_too_big">Given dimensions are too big</string>
 	<string name="scaling_smooth">Smooth</string>
 	<string name="direction">Direction</string>
-	<string name="direction_horizontal">Horizontaly</string>
-	<string name="direction_vertical">Verticaly</string>
+	<string name="direction_horizontal">Horizontally</string>
+	<string name="direction_vertical">Vertically</string>
 	<string name="angle">Angle</string>
 	<string name="zoom">Zoom</string>
 	<string name="center_view">Center</string>
@@ -309,4 +309,5 @@
 	<string name="select_all">Select all</string>
 	<string name="select_nothing">Remove selection</string>
 	<string name="selection_invert">Invert selection</string>
+	<string name="message_unsupported_format">Unsupported format</string>
 </resources>

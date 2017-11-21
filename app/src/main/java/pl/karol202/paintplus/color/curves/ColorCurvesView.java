@@ -21,7 +21,7 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import com.google.firebase.crash.FirebaseCrash;
+import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.util.Utils;
@@ -132,7 +132,7 @@ public class ColorCurvesView extends View
 	{
 		if(channelType != null)
 		{
-			FirebaseCrash.report(new RuntimeException("Channel settings are already set!"));
+			ErrorHandler.report(new RuntimeException("Channel settings are already set!"));
 			return;
 		}
 		channelType = type;
