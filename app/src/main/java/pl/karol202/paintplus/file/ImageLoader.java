@@ -24,17 +24,17 @@ import android.graphics.Point;
 import com.ultrasonic.android.image.bitmap.util.AndroidBmpUtil;
 import com.waynejo.androidndkgif.GifEncoder;
 import pl.karol202.paintplus.ErrorHandler;
+import pl.karol202.paintplus.file.BitmapSaveFormat.GIFSaveFormat;
+import pl.karol202.paintplus.file.BitmapSaveFormat.JPEGSaveFormat;
+import pl.karol202.paintplus.file.BitmapSaveFormat.PNGSaveFormat;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
 import java.io.*;
 
+import static pl.karol202.paintplus.file.BitmapSaveFormat.*;
+
 public class ImageLoader
 {
-	private enum BitmapFormat
-	{
-		JPEG, PNG, WEBP, BMP, GIF
-	}
-	
 	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	
@@ -97,16 +97,30 @@ public class ImageLoader
 		else return originalSize;
 	}
 	
-	public static BitmapSaveResult.Result saveBitmap(Bitmap bitmap, FileDescriptor fileDescriptor, String name, int quality)
+	public static BitmapSaveFormat getFormat(String name)
+	{
+		String[] parts = name.split("\\.");
+		String extension = parts[parts.length - 1].toLowerCase();
+		switch(extension)
+		{
+		case "jpg":
+		case "jpeg": return new JPEGSaveFormat();
+		case "png": return new PNGSaveFormat();
+		case "webp": return new WEBPSaveFormat();
+		case "bmp": return new BMPSaveFormat();
+		case "gif": return new GIFSaveFormat();
+		default: return null;
+		}
+	}
+	
+	public static BitmapSaveResult.Result saveBitmap(Bitmap bitmap, FileDescriptor fileDescriptor, BitmapSaveFormat format)
 	{
 		FileOutputStream fos = null;
-		BitmapFormat format = getFormat(name);
-		if(format == null) return BitmapSaveResult.Result.UNSUPPORTED_FORMAT;
 		
 		try
 		{
 			fos = new FileOutputStream(fileDescriptor);
-			if(!compressBitmap(bitmap, fos, format, quality)) throw new RuntimeException("Cannot compress bitmap.");
+			if(!compressBitmap(bitmap, fos, format)) throw new RuntimeException("Cannot compress bitmap.");
 		}
 		catch(Exception e)
 		{
@@ -128,33 +142,15 @@ public class ImageLoader
 		return BitmapSaveResult.Result.SUCCESSFUL;
 	}
 	
-	private static boolean compressBitmap(Bitmap bitmap, FileOutputStream outputStream, BitmapFormat format, int quality)
+	private static boolean compressBitmap(Bitmap bitmap, FileOutputStream outputStream, BitmapSaveFormat format)
 	{
-		switch(format)
-		{
-		case JPEG: return bitmap.compress(CompressFormat.JPEG, quality, outputStream);
-		case PNG: return bitmap.compress(CompressFormat.PNG, quality, outputStream);
-		case WEBP: return bitmap.compress(CompressFormat.WEBP, quality, outputStream);
-		case BMP: return compressToBmp(bitmap, outputStream);
-		case GIF: return tryToCompressToGif(bitmap, outputStream);
-		default: return false;
-		}
-	}
-	
-	private static BitmapFormat getFormat(String name)
-	{
-		String[] parts = name.split("\\.");
-		String extension = parts[parts.length - 1].toLowerCase();
-		switch(extension)
-		{
-		case "jpg":
-		case "jpeg": return BitmapFormat.JPEG;
-		case "png": return BitmapFormat.PNG;
-		case "webp": return BitmapFormat.WEBP;
-		case "bmp": return BitmapFormat.BMP;
-		case "gif": return BitmapFormat.GIF;
-		default: return null;
-		}
+		if(format instanceof JPEGSaveFormat)
+			return bitmap.compress(CompressFormat.JPEG, ((JPEGSaveFormat) format).getQuality(), outputStream);
+		else if(format instanceof PNGSaveFormat) return bitmap.compress(CompressFormat.PNG, 100, outputStream);
+		else if(format instanceof WEBPSaveFormat) return bitmap.compress(CompressFormat.WEBP, 100, outputStream);
+		else if(format instanceof BMPSaveFormat) return compressToBmp(bitmap, outputStream);
+		else if(format instanceof GIFSaveFormat) return tryToCompressToGif(bitmap, outputStream, (GIFSaveFormat) format);
+		return false;
 	}
 	
 	private static boolean compressToBmp(Bitmap bitmap, FileOutputStream outputStream)
@@ -163,11 +159,11 @@ public class ImageLoader
 		return util.save(bitmap, outputStream);
 	}
 	
-	private static boolean tryToCompressToGif(Bitmap bitmap, FileOutputStream outputStream)
+	private static boolean tryToCompressToGif(Bitmap bitmap, FileOutputStream outputStream, GIFSaveFormat format)
 	{
 		try
 		{
-			return compressToGif(bitmap, outputStream);
+			return compressToGif(bitmap, outputStream, format);
 		}
 		catch(IOException e)
 		{
@@ -176,21 +172,23 @@ public class ImageLoader
 		}
 	}
 	
-	private static boolean compressToGif(Bitmap bitmap, FileOutputStream outputStream) throws IOException
+	private static boolean compressToGif(Bitmap bitmap, FileOutputStream outputStream, GIFSaveFormat format) throws IOException
 	{
-		boolean result = compressToGif(bitmap, temporaryGifFile.getAbsolutePath());
+		boolean result = compressToGif(bitmap, temporaryGifFile.getAbsolutePath(), format);
 		
 		FileInputStream inputStream = new FileInputStream(temporaryGifFile);
 		if(result) copyStream(inputStream, outputStream);
+		inputStream.close();
 		
 		temporaryGifFile.delete();
 		return result;
 	}
 	
-	private static boolean compressToGif(Bitmap bitmap, String path) throws FileNotFoundException
+	private static boolean compressToGif(Bitmap bitmap, String path, GIFSaveFormat format) throws FileNotFoundException
 	{
 		boolean result;
 		GifEncoder encoder = new GifEncoder();
+		encoder.setDither(format.getDithering());
 		encoder.init(bitmap.getWidth(), bitmap.getHeight(), path, GifEncoder.EncodingType.ENCODING_TYPE_FAST);
 		result = encoder.encodeFrame(bitmap, 0);
 		encoder.close();

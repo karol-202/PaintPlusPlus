@@ -21,6 +21,7 @@ import android.graphics.*;
 import android.net.Uri;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
+import pl.karol202.paintplus.file.BitmapSaveFormat;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.history.History;
 import pl.karol202.paintplus.history.OnHistoryUpdateListener;
@@ -53,6 +54,7 @@ public class Image
 	public static final int FLIP_VERTICALLY = 1;
 	
 	private Uri lastUri;
+	private BitmapSaveFormat lastFormat;
 	private ArrayList<Layer> layers;
 	private int selectedLayer;
 	private int width;
@@ -94,6 +96,7 @@ public class Image
 	public void newImage(int width, int height)
 	{
 		this.lastUri = null;
+		this.lastFormat = null;
 		this.width = width;
 		this.height = height;
 		
@@ -271,6 +274,16 @@ public class Image
 	public void setLastUri(Uri lastUri)
 	{
 		this.lastUri = lastUri;
+	}
+	
+	public BitmapSaveFormat getLastFormat()
+	{
+		return lastFormat;
+	}
+	
+	public void setLastFormat(BitmapSaveFormat lastFormat)
+	{
+		this.lastFormat = lastFormat;
 	}
 	
 	public ArrayList<Layer> getLayers()

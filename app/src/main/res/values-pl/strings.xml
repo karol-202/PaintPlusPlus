@@ -293,4 +293,7 @@
 	<string name="select_nothing">Usuń zaznaczenie</string>
 	<string name="selection_invert">Odwróć zaznaczenie</string>
 	<string name="message_unsupported_format">Nieobsługiwany format</string>
+	<string name="dithering">Dithering</string>
+	<string name="dialog_jpeg_save_settings">Ustawienia zapisu JPEG</string>
+	<string name="dialog_gif_save_settings">Ustawienia zapisu GIF</string>
 </resources>

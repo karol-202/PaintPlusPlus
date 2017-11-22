@@ -24,7 +24,7 @@
 	<SeekBar
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:id="@+id/seekBar_preference"
+		android:id="@+id/seekBar_format_jpeg_quality"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginTop="16dp"
@@ -35,10 +35,10 @@
 		android:layout_marginRight="48dp" />
 	
 	<TextView
+		android:id="@+id/text_format_jpeg_quality"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/text_seekBar_preference"
-		app:layout_constraintTop_toTopOf="@+id/seekBar_preference"
-		app:layout_constraintLeft_toRightOf="@+id/seekBar_preference"
-		android:layout_marginTop="1dp" />
+		android:layout_marginTop="1dp"
+		app:layout_constraintLeft_toRightOf="@+id/seekBar_format_jpeg_quality"
+		app:layout_constraintTop_toTopOf="@+id/seekBar_format_jpeg_quality" />
 </android.support.constraint.ConstraintLayout>

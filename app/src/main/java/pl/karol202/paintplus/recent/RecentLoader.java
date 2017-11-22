@@ -26,6 +26,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 import pl.karol202.paintplus.ErrorHandler;
+import pl.karol202.paintplus.file.BitmapSaveFormat;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.file.UriUtils;
 
@@ -245,7 +246,7 @@ class RecentLoader
 		
 		Uri uri = Uri.fromFile(file);
 		ParcelFileDescriptor fileDescriptor = UriUtils.createFileSaveDescriptor(context, uri);
-		ImageLoader.saveBitmap(bitmap, fileDescriptor.getFileDescriptor(), fileName, 70);
+		ImageLoader.saveBitmap(bitmap, fileDescriptor.getFileDescriptor(), new BitmapSaveFormat.JPEGSaveFormat(70));
 		fileDescriptor.close();
 		return uri;
 	}

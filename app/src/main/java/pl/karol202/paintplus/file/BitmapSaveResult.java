@@ -22,7 +22,7 @@ public class BitmapSaveResult
 {
 	public enum Result
 	{
-		SUCCESSFUL, UNSUPPORTED_FORMAT, ERROR
+		SUCCESSFUL, ERROR
 	}
 	
 	private Bitmap bitmap;

@@ -25,17 +25,15 @@ public class BitmapSaveParams
 {
 	private OnBitmapSaveListener listener;
 	private Bitmap bitmap;
-	private String name;
 	private FileDescriptor fileDescriptor;
-	private int quality;
+	private BitmapSaveFormat format;
 	
-	public BitmapSaveParams(OnBitmapSaveListener listener, Bitmap bitmap, String name, FileDescriptor fileDescriptor, int quality)
+	public BitmapSaveParams(OnBitmapSaveListener listener, Bitmap bitmap, FileDescriptor fileDescriptor, BitmapSaveFormat format)
 	{
 		this.listener = listener;
 		this.bitmap = bitmap;
-		this.name = name;
 		this.fileDescriptor = fileDescriptor;
-		this.quality = quality;
+		this.format = format;
 	}
 	
 	OnBitmapSaveListener getListener()
@@ -48,18 +46,13 @@ public class BitmapSaveParams
 		return bitmap;
 	}
 	
-	String getName()
-	{
-		return name;
-	}
-	
 	FileDescriptor getFileDescriptor()
 	{
 		return fileDescriptor;
 	}
 	
-	int getQuality()
+	BitmapSaveFormat getFormat()
 	{
-		return quality;
+		return format;
 	}
 }

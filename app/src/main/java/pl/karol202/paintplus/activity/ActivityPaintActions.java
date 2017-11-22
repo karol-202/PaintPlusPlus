@@ -178,7 +178,7 @@ class ActivityPaintActions
 				@Override
 				public void onPermissionGrant()
 				{
-					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(image.getLastUri());
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(image.getLastUri(), image.getLastFormat());
 				}
 			});
 			return true;

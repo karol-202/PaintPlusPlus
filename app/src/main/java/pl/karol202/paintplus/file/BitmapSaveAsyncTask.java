@@ -33,7 +33,7 @@ public class BitmapSaveAsyncTask extends AsyncTask<BitmapSaveParams, Void, Bitma
 		BitmapSaveParams param = params[0];
 		listener = param.getListener();
 		
-		BitmapSaveResult.Result result = ImageLoader.saveBitmap(param.getBitmap(), param.getFileDescriptor(), param.getName(), param.getQuality());
+		BitmapSaveResult.Result result = ImageLoader.saveBitmap(param.getBitmap(), param.getFileDescriptor(), param.getFormat());
 		return new BitmapSaveResult(param.getBitmap(), result);
 	}
 	

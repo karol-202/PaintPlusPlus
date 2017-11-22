@@ -310,4 +310,7 @@
 	<string name="select_nothing">Remove selection</string>
 	<string name="selection_invert">Invert selection</string>
 	<string name="message_unsupported_format">Unsupported format</string>
+	<string name="dithering">Dithering</string>
+	<string name="dialog_jpeg_save_settings">JPEG save settings</string>
+	<string name="dialog_gif_save_settings">GIF save settings</string>
 </resources>
