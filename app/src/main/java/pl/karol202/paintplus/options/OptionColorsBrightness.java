@@ -16,10 +16,10 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
@@ -50,7 +51,7 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	private TextView textContrast;
 	private Button buttonPreview;
 	
-	public OptionColorsBrightness(Context context, Image image)
+	public OptionColorsBrightness(AppContext context, Image image)
 	{
 		super(context, image);
 		this.manipulator = new ColorsBrightness();
@@ -59,11 +60,12 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	}
 	
 	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_colors_brightness, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_colors_brightness);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
@@ -120,10 +122,10 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	
 	private void applyChanges(boolean applyToHistory)
 	{
-		ActionLayerChange action = new ActionLayerChange(image, R.string.history_action_brightness);
-		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		ActionLayerChange action = new ActionLayerChange(getImage(), R.string.history_action_brightness);
+		action.setLayerChange(getImage().getLayerIndex(layer), layer.getBitmap());
 		
-		Selection selection = image.getSelection();
+		Selection selection = getImage().getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 		
 		BrightnessParams params = new BrightnessParams(manipulatorSelection);

@@ -40,14 +40,14 @@ public class OptionFileSave extends OptionSave
 	@Override
 	Bitmap getBitmapToSave()
 	{
-		return image.getFullImage();
+		return getImage().getFullImage();
 	}
 	
 	@Override
 	void saveBitmapAsynchronously()
 	{
-		image.setLastUri(uri);
-		image.setLastFormat(format);
+		getImage().setLastUri(uri);
+		getImage().setLastFormat(format);
 		super.saveBitmapAsynchronously();
 	}
 }

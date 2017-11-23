@@ -16,16 +16,18 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.*;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.Utils;
@@ -51,16 +53,18 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 	private float ratio;
 	private boolean dontFireEvent;
 	
-	OptionResize(Context context, Image image)
+	OptionResize(AppContext context, Image image)
 	{
 		super(context, image);
 	}
 	
+	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_resize, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
@@ -126,18 +130,18 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 		{
 			if(newWidth == 0 || newHeight == 0)
 			{
-				Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
+				getAppContext().createSnackbar(R.string.message_invalid_bounds, Snackbar.LENGTH_LONG).show();
 				return;
 			}
 			if(newWidth > GraphicsHelper.getMaxTextureSize() || newHeight > GraphicsHelper.getMaxTextureSize())
 			{
-				Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
+				getAppContext().createSnackbar(R.string.message_too_big, Snackbar.LENGTH_LONG).show();
 				return;
 			}
 			int x = parseInt(editX.getText().toString());
 			int y = parseInt(editY.getText().toString());
 			applySize(x, y, newWidth, newHeight);
-			image.updateImage();
+			getImage().updateImage();
 		}
 	}
 	

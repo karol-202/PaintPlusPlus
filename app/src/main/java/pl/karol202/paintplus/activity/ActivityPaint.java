@@ -17,12 +17,15 @@
 package pl.karol202.paintplus.activity;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -46,10 +49,11 @@ import pl.karol202.paintplus.settings.ActivitySettings;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.Tools;
 import pl.karol202.paintplus.util.GraphicsHelper;
+import pl.karol202.paintplus.util.NavigationBarUtils;
 
 import java.util.HashMap;
 
-public class ActivityPaint extends AppCompatActivity implements PermissionRequest.PermissionGrantingActivity
+public class ActivityPaint extends AppCompatActivity implements PermissionRequest.PermissionGrantingActivity, AppContext
 {
 	public static final String URI_KEY = "path";
 	public static final String OPEN_KEY = "open";
@@ -248,6 +252,23 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	{
 		Intent intent = new Intent(this, ActivitySettings.class);
 		startActivity(intent);
+	}
+	
+	@Override
+	public Context getContext()
+	{
+		return this;
+	}
+	
+	@Override
+	public Snackbar createSnackbar(int message, int duration)
+	{
+		Snackbar snackbar = Snackbar.make(mainContainer, message, duration);
+		View view = snackbar.getView();
+		CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this));
+		view.setLayoutParams(params);
+		return snackbar;
 	}
 	
 	public void registerActivityResultListener(int requestCode, ActivityResultListener listener)

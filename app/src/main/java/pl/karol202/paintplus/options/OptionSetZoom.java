@@ -16,8 +16,8 @@
 
 package pl.karol202.paintplus.options;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AlertDialog;
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.pan.PanProperties;
 
@@ -40,22 +41,23 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
 	
-	public OptionSetZoom(Context context, Image image)
+	public OptionSetZoom(AppContext context, Image image)
 	{
 		super(context, image);
 	}
 	
 	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_set_zoom, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_set_zoom);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, null);
 		
-		zoom = image.getZoom();
+		zoom = getImage().getZoom();
 		
 		buttonZoomOut = view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
@@ -117,7 +119,7 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 		{
 			this.zoom = zoom;
 			if(updateText) editTextZoom.setText(zoomToText(zoom));
-			image.setZoom((float) zoom);
+			getImage().setZoom((float) zoom);
 		}
 		
 		dontFireEvent = false;

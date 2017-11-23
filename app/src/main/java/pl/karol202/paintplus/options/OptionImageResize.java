@@ -16,14 +16,14 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageResize;
 import pl.karol202.paintplus.image.Image;
 
 public class OptionImageResize extends OptionResize
 {
-	public OptionImageResize(Context context, Image image)
+	public OptionImageResize(AppContext context, Image image)
 	{
 		super(context, image);
 	}
@@ -37,25 +37,25 @@ public class OptionImageResize extends OptionResize
 	@Override
 	protected int getObjectWidth()
 	{
-		return image.getWidth();
+		return getImage().getWidth();
 	}
 	
 	@Override
 	protected int getObjectHeight()
 	{
-		return image.getHeight();
+		return getImage().getHeight();
 	}
 	
 	@Override
 	protected int getOldObjectWidth()
 	{
-		return image.getWidth();
+		return getImage().getWidth();
 	}
 	
 	@Override
 	protected int getOldObjectHeight()
 	{
-		return image.getHeight();
+		return getImage().getHeight();
 	}
 	
 	@Override
@@ -73,10 +73,10 @@ public class OptionImageResize extends OptionResize
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
-		ActionImageResize action = new ActionImageResize(image);
-		action.setDataBeforeResizing(image.getWidth(), image.getHeight(), x, y);
+		ActionImageResize action = new ActionImageResize(getImage());
+		action.setDataBeforeResizing(getImage().getWidth(), getImage().getHeight(), x, y);
 		
-		image.resize(x, y, width, height);
+		getImage().resize(x, y, width, height);
 		
 		action.applyAction();
 	}

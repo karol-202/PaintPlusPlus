@@ -14,37 +14,14 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.activity;
 
 import android.content.Context;
-import pl.karol202.paintplus.activity.AppContext;
-import pl.karol202.paintplus.image.Image;
+import android.support.design.widget.Snackbar;
 
-public abstract class Option
+public interface AppContext
 {
-	private AppContext context;
-	private Image image;
-
-	public Option(AppContext context, Image image)
-	{
-		this.context = context;
-		this.image = image;
-	}
-
-	public abstract void execute();
+	Context getContext();
 	
-	public AppContext getAppContext()
-	{
-		return context;
-	}
-	
-	public Context getContext()
-	{
-		return context.getContext();
-	}
-	
-	public Image getImage()
-	{
-		return image;
-	}
+	Snackbar createSnackbar(int message, int duration);
 }

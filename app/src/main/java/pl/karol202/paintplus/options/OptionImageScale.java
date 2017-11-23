@@ -16,14 +16,14 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageScale;
 import pl.karol202.paintplus.image.Image;
 
 public class OptionImageScale extends OptionScale
 {
-	public OptionImageScale(Context context, Image image)
+	public OptionImageScale(AppContext context, Image image)
 	{
 		super(context, image);
 	}
@@ -37,21 +37,21 @@ public class OptionImageScale extends OptionScale
 	@Override
 	protected int getObjectWidth()
 	{
-		return image.getWidth();
+		return getImage().getWidth();
 	}
 	
 	@Override
 	protected int getObjectHeight()
 	{
-		return image.getHeight();
+		return getImage().getHeight();
 	}
 	
 	@Override
 	protected void applySize(int width, int height, boolean smooth)
 	{
-		ActionImageScale action = new ActionImageScale(image);
+		ActionImageScale action = new ActionImageScale(getImage());
 		
-		image.scale(width, height, smooth);
+		getImage().scale(width, height, smooth);
 		
 		action.applyAction();
 	}

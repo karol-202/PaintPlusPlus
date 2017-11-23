@@ -16,14 +16,15 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 
 public abstract class OptionFlip extends Option implements DialogInterface.OnClickListener
@@ -33,17 +34,18 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 	private RadioButton radioHorizontal;
 	private RadioButton radioVertical;
 	
-	OptionFlip(Context context, Image image)
+	OptionFlip(AppContext context, Image image)
 	{
 		super(context, image);
 	}
 	
 	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_flip, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
@@ -66,11 +68,11 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		else if(!radioHorizontal.isChecked() && radioVertical.isChecked()) direction = Image.FLIP_VERTICALLY;
 		else
 		{
-			Toast.makeText(context, R.string.message_flip_direction, Toast.LENGTH_SHORT).show();
+			getAppContext().createSnackbar(R.string.message_flip_direction, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		flip(direction);
-		image.updateImage();
+		getImage().updateImage();
 	}
 	
 	protected abstract void flip(int direction);

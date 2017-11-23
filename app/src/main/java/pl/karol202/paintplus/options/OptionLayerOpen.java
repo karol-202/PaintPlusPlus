@@ -20,7 +20,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -66,7 +66,7 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 		if(resultCode != RESULT_OK) return;
 		uri = intent.getData();
 		
-		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
+		new ImageLoaderDialog(getContext(), asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
 	
 	@Override
@@ -74,19 +74,19 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 	{
 		if(bitmap == null)
 		{
-			Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
+			getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 			return;
 		}
 		Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), "xyz", Color.TRANSPARENT);
 		layer.setBitmap(bitmap);
-		if(!image.addLayer(layer, 0))
-			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+		if(!getImage().addLayer(layer, 0))
+			getAppContext().createSnackbar(R.string.too_many_layers, Snackbar.LENGTH_SHORT).show();
 		else createLayerAddHistoryAction(layer);
 	}
 	
 	private void createLayerAddHistoryAction(Layer layer)
 	{
-		ActionLayerAdd action = new ActionLayerAdd(image);
+		ActionLayerAdd action = new ActionLayerAdd(getImage());
 		action.setLayerAfterAdding(layer);
 		action.applyAction();
 	}

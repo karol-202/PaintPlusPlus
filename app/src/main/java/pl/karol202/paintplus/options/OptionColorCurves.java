@@ -16,11 +16,10 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +28,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.color.curves.ColorChannel;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.curves.ColorChannelsAdapter;
@@ -64,7 +64,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	private Button buttonPreview;
 	private Button buttonRestore;
 	
-	public OptionColorCurves(Context context, Image image, ColorChannelType type)
+	public OptionColorCurves(AppContext context, Image image, ColorChannelType type)
 	{
 		super(context, image);
 		this.channelType = type;
@@ -76,16 +76,16 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	@Override
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_color_curves, null);
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(channelType == RGB ? R.string.dialog_color_curves_rgb : R.string.dialog_color_curves_hsv);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, this);
 		builder.setNegativeButton(R.string.cancel, this);
 		
-		adapterIn = new ColorChannelsAdapter(context, channelType);
-		adapterOut = new ColorChannelsAdapter(context, channelType);
+		adapterIn = new ColorChannelsAdapter(getContext(), channelType);
+		adapterOut = new ColorChannelsAdapter(getContext(), channelType);
 		
 		spinnerChannelIn = view.findViewById(R.id.spinner_curves_channel_in);
 		spinnerChannelIn.setAdapter(adapterIn);
@@ -127,10 +127,10 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	
 	private void applyChanges(boolean applyToHistory)
 	{
-		ActionLayerChange action = new ActionLayerChange(image, R.string.history_action_color_curves);
-		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		ActionLayerChange action = new ActionLayerChange(getImage(), R.string.history_action_color_curves);
+		action.setLayerChange(getImage().getLayerIndex(layer), layer.getBitmap());
 		
-		Selection selection = image.getSelection();
+		Selection selection = getImage().getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 		
 		CurveManipulatorParams params = new CurveManipulatorParams(manipulatorSelection, channelType);

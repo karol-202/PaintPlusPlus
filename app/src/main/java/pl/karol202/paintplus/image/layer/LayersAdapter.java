@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
 import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
@@ -40,7 +41,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
 	private final String DUPLICATE_INDICATOR;
 	
-	private Context context;
+	private AppContext appContext;
 	private Image image;
 	private ArrayList<Layer> layers;
 	
@@ -49,17 +50,17 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	
 	public LayersAdapter(ActivityPaint activity)
 	{
-		this.context = activity;
+		this.appContext = activity;
 		this.viewHolders = new HashMap<>();
 		this.layerHandle = new LayerHandle(activity, this);
 		
-		DUPLICATE_INDICATOR = context.getString(R.string.duplicate);
+		DUPLICATE_INDICATOR = appContext.getContext().getString(R.string.duplicate);
 	}
 	
 	@Override
 	public LayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 	{
-		View view = LayoutInflater.from(context).inflate(R.layout.item_layer, parent, false);
+		View view = LayoutInflater.from(appContext.getContext()).inflate(R.layout.item_layer, parent, false);
 		return new LayerViewHolder(this, view);
 	}
 	
@@ -78,7 +79,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	
 	Context getContext()
 	{
-		return context;
+		return appContext.getContext();
 	}
 	
 	Image getImage()
@@ -143,7 +144,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		newLayer.setMode(copyLayerMode(layer.getMode()));
 		newLayer.setOpacity(layer.getOpacity());
 		if(!image.addLayer(newLayer, layerIndex))
-			Toast.makeText(context, R.string.too_many_layers, Toast.LENGTH_SHORT).show();
+			appContext.createSnackbar(R.string.too_many_layers, Toast.LENGTH_SHORT).show();
 		else createDuplicateHistoryAction(newLayer);
 	}
 	

@@ -20,8 +20,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -55,7 +55,7 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	@Override
 	public void execute()
 	{
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
 		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
 		dialogBuilder.setPositiveButton(R.string.dialog_open_file_positive, new DialogInterface.OnClickListener() {
@@ -93,18 +93,18 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	public void openFile(Uri uri)
 	{
 		this.uri = uri;
-		new ImageLoaderDialog(context, asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
+		new ImageLoaderDialog(getContext(), asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
 	
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
-		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
+		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 		else
 		{
-			image.openImage(bitmap);
-			image.setLastUri(uri);
-			image.centerView();
+			getImage().openImage(bitmap);
+			getImage().setLastUri(uri);
+			getImage().centerView();
 			
 			if(listener != null) listener.onFileEdited(uri, bitmap);
 		}

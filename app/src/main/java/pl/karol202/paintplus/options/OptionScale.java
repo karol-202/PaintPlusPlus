@@ -16,9 +16,9 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 
 public abstract class OptionScale extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
@@ -46,16 +47,18 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	private float ratio;
 	private boolean dontFireEvent;
 	
-	OptionScale(Context context, Image image)
+	OptionScale(AppContext context, Image image)
 	{
 		super(context, image);
 	}
 	
+	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_scale, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
@@ -93,12 +96,12 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	{
 		if(which * height > MAX_SIZE)
 		{
-			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
+			getAppContext().createSnackbar(R.string.message_too_big, Toast.LENGTH_LONG).show();
 			return;
 		}
 		boolean smooth = checkSmooth.isChecked();
 		applySize(width, height, smooth);
-		image.updateImage();
+		getImage().updateImage();
 	}
 	
 	protected abstract void applySize(int width, int height, boolean smooth);

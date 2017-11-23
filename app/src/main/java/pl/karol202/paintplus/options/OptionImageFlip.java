@@ -16,14 +16,14 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.Context;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageFlip;
 import pl.karol202.paintplus.image.Image;
 
 public class OptionImageFlip extends OptionFlip
 {
-	public OptionImageFlip(Context context, Image image)
+	public OptionImageFlip(AppContext context, Image image)
 	{
 		super(context, image);
 	}
@@ -37,10 +37,10 @@ public class OptionImageFlip extends OptionFlip
 	@Override
 	protected void flip(int direction)
 	{
-		ActionImageFlip action = new ActionImageFlip(image);
+		ActionImageFlip action = new ActionImageFlip(getImage());
 		action.setDirectionBeforeFlip(direction);
 		
-		image.flip(direction);
+		getImage().flip(direction);
 		
 		action.applyAction();
 	}

@@ -41,7 +41,7 @@ public class OptionLayerSave extends OptionSave
 	@Override
 	Bitmap getBitmapToSave()
 	{
-		Layer layer = image.getSelectedLayer();
+		Layer layer = getImage().getSelectedLayer();
 		return layer.getBitmap();
 	}
 }

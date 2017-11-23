@@ -16,15 +16,16 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
 import static android.content.DialogInterface.OnClickListener;
@@ -35,26 +36,28 @@ public class OptionFileNew extends Option implements OnClickListener
 	private EditText editX;
 	private EditText editY;
 
-	public OptionFileNew(Context context, Image image)
+	public OptionFileNew(AppContext context, Image image)
 	{
 		super(context, image);
 	}
-
+	
+	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_new_image, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_new_image);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 
 		editX = view.findViewById(R.id.edit_image_x);
-		editX.setText(String.valueOf(image.getWidth()));
+		editX.setText(String.valueOf(getImage().getWidth()));
 
 		editY = view.findViewById(R.id.edit_image_y);
-		editY.setText(String.valueOf(image.getHeight()));
+		editY.setText(String.valueOf(getImage().getHeight()));
 
 		dialog = dialogBuilder.create();
 		dialog.show();
@@ -68,17 +71,17 @@ public class OptionFileNew extends Option implements OnClickListener
 		
 		if(x == 0 || y == 0)
 		{
-			Toast.makeText(context, R.string.message_invalid_bounds, Toast.LENGTH_LONG).show();
+			getAppContext().createSnackbar(R.string.message_invalid_bounds, Snackbar.LENGTH_SHORT).show();
 			return;
 		}
 		if(x > GraphicsHelper.getMaxTextureSize() ||
 		   y > GraphicsHelper.getMaxTextureSize())
 		{
-			Toast.makeText(context, R.string.message_too_big, Toast.LENGTH_LONG).show();
+			getAppContext().createSnackbar(R.string.message_too_big, Snackbar.LENGTH_SHORT).show();
 			return;
 		}
-		image.newImage(x, y);
-		image.centerView();
+		getImage().newImage(x, y);
+		getImage().centerView();
 	}
 	
 	private int parseInt(String text)

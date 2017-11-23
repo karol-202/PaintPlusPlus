@@ -22,9 +22,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
@@ -57,7 +57,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 	@Override
 	public void execute()
 	{
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
 		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
 		dialogBuilder.setPositiveButton(R.string.dialog_capture_photo_positive, new DialogInterface.OnClickListener() {
@@ -79,7 +79,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		if(intent.resolveActivity(activity.getPackageManager()) == null)
 			throw new RuntimeException("Cannot resolve camera activity.");
 		
-		Uri photoUri = FileProvider.getUriForFile(context, "pl.karol202.paintplus", photoFile);
+		Uri photoUri = FileProvider.getUriForFile(getContext(), "pl.karol202.paintplus", photoFile);
 		intent.putExtra(EXTRA_OUTPUT, photoUri);
 		activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
 		activity.startActivityForResult(intent, REQUEST_CAPTURE_PHOTO);
@@ -101,7 +101,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 	{
 		String dateString = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss").format(new Date());
 		String fileName = "CAPTURED_" + dateString;
-		File directory = context.getExternalFilesDir(DIRECTORY_PICTURES);
+		File directory = getContext().getExternalFilesDir(DIRECTORY_PICTURES);
 		photoFile = File.createTempFile(fileName, ".jpeg", directory);
 		return photoFile;
 	}
@@ -113,7 +113,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		if(resultCode != RESULT_OK) return;
 		
 		Uri uri = Uri.fromFile(photoFile);
-		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
+		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(getContext(), uri);
 		
 		if(fileDescriptor != null) openBitmap(fileDescriptor);
 		
@@ -124,11 +124,11 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 	private void openBitmap(ParcelFileDescriptor fileDescriptor)
 	{
 		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor());
-		if(bitmap == null) Toast.makeText(context, R.string.message_cannot_open_file, Toast.LENGTH_SHORT).show();
+		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 		else
 		{
-			image.openImage(bitmap);
-			image.centerView();
+			getImage().openImage(bitmap);
+			getImage().centerView();
 		}
 	}
 }

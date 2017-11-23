@@ -16,14 +16,15 @@
 
 package pl.karol202.paintplus.options;
 
-import android.support.v7.app.AlertDialog;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.Utils;
 
@@ -34,17 +35,18 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 	private SeekBar seekBarAngle;
 	private TextView textAngle;
 	
-	OptionRotate(Context context, Image image)
+	OptionRotate(AppContext context, Image image)
 	{
 		super(context, image);
 	}
 	
 	@Override
+	@SuppressLint("InflateParams")
 	public void execute()
 	{
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.dialog_rotate, null);
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(getTitle());
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
@@ -68,7 +70,7 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 	{
 		float angle = progressToAngle(seekBarAngle.getProgress());
 		rotate(angle);
-		image.updateImage();
+		getImage().updateImage();
 	}
 	
 	protected abstract void rotate(float angle);
@@ -76,7 +78,7 @@ public abstract class OptionRotate extends Option implements DialogInterface.OnC
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		String angleRes = context.getResources().getString(R.string.angle);
+		String angleRes = getContext().getResources().getString(R.string.angle);
 		textAngle.setText(angleRes + " " + progressToAngle(progress) + "°");
 	}
 	

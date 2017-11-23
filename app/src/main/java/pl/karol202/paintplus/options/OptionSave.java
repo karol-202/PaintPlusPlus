@@ -90,7 +90,7 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	
 	private boolean checkFileFormat()
 	{
-		UriMetadata metadata = new UriMetadata(context, uri);
+		UriMetadata metadata = new UriMetadata(getContext(), uri);
 		format = ImageLoader.getFormat(metadata.getDisplayName());
 		if(format == null) unsupportedFormat();
 		return format != null;
@@ -98,19 +98,19 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	
 	private void unsupportedFormat()
 	{
-		UriUtils.deleteDocument(context, uri);
-		Toast.makeText(activity, R.string.message_unsupported_format, Toast.LENGTH_SHORT).show();
+		UriUtils.deleteDocument(getContext(), uri);
+		getAppContext().createSnackbar(R.string.message_unsupported_format, Toast.LENGTH_SHORT).show();
 	}
 	
 	private boolean showSettingsDialog()
 	{
 		if(!format.providesSettingsDialog()) return false;
 		
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(format.getSettingsDialogLayout(), null);
 		format.customizeSettingsDialog(view);
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(format.getSettingsDialogTitle());
 		builder.setView(view);
 		builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -129,7 +129,7 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	{
 		asyncManager.block(this);
 		
-		parcelFileDescriptor = UriUtils.createFileSaveDescriptor(context, uri);
+		parcelFileDescriptor = UriUtils.createFileSaveDescriptor(getContext(), uri);
 		BitmapSaveParams params = new BitmapSaveParams(this, getBitmapToSave(),
 														parcelFileDescriptor.getFileDescriptor(), format);
 		asyncTask = new BitmapSaveAsyncTask();
@@ -161,8 +161,8 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 			if(listener != null) listener.onFileEdited(uri, result.getBitmap());
 			break;
 		case ERROR:
-			UriUtils.deleteDocument(context, uri);
-			Toast.makeText(activity, R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
+			UriUtils.deleteDocument(getContext(), uri);
+			getAppContext().createSnackbar(R.string.message_cannot_save_file, Toast.LENGTH_SHORT).show();
 			break;
 		}
 	}
