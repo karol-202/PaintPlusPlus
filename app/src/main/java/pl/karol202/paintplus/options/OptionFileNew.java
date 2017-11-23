@@ -19,7 +19,10 @@ package pl.karol202.paintplus.options;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -32,7 +35,45 @@ import static android.content.DialogInterface.OnClickListener;
 
 public class OptionFileNew extends Option implements OnClickListener
 {
+	private class EditTextListener implements TextWatcher
+	{
+		private TextInputLayout inputLayout;
+		
+		EditTextListener(TextInputLayout inputLayout)
+		{
+			this.inputLayout = inputLayout;
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+		
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) { }
+		
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+			int value = parseInt(s.toString());
+			if(value <= 0)
+				inputLayout.setError(getString(R.string.message_image_invalid_size));
+			else if(value > GraphicsHelper.getMaxTextureSize())
+				inputLayout.setError(getString(R.string.message_image_size_too_big));
+			else
+			{
+				inputLayout.setError(null);
+				inputLayout.setErrorEnabled(false);
+			}
+		}
+		
+		private String getString(int resource)
+		{
+			return getContext().getString(resource);
+		}
+	}
+	
 	private AlertDialog dialog;
+	private TextInputLayout inputLayoutX;
+	private TextInputLayout inputLayoutY;
 	private EditText editX;
 	private EditText editY;
 
@@ -52,12 +93,18 @@ public class OptionFileNew extends Option implements OnClickListener
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
+		
+		inputLayoutX = view.findViewById(R.id.inputLayout_image_x);
+		
+		inputLayoutY = view.findViewById(R.id.inputLayout_image_y);
 
 		editX = view.findViewById(R.id.edit_image_x);
 		editX.setText(String.valueOf(getImage().getWidth()));
+		editX.addTextChangedListener(new EditTextListener(inputLayoutX));
 
 		editY = view.findViewById(R.id.edit_image_y);
 		editY.setText(String.valueOf(getImage().getHeight()));
+		editY.addTextChangedListener(new EditTextListener(inputLayoutY));
 
 		dialog = dialogBuilder.create();
 		dialog.show();

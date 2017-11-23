@@ -18,6 +18,8 @@ package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,17 +28,74 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.util.GraphicsHelper;
 
-public abstract class OptionScale extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
+public abstract class OptionScale extends Option implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
-	private final int MAX_SIZE = 2048 * 2048;
+	private class EditTextListener implements TextWatcher
+	{
+		private TextInputLayout inputLayout;
+		
+		EditTextListener(TextInputLayout inputLayout)
+		{
+			this.inputLayout = inputLayout;
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+		
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) { }
+		
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+			checkSize(s);
+			manageBounds();
+		}
+		
+		private void checkSize(Editable s)
+		{
+			int value = parseInt(s.toString());
+			if(value <= 0)
+				inputLayout.setError(getString(R.string.message_image_invalid_size));
+			else if(value > GraphicsHelper.getMaxTextureSize())
+				inputLayout.setError(getString(R.string.message_image_size_too_big));
+			else
+			{
+				inputLayout.setError(null);
+				inputLayout.setErrorEnabled(false);
+			}
+		}
+		
+		private void manageBounds()
+		{
+			if(!dontFireEvent)
+			{
+				dontFireEvent = true;
+				
+				int width = parseInt(editWidth.getText().toString());
+				int height = parseInt(editHeight.getText().toString());
+				
+				changeBounds(width, height);
+				
+				dontFireEvent = false;
+			}
+		}
+		
+		private String getString(int resource)
+		{
+			return getContext().getString(resource);
+		}
+	}
 	
 	private AlertDialog dialog;
 	
+	private TextInputLayout inputLayoutWidth;
+	private TextInputLayout inputLayoutHeight;
 	private EditText editWidth;
 	private EditText editHeight;
 	private CheckBox checkKeepRatio;
@@ -68,13 +127,17 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 		height = getObjectHeight();
 		ratio = -1;
 		
+		inputLayoutWidth = view.findViewById(R.id.inputLayout_object_width);
+		
+		inputLayoutHeight = view.findViewById(R.id.inputLayout_object_height);
+		
 		editWidth = view.findViewById(R.id.edit_object_width);
 		editWidth.setText(String.valueOf(width));
-		editWidth.addTextChangedListener(this);
+		editWidth.addTextChangedListener(new EditTextListener(inputLayoutWidth));
 		
 		editHeight = view.findViewById(R.id.edit_object_height);
 		editHeight.setText(String.valueOf(height));
-		editHeight.addTextChangedListener(this);
+		editHeight.addTextChangedListener(new EditTextListener(inputLayoutHeight));
 		
 		checkKeepRatio = view.findViewById(R.id.check_keep_ratio);
 		checkKeepRatio.setOnCheckedChangeListener(this);
@@ -94,9 +157,15 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		if(which * height > MAX_SIZE)
+		if(width == 0 || height == 0)
 		{
-			getAppContext().createSnackbar(R.string.message_too_big, Toast.LENGTH_LONG).show();
+			getAppContext().createSnackbar(R.string.message_invalid_bounds, Snackbar.LENGTH_SHORT).show();
+			return;
+		}
+		if(width > GraphicsHelper.getMaxTextureSize() ||
+		   height > GraphicsHelper.getMaxTextureSize())
+		{
+			getAppContext().createSnackbar(R.string.message_too_big, Snackbar.LENGTH_SHORT).show();
 			return;
 		}
 		boolean smooth = checkSmooth.isChecked();
@@ -105,28 +174,6 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	}
 	
 	protected abstract void applySize(int width, int height, boolean smooth);
-	
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-	
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) { }
-	
-	@Override
-	public void afterTextChanged(Editable s)
-	{
-		if(!dontFireEvent)
-		{
-			dontFireEvent = true;
-			
-			int width = parseInt(editWidth.getText().toString());
-			int height = parseInt(editHeight.getText().toString());
-			
-			changeBounds(width, height);
-			
-			dontFireEvent = false;
-		}
-	}
 	
 	private void changeBounds(int width, int height)
 	{

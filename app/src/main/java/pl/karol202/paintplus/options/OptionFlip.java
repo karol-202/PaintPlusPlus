@@ -52,6 +52,8 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		
 		radioHorizontal = view.findViewById(R.id.radio_horizontal);
+		radioHorizontal.setChecked(true);
+		
 		radioVertical = view.findViewById(R.id.radio_vertical);
 		
 		dialog = dialogBuilder.create();

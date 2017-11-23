@@ -48,6 +48,7 @@ public class OptionFileSave extends OptionSave
 	{
 		getImage().setLastUri(uri);
 		getImage().setLastFormat(format);
+		getImage().notifySave();
 		super.saveBitmapAsynchronously();
 	}
 }

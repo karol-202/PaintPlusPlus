@@ -55,6 +55,12 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	@Override
 	public void execute()
 	{
+		if(getImage().wasModifiedSinceLastSave()) askAboutChanges();
+		else executeWithoutAsking();
+	}
+	
+	private void askAboutChanges()
+	{
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
 		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);

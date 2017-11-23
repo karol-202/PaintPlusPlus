@@ -313,4 +313,6 @@
 	<string name="dithering">Dithering</string>
 	<string name="dialog_jpeg_save_settings">JPEG save settings</string>
 	<string name="dialog_gif_save_settings">GIF save settings</string>
+	<string name="message_image_invalid_size">Invalid size</string>
+	<string name="message_image_size_too_big">Size is too big</string>
 </resources>

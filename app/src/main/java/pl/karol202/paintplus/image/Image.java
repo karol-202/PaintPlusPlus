@@ -53,12 +53,10 @@ public class Image
 	public static final int FLIP_HORIZONTALLY = 0;
 	public static final int FLIP_VERTICALLY = 1;
 	
-	private Uri lastUri;
-	private BitmapSaveFormat lastFormat;
-	private ArrayList<Layer> layers;
-	private int selectedLayer;
 	private int width;
 	private int height;
+	private ArrayList<Layer> layers;
+	private int selectedLayer;
 	
 	private OnImageChangeListener listener;
 	private ColorsSet colorsSet;
@@ -74,6 +72,9 @@ public class Image
 	private int viewportWidth;
 	private int viewportHeight;
 	private boolean layersLocked;
+	private Uri lastUri;
+	private BitmapSaveFormat lastFormat;
+	private boolean changedSinceSave;
 	
 	public Image(Context context)
 	{
@@ -95,10 +96,11 @@ public class Image
 	
 	public void newImage(int width, int height)
 	{
-		this.lastUri = null;
-		this.lastFormat = null;
 		this.width = width;
 		this.height = height;
+		lastUri = null;
+		lastFormat = null;
+		changedSinceSave = false;
 		
 		layers.clear();
 		Layer layer = new Layer(0, 0, width, height, DEFAULT_LAYER_NAME, colorsSet.getSecondColor());
@@ -266,24 +268,14 @@ public class Image
 		return DEFAULT_LAYER_NAME;
 	}
 	
-	public Uri getLastUri()
+	public int getWidth()
 	{
-		return lastUri;
+		return width;
 	}
 	
-	public void setLastUri(Uri lastUri)
+	public int getHeight()
 	{
-		this.lastUri = lastUri;
-	}
-	
-	public BitmapSaveFormat getLastFormat()
-	{
-		return lastFormat;
-	}
-	
-	public void setLastFormat(BitmapSaveFormat lastFormat)
-	{
-		this.lastFormat = lastFormat;
+		return height;
 	}
 	
 	public ArrayList<Layer> getLayers()
@@ -325,16 +317,6 @@ public class Image
 	{
 		Layer selected = getSelectedLayer();
 		return selected != null ? selected.getY() : 0;
-	}
-	
-	public int getWidth()
-	{
-		return width;
-	}
-	
-	public int getHeight()
-	{
-		return height;
 	}
 	
 	
@@ -396,6 +378,7 @@ public class Image
 	public void addHistoryAction(Action action)
 	{
 		history.addAction(action);
+		changedSinceSave = true;
 	}
 	
 	public void setOnImageChangeListener(OnImageChangeListener listener)
@@ -533,5 +516,35 @@ public class Image
 	public void unlockLayers()
 	{
 		this.layersLocked = false;
+	}
+	
+	public Uri getLastUri()
+	{
+		return lastUri;
+	}
+	
+	public void setLastUri(Uri lastUri)
+	{
+		this.lastUri = lastUri;
+	}
+	
+	public BitmapSaveFormat getLastFormat()
+	{
+		return lastFormat;
+	}
+	
+	public void setLastFormat(BitmapSaveFormat lastFormat)
+	{
+		this.lastFormat = lastFormat;
+	}
+	
+	public boolean wasModifiedSinceLastSave()
+	{
+		return changedSinceSave;
+	}
+	
+	public void notifySave()
+	{
+		changedSinceSave = false;
 	}
 }

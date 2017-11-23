@@ -20,12 +20,16 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.*;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
@@ -34,9 +38,84 @@ import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public abstract class OptionResize extends Option implements DialogInterface.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener
+public abstract class OptionResize extends Option implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
+	private class BoundsChangeListener implements TextWatcher
+	{
+		private TextInputLayout inputLayout;
+		
+		BoundsChangeListener(TextInputLayout inputLayout)
+		{
+			this.inputLayout = inputLayout;
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+		
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) { }
+		
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+			checkSize(s);
+			manageBounds();
+		}
+		
+		private void checkSize(Editable s)
+		{
+			int value = parseInt(s.toString());
+			if(value <= 0)
+				inputLayout.setError(getString(R.string.message_image_invalid_size));
+			else if(value > GraphicsHelper.getMaxTextureSize())
+				inputLayout.setError(getString(R.string.message_image_size_too_big));
+			else
+			{
+				inputLayout.setError(null);
+				inputLayout.setErrorEnabled(false);
+			}
+		}
+		
+		private void manageBounds()
+		{
+			if(!dontFireEvent)
+			{
+				dontFireEvent = true;
+				
+				int newWidth = parseInt(editWidth.getText().toString());
+				int newHeight = parseInt(editHeight.getText().toString());
+				
+				changeBounds(newWidth, newHeight);
+				
+				dontFireEvent = false;
+			}
+			updatePreview();
+		}
+		
+		private String getString(int resource)
+		{
+			return getContext().getString(resource);
+		}
+	}
+	
+	private class OffsetChangeListener implements TextWatcher
+	{
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+		
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) { }
+		
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+			updatePreview();
+		}
+	}
+	
 	private AlertDialog dialog;
+	private TextInputLayout inputLayoutWidth;
+	private TextInputLayout inputLayoutHeight;
 	private EditText editWidth;
 	private EditText editHeight;
 	private EditText editX;
@@ -76,21 +155,25 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 		oldHeight = getOldObjectHeight();
 		ratio = -1;
 		
+		inputLayoutWidth = view.findViewById(R.id.inputLayout_object_width);
+		
+		inputLayoutHeight = view.findViewById(R.id.inputLayout_object_height);
+		
 		editWidth = view.findViewById(R.id.edit_object_width);
 		editWidth.setText(String.valueOf(newWidth));
-		editWidth.addTextChangedListener(this);
+		editWidth.addTextChangedListener(new BoundsChangeListener(inputLayoutWidth));
 		
 		editHeight = view.findViewById(R.id.edit_object_height);
 		editHeight.setText(String.valueOf(newHeight));
-		editHeight.addTextChangedListener(this);
+		editHeight.addTextChangedListener(new BoundsChangeListener(inputLayoutHeight));
 		
 		editX = view.findViewById(R.id.edit_object_x);
 		editX.setText(String.valueOf(getObjectX()));
-		editX.addTextChangedListener(this);
+		editX.addTextChangedListener(new OffsetChangeListener());
 		
 		editY = view.findViewById(R.id.edit_object_y);
 		editY.setText(String.valueOf(getObjectY()));
-		editY.addTextChangedListener(this);
+		editY.addTextChangedListener(new OffsetChangeListener());
 		
 		imagePreview = view.findViewById(R.id.image_resize_preview);
 		
@@ -146,29 +229,6 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 	}
 	
 	protected abstract void applySize(int x, int y, int width, int height);
-	
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-	
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) { }
-	
-	@Override
-	public void afterTextChanged(Editable s)
-	{
-		if(!dontFireEvent)
-		{
-			dontFireEvent = true;
-			
-			int newWidth = parseInt(editWidth.getText().toString());
-			int newHeight = parseInt(editHeight.getText().toString());
-			
-			changeBounds(newWidth, newHeight);
-			
-			dontFireEvent = false;
-		}
-		updatePreview();
-	}
 	
 	private void changeBounds(int newWidth, int newHeight)
 	{
