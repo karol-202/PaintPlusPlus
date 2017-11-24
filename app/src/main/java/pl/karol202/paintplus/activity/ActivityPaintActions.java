@@ -240,6 +240,9 @@ class ActivityPaintActions
 		case R.id.action_flip_image:
 			new OptionImageFlip(activity, image).execute();
 			return true;
+		case R.id.action_flatten_image:
+			new OptionImageFlatten(activity, image).execute();
+			return true;
 		
 		case R.id.action_new_layer:
 			new OptionLayerNew(activity, image).execute();

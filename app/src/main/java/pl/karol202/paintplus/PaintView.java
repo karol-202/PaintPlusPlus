@@ -385,7 +385,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private void updateImageRect()
 	{
-		image.setImageRect(imageRect);
+		image.fetchImageRect(imageRect);
 	}
 	
 	private RectF getScreenRect()

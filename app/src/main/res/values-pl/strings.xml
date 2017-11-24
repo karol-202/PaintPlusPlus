@@ -298,4 +298,7 @@
 	<string name="dialog_gif_save_settings">Ustawienia zapisu GIF</string>
 	<string name="message_image_invalid_size">Niewłaściwy rozmiar</string>
 	<string name="message_image_size_too_big">Rozmiar jest za duży</string>
+	<string name="action_flatten_image">Spłaszcz obraz</string>
+	<string name="flattened">Spłaszczona</string>
+	<string name="history_action_image_flatten">Spłaszczenie obrazu</string>
 </resources>

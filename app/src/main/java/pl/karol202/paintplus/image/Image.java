@@ -47,6 +47,7 @@ public class Image
 	}
 	
 	private final String DEFAULT_LAYER_NAME;
+	private final String FLATTENED_LAYER_NAME;
 	public final float SCREEN_DENSITY;
 	
 	public static final int MAX_LAYERS = 8;
@@ -79,6 +80,7 @@ public class Image
 	public Image(Context context)
 	{
 		this.DEFAULT_LAYER_NAME = context.getString(R.string.new_layer_name);
+		this.FLATTENED_LAYER_NAME = context.getString(R.string.flattened);
 		this.SCREEN_DENSITY = context.getResources().getDisplayMetrics().density;
 		
 		this.layers = new ArrayList<>();
@@ -193,6 +195,34 @@ public class Image
 		return bitmap;
 	}
 	
+	public void flattenImage()
+	{
+		Rect resultBounds = new Rect();
+		for(Layer layer : layers) resultBounds.union(layer.getBounds());
+		
+		Matrix matrix = new Matrix();
+		matrix.preTranslate(-resultBounds.left, -resultBounds.top);
+		
+		Bitmap bitmap = Bitmap.createBitmap(resultBounds.width(), resultBounds.height(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		for(int i = layers.size() - 1; i >= 0; i--)
+		{
+			Layer layer = layers.get(i);
+			bitmap = layer.drawLayerAndReturnBitmap(bitmap, canvas, null, matrix);
+		}
+		
+		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top, resultBounds.width(), resultBounds.height(),
+									  FLATTENED_LAYER_NAME, Color.TRANSPARENT);
+		resultLayer.setBitmap(bitmap);
+		
+		layers.clear();
+		layers.add(resultLayer);
+		selectedLayer = 0;
+		
+		updateImage();
+		updateLayersPreview();
+	}
+	
 	
 	public Layer newLayer(int width, int height, String name)
 	{
@@ -260,6 +290,12 @@ public class Image
 		int index = layers.indexOf(layer);
 		if(index <= selectedLayer && selectedLayer != 0) selectedLayer--;
 		layers.remove(layer);
+		updateLayersPreview();
+	}
+	
+	public void deleteAllLayers()
+	{
+		layers.clear();
 		updateLayersPreview();
 	}
 	
@@ -474,7 +510,7 @@ public class Image
 		return imageMatrix;
 	}
 	
-	public void setImageRect(RectF rect)
+	public void fetchImageRect(RectF rect)
 	{
 		float viewX = -getViewX() * zoom;
 		float viewY = -getViewY() * zoom;

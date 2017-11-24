@@ -315,4 +315,7 @@
 	<string name="dialog_gif_save_settings">GIF save settings</string>
 	<string name="message_image_invalid_size">Invalid size</string>
 	<string name="message_image_size_too_big">Size is too big</string>
+	<string name="action_flatten_image">Flatten image</string>
+	<string name="flattened">Flattened</string>
+	<string name="history_action_image_flatten">Image flattening</string>
 </resources>

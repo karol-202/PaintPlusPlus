@@ -162,14 +162,14 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		
 		Rect resultBounds = firstLayer.getBounds();
 		resultBounds.union(secondLayer.getBounds());
-		firstLayer.setPosition(firstLayer.getX() - resultBounds.left,
-							   firstLayer.getY() - resultBounds.top);
+		
+		Matrix matrix = new Matrix();
+		matrix.preTranslate(-resultBounds.left, -resultBounds.top);
 		
 		Bitmap resultBitmap = Bitmap.createBitmap(resultBounds.width(), resultBounds.height(), ARGB_8888);
 		Canvas resultCanvas = new Canvas(resultBitmap);
-		resultCanvas.drawBitmap(secondLayer.getBitmap(), secondLayer.getX() - resultBounds.left,
-												         secondLayer.getY() - resultBounds.top, null);
-		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, new Matrix());
+		resultBitmap = secondLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
+		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
 		
 		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top,
 									  resultBounds.width(), resultBounds.height(),
