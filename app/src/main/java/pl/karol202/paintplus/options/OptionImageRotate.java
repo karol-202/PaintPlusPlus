@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
+import pl.karol202.paintplus.history.action.ActionImageRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.RotationAmount;
 
@@ -79,12 +80,12 @@ public class OptionImageRotate extends Option
 	
 	private void rotate(RotationAmount rotationAmount)
 	{
-		//ActionImageRotate action = new ActionImageRotate(getImage());
-		//action.setAngle(angle);
+		ActionImageRotate action = new ActionImageRotate(getImage());
+		action.setRotationAmount(rotationAmount);
 		
 		getImage().rotate(rotationAmount);
 		
-		//action.applyAction();
+		action.applyAction();
 	}
 	
 	private void showErrorSnackbar()

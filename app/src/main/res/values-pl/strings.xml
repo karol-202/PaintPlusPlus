@@ -300,7 +300,7 @@
 	<string name="action_flatten_image">Spłaszcz obraz</string>
 	<string name="flattened">Spłaszczona</string>
 	<string name="history_action_image_flatten">Spłaszczenie obrazu</string>
-	<string name="history_action_image_rotate">Obrót warstwy</string>
+	<string name="history_action_image_rotate">Obrót obrazu</string>
 	<string name="dialog_exif_rotation">Czy chcesz obrócić zdjęcie?</string>
 	<string name="rotate">Obróć</string>
 	<string name="no">Nie</string>
