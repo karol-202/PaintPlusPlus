@@ -17,39 +17,35 @@
 package pl.karol202.paintplus.options;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.ImageLoaderDialog;
-import pl.karol202.paintplus.file.explorer.FileExplorer;
-import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
+import pl.karol202.paintplus.image.Image.RotationAmount;
 import pl.karol202.paintplus.recent.OnFileEditListener;
 
-import static android.app.Activity.RESULT_OK;
-
-public class OptionFileOpen extends Option implements ActivityResultListener, ImageLoaderDialog.OnImageLoadListener
+public class OptionFileOpen extends OptionOpen
 {
 	private static final int REQUEST_OPEN_FILE = 1;
 	
-	private ActivityPaint activity;
 	private OnFileEditListener listener;
-	private AsyncManager asyncManager;
-	
-	private Uri uri;
 	
 	public OptionFileOpen(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
-		super(activity, image);
-		this.activity = activity;
-		this.asyncManager = asyncManager;
+		super(activity, image, asyncManager);
 		this.listener = listener;
+	}
+	
+	@Override
+	int getRequestId()
+	{
+		return REQUEST_OPEN_FILE;
 	}
 	
 	@Override
@@ -68,7 +64,7 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				startFileOpenActivity();
+				OptionFileOpen.super.execute();
 			}
 		});
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
@@ -77,42 +73,64 @@ public class OptionFileOpen extends Option implements ActivityResultListener, Im
 	
 	public void executeWithoutAsking()
 	{
-		startFileOpenActivity();
-	}
-	
-	private void startFileOpenActivity()
-	{
-		activity.registerActivityResultListener(REQUEST_OPEN_FILE, this);
-		
-		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
-		explorer.openFile(REQUEST_OPEN_FILE);
+		super.execute();
 	}
 	
 	@Override
-	public void onActivityResult(int resultCode, Intent intent)
-	{
-		activity.unregisterActivityResultListener(REQUEST_OPEN_FILE);
-		if(resultCode != RESULT_OK) return;
-		openFile(intent.getData());
-	}
-	
 	public void openFile(Uri uri)
 	{
-		this.uri = uri;
-		new ImageLoaderDialog(getContext(), asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
+		super.openFile(uri);
 	}
 	
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
 		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
-		else
+		else openImageFromBitmap(bitmap);
+	}
+	
+	private void openImageFromBitmap(Bitmap bitmap)
+	{
+		getImage().openImage(bitmap);
+		getImage().setLastUri(getUri());
+		getImage().centerView();
+		
+		if(listener != null) listener.onFileEdited(getUri(), bitmap);
+		askAboutExifRotation(new RotationNeedListener() {
+			@Override
+			public void onRotationNeed(int exifOrientation)
+			{
+				rotateImage(exifOrientation);
+			}
+		});
+	}
+	
+	private void rotateImage(int exifOrientation)
+	{
+		switch(exifOrientation)
 		{
-			getImage().openImage(bitmap);
-			getImage().setLastUri(uri);
-			getImage().centerView();
-			
-			if(listener != null) listener.onFileEdited(uri, bitmap);
+		case ExifInterface.ORIENTATION_ROTATE_90:
+			getImage().rotate(RotationAmount.ANGLE_90);
+			break;
+		case ExifInterface.ORIENTATION_ROTATE_180:
+			getImage().rotate(RotationAmount.ANGLE_180);
+			break;
+		case ExifInterface.ORIENTATION_ROTATE_270:
+			getImage().rotate(RotationAmount.ANGLE_270);
+			break;
+		case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+			getImage().flip(FlipDirection.HORIZONTALLY);
+			break;
+		case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+			getImage().flip(FlipDirection.VERTICALLY);
+			break;
+		case ExifInterface.ORIENTATION_TRANSPOSE:
+			getImage().rotate(RotationAmount.ANGLE_90);
+			getImage().flip(FlipDirection.HORIZONTALLY);
+			break;
+		case ExifInterface.ORIENTATION_TRANSVERSE:
+			getImage().rotate(RotationAmount.ANGLE_270);
+			getImage().flip(FlipDirection.HORIZONTALLY);
 		}
 	}
 }

@@ -157,7 +157,6 @@
 	<string name="direction">Direction</string>
 	<string name="direction_horizontal">Horizontally</string>
 	<string name="direction_vertical">Vertically</string>
-	<string name="angle">Angle</string>
 	<string name="zoom">Zoom</string>
 	<string name="center_view">Center</string>
 	<string name="unknown">Unknown</string>
@@ -190,7 +189,7 @@
 	<string name="layer_name">Name</string>
 	<string name="message_invalid_bounds">Given dimensions are invalid</string>
 	<string name="new_layer_name">New layer</string>
-	<string name="message_flip_direction">Select flip direction</string>
+	<string name="message_flip_direction">Choose flip direction</string>
 	<string name="rubber_strength">Strength</string>
 	<string name="rubber_smooth">Smooth</string>
 	<string name="message_cannot_open_file">Can\'t open file</string>
@@ -318,4 +317,13 @@
 	<string name="action_flatten_image">Flatten image</string>
 	<string name="flattened">Flattened</string>
 	<string name="history_action_image_flatten">Image flattening</string>
+	<string name="angle" translatable="false">%d°</string>
+	<string name="history_action_image_rotate">Image rotation</string>
+	<string name="dialog_exif_rotation">Do you want to rotate the image?</string>
+	<string name="rotate">Rotate</string>
+	<string name="no">No</string>
+	<string name="angle_90" translatable="false">90°</string>
+	<string name="angle_180" translatable="false">180°</string>
+	<string name="angle_270" translatable="false">270°</string>
+	<string name="message_rotation_angle">Choose rotation angle</string>
 </resources>

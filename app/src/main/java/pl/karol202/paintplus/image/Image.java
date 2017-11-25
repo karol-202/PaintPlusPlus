@@ -46,13 +46,33 @@ public class Image
 		void onImageMatrixChanged();
 	}
 	
+	public enum FlipDirection
+	{
+		HORIZONTALLY, VERTICALLY
+	}
+	
+	public enum RotationAmount
+	{
+		ANGLE_90(90), ANGLE_180(180), ANGLE_270(270);
+		
+		private float angle;
+		
+		RotationAmount(float angle)
+		{
+			this.angle = angle;
+		}
+		
+		float getAngle()
+		{
+			return angle;
+		}
+	}
+	
+	public static final int MAX_LAYERS = 8;
+	
 	private final String DEFAULT_LAYER_NAME;
 	private final String FLATTENED_LAYER_NAME;
 	public final float SCREEN_DENSITY;
-	
-	public static final int MAX_LAYERS = 8;
-	public static final int FLIP_HORIZONTALLY = 0;
-	public static final int FLIP_VERTICALLY = 1;
 	
 	private int width;
 	private int height;
@@ -126,7 +146,6 @@ public class Image
 		this.width = width;
 		this.height = height;
 		for(Layer layer : layers) layer.offset(-x, -y);
-		updateImage();
 		updateMatrix();
 	}
 	
@@ -141,18 +160,42 @@ public class Image
 		}
 		this.width = width;
 		this.height = height;
-		updateImage();
 		updateMatrix();
 	}
 	
-	public void flip(int direction)
+	public void flip(FlipDirection direction)
 	{
 		for(Layer layer : layers)
 		{
 			layer.flip(direction);
-			if(direction == FLIP_HORIZONTALLY) layer.setPosition(width - layer.getX() - layer.getWidth(), layer.getY());
-			else layer.setPosition(layer.getX(), height - layer.getY() - layer.getHeight());
+			if(direction == FlipDirection.HORIZONTALLY)
+				layer.setPosition(width - layer.getX() - layer.getWidth(), layer.getY());
+			else
+				layer.setPosition(layer.getX(), height - layer.getY() - layer.getHeight());
 		}
+	}
+	
+	public void rotate(RotationAmount angle)
+	{
+		for(Layer layer : layers)
+		{
+			if(angle == RotationAmount.ANGLE_90)
+				layer.setPosition(height - layer.getY() - layer.getHeight(), layer.getX());
+			else if(angle == RotationAmount.ANGLE_180)
+				layer.setPosition(width - layer.getX() - layer.getWidth(), height - layer.getY() - layer.getHeight());
+			else if(angle == RotationAmount.ANGLE_270)
+				layer.setPosition(layer.getY(), width - layer.getX() - layer.getWidth());
+			layer.rotate(angle.getAngle(), false);
+		}
+		
+		if(angle == RotationAmount.ANGLE_90 || angle == RotationAmount.ANGLE_270)
+		{
+			int temp = width;
+			width = height;
+			height = temp;
+		}
+		
+		updateMatrix();
 	}
 	
 	private void updateMatrix()

@@ -32,8 +32,9 @@ public class OptionImageFlatten extends Option
 	{
 		ActionImageFlatten action = new ActionImageFlatten(getImage());
 		action.setImageBeforeFlattening(getImage());
-		action.applyAction();
 		
 		getImage().flattenImage();
+		
+		action.applyAction();
 	}
 }

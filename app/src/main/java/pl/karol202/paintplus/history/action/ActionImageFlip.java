@@ -20,15 +20,15 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
 
 public class ActionImageFlip extends Action
 {
-	private int direction;
+	private FlipDirection direction;
 	
 	public ActionImageFlip(Image image)
 	{
 		super(image);
-		this.direction = -1;
 	}
 	
 	private void updateBitmap(Image image)
@@ -67,7 +67,7 @@ public class ActionImageFlip extends Action
 	@Override
 	boolean canApplyAction()
 	{
-		return direction != -1;
+		return direction != null;
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class ActionImageFlip extends Action
 		return R.string.history_action_image_flip;
 	}
 	
-	public void setDirectionBeforeFlip(int direction)
+	public void setDirectionBeforeFlip(FlipDirection direction)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.direction = direction;

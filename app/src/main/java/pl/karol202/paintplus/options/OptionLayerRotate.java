@@ -16,30 +16,71 @@
 
 package pl.karol202.paintplus.options;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.util.Utils;
 
-public class OptionLayerRotate extends OptionRotate
+public class OptionLayerRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
+	private AlertDialog dialog;
+	private SeekBar seekBarAngle;
+	private TextView textAngle;
+	
 	private Layer layer;
 	
 	public OptionLayerRotate(AppContext context, Image image)
 	{
 		super(context, image);
-		this.layer = image.getSelectedLayer();
+		layer = image.getSelectedLayer();
 	}
 	
 	@Override
-	protected int getTitle()
+	@SuppressLint("InflateParams")
+	public void execute()
 	{
-		return R.string.dialog_rotate_layer;
+		LayoutInflater inflater = LayoutInflater.from(getContext());
+		View view = inflater.inflate(R.layout.dialog_rotate_layer, null);
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+		dialogBuilder.setTitle(R.string.dialog_rotate_layer);
+		dialogBuilder.setView(view);
+		dialogBuilder.setPositiveButton(R.string.ok, this);
+		dialogBuilder.setNegativeButton(R.string.cancel, null);
+		
+		seekBarAngle = view.findViewById(R.id.seekBar_angle);
+		seekBarAngle.setProgress(angleToProgress(0));
+		seekBarAngle.setOnSeekBarChangeListener(this);
+		
+		textAngle = view.findViewById(R.id.text_angle);
+		setAngleText(0);
+		
+		dialog = dialogBuilder.create();
+		dialog.show();
+	}
+	
+	private void setAngleText(int angle)
+	{
+		textAngle.setText(getContext().getResources().getString(R.string.angle, angle));
 	}
 	
 	@Override
-	protected void rotate(float angle)
+	public void onClick(DialogInterface dialog, int which)
+	{
+		float angle = progressToAngle(seekBarAngle.getProgress());
+		rotate(angle);
+		getImage().updateImage();
+	}
+	
+	private void rotate(float angle)
 	{
 		ActionLayerRotate action = new ActionLayerRotate(getImage());
 		action.setLayerBeforeRotation(layer);
@@ -47,5 +88,27 @@ public class OptionLayerRotate extends OptionRotate
 		layer.rotate(angle);
 		
 		action.applyAction();
+	}
+	
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+	{
+		setAngleText(Math.round(progressToAngle(progress)));
+	}
+	
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) { }
+	
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) { }
+	
+	private int angleToProgress(float angle)
+	{
+		return (int) Utils.map(angle, -180, 180, 0, seekBarAngle.getMax());
+	}
+	
+	private float progressToAngle(int progress)
+	{
+		return Utils.map(progress, 0, seekBarAngle.getMax(), -180, 180);
 	}
 }

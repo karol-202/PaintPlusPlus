@@ -26,6 +26,7 @@ import android.widget.Toast;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
 
 public abstract class OptionFlip extends Option implements DialogInterface.OnClickListener
 {
@@ -65,9 +66,9 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
-		int direction;
-		if(radioHorizontal.isChecked() && !radioVertical.isChecked()) direction = Image.FLIP_HORIZONTALLY;
-		else if(!radioHorizontal.isChecked() && radioVertical.isChecked()) direction = Image.FLIP_VERTICALLY;
+		FlipDirection direction;
+		if(radioHorizontal.isChecked() && !radioVertical.isChecked()) direction = FlipDirection.HORIZONTALLY;
+		else if(!radioHorizontal.isChecked() && radioVertical.isChecked()) direction = FlipDirection.VERTICALLY;
 		else
 		{
 			getAppContext().createSnackbar(R.string.message_flip_direction, Toast.LENGTH_SHORT).show();
@@ -77,5 +78,5 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		getImage().updateImage();
 	}
 	
-	protected abstract void flip(int direction);
+	protected abstract void flip(FlipDirection direction);
 }

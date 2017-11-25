@@ -156,10 +156,15 @@
                   android:title="@string/action_flip_image"
                   android:orderInCategory="3"
                   app:showAsAction="never"/>
+	        <item android:id="@+id/action_rotate_image"
+		          android:icon="@drawable/ic_rotate_black_24dp"
+		          android:title="@string/action_rotate_image"
+		          android:orderInCategory="4"
+		          app:showAsAction="never"/>
 	        <item android:id="@+id/action_flatten_image"
 		          android:icon="@drawable/ic_flatten_black_24dp"
 		          android:title="@string/action_flatten_image"
-		          android:orderInCategory="4"
+		          android:orderInCategory="5"
 		          app:showAsAction="never"/>
         </menu>
     </item>

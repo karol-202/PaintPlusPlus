@@ -14,35 +14,34 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.history.action;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
-import pl.karol202.paintplus.history.action.ActionImageFlip;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.FlipDirection;
 
-public class OptionImageFlip extends OptionFlip
+public class ActionImageRotate extends ActionImageScale
 {
-	public OptionImageFlip(AppContext context, Image image)
+	private float angle;
+	
+	public ActionImageRotate(Image image)
 	{
-		super(context, image);
+		super(image);
 	}
 	
 	@Override
-	protected int getTitle()
+	public int getActionName()
 	{
-		return R.string.dialog_flip_image;
+		return R.string.history_action_image_rotate;
 	}
 	
 	@Override
-	protected void flip(FlipDirection direction)
+	boolean canApplyAction()
 	{
-		ActionImageFlip action = new ActionImageFlip(getImage());
-		action.setDirectionBeforeFlip(direction);
-		
-		getImage().flip(direction);
-		
-		action.applyAction();
+		return angle != 0;
+	}
+	
+	public void setAngle(float angle)
+	{
+		this.angle = angle;
 	}
 }

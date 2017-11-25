@@ -20,12 +20,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class ActionLayerFlip extends Action
 {
 	private int layerId;
-	private int direction;
+	private FlipDirection direction;
 	
 	public ActionLayerFlip(Image image)
 	{
@@ -76,7 +77,7 @@ public class ActionLayerFlip extends Action
 		return R.string.history_action_layer_flip;
 	}
 
-	public void setLayerAndFlipDirection(int layerId, int direction)
+	public void setLayerAndFlipDirection(int layerId, FlipDirection direction)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.layerId = layerId;

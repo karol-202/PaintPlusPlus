@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.image.layer;
 
 import android.graphics.*;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.image.layer.mode.LayerModeDefault;
@@ -86,10 +86,10 @@ public class Layer
 		editCanvas.drawBitmap(source, null, rect, paint);
 	}
 	
-	public void flip(int direction)
+	public void flip(FlipDirection direction)
 	{
 		Matrix matrix = new Matrix();
-		matrix.preScale(direction == Image.FLIP_HORIZONTALLY ? -1 : 1, direction == Image.FLIP_VERTICALLY ? -1 : 1);
+		matrix.preScale(direction == FlipDirection.HORIZONTALLY ? -1 : 1, direction == FlipDirection.VERTICALLY ? -1 : 1);
 		
 		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 		bitmap.eraseColor(Color.TRANSPARENT);
@@ -97,6 +97,11 @@ public class Layer
 	}
 	
 	public void rotate(float angle)
+	{
+		rotate(angle, true);
+	}
+	
+	public void rotate(float angle, boolean offset)
 	{
 		int oldWidth = bitmap.getWidth();
 		int oldHeight = bitmap.getHeight();
@@ -107,6 +112,8 @@ public class Layer
 		bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
 		editCanvas = new Canvas(bitmap);
 		editCanvas.drawBitmap(source, 0, 0, null);
+		
+		if(!offset) return;
 		x -= (source.getWidth() - oldWidth) / 2;
 		y -= (source.getHeight() - oldHeight) / 2;
 	}

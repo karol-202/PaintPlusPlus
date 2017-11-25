@@ -157,7 +157,6 @@
 	<string name="direction">Kierunek</string>
 	<string name="direction_horizontal">Poziomo</string>
 	<string name="direction_vertical">Pionowo</string>
-	<string name="angle">Kąt</string>
 	<string name="zoom">Zoom</string>
 	<string name="center_view">Wyśrodkuj</string>
 	<string name="unknown">Nieznany</string>
@@ -301,4 +300,9 @@
 	<string name="action_flatten_image">Spłaszcz obraz</string>
 	<string name="flattened">Spłaszczona</string>
 	<string name="history_action_image_flatten">Spłaszczenie obrazu</string>
+	<string name="history_action_image_rotate">Obrót warstwy</string>
+	<string name="dialog_exif_rotation">Czy chcesz obrócić zdjęcie?</string>
+	<string name="rotate">Obróć</string>
+	<string name="no">Nie</string>
+	<string name="message_rotation_angle">Wybierz kąt obrotu</string>
 </resources>

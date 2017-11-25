@@ -16,72 +16,63 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
+import android.media.ExifInterface;
 import android.support.design.widget.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.activity.ActivityResultListener;
-import pl.karol202.paintplus.file.ImageLoaderDialog;
-import pl.karol202.paintplus.file.explorer.FileExplorer;
-import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
+import pl.karol202.paintplus.file.UriMetadata;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
 
-import static android.app.Activity.RESULT_OK;
-
-public class OptionLayerOpen extends Option implements ActivityResultListener, ImageLoaderDialog.OnImageLoadListener
+public class OptionLayerOpen extends OptionOpen
 {
 	private static final int REQUEST_OPEN_LAYER = 3;
 	
-	private ActivityPaint activity;
-	private AsyncManager asyncManager;
-	
-	private Uri uri;
-	
 	public OptionLayerOpen(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
-		super(activity, image);
-		this.activity = activity;
-		this.asyncManager = asyncManager;
+		super(activity, image, asyncManager);
 	}
 	
 	@Override
-	public void execute()
+	int getRequestId()
 	{
-		activity.registerActivityResultListener(REQUEST_OPEN_LAYER, this);
-		
-		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
-		explorer.openFile(REQUEST_OPEN_LAYER);
-	}
-	
-	@Override
-	public void onActivityResult(int resultCode, Intent intent)
-	{
-		activity.unregisterActivityResultListener(REQUEST_OPEN_LAYER);
-		if(resultCode != RESULT_OK) return;
-		uri = intent.getData();
-		
-		new ImageLoaderDialog(getContext(), asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
+		return REQUEST_OPEN_LAYER;
 	}
 	
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
-		if(bitmap == null)
-		{
-			getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
-			return;
-		}
-		Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), "xyz", Color.TRANSPARENT);
+		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
+		else addNewLayer(bitmap);
+	}
+	
+	private void addNewLayer(Bitmap bitmap)
+	{
+		final Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), getLayerName(), Color.TRANSPARENT);
 		layer.setBitmap(bitmap);
-		if(!getImage().addLayer(layer, 0))
-			getAppContext().createSnackbar(R.string.too_many_layers, Snackbar.LENGTH_SHORT).show();
-		else createLayerAddHistoryAction(layer);
+		if(!getImage().addLayer(layer, 0)) getAppContext().createSnackbar(R.string.too_many_layers, Snackbar.LENGTH_SHORT).show();
+		else
+		{
+			createLayerAddHistoryAction(layer);
+			askAboutExifRotation(new RotationNeedListener() {
+				@Override
+				public void onRotationNeed(int exifOrientation)
+				{
+					rotateLayer(layer, exifOrientation);
+				}
+			});
+		}
+	}
+	
+	private String getLayerName()
+	{
+		UriMetadata metadata = new UriMetadata(getContext(), getUri());
+		return metadata.getDisplayName();
 	}
 	
 	private void createLayerAddHistoryAction(Layer layer)
@@ -89,5 +80,34 @@ public class OptionLayerOpen extends Option implements ActivityResultListener, I
 		ActionLayerAdd action = new ActionLayerAdd(getImage());
 		action.setLayerAfterAdding(layer);
 		action.applyAction();
+	}
+	
+	private void rotateLayer(Layer layer, int exifOrientation)
+	{
+		switch(exifOrientation)
+		{
+		case ExifInterface.ORIENTATION_ROTATE_90:
+			layer.rotate(90);
+			break;
+		case ExifInterface.ORIENTATION_ROTATE_180:
+			layer.rotate(180);
+			break;
+		case ExifInterface.ORIENTATION_ROTATE_270:
+			layer.rotate(270);
+			break;
+		case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+			layer.flip(FlipDirection.HORIZONTALLY);
+			break;
+		case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+			layer.flip(FlipDirection.VERTICALLY);
+			break;
+		case ExifInterface.ORIENTATION_TRANSPOSE:
+			layer.rotate(90);
+			layer.flip(FlipDirection.HORIZONTALLY);
+			break;
+		case ExifInterface.ORIENTATION_TRANSVERSE:
+			layer.rotate(-90);
+			layer.flip(FlipDirection.HORIZONTALLY);
+		}
 	}
 }
