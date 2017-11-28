@@ -76,14 +76,11 @@ public class Layer
 	
 	public void scale(int width, int height, boolean bilinear)
 	{
-		Bitmap source = bitmap;
-		bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		editCanvas = new Canvas(bitmap);
+		Matrix matrix = new Matrix();
+		matrix.preScale((float) width / bitmap.getWidth(), (float) height / bitmap.getHeight());
 		
-		Paint paint = new Paint();
-		paint.setFilterBitmap(bilinear);
-		Rect rect = new Rect(0, 0, width, height);
-		editCanvas.drawBitmap(source, null, rect, paint);
+		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, bilinear);
+		editCanvas = new Canvas(bitmap);
 	}
 	
 	public void flip(FlipDirection direction)
@@ -91,9 +88,8 @@ public class Layer
 		Matrix matrix = new Matrix();
 		matrix.preScale(direction == FlipDirection.HORIZONTALLY ? -1 : 1, direction == FlipDirection.VERTICALLY ? -1 : 1);
 		
-		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-		bitmap.eraseColor(Color.TRANSPARENT);
-		editCanvas.drawBitmap(source, 0, 0, null);
+		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+		editCanvas = new Canvas(bitmap);
 	}
 	
 	public void rotate(float angle)
@@ -108,14 +104,12 @@ public class Layer
 		Matrix matrix = new Matrix();
 		matrix.preRotate(angle);
 		
-		Bitmap source = Bitmap.createBitmap(bitmap, 0, 0, oldWidth, oldHeight, matrix, true);
-		bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 		editCanvas = new Canvas(bitmap);
-		editCanvas.drawBitmap(source, 0, 0, null);
 		
 		if(!offset) return;
-		x -= (source.getWidth() - oldWidth) / 2;
-		y -= (source.getHeight() - oldHeight) / 2;
+		x -= (bitmap.getWidth() - oldWidth) / 2;
+		y -= (bitmap.getHeight() - oldHeight) / 2;
 	}
 	
 	public Bitmap drawLayerAndReturnBitmap(Bitmap bitmap, Canvas canvas, RectF clipRect, Matrix imageMatrix)

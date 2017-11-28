@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.provider.DocumentFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class UriUtils
@@ -42,7 +41,7 @@ public class UriUtils
 		{
 			return context.getContentResolver().openFileDescriptor(uri, mode);
 		}
-		catch(FileNotFoundException e)
+		catch(Exception e)
 		{
 			System.err.println(e.getMessage());
 			return null;

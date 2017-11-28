@@ -305,4 +305,5 @@
 	<string name="rotate">Obróć</string>
 	<string name="no">Nie</string>
 	<string name="message_rotation_angle">Wybierz kąt obrotu</string>
+	<string name="action_layer_to_image_size">Dopasuj wielkość do obrazu</string>
 </resources>

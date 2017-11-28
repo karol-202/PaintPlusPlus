@@ -268,6 +268,9 @@ class ActivityPaintActions
 		case R.id.action_rotate_layer:
 			new OptionLayerRotate(activity, image).execute();
 			return true;
+		case R.id.action_layer_to_image_size:
+			new OptionLayerToImageSize(activity, image).execute();
+			return true;
 			
 		case R.id.action_select_all:
 			image.selectAll();
