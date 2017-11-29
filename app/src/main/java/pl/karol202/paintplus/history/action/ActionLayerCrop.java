@@ -14,31 +14,21 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.history.action;
 
-import pl.karol202.paintplus.activity.AppContext;
-import pl.karol202.paintplus.history.action.ActionLayerResize;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.Layer;
 
-public class OptionLayerToImageSize extends Option
+public class ActionLayerCrop extends ActionLayerResize
 {
-	public OptionLayerToImageSize(AppContext context, Image image)
+	public ActionLayerCrop(Image image)
 	{
-		super(context, image);
+		super(image);
 	}
 	
 	@Override
-	public void execute()
+	public int getActionName()
 	{
-		Layer layer = getImage().getSelectedLayer();
-		
-		ActionLayerResize action = new ActionLayerResize(getImage());
-		action.setLayerBeforeResize(layer);
-		
-		layer.resize(-layer.getX(), -layer.getY(), getImage().getWidth(), getImage().getHeight());
-		getImage().updateImage();
-		
-		action.applyAction();
+		return R.string.history_action_layer_crop;
 	}
 }

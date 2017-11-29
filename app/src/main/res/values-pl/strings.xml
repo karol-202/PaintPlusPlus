@@ -306,4 +306,9 @@
 	<string name="no">Nie</string>
 	<string name="message_rotation_angle">Wybierz kąt obrotu</string>
 	<string name="action_layer_to_image_size">Dopasuj wielkość do obrazu</string>
+	<string name="drag_one_axis">Tylko jedna oś</string>
+	<string name="action_crop_image_by_selection">Kadruj obraz wg. zaznaczenia</string>
+	<string name="action_crop_layer_by_selection">Kadruj warstwę wg. zaznaczenia</string>
+	<string name="history_action_image_crop">Kadrowanie obrazu</string>
+	<string name="history_action_layer_crop">Kadrowanie warstwy</string>
 </resources>

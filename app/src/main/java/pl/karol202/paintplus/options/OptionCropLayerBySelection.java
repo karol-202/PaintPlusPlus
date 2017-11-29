@@ -16,14 +16,15 @@
 
 package pl.karol202.paintplus.options;
 
+import android.graphics.Rect;
 import pl.karol202.paintplus.activity.AppContext;
-import pl.karol202.paintplus.history.action.ActionLayerResize;
+import pl.karol202.paintplus.history.action.ActionLayerCrop;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class OptionLayerToImageSize extends Option
+public class OptionCropLayerBySelection extends Option
 {
-	public OptionLayerToImageSize(AppContext context, Image image)
+	public OptionCropLayerBySelection(AppContext context, Image image)
 	{
 		super(context, image);
 	}
@@ -31,13 +32,15 @@ public class OptionLayerToImageSize extends Option
 	@Override
 	public void execute()
 	{
-		Layer layer = getImage().getSelectedLayer();
+		Image image = getImage();
+		Layer layer = image.getSelectedLayer();
+		Rect bounds = image.getSelection().getBounds();
 		
-		ActionLayerResize action = new ActionLayerResize(getImage());
+		ActionLayerCrop action = new ActionLayerCrop(image);
 		action.setLayerBeforeResize(layer);
 		
-		layer.resize(-layer.getX(), -layer.getY(), getImage().getWidth(), getImage().getHeight());
-		getImage().updateImage();
+		layer.resize(bounds.left, bounds.top, bounds.width(), bounds.height());
+		image.updateImage();
 		
 		action.applyAction();
 	}

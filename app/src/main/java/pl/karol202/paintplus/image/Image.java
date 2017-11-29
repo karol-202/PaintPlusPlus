@@ -145,7 +145,11 @@ public class Image
 	{
 		this.width = width;
 		this.height = height;
+		this.viewX -= x;
+		this.viewY -= y;
+		
 		for(Layer layer : layers) layer.offset(-x, -y);
+		selection.offsetSelection(-x, -y);
 		updateMatrix();
 	}
 	

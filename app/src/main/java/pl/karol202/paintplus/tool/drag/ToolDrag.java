@@ -28,6 +28,8 @@ import pl.karol202.paintplus.tool.ToolProperties;
 
 public class ToolDrag extends StandardTool
 {
+	private boolean oneAxis;
+	
 	private int oldLayerX;
 	private int oldLayerY;
 	private float oldTouchX;
@@ -38,6 +40,8 @@ public class ToolDrag extends StandardTool
 	public ToolDrag(Image image)
 	{
 		super(image);
+		this.oneAxis = false;
+		
 		dirtyRect = new Rect();
 	}
 	
@@ -93,6 +97,12 @@ public class ToolDrag extends StandardTool
 		
 		int deltaTouchX = Math.round(x - oldTouchX);
 		int deltaTouchY = Math.round(y - oldTouchY);
+		
+		if(oneAxis)
+		{
+			if(Math.abs(deltaTouchX) >= Math.abs(deltaTouchY)) deltaTouchY = 0;
+			else deltaTouchX = 0;
+		}
 		
 		PointF snapped = new PointF(oldLayerX + deltaTouchX, oldLayerY + deltaTouchY);
 		helpersManager.snapPoint(snapped);
@@ -171,4 +181,14 @@ public class ToolDrag extends StandardTool
 	
 	@Override
 	public void onTopDraw(Canvas canvas) { }
+	
+	public boolean isOneAxis()
+	{
+		return oneAxis;
+	}
+	
+	public void setOneAxis(boolean oneAxis)
+	{
+		this.oneAxis = oneAxis;
+	}
 }

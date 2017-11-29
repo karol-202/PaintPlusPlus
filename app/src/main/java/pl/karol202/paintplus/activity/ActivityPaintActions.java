@@ -281,6 +281,12 @@ class ActivityPaintActions
 		case R.id.action_revert_selection:
 			image.revertSelection();
 			return true;
+		case R.id.action_crop_image_by_selection:
+			new OptionCropImageBySelection(activity, image).execute();
+			return true;
+		case R.id.action_crop_layer_by_selection:
+			new OptionCropLayerBySelection(activity, image).execute();
+			return true;
 			
 		case R.id.action_colors_invert:
 			new OptionColorsInvert(activity, image).execute();

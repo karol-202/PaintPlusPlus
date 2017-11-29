@@ -166,6 +166,11 @@
 		          android:title="@string/action_flatten_image"
 		          android:orderInCategory="5"
 		          app:showAsAction="never"/>
+	        <item android:id="@+id/action_crop_image_by_selection"
+		          android:icon="@drawable/ic_crop_black_24dp"
+		          android:title="@string/action_crop_image_by_selection"
+		          android:orderInCategory="6"
+		          app:showAsAction="never"/>
         </menu>
     </item>
 
@@ -216,15 +221,19 @@
 		          android:title="@string/action_layer_to_image_size"
 		          android:orderInCategory="8"
 		          app:showAsAction="never"/>
+	        <item android:id="@+id/action_crop_layer_by_selection"
+		          android:icon="@drawable/ic_crop_black_24dp"
+		          android:title="@string/action_crop_layer_by_selection"
+		          android:orderInCategory="9"
+		          app:showAsAction="never"/>
         </menu>
     </item>
 
-    <item
-            android:id="@+id/action_selection"
-            android:icon="@drawable/ic_select_all_black_24dp"
-            android:title="@string/action_selection"
-            android:orderInCategory="10"
-            app:showAsAction="never">
+    <item android:id="@+id/action_selection"
+          android:icon="@drawable/ic_select_all_black_24dp"
+          android:title="@string/action_selection"
+          android:orderInCategory="10"
+          app:showAsAction="never">
 
         <menu>
             <item android:id="@+id/action_select_all"
@@ -245,12 +254,11 @@
         </menu>
     </item>
 
-    <item
-            android:id="@+id/action_colors"
-            android:icon="@drawable/ic_colors_black_24dp"
-            android:title="@string/action_colors"
-            android:orderInCategory="11"
-            app:showAsAction="never">
+    <item android:id="@+id/action_colors"
+          android:icon="@drawable/ic_colors_black_24dp"
+          android:title="@string/action_colors"
+          android:orderInCategory="11"
+          app:showAsAction="never">
 
         <menu>
             <item android:id="@+id/action_colors_invert"
@@ -276,10 +284,9 @@
         </menu>
     </item>
 
-    <item
-            android:id="@+id/action_settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/action_settings"
-            android:orderInCategory="12"
-            app:showAsAction="never"/>
+    <item android:id="@+id/action_settings"
+          android:icon="@drawable/ic_settings_black_24dp"
+          android:title="@string/action_settings"
+          android:orderInCategory="12"
+          app:showAsAction="never"/>
 </menu>

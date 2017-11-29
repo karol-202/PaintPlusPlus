@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -28,6 +30,7 @@ public class DragProperties extends ToolProperties
 	private ToolDrag drag;
 	
 	private View view;
+	private CheckBox checkOneAxis;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -35,6 +38,16 @@ public class DragProperties extends ToolProperties
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_drag, container, false);
 		drag = (ToolDrag) tool;
+		
+		checkOneAxis = view.findViewById(R.id.check_drag_one_axis);
+		checkOneAxis.setChecked(drag.isOneAxis());
+		checkOneAxis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				drag.setOneAxis(isChecked);
+			}
+		});
 		
 		return view;
 	}

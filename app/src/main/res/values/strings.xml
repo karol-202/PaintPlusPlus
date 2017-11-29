@@ -327,4 +327,9 @@
 	<string name="angle_270" translatable="false">270°</string>
 	<string name="message_rotation_angle">Choose rotation angle</string>
 	<string name="action_layer_to_image_size">Layer size to image size</string>
+	<string name="drag_one_axis">Only one axis</string>
+	<string name="action_crop_image_by_selection">Crop image by selection</string>
+	<string name="action_crop_layer_by_selection">Crop layer by selection</string>
+	<string name="history_action_image_crop">Image cropping</string>
+	<string name="history_action_layer_crop">Layer cropping</string>
 </resources>

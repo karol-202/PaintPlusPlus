@@ -106,6 +106,12 @@ public class Selection
 		action.applyAction();
 	}
 	
+	public void offsetSelection(int x, int y)
+	{
+		region.translate(x, y);
+		updatePath();
+	}
+	
 	private void updatePath()
 	{
 		path = region.getBoundaryPath();
