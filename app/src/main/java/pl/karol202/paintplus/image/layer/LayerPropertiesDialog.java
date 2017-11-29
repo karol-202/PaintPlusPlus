@@ -93,7 +93,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	
 	private int indexOf(LayerMode mode)
 	{
-		return LayerModeType.getIndexOfType(mode);
+		return LayerModeType.getIndexOfMode(mode);
 	}
 	
 	public void show()

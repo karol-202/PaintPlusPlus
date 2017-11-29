@@ -313,4 +313,15 @@
 	<string name="history_action_layer_crop">Kadrowanie warstwy</string>
 	<string name="dialog_drag_layer">Ustaw pozycję warstwy</string>
 	<string name="action_drag_layer">Przesuń warstwę</string>
+	<string name="layer_info_name">Nazwa</string>
+	<string name="layer_info_width">Szerokość</string>
+	<string name="layer_info_height">Wysokość</string>
+	<string name="layer_info_x">Pozycja X</string>
+	<string name="layer_info_y">Pozycja Y</string>
+	<string name="layer_info_opacity">Nieprzezroczystość</string>
+	<string name="layer_info_mode">Tryb</string>
+	<string name="layer_info_visible">Widzialna</string>
+	<string name="layer_info">Informacje</string>
+	<string name="dialog_layer_info">Informacje o warstwie</string>
+	<string name="yes">Tak</string>
 </resources>

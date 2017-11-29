@@ -334,4 +334,15 @@
 	<string name="history_action_layer_crop">Layer cropping</string>
 	<string name="dialog_drag_layer">Set layer position</string>
 	<string name="action_drag_layer">Drag layer</string>
+	<string name="layer_info_name">Name</string>
+	<string name="layer_info_width">Width</string>
+	<string name="layer_info_height">Height</string>
+	<string name="layer_info_x">Position X</string>
+	<string name="layer_info_y">Position Y</string>
+	<string name="layer_info_opacity">Opacity</string>
+	<string name="layer_info_mode">Mode</string>
+	<string name="layer_info_visible">Visible</string>
+	<string name="layer_info">Information</string>
+	<string name="dialog_layer_info">Layer information</string>
+	<string name="yes">Yes</string>
 </resources>

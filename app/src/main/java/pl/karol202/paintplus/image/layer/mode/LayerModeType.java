@@ -58,11 +58,18 @@ public enum LayerModeType
 		return layerMode;
 	}
 	
-	public static int getIndexOfType(LayerMode mode)
+	public static int getIndexOfMode(LayerMode mode)
 	{
 		for(int i = 0; i < values().length; i++)
 			if(mode.getClass() == values()[i].getLayerModeClass()) return i;
 		return -1;
+	}
+	
+	public static LayerModeType getTypeOfMode(LayerMode mode)
+	{
+		for(int i = 0; i < values().length; i++)
+			if(mode.getClass() == values()[i].getLayerModeClass()) return values()[i];
+		return null;
 	}
 	
 	public static boolean isAntialiasing()
