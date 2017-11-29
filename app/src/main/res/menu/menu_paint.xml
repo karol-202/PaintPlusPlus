@@ -216,15 +216,20 @@
                   android:title="@string/action_rotate_layer"
                   android:orderInCategory="7"
                   app:showAsAction="never"/>
+	        <item android:id="@+id/action_drag_layer"
+		          android:icon="@drawable/ic_offset_black_24dp"
+		          android:title="@string/action_drag_layer"
+		          android:orderInCategory="8"
+		          app:showAsAction="never"/>
 	        <item android:id="@+id/action_layer_to_image_size"
 		          android:icon="@drawable/ic_layer_to_image_size_black_24dp"
 		          android:title="@string/action_layer_to_image_size"
-		          android:orderInCategory="8"
+		          android:orderInCategory="9"
 		          app:showAsAction="never"/>
 	        <item android:id="@+id/action_crop_layer_by_selection"
 		          android:icon="@drawable/ic_crop_black_24dp"
 		          android:title="@string/action_crop_layer_by_selection"
-		          android:orderInCategory="9"
+		          android:orderInCategory="10"
 		          app:showAsAction="never"/>
         </menu>
     </item>

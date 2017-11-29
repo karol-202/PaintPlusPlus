@@ -246,6 +246,9 @@ class ActivityPaintActions
 		case R.id.action_flatten_image:
 			new OptionImageFlatten(activity, image).execute();
 			return true;
+		case R.id.action_crop_image_by_selection:
+			new OptionCropImageBySelection(activity, image).execute();
+			return true;
 		
 		case R.id.action_new_layer:
 			new OptionLayerNew(activity, image).execute();
@@ -268,8 +271,14 @@ class ActivityPaintActions
 		case R.id.action_rotate_layer:
 			new OptionLayerRotate(activity, image).execute();
 			return true;
+		case R.id.action_drag_layer:
+			new OptionLayerDrag(activity, image).execute();
+			return true;
 		case R.id.action_layer_to_image_size:
 			new OptionLayerToImageSize(activity, image).execute();
+			return true;
+		case R.id.action_crop_layer_by_selection:
+			new OptionCropLayerBySelection(activity, image).execute();
 			return true;
 			
 		case R.id.action_select_all:
@@ -280,12 +289,6 @@ class ActivityPaintActions
 			return true;
 		case R.id.action_revert_selection:
 			image.revertSelection();
-			return true;
-		case R.id.action_crop_image_by_selection:
-			new OptionCropImageBySelection(activity, image).execute();
-			return true;
-		case R.id.action_crop_layer_by_selection:
-			new OptionCropLayerBySelection(activity, image).execute();
 			return true;
 			
 		case R.id.action_colors_invert:

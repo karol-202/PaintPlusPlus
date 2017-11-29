@@ -311,4 +311,6 @@
 	<string name="action_crop_layer_by_selection">Kadruj warstwę wg. zaznaczenia</string>
 	<string name="history_action_image_crop">Kadrowanie obrazu</string>
 	<string name="history_action_layer_crop">Kadrowanie warstwy</string>
+	<string name="dialog_drag_layer">Ustaw pozycję warstwy</string>
+	<string name="action_drag_layer">Przesuń warstwę</string>
 </resources>
