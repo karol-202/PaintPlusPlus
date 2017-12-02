@@ -176,7 +176,7 @@
 	<string name="circle_fill">Wypełnij</string>
 	<string name="circle_width">Grubość</string>
 	<string name="shapes_smooth">Wygładź</string>
-	<string name="polygon_sides">Ilość boków</string>
+	<string name="polygon_sides">Boki</string>
 	<string name="polygon_fill">Wypełnij</string>
 	<string name="polygon_width">Grubość</string>
 	<string name="selection_mode">Tryb zaznaczania</string>
@@ -324,4 +324,17 @@
 	<string name="layer_info">Informacje</string>
 	<string name="dialog_layer_info">Informacje o warstwie</string>
 	<string name="yes">Tak</string>
+	<string name="shape_star">Gwiazda</string>
+	<string name="star_corners">Ramiona</string>
+	<string name="desc_star_less_corners">Mniej ramion</string>
+	<string name="desc_star_more_corners">Więcej ramion</string>
+	<string name="star_fill">Wypełnij</string>
+	<string name="star_width">Grubość</string>
+	<string name="error_star_too_few_corners">Za mało ramion</string>
+	<string name="error_star_too_many_corners">Za dużo ramion</string>
+	<string name="star_join">Połączenie</string>
+	<string name="join_mitter">Ostre</string>
+	<string name="join_bevel">Obcięte</string>
+	<string name="join_round">Zaokrąglone</string>
+	<string name="polygon_join">Połączenie</string>
 </resources>

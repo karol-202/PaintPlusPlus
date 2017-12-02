@@ -97,6 +97,8 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 			ParcelFileDescriptor parcelFileDescriptor = UriUtils.createFileOpenDescriptor(getContext(), uri);
 			InputStream inputStream = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
 			ExifInterface exif = new ExifInterface(inputStream);
+			inputStream.close();
+			parcelFileDescriptor.close();
 			return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 		}
 		catch(IOException e)

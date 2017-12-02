@@ -31,18 +31,19 @@ import pl.karol202.paintplus.util.GraphicsHelper;
 
 import java.io.*;
 
-import static pl.karol202.paintplus.file.BitmapSaveFormat.*;
+import static pl.karol202.paintplus.file.BitmapSaveFormat.BMPSaveFormat;
+import static pl.karol202.paintplus.file.BitmapSaveFormat.WEBPSaveFormat;
 
 public class ImageLoader
 {
 	public static final String[] OPEN_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	public static final String[] SAVE_FORMATS = new String[] { "jpg", "jpeg", "png", "webp", "bmp", "gif" };
 	
-	private static File temporaryGifFile;
+	private static File temporaryFile;
 	
 	public static void setTemporaryFileLocation(File location)
 	{
-		ImageLoader.temporaryGifFile = new File(location, "tmp.gif");
+		ImageLoader.temporaryFile = new File(location, "tmp");
 	}
 	
 	public static Bitmap openBitmapAndScaleIfNecessary(FileDescriptor fileDescriptor)
@@ -174,13 +175,16 @@ public class ImageLoader
 	
 	private static boolean compressToGif(Bitmap bitmap, FileOutputStream outputStream, GIFSaveFormat format) throws IOException
 	{
-		boolean result = compressToGif(bitmap, temporaryGifFile.getAbsolutePath(), format);
+		boolean result = compressToGif(bitmap, temporaryFile.getAbsolutePath(), format);
 		
-		FileInputStream inputStream = new FileInputStream(temporaryGifFile);
-		if(result) copyStream(inputStream, outputStream);
-		inputStream.close();
+		if(result)
+		{
+			FileInputStream inputStream = new FileInputStream(temporaryFile);
+			copyStream(inputStream, outputStream);
+			inputStream.close();
+		}
 		
-		temporaryGifFile.delete();
+		temporaryFile.delete();
 		return result;
 	}
 	

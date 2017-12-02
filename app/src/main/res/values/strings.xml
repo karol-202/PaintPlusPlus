@@ -345,4 +345,17 @@
 	<string name="layer_info">Information</string>
 	<string name="dialog_layer_info">Layer information</string>
 	<string name="yes">Yes</string>
+	<string name="shape_star">Star</string>
+	<string name="star_corners">Corners</string>
+	<string name="desc_star_less_corners">Less corners</string>
+	<string name="desc_star_more_corners">More corners</string>
+	<string name="star_fill">Fill</string>
+	<string name="star_width">Stroke width</string>
+	<string name="error_star_too_few_corners">Too few corners</string>
+	<string name="error_star_too_many_corners">Too many corners</string>
+	<string name="star_join">Join</string>
+	<string name="join_mitter">Mitter</string>
+	<string name="join_bevel">Bevel</string>
+	<string name="join_round">Round</string>
+	<string name="polygon_join">Join</string>
 </resources>

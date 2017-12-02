@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.shape.polygon;
+package pl.karol202.paintplus.tool.shape.star;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -22,32 +22,29 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.Join;
 import pl.karol202.paintplus.tool.shape.JoinAdapter;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
-public class PolygonProperties extends ShapeProperties
+public class StarProperties extends ShapeProperties
 {
-	private final int MIN_SIDES = 3;
-	private final int MAX_SIDES = 20;
+	private final int MIN_CORNERS = 3;
+	private final int MAX_CORNERS = 20;
 	
-	private ShapePolygon polygon;
+	private ShapeStar star;
 	private String errorToFew;
 	private String errorToMany;
 	private JoinAdapter adapter;
 	
 	private View view;
-	private ImageButton buttonMinusSides;
-	private ImageButton buttonPlusSides;
-	private TextInputLayout editLayoutSides;
-	private EditText editSides;
+	private ImageButton buttonMinusCorners;
+	private ImageButton buttonPlusCorners;
+	private TextInputLayout editLayoutCorners;
+	private EditText editCorners;
 	private CheckBox checkFill;
 	private SeekBar seekBarWidth;
 	private TextView textWidth;
@@ -57,38 +54,38 @@ public class PolygonProperties extends ShapeProperties
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
-		view = inflater.inflate(R.layout.properties_polygon, container, false);
+		view = inflater.inflate(R.layout.properties_star, container, false);
 		
-		polygon = (ShapePolygon) shape;
+		star = (ShapeStar) shape;
 		errorToFew = getActivity().getString(R.string.error_polygon_too_few_sides);
 		errorToMany = getActivity().getString(R.string.error_polygon_too_many_sides);
 		adapter = new JoinAdapter(getActivity());
 		
-		buttonMinusSides = view.findViewById(R.id.button_minus_polygon_sides);
-		buttonMinusSides.setOnClickListener(new OnClickListener() {
+		buttonMinusCorners = view.findViewById(R.id.button_minus_star_corners);
+		buttonMinusCorners.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v)
 			{
-				if(getSides() > MIN_SIDES) editSides.setText(String.valueOf(getSides() - 1));
+				if(getSides() > MIN_CORNERS) editCorners.setText(String.valueOf(getSides() - 1));
 			}
 		});
 		
-		buttonPlusSides = view.findViewById(R.id.button_plus_polygon_sides);
-		buttonPlusSides.setOnClickListener(new OnClickListener() {
+		buttonPlusCorners = view.findViewById(R.id.button_plus_star_corners);
+		buttonPlusCorners.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v)
 			{
-				if(getSides() < MAX_SIDES) editSides.setText(String.valueOf(getSides() + 1));
+				if(getSides() < MAX_CORNERS) editCorners.setText(String.valueOf(getSides() + 1));
 			}
 		});
 		
-		editLayoutSides = view.findViewById(R.id.edit_layout_polygon_sides);
-		editLayoutSides.setHintEnabled(false);
+		editLayoutCorners = view.findViewById(R.id.edit_layout_star_corners);
+		editLayoutCorners.setHintEnabled(false);
 		
-		editSides = editLayoutSides.getEditText();
-		if(editSides == null) throw new RuntimeException("TextInputLayout must contain EditText.");
-		editSides.setText(String.valueOf(polygon.getSides()));
-		editSides.addTextChangedListener(new TextWatcher() {
+		editCorners = editLayoutCorners.getEditText();
+		if(editCorners == null) throw new RuntimeException("TextInputLayout must contain EditText.");
+		editCorners.setText(String.valueOf(star.getCorners()));
+		editCorners.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 			
@@ -99,33 +96,33 @@ public class PolygonProperties extends ShapeProperties
 			public void afterTextChanged(Editable s)
 			{
 				int sides = getSides();
-				if(sides < MIN_SIDES) editLayoutSides.setError(errorToFew);
-				else if(sides > MAX_SIDES) editLayoutSides.setError(errorToMany);
+				if(sides < MIN_CORNERS) editLayoutCorners.setError(errorToFew);
+				else if(sides > MAX_CORNERS) editLayoutCorners.setError(errorToMany);
 				else
 				{
-					editLayoutSides.setErrorEnabled(false);
-					polygon.setSides(getSides());
+					editLayoutCorners.setErrorEnabled(false);
+					star.setCorners(getSides());
 				}
 			}
 		});
 		
-		checkFill = view.findViewById(R.id.check_polygon_fill);
-		checkFill.setChecked(polygon.isFill());
-		checkFill.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		checkFill = view.findViewById(R.id.check_star_fill);
+		checkFill.setChecked(star.isFill());
+		checkFill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
-				polygon.setFill(isChecked);
+				star.setFill(isChecked);
 			}
 		});
 		
-		seekBarWidth = view.findViewById(R.id.seek_polygon_width);
-		seekBarWidth.setProgress(polygon.getLineWidth() - 1);
-		seekBarWidth.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		seekBarWidth = view.findViewById(R.id.seek_star_width);
+		seekBarWidth.setProgress(star.getLineWidth() - 1);
+		seekBarWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				polygon.setLineWidth(progress + 1);
+				star.setLineWidth(progress + 1);
 				textWidth.setText(String.valueOf(progress + 1));
 			}
 			
@@ -137,18 +134,18 @@ public class PolygonProperties extends ShapeProperties
 		});
 		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
 		
-		textWidth = view.findViewById(R.id.polygon_width);
-		textWidth.setText(String.valueOf(polygon.getLineWidth()));
+		textWidth = view.findViewById(R.id.star_width);
+		textWidth.setText(String.valueOf(star.getLineWidth()));
 		
-		spinnerJoin = view.findViewById(R.id.spinner_polygon_join);
+		spinnerJoin = view.findViewById(R.id.spinner_star_join);
 		spinnerJoin.setAdapter(adapter);
-		spinnerJoin.setSelection(polygon.getJoin().ordinal());
+		spinnerJoin.setSelection(star.getJoin().ordinal());
 		spinnerJoin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
 				Join join = adapter.getItem(position);
-				polygon.setJoin(join);
+				star.setJoin(join);
 			}
 			
 			@Override
@@ -160,7 +157,7 @@ public class PolygonProperties extends ShapeProperties
 	
 	private int getSides()
 	{
-		if(editSides.getText().length() == 0) return 0;
-		return Integer.parseInt(editSides.getText().toString());
+		if(editCorners.getText().length() == 0) return 0;
+		return Integer.parseInt(editCorners.getText().toString());
 	}
 }

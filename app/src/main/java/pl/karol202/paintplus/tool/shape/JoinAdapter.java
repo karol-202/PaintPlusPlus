@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.shape.line;
+package pl.karol202.paintplus.tool.shape;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -25,11 +25,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 
-public class CapAdapter extends ArrayAdapter<Cap>
+public class JoinAdapter extends ArrayAdapter<Join>
 {
-	CapAdapter(Context context)
+	public JoinAdapter(Context context)
 	{
-		super(context, R.layout.spinner_item_cap, Cap.values());
+		super(context, R.layout.spinner_item_join, Join.values());
 	}
 	
 	@Override
@@ -39,16 +39,16 @@ public class CapAdapter extends ArrayAdapter<Cap>
 		if(convertView == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.spinner_item_cap, parent, false);
+			view = inflater.inflate(R.layout.spinner_item_join, parent, false);
 		}
 		else view = convertView;
-		Cap cap = getItem(position);
+		Join join = getItem(position);
 		
-		ImageView imageView = view.findViewById(R.id.image_cap_icon);
-		imageView.setImageResource(cap.getIcon());
+		ImageView imageView = view.findViewById(R.id.image_join_icon);
+		imageView.setImageResource(join.getIcon());
 		
-		TextView textView = view.findViewById(R.id.text_cap_name);
-		textView.setText(cap.getName());
+		TextView textView = view.findViewById(R.id.text_join_name);
+		textView.setText(join.getName());
 		return view;
 	}
 	

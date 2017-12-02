@@ -19,6 +19,7 @@ package pl.karol202.paintplus.tool.shape.polygon;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.tool.shape.Join;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
@@ -29,6 +30,7 @@ public class ShapePolygon extends Shape
 	private int sides;
 	private boolean fill;
 	private int lineWidth;
+	private Join join;
 	
 	private boolean polygonCreated;
 	private Point center;
@@ -47,6 +49,7 @@ public class ShapePolygon extends Shape
 		this.sides = 4;
 		this.fill = false;
 		this.lineWidth = 30;
+		this.join = Join.MITTER;
 		
 		update();
 	}
@@ -81,7 +84,7 @@ public class ShapePolygon extends Shape
 			
 			float centralAngle = 360f / sides;
 			float halfOfCentral = centralAngle / 2;
-			float angle = (float) getAngle(touchPoint) - this.angle;
+			float angle = (float) Utils.getAngle(center, touchPoint) - this.angle;
 			if(angle < 0) angle += 360;
 			float angleMod = angle % centralAngle;
 			float a = Math.abs(angleMod - halfOfCentral);
@@ -150,7 +153,7 @@ public class ShapePolygon extends Shape
 			
 			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
 			
-			angle = (float) getAngle(new Point((int) result.x, (int) result.y));
+			angle = (float) Utils.getAngle(center, new Point((int) result.x, (int) result.y)) - 90;
 		}
 		else
 		{
@@ -158,22 +161,10 @@ public class ShapePolygon extends Shape
 			getHelpersManager().snapPoint(snapped);
 			radiusOCC = calcDistance(center, (int) snapped.x, (int) snapped.y);
 			
-			angle = (float) getAngle(new Point((int) snapped.x, (int) snapped.y));
+			angle = (float) Utils.getAngle(center, new Point((int) snapped.x, (int) snapped.y)) - 90;
 		}
 		
 		createPath();
-	}
-	
-	private double getAngle(Point point)
-	{
-		double deltaX = point.x - center.x;
-		double deltaY = center.y - point.y;
-		double ratio = deltaX / deltaY;
-		double angleRad = Math.atan(ratio);
-		double angleDeg = Math.toDegrees(angleRad);
-		if(deltaY < 0) angleDeg += 180;
-		if(angleDeg < 0) angleDeg += 360;
-		return angleDeg;
 	}
 	
 	private void setCenterPoint(Point point)
@@ -242,6 +233,7 @@ public class ShapePolygon extends Shape
 	{
 		getPaint().setStyle(fill ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
 		getPaint().setStrokeWidth(lineWidth);
+		getPaint().setStrokeJoin(join.getPaintJoin());
 		createPath();
 		super.update();
 	}
@@ -316,6 +308,17 @@ public class ShapePolygon extends Shape
 	void setLineWidth(int lineWidth)
 	{
 		this.lineWidth = lineWidth;
+		update();
+	}
+	
+	Join getJoin()
+	{
+		return join;
+	}
+	
+	void setJoin(Join join)
+	{
+		this.join = join;
 		update();
 	}
 }

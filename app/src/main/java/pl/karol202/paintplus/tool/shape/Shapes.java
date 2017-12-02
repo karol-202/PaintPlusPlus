@@ -20,6 +20,7 @@ import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.shape.circle.ShapeCircle;
 import pl.karol202.paintplus.tool.shape.line.ShapeLine;
 import pl.karol202.paintplus.tool.shape.polygon.ShapePolygon;
+import pl.karol202.paintplus.tool.shape.star.ShapeStar;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ class Shapes
 		shapes.add(new ShapeLine(image, shapeEditListener));
 		shapes.add(new ShapeCircle(image, shapeEditListener));
 		shapes.add(new ShapePolygon(image, shapeEditListener));
+		shapes.add(new ShapeStar(image, shapeEditListener));
 	}
 	
 	Shape getShape(int id)
