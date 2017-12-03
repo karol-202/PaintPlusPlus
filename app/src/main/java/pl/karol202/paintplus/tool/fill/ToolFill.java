@@ -27,6 +27,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolBottomBar;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
@@ -65,6 +66,12 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return FillProperties.class;
+	}
+	
+	@Override
+	public Class<? extends ToolBottomBar> getBottomBarFragmentClass()
+	{
+		return null;
 	}
 	
 	@Override

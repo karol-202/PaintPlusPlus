@@ -113,6 +113,12 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	}
 	
 	@Override
+	protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight)
+	{
+		if(image != null) image.setViewportSize(width, height);
+	}
+	
+	@Override
 	public void draw(Canvas canvas)
 	{
 		super.draw(canvas);
@@ -131,8 +137,7 @@ public class PaintView extends SurfaceView implements OnImageChangeListener, Sel
 	
 	private void initImage()
 	{
-		image.setViewportWidth(getWidth());
-		image.setViewportHeight(getHeight());
+		image.setViewportSize(getWidth(), getHeight());
 		image.centerView();
 		
 		onSelectionChanged();

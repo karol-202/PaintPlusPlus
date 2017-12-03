@@ -62,6 +62,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	private ActivityPaintActions actions;
 	private ActivityPaintDrawers drawers;
 	private ActivityPaintLayers layers;
+	private ActivityPaintBottomBar bottomBar;
 
 	private View decorView;
 	private FragmentManager fragments;
@@ -88,6 +89,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 		actions = new ActivityPaintActions(this);
 		drawers = new ActivityPaintDrawers(this);
 		layers = new ActivityPaintLayers(this);
+		bottomBar = new ActivityPaintBottomBar(this);
 
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
@@ -113,6 +115,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 
 		drawers.initDrawers();
 		layers.initLayers();
+		bottomBar.initBottomBar();
 
 		restoreInstanceState(savedInstanceState);
 	}
@@ -177,6 +180,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 		paintView.init(this);
 		layers.postInitLayers();
 		drawers.postInitDrawers();
+		bottomBar.postInitBottomBar();
 
 		loadImageIfPathIsPresent();
 		selectImageToOpenIfNeeded();
@@ -337,6 +341,17 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	public void updateLayersPreview()
 	{
 		layers.updateData();
+	}
+
+	boolean isBottomBarVisible()
+	{
+		return bottomBar.isBottomBarVisible();
+	}
+
+	void setBottomBarVisibility(boolean visible)
+	{
+		if(visible) bottomBar.showBottomBar();
+		else bottomBar.hideBottomBar();
 	}
 
 	public void setTitle(String title)

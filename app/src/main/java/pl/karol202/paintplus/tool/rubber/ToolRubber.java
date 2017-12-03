@@ -21,6 +21,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolBottomBar;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -76,6 +77,12 @@ public class ToolRubber extends StandardTool
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return RubberProperties.class;
+	}
+	
+	@Override
+	public Class<? extends ToolBottomBar> getBottomBarFragmentClass()
+	{
+		return null;
 	}
 	
 	@Override

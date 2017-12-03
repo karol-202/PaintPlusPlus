@@ -171,7 +171,7 @@ class ActivityPaintDrawers
 		drawerLeft.setAdapter(toolsAdapter);
 
 		tryToAttachPropertiesFragment();
-		tryToAttachColorsFragment();
+		attachColorsFragment();
 	}
 
 	private void tryToAttachPropertiesFragment()
@@ -206,26 +206,25 @@ class ActivityPaintDrawers
 		return properties;
 	}
 
-	private void tryToAttachColorsFragment()
-	{
-		try
-		{
-			attachColorsFragment();
-		}
-		catch(Exception e)
-		{
-			ErrorHandler.report(new RuntimeException("Error: Could not instantiate fragment from fragment class." +
-													  "Probably the fragment class does not contain " +
-													  "default constructor.", e));
-		}
-	}
-
-	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
+	private void attachColorsFragment()
 	{
 		FragmentTransaction colorTrans = fragments.beginTransaction();
 		colorTrans.replace(R.id.colors_fragment, colorsSelect);
 		colorTrans.commit();
 	}
+
+	private void onToolSelect(Tool newTool)
+	{
+		Tool previousTool = activity.getTool();
+
+		activity.setTool(newTool);
+		tryToAttachPropertiesFragment();
+		layoutDrawer.closeDrawer(drawerLeft);
+
+		if(previousTool instanceof OnToolChangeListener) ((OnToolChangeListener) previousTool).onOtherToolSelected();
+		if(newTool instanceof OnToolChangeListener) ((OnToolChangeListener) newTool).onToolSelected();
+	}
+
 	void togglePropertiesDrawer()
 	{
 		layoutDrawer.closeDrawer(drawerLeft);
@@ -241,17 +240,5 @@ class ActivityPaintDrawers
 	void addOnToolSelectListener(OnToolSelectListener listener)
 	{
 		toolsAdapter.addOnToolSelectListener(listener);
-	}
-
-	private void onToolSelect(Tool newTool)
-	{
-		Tool previousTool = activity.getTool();
-
-		activity.setTool(newTool);
-		tryToAttachPropertiesFragment();
-		layoutDrawer.closeDrawer(drawerLeft);
-
-		if(previousTool instanceof OnToolChangeListener) ((OnToolChangeListener) previousTool).onOtherToolSelected();
-		if(newTool instanceof OnToolChangeListener) ((OnToolChangeListener) newTool).onToolSelected();
 	}
 }

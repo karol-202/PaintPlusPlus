@@ -358,6 +358,7 @@
 	<string name="join_bevel">Bevel</string>
 	<string name="join_round">Round</string>
 	<string name="polygon_join">Join</string>
+	<string name="action_bottom_bar">Bottom bar</string>
 	<string name="color_curve_point_info"
 		translatable="false">X: %d Y: %d</string>
 	<string name="opacity"

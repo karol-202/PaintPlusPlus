@@ -108,29 +108,35 @@
 		
 		<menu>
 			<item android:id="@+id/action_set_zoom"
-				android:icon="@drawable/ic_zoom_in_black_24dp"
-				android:title="@string/action_set_zoom"
-				android:orderInCategory="1"/>
+				  android:icon="@drawable/ic_zoom_in_black_24dp"
+				  android:title="@string/action_set_zoom"
+				  android:orderInCategory="1"/>
 			<item android:id="@+id/action_zoom_default"
-				android:icon="@drawable/ic_zoom_default_black_24dp"
-				android:title="@string/action_zoom_default"
-				android:orderInCategory="2"/>
+				  android:icon="@drawable/ic_zoom_default_black_24dp"
+				  android:title="@string/action_zoom_default"
+				  android:orderInCategory="2"/>
 			<item android:id="@+id/action_image_center"
-				android:icon="@drawable/ic_center_black_24dp"
-				android:title="@string/action_image_center"
-				android:orderInCategory="3"/>
+				  android:icon="@drawable/ic_center_black_24dp"
+				  android:title="@string/action_image_center"
+				  android:orderInCategory="3"/>
 			<item android:id="@+id/action_grid"
-				android:icon="@drawable/ic_grid_black_24dp"
-				android:title="@string/action_grid"
-				android:orderInCategory="4"
-				android:checkable="true"
-				android:checked="false"/>
+				  android:icon="@drawable/ic_grid_black_24dp"
+				  android:title="@string/action_grid"
+				  android:orderInCategory="4"
+				  android:checkable="true"
+				  android:checked="false"/>
 			<item android:id="@+id/action_snap_to_grid"
-				android:icon="@drawable/ic_snap_to_grid_black_24px"
-				android:title="@string/action_snap_to_grid"
-				android:orderInCategory="5"
-				android:checkable="true"
-				android:checked="false"/>
+				  android:icon="@drawable/ic_snap_to_grid_black_24dp"
+				  android:title="@string/action_snap_to_grid"
+				  android:orderInCategory="5"
+				  android:checkable="true"
+				  android:checked="false"/>
+			<item android:id="@+id/action_bottom_bar"
+				  android:icon="@drawable/ic_bottom_bar_black_24dp"
+				  android:title="@string/action_bottom_bar"
+				  android:orderInCategory="6"
+				  android:checkable="true"
+				  android:checked="true"/>
 		</menu>
 	</item>
 	

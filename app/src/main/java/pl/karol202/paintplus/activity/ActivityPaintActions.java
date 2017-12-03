@@ -65,11 +65,12 @@ class ActivityPaintActions
 		setItemsVisibility(menu, !anyDrawerOpen);
 		
 		preparePhotoCaptureOption(menu);
-		prepareFileOpenOption(menu);
-		prepareFileSaveOption(menu);
+		prepareFileOpenOptions(menu);
+		prepareFileSaveOptions(menu);
 		prepareHistoryOptions(menu);
 		prepareClipboardOptions(menu);
 		prepareSnapOptions(menu);
+		prepareBottomBarOption(menu);
 	}
 	
 	private void setItemsVisibility(Menu menu, boolean visible)
@@ -83,7 +84,7 @@ class ActivityPaintActions
 		menu.findItem(R.id.action_capture_photo).setEnabled(hasCamera);
 	}
 	
-	private void prepareFileOpenOption(Menu menu)
+	private void prepareFileOpenOptions(Menu menu)
 	{
 		String state = Environment.getExternalStorageState();
 		boolean enable = state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
@@ -91,7 +92,7 @@ class ActivityPaintActions
 		menu.findItem(R.id.action_open_layer).setEnabled(enable);
 	}
 	
-	private void prepareFileSaveOption(Menu menu)
+	private void prepareFileSaveOptions(Menu menu)
 	{
 		String state = Environment.getExternalStorageState();
 		boolean savingAs = state.equals(Environment.MEDIA_MOUNTED);
@@ -130,6 +131,14 @@ class ActivityPaintActions
 		MenuItem snapToGridItem = menu.findItem(R.id.action_snap_to_grid);
 		snapToGridItem.setChecked(grid && snapToGrid);
 		snapToGridItem.setEnabled(grid);
+	}
+	
+	private void prepareBottomBarOption(Menu menu)
+	{
+		boolean bottomBar = activity.isBottomBarVisible();
+		
+		MenuItem bottomBarItem = menu.findItem(R.id.action_bottom_bar);
+		bottomBarItem.setChecked(bottomBar);
 	}
 	
 	boolean handleAction(MenuItem item)
@@ -203,6 +212,10 @@ class ActivityPaintActions
 		case R.id.action_snap_to_grid:
 			item.setChecked(!item.isChecked());
 			activity.getPaintView().setSnapToGrid(item.isChecked());
+			return true;
+		case R.id.action_bottom_bar:
+			item.setChecked(!item.isChecked());
+			activity.setBottomBarVisibility(item.isChecked());
 			return true;
 			
 		case R.id.action_resize_image:

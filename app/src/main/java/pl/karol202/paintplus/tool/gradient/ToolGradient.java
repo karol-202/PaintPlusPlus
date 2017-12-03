@@ -21,10 +21,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.OnToolChangeListener;
-import pl.karol202.paintplus.tool.StandardTool;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
-import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.*;
 
 public class ToolGradient extends StandardTool implements OnToolChangeListener
 {
@@ -110,6 +107,12 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return GradientProperties.class;
+	}
+	
+	@Override
+	public Class<? extends ToolBottomBar> getBottomBarFragmentClass()
+	{
+		return null;
 	}
 	
 	@Override

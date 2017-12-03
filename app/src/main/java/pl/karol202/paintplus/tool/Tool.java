@@ -29,6 +29,8 @@ public interface Tool
 	
 	Class<? extends ToolProperties> getPropertiesFragmentClass();
 	
+	Class<? extends ToolBottomBar> getBottomBarFragmentClass();
+	
 	ToolCoordinateSpace getCoordinateSpace();
 	
 	boolean isUsingSnapping();

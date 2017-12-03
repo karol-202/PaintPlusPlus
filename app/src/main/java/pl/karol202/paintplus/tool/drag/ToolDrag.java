@@ -23,6 +23,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerDrag;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.StandardTool;
+import pl.karol202.paintplus.tool.ToolBottomBar;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 
@@ -61,6 +62,12 @@ public class ToolDrag extends StandardTool
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return DragProperties.class;
+	}
+	
+	@Override
+	public Class<? extends ToolBottomBar> getBottomBarFragmentClass()
+	{
+		return null;
 	}
 	
 	@Override

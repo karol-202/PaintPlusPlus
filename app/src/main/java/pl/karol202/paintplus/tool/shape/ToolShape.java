@@ -22,10 +22,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.OnToolChangeListener;
-import pl.karol202.paintplus.tool.StandardTool;
-import pl.karol202.paintplus.tool.ToolCoordinateSpace;
-import pl.karol202.paintplus.tool.ToolProperties;
+import pl.karol202.paintplus.tool.*;
 
 public class ToolShape extends StandardTool implements OnShapeEditListener, OnToolChangeListener
 {
@@ -62,6 +59,12 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return ShapeToolProperties.class;
+	}
+	
+	@Override
+	public Class<? extends ToolBottomBar> getBottomBarFragmentClass()
+	{
+		return null;
 	}
 	
 	@Override

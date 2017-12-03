@@ -112,6 +112,8 @@ public class Image
 		
 		this.zoom = 1;
 		this.imageMatrix = new Matrix();
+		this.viewportWidth = 0;
+		this.viewportHeight = 0;
 		this.layersLocked = false;
 		updateMatrix();
 	}
@@ -571,19 +573,23 @@ public class Image
 		return viewportWidth;
 	}
 	
-	public void setViewportWidth(int viewportWidth)
-	{
-		this.viewportWidth = viewportWidth;
-	}
-	
 	public int getViewportHeight()
 	{
 		return viewportHeight;
 	}
 	
-	public void setViewportHeight(int viewportHeight)
+	public void setViewportSize(int width, int height)
 	{
-		this.viewportHeight = viewportHeight;
+		updateViewportSize(width - viewportWidth, height - viewportHeight);
+		this.viewportWidth = width;
+		this.viewportHeight = height;
+	}
+	
+	private void updateViewportSize(int deltaX, int deltaY)
+	{
+		this.viewX -= deltaX / 2f;
+		this.viewY -= deltaY / 2f;
+		updateMatrix();
 	}
 	
 	public boolean areLayersLocked()
