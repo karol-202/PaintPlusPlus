@@ -35,7 +35,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import pl.karol202.paintplus.ErrorHandler;
+import pl.karol202.paintplus.BuildConfig;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.PermissionRequest;
@@ -129,8 +129,7 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 	
 	private void initFirebaseIfNotDebug()
 	{
-		if(getResources().getBoolean(R.bool.debug)) ErrorHandler.disableReporting();
-		else FirebaseAnalytics.getInstance(this);
+		if(!BuildConfig.DEBUG) FirebaseAnalytics.getInstance(this);
 	}
 	
 	private void attachSwipingFeature()

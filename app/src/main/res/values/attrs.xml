@@ -18,7 +18,7 @@
 <resources>
 	<attr name="borderlessSelectableBackground" format="reference"/>
 	
-	<declare-styleable name="imageToggleButton">
+	<declare-styleable name="ImageToggleButton">
 		<attr name="checked" format="boolean"/>
 	</declare-styleable>
 	

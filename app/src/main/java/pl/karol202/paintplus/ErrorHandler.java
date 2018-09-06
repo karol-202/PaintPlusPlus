@@ -16,21 +16,13 @@
 
 package pl.karol202.paintplus;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 
 public class ErrorHandler
 {
-	private static boolean enableReporting = true;
-	
-	public static void disableReporting()
-	{
-		ErrorHandler.enableReporting = false;
-		FirebaseCrash.setCrashCollectionEnabled(false);
-	}
-	
 	public static void report(Exception e)
 	{
 		e.printStackTrace();
-		if(enableReporting) FirebaseCrash.report(e);
+		Crashlytics.logException(e);
 	}
 }
