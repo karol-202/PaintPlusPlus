@@ -44,10 +44,10 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	private OnFileEditListener listener;
 	private AsyncManager asyncManager;
 	
-	private BitmapSaveAsyncTask asyncTask;
+	BitmapSaveAsyncTask asyncTask;
 	Uri uri;
-	private BitmapSaveFormat format;
-	private ParcelFileDescriptor parcelFileDescriptor;
+	BitmapSaveFormat format;
+	ParcelFileDescriptor parcelFileDescriptor;
 	
 	OptionSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
