@@ -15,12 +15,10 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="match_parent">
-	
-	
+
 	<RadioGroup
 		android:id="@+id/radioGroup_angle"
 		android:layout_width="0dp"
@@ -31,7 +29,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
-		
+
 		<RadioButton
 			android:id="@+id/radio_angle_90"
 			android:layout_width="wrap_content"
@@ -39,7 +37,7 @@
 			android:layout_weight="1"
 			android:text="@string/angle_90"
 			android:textAppearance="?android:attr/textAppearanceMedium" />
-		
+
 		<RadioButton
 			android:id="@+id/radio_angle_180"
 			android:layout_width="wrap_content"
@@ -47,7 +45,7 @@
 			android:layout_weight="1"
 			android:text="@string/angle_180"
 			android:textAppearance="?android:attr/textAppearanceMedium"/>
-		
+
 		<RadioButton
 			android:id="@+id/radio_angle_270"
 			android:layout_width="wrap_content"
@@ -56,4 +54,4 @@
 			android:text="@string/angle_270"
 			android:textAppearance="?android:attr/textAppearanceMedium"/>
 	</RadioGroup>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

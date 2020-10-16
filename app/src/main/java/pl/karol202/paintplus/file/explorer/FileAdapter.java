@@ -18,13 +18,13 @@ package pl.karol202.paintplus.file.explorer;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.file.ImageLoader;
 
@@ -37,13 +37,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 	{
 		boolean onFileSelected(File file);
 	}
-	
+
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 	{
 		private File file;
 		private ImageView imageFileType;
 		private TextView textFileName;
-		
+
 		ViewHolder(View view)
 		{
 			super(view);
@@ -51,7 +51,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 			imageFileType = view.findViewById(R.id.image_file_type);
 			textFileName = view.findViewById(R.id.text_file_name);
 		}
-		
+
 		void bind(File file)
 		{
 			this.file = file;
@@ -59,7 +59,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 			imageFileType.setContentDescription(getFileTypeDescription(file));
 			textFileName.setText(getFileName(file));
 		}
-		
+
 		private int getFileTypeIcon(File file)
 		{
 			if(file == null) return R.drawable.ic_arrow_file_back_black_24dp;
@@ -72,7 +72,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 				return R.drawable.ic_file_black_24dp;
 			}
 		}
-		
+
 		private CharSequence getFileTypeDescription(File file)
 		{
 			if(file == null) return "";
@@ -85,39 +85,39 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 				return context.getString(R.string.desc_file_type_file);
 			}
 		}
-		
+
 		private String getFileExtension(File file)
 		{
 			String fileName = file.getName();
 			String[] nameParts = fileName.split("\\.");
 			return nameParts[nameParts.length - 1];
 		}
-		
+
 		private String getFileName(File file)
 		{
 			if(file == null) return res.getString(R.string.file_back);
 			else return file.getName();
 		}
-		
+
 		@Override
 		public void onClick(View v)
 		{
 			listener.onFileSelected(file);
 		}
 	}
-	
+
 	private Context context;
 	private Resources res;
 	private ArrayList<File> files;
 	private OnFileSelectListener listener;
-	
+
 	FileAdapter(Context context, OnFileSelectListener listener)
 	{
 		this.context = context;
 		this.res = context.getResources();
 		this.listener = listener;
 	}
-	
+
 	@NonNull
 	@Override
 	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -125,20 +125,20 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>
 		View view = LayoutInflater.from(context).inflate(R.layout.item_file, parent, false);
 		return new ViewHolder(view);
 	}
-	
+
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position)
 	{
 		holder.bind(files.get(position));
 	}
-	
+
 	@Override
 	public int getItemCount()
 	{
 		if(files == null) return 0;
 		return files.size();
 	}
-	
+
 	void setFiles(ArrayList<File> files)
 	{
 		this.files = files;

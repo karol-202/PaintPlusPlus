@@ -18,8 +18,8 @@ package pl.karol202.paintplus.options;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.media.ExifInterface;
-import android.support.design.widget.Snackbar;
+import androidx.exifinterface.media.ExifInterface;
+import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -32,25 +32,25 @@ import pl.karol202.paintplus.image.layer.Layer;
 public class OptionLayerOpen extends OptionOpen
 {
 	private static final int REQUEST_OPEN_LAYER = 3;
-	
+
 	public OptionLayerOpen(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
 		super(activity, image, asyncManager);
 	}
-	
+
 	@Override
 	int getRequestId()
 	{
 		return REQUEST_OPEN_LAYER;
 	}
-	
+
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
 		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 		else addNewLayer(bitmap);
 	}
-	
+
 	private void addNewLayer(Bitmap bitmap)
 	{
 		final Layer layer = new Layer(0, 0, bitmap.getWidth(), bitmap.getHeight(), getLayerName(), Color.TRANSPARENT);
@@ -62,20 +62,20 @@ public class OptionLayerOpen extends OptionOpen
 			askAboutExifRotation(exifOrientation -> rotateLayer(layer, exifOrientation));
 		}
 	}
-	
+
 	private String getLayerName()
 	{
 		UriMetadata metadata = new UriMetadata(getContext(), getUri());
 		return metadata.getDisplayName();
 	}
-	
+
 	private void createLayerAddHistoryAction(Layer layer)
 	{
 		ActionLayerAdd action = new ActionLayerAdd(getImage());
 		action.setLayerAfterAdding(layer);
 		action.applyAction();
 	}
-	
+
 	private void rotateLayer(Layer layer, int exifOrientation)
 	{
 		switch(exifOrientation)

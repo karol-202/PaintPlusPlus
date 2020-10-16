@@ -19,7 +19,7 @@ package pl.karol202.paintplus.file;
 import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.support.v4.provider.DocumentFile;
+import androidx.documentfile.provider.DocumentFile;
 
 import java.io.IOException;
 
@@ -29,12 +29,12 @@ public class UriUtils
 	{
 		return createFileDescriptor(context, uri, "r");
 	}
-	
+
 	public static ParcelFileDescriptor createFileSaveDescriptor(Context context, Uri uri)
 	{
 		return createFileDescriptor(context, uri, "w");
 	}
-	
+
 	private static ParcelFileDescriptor createFileDescriptor(Context context, Uri uri, String mode)
 	{
 		try
@@ -47,7 +47,7 @@ public class UriUtils
 			return null;
 		}
 	}
-	
+
 	public static void closeFileDescriptor(ParcelFileDescriptor fileDescriptor)
 	{
 		if(fileDescriptor == null) return;
@@ -60,7 +60,7 @@ public class UriUtils
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void deleteDocument(Context context, Uri uri)
 	{
 		DocumentFile file = DocumentFile.fromSingleUri(context, uri);

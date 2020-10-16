@@ -18,9 +18,9 @@ package pl.karol202.paintplus.color.manipulators;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.Element;
-import android.support.v8.renderscript.RenderScript;
+import androidx.renderscript.Allocation;
+import androidx.renderscript.Element;
+import androidx.renderscript.RenderScript;
 import pl.karol202.paintplus.color.curves.ChannelInOutSet;
 import pl.karol202.paintplus.color.curves.ColorChannel;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
@@ -37,45 +37,45 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 	private Allocation allocationIn;
 	private Allocation allocationOut;
 	private Rect selectionBounds;
-	
+
 	public ColorsCurveManipulator()
 	{
 		renderScript = GraphicsHelper.getRenderScript();
 	}
-	
+
 	@Override
 	public Bitmap run(Bitmap in, CurveManipulatorParams params)
 	{
 		this.params = params;
 		prepareSelection();
-		
+
 		Bitmap out = Bitmap.createBitmap(in.getWidth(), in.getHeight(), Bitmap.Config.ARGB_8888);
-		
+
 		allocationIn = Allocation.createFromBitmap(renderScript, in);
 		allocationOut = Allocation.createFromBitmap(renderScript, out);
-		
+
 		if(params.getChannelType() == ColorChannelType.RGB) runRGB();
 		else if(params.getChannelType() == ColorChannelType.HSV) runHSV();
 		allocationOut.copyTo(out);
-		
+
 		return out;
 	}
-	
+
 	private void prepareSelection()
 	{
 		ManipulatorSelection selection = params.getSelection();
 		if(selection == null) return;
 		byte[] selectionData = selection.getData();
 		selectionBounds = selection.getBounds();
-		
+
 		allocationSelection = Allocation.createSized(renderScript, Element.U8(renderScript), selectionData.length);
 		allocationSelection.copyFrom(selectionData);
 	}
-	
+
 	private void runRGB()
 	{
 		ScriptC_cm_curves_rgb script = new ScriptC_cm_curves_rgb(renderScript);
-		
+
 		if(allocationSelection != null)
 		{
 			script.bind_selectionData(allocationSelection);
@@ -85,11 +85,11 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 			script.set_selectionRight(selectionBounds.right);
 			script.set_selectionBottom(selectionBounds.bottom);
 		}
-		
+
 		attachCurvesRGB(script, params);
 		script.forEach_transform(allocationIn, allocationOut);
 	}
-	
+
 	private void attachCurvesRGB(ScriptC_cm_curves_rgb script, CurveManipulatorParams params)
 	{
 		for(int i = 0; i < params.getCurvesAmount(); i++)
@@ -99,7 +99,7 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 			byte[] curveMap = curve.createByteColorsMap();
 			Allocation allocation = Allocation.createSized(renderScript, Element.U8(renderScript), curveMap.length);
 			allocation.copyFrom(curveMap);
-			
+
 			if(channels.getIn() == ColorChannel.RED && channels.getOut() == ColorChannel.RED)
 				script.bind_curve_rtr(allocation);
 			else if(channels.getIn() == ColorChannel.RED && channels.getOut() == ColorChannel.GREEN)
@@ -120,11 +120,11 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 				script.bind_curve_btb(allocation);
 		}
 	}
-	
+
 	private void runHSV()
 	{
 		ScriptC_cm_curves_hsv script = new ScriptC_cm_curves_hsv(renderScript);
-		
+
 		if(allocationSelection != null)
 		{
 			script.bind_selectionData(allocationSelection);
@@ -134,11 +134,11 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 			script.set_selectionRight(selectionBounds.right);
 			script.set_selectionBottom(selectionBounds.bottom);
 		}
-		
+
 		attachCurvesHSV(script, params);
 		script.forEach_transform(allocationIn, allocationOut);
 	}
-	
+
 	private void attachCurvesHSV(ScriptC_cm_curves_hsv script, CurveManipulatorParams params)
 	{
 		for(int i = 0; i < params.getCurvesAmount(); i++)
@@ -148,7 +148,7 @@ public class ColorsCurveManipulator implements ColorsManipulator<CurveManipulato
 			short[] curveMap = curve.createShortColorsMap();
 			Allocation allocation = Allocation.createSized(renderScript, Element.U16(renderScript), curveMap.length);
 			allocation.copyFrom(curveMap);
-			
+
 			if(channels.getIn() == ColorChannel.HUE && channels.getOut() == ColorChannel.HUE)
 				script.bind_curve_hth(allocation);
 			else if(channels.getIn() == ColorChannel.HUE && channels.getOut() == ColorChannel.SATURATION)

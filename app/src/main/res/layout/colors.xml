@@ -15,13 +15,13 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="100dp"
 	android:gravity="center_horizontal">
-	
+
 	<FrameLayout
 		android:id="@+id/view_border_color_first"
 		android:layout_width="32dp"
@@ -34,15 +34,15 @@
 		tools:layout_constraintBottom_creator="1"
 		tools:layout_constraintRight_creator="1"
 		tools:layout_constraintTop_creator="1">
-		
+
 		<View
 			android:id="@+id/view_color_first"
 			android:layout_width="32dp"
 			android:layout_height="32dp"
 			android:background="#0f0" />
-	
+
 	</FrameLayout>
-	
+
 	<ImageButton
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
 		android:contentDescription="@string/desc_colors_swap" />
-	
+
 	<FrameLayout
 		android:id="@+id/view_border_color_second"
 		android:layout_width="32dp"
@@ -69,7 +69,7 @@
 		tools:layout_constraintBottom_creator="1"
 		tools:layout_constraintLeft_creator="1"
 		tools:layout_constraintTop_creator="1">
-		
+
 		<View
 			android:id="@+id/view_color_second"
 			android:layout_width="32dp"
@@ -77,4 +77,4 @@
 			android:background="#f00" />
 	</FrameLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

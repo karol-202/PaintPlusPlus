@@ -17,29 +17,29 @@
 package pl.karol202.paintplus.color.picker;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
 
 @SuppressWarnings("unused")
 public class BottomBarBehaviour extends CoordinatorLayout.Behavior<View>
 {
 	public BottomBarBehaviour() { }
-	
+
 	public BottomBarBehaviour(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
-	
+
 	@Override
 	public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency)
 	{
 		return dependency instanceof ViewPager;
 	}
-	
+
 	@Override
 	public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency)
 	{

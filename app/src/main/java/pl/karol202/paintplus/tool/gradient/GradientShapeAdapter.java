@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.gradient;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,7 @@ public class GradientShapeAdapter extends ArrayAdapter<GradientShape>
 	{
 		super(context, R.layout.spinner_item_gradient_shape, shapes);
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
@@ -47,15 +47,15 @@ public class GradientShapeAdapter extends ArrayAdapter<GradientShape>
 		}
 		else view = convertView;
 		GradientShape shape = getItem(position);
-		
+
 		ImageView imageIcon = view.findViewById(R.id.image_gradient_shape_icon);
 		imageIcon.setImageResource(shape.getIcon());
-		
+
 		TextView textName = view.findViewById(R.id.text_gradient_shape_name);
 		textName.setText(shape.getName());
 		return view;
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{

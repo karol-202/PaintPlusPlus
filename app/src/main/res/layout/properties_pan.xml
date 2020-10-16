@@ -15,10 +15,10 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent" android:layout_height="match_parent">
-	
+
 	<TextView
 		android:text="@string/zoom"
 		android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
 		app:layout_constraintTop_toTopOf="parent"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_marginLeft="16dp" />
-	
+
 	<ImageButton
 		android:layout_width="40dp"
 		android:layout_height="40dp"
@@ -44,7 +44,7 @@
 		android:scaleType="fitXY"
 		android:layout_marginLeft="12dp"
 		android:contentDescription="@string/scale_down" />
-	
+
 	<ImageButton
 		android:layout_width="40dp"
 		android:layout_height="40dp"
@@ -58,7 +58,7 @@
 		android:scaleType="fitXY"
 		android:layout_marginRight="12dp"
 		android:contentDescription="@string/desc_scale_up" />
-	
+
 	<EditText
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -71,9 +71,10 @@
 		android:textAlignment="center"
 		android:inputType="number"
 		app:layout_constraintTop_toBottomOf="@+id/text_zoom"
-		android:layout_marginTop="8dp" />
-	
-	<android.support.v7.widget.AppCompatButton
+		android:layout_marginTop="8dp"
+		android:gravity="center_horizontal"/>
+
+	<Button
 		android:text="@string/center_view"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -89,4 +90,4 @@
 		android:layout_marginLeft="16dp"
 		android:layout_marginRight="16dp"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

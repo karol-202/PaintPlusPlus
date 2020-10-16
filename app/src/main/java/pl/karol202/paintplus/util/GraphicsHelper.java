@@ -20,7 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.opengl.*;
 import android.os.Build;
-import android.support.v8.renderscript.RenderScript;
+import androidx.renderscript.RenderScript;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -33,14 +33,14 @@ public class GraphicsHelper
 			super(message);
 		}
 	}
-	
+
 	private static RenderScript renderScript;
 	private static int maxTextureSize;
-	
+
 	private EGLDisplay display;
 	private EGLSurface surface;
 	private EGLContext context;
-	
+
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	public GraphicsHelper()
 	{
@@ -54,20 +54,20 @@ public class GraphicsHelper
 			stopGL();
 		}
 	}
-	
+
 	public static void init(Context context)
 	{
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) new GraphicsHelper();
 		else initSubstitutesForVariables();
-		
+
 		renderScript = RenderScript.create(context);
 	}
-	
+
 	public static void destroy()
 	{
 		renderScript.destroy();
 	}
-	
+
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	private void initGL() throws GLException
 	{
@@ -95,7 +95,7 @@ public class GraphicsHelper
 		context = EGL14.eglCreateContext(display, config, EGL14.EGL_NO_CONTEXT, ctxAttrib, 0);
 		EGL14.eglMakeCurrent(display, surface, surface, context);
 	}
-	
+
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	private void initVariables()
 	{
@@ -103,7 +103,7 @@ public class GraphicsHelper
 		GLES20.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, array, 0);
 		maxTextureSize = array[0];
 	}
-	
+
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	private void stopGL()
 	{
@@ -113,17 +113,17 @@ public class GraphicsHelper
 		EGL14.eglDestroyContext(display, context);
 		EGL14.eglTerminate(display);
 	}
-	
+
 	private static void initSubstitutesForVariables()
 	{
 		maxTextureSize = 2048;
 	}
-	
+
 	public static RenderScript getRenderScript()
 	{
 		return renderScript;
 	}
-	
+
 	public static int getMaxTextureSize()
 	{
 		return maxTextureSize;

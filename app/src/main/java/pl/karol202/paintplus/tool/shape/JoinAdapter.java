@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ public class JoinAdapter extends ArrayAdapter<Join>
 	{
 		super(context, R.layout.spinner_item_join, Join.values());
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
@@ -45,15 +45,15 @@ public class JoinAdapter extends ArrayAdapter<Join>
 		}
 		else view = convertView;
 		Join join = getItem(position);
-		
+
 		ImageView imageView = view.findViewById(R.id.image_join_icon);
 		imageView.setImageResource(join.getIcon());
-		
+
 		TextView textView = view.findViewById(R.id.text_join_name);
 		textView.setText(join.getName());
 		return view;
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{

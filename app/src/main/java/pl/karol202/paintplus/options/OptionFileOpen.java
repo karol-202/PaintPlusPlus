@@ -17,10 +17,10 @@
 package pl.karol202.paintplus.options;
 
 import android.graphics.Bitmap;
-import android.support.media.ExifInterface;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import androidx.exifinterface.media.ExifInterface;
+import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -32,28 +32,28 @@ import pl.karol202.paintplus.recent.OnFileEditListener;
 public class OptionFileOpen extends OptionOpen
 {
 	private static final int REQUEST_OPEN_FILE = 1;
-	
+
 	private OnFileEditListener listener;
-	
+
 	public OptionFileOpen(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
 		super(activity, image, asyncManager);
 		this.listener = listener;
 	}
-	
+
 	@Override
 	int getRequestId()
 	{
 		return REQUEST_OPEN_FILE;
 	}
-	
+
 	@Override
 	public void execute()
 	{
 		if(getImage().wasModifiedSinceLastSave()) askAboutChanges();
 		else executeWithoutAsking();
 	}
-	
+
 	private void askAboutChanges()
 	{
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -63,35 +63,35 @@ public class OptionFileOpen extends OptionOpen
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		dialogBuilder.show();
 	}
-	
+
 	public void executeWithoutAsking()
 	{
 		super.execute();
 	}
-	
+
 	@Override //Overridden only to make public
 	public void openFile(Uri uri)
 	{
 		super.openFile(uri);
 	}
-	
+
 	@Override
 	public void onImageLoaded(Bitmap bitmap)
 	{
 		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 		else openImageFromBitmap(bitmap);
 	}
-	
+
 	private void openImageFromBitmap(Bitmap bitmap)
 	{
 		getImage().openImage(bitmap);
 		getImage().setLastUri(getUri());
 		getImage().centerView();
-		
+
 		if(listener != null) listener.onFileEdited(getUri(), bitmap);
 		askAboutExifRotation(this::rotateImage);
 	}
-	
+
 	private void rotateImage(int exifOrientation)
 	{
 		switch(exifOrientation)

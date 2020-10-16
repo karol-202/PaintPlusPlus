@@ -19,13 +19,13 @@ package pl.karol202.paintplus.options;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
@@ -43,14 +43,14 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	private ColorsBrightness manipulator;
 	private Layer layer;
 	private Bitmap oldBitmap;
-	
+
 	private AlertDialog dialog;
 	private SeekBar seekBarBrightness;
 	private SeekBar seekBarContrast;
 	private TextView textBrightness;
 	private TextView textContrast;
 	private Button buttonPreview;
-	
+
 	public OptionColorsBrightness(AppContext context, Image image)
 	{
 		super(context, image);
@@ -58,7 +58,7 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		this.layer = image.getSelectedLayer();
 		this.oldBitmap = Bitmap.createBitmap(layer.getBitmap());
 	}
-	
+
 	@Override
 	@SuppressLint("InflateParams")
 	public void execute()
@@ -70,79 +70,79 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, this);
-		
+
 		seekBarBrightness = view.findViewById(R.id.seekBar_brightness);
 		seekBarBrightness.setOnSeekBarChangeListener(this);
-		
+
 		seekBarContrast = view.findViewById(R.id.seekBar_contrast);
 		seekBarContrast.setOnSeekBarChangeListener(this);
-		
+
 		textBrightness = view.findViewById(R.id.brightness);
 		textBrightness.setText(getText(seekBarBrightness));
-		
+
 		textContrast = view.findViewById(R.id.contrast);
 		textContrast.setText(getText(seekBarContrast));
-		
+
 		buttonPreview = view.findViewById(R.id.button_preview);
 		buttonPreview.setOnTouchListener(this);
-		
+
 		dialog = dialogBuilder.create();
 		dialog.show();
 	}
-	
+
 	private String getText(SeekBar seekBar)
 	{
 		return String.format(Locale.US, "%1$d%%", getValue(seekBar));
 	}
-	
+
 	private int getValue(SeekBar seekBar)
 	{
 		return seekBar.getProgress() - 100;
 	}
-	
+
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
 		if(seekBar == seekBarBrightness) textBrightness.setText(getText(seekBarBrightness));
 		else if(seekBar == seekBarContrast) textContrast.setText(getText(seekBarContrast));
 	}
-	
+
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) { }
-	
+
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) { }
-	
+
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
 		if(which == DialogInterface.BUTTON_POSITIVE) applyChanges(true);
 		else if(which == DialogInterface.BUTTON_NEGATIVE) revertChanges();
 	}
-	
+
 	private void applyChanges(boolean applyToHistory)
 	{
 		ActionLayerChange action = new ActionLayerChange(getImage(), R.string.history_action_brightness);
 		action.setLayerChange(getImage().getLayerIndex(layer), layer.getBitmap());
-		
+
 		Selection selection = getImage().getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
-		
+
 		BrightnessParams params = new BrightnessParams(manipulatorSelection);
 		params.setBrightness(getValue(seekBarBrightness) / 100f);
 		params.setContrast(getValue(seekBarContrast) / 100f);
-		
+
 		Bitmap bitmapOut = manipulator.run(oldBitmap, params);
 		layer.setBitmap(bitmapOut);
-		
+
 		if(applyToHistory) action.applyAction();
 	}
-	
+
 	private void revertChanges()
 	{
 		layer.setBitmap(oldBitmap);
 	}
-	
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{

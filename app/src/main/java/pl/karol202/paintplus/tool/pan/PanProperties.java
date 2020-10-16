@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.pan;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -36,16 +36,16 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	public static final double SQRT2 = Math.sqrt(2);
 	public static final double MIN_ZOOM = 0.009;
 	public static final double MAX_ZOOM = 16;
-	
+
 	private ToolPan pan;
 	private double zoom;
 	private boolean dontFireEvent;
-	
+
 	private ImageButton buttonZoomOut;
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
 	private Button buttonCenter;
-	
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -54,22 +54,22 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		pan = (ToolPan) tool;
 		pan.setZoomListener(this);
 		zoom = pan.getZoom();
-		
+
 		buttonZoomOut = view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
-		
+
 		buttonZoomIn = view.findViewById(R.id.button_zoom_in);
 		buttonZoomIn.setOnClickListener(this);
-		
+
 		editTextZoom = view.findViewById(R.id.edit_zoom);
 		updateZoom(zoom, true);
 		editTextZoom.addTextChangedListener(this);
-		
+
 		buttonCenter = view.findViewById(R.id.button_center_view);
 		buttonCenter.setOnClickListener(this);
 		return view;
 	}
-	
+
 	@Override
 	public void onClick(View view)
 	{
@@ -85,13 +85,13 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		}
 		else if(view == buttonCenter) pan.centerView();
 	}
-	
+
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-	
+
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) { }
-	
+
 	@Override
 	public void afterTextChanged(Editable s)
 	{
@@ -103,14 +103,14 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			editTextZoom.setSelection(editTextZoom.getText().length() - 1);
 			return;
 		}
-		
+
 		if(!string.equals("%")) updateZoom((float) textToZoom(string), false);
 	}
-	
+
 	private void updateZoom(double zoom, boolean updateText)
 	{
 		dontFireEvent = true;
-		
+
 		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM, true);
 		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM, true);
 		else
@@ -119,20 +119,20 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			if(updateText) editTextZoom.setText(zoomToText(zoom));
 			pan.setZoom((float) zoom);
 		}
-		
+
 		dontFireEvent = false;
 	}
-	
+
 	private String zoomToText(double zoom)
 	{
 		return String.format(Locale.US, "%.1f%%", zoom * 100);
 	}
-	
+
 	private double textToZoom(String text)
 	{
 		return Float.parseFloat(text.substring(0, text.length() - 1)) / 100;
 	}
-	
+
 	private double getLowerZoom()
 	{
 		int position = 0;
@@ -155,7 +155,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			}
 		}
 	}
-	
+
 	private double getGreaterZoom()
 	{
 		int position = 0;
@@ -178,7 +178,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 			}
 		}
 	}
-	
+
 	private double calculateZoomRatio(int position)
 	{
 		int posAbs = Math.abs(position);
@@ -187,7 +187,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 		if(position >= 0) return round;
 		else return 1 / round;
 	}
-	
+
 	@Override
 	public void onZoomChanged()
 	{

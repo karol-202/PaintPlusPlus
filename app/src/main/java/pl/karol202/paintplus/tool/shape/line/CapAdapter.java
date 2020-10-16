@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.shape.line;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ public class CapAdapter extends ArrayAdapter<Cap>
 	{
 		super(context, R.layout.spinner_item_cap, Cap.values());
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
@@ -45,15 +45,15 @@ public class CapAdapter extends ArrayAdapter<Cap>
 		}
 		else view = convertView;
 		Cap cap = getItem(position);
-		
+
 		ImageView imageView = view.findViewById(R.id.image_cap_icon);
 		imageView.setImageResource(cap.getIcon());
-		
+
 		TextView textView = view.findViewById(R.id.text_cap_name);
 		textView.setText(cap.getName());
 		return view;
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{

@@ -18,14 +18,14 @@ package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
@@ -38,18 +38,18 @@ public class OptionFileNew extends Option implements OnClickListener
 	private class EditTextListener implements TextWatcher
 	{
 		private TextInputLayout inputLayout;
-		
+
 		EditTextListener(TextInputLayout inputLayout)
 		{
 			this.inputLayout = inputLayout;
 		}
-		
+
 		@Override
 		public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-		
+
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) { }
-		
+
 		@Override
 		public void afterTextChanged(Editable s)
 		{
@@ -64,13 +64,13 @@ public class OptionFileNew extends Option implements OnClickListener
 				inputLayout.setErrorEnabled(false);
 			}
 		}
-		
+
 		private String getString(int resource)
 		{
 			return getContext().getString(resource);
 		}
 	}
-	
+
 	private AlertDialog dialog;
 	private TextInputLayout inputLayoutX;
 	private TextInputLayout inputLayoutY;
@@ -81,7 +81,7 @@ public class OptionFileNew extends Option implements OnClickListener
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	@SuppressLint("InflateParams")
 	public void execute()
@@ -93,9 +93,9 @@ public class OptionFileNew extends Option implements OnClickListener
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
-		
+
 		inputLayoutX = view.findViewById(R.id.inputLayout_image_x);
-		
+
 		inputLayoutY = view.findViewById(R.id.inputLayout_image_y);
 
 		editX = view.findViewById(R.id.edit_image_x);
@@ -115,7 +115,7 @@ public class OptionFileNew extends Option implements OnClickListener
 	{
 		int x = parseInt(editX.getText().toString());
 		int y = parseInt(editY.getText().toString());
-		
+
 		if(x == 0 || y == 0)
 		{
 			getAppContext().createSnackbar(R.string.message_invalid_bounds, Snackbar.LENGTH_SHORT).show();
@@ -130,7 +130,7 @@ public class OptionFileNew extends Option implements OnClickListener
 		getImage().newImage(x, y);
 		getImage().centerView();
 	}
-	
+
 	private int parseInt(String text)
 	{
 		return text.equals("") || text.equals("-") ? 0 : Integer.parseInt(text);

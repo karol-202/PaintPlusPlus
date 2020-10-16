@@ -15,12 +15,12 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
+
 	<pl.karol202.paintplus.color.picker.DualColorPreviewView
 		android:id="@+id/view_colors_numerical_color"
 		android:layout_width="0dp"
@@ -31,7 +31,7 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toTopOf="@+id/guideline3"
 		app:dividerPosition="0.3"/>
-	
+
 	<include
 		android:id="@+id/colors_numerical_channel_a"
 		layout="@layout/color_picker_channel"
@@ -43,7 +43,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/guideline3" />
-	
+
 	<include
 		layout="@layout/color_picker_channel"
 		android:id="@+id/colors_numerical_channel_b"
@@ -54,7 +54,7 @@
 		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_c"
 		android:layout_marginRight="0dp"
 		app:layout_constraintRight_toRightOf="parent" />
-	
+
 	<include
 		layout="@layout/color_picker_channel"
 		android:id="@+id/colors_numerical_channel_c"
@@ -65,7 +65,7 @@
 		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_d"
 		android:layout_marginRight="0dp"
 		app:layout_constraintRight_toRightOf="parent" />
-	
+
 	<include
 		layout="@layout/color_picker_channel"
 		android:id="@+id/colors_numerical_channel_d"
@@ -76,7 +76,7 @@
 		app:layout_constraintBottom_toTopOf="@+id/colors_numerical_channel_e"
 		android:layout_marginRight="0dp"
 		app:layout_constraintRight_toRightOf="parent" />
-	
+
 	<include
 		layout="@layout/color_picker_channel"
 		android:id="@+id/colors_numerical_channel_e"
@@ -88,14 +88,14 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginBottom="8dp"
 		app:layout_constraintBottom_toTopOf="@+id/edit_color_hex" />
-	
-	<android.support.constraint.Guideline
+
+	<androidx.constraintlayout.widget.Guideline
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/guideline3"
 		android:orientation="horizontal"
 		app:layout_constraintGuide_percent="0.3" />
-	
+
 	<TextView
 		android:id="@+id/text_color_hex_hash"
 		android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
 		app:layout_constraintTop_toTopOf="@+id/edit_color_hex"
 		app:layout_constraintRight_toLeftOf="@+id/edit_color_hex"
 		android:layout_marginRight="0dp" />
-	
+
 	<EditText
 		android:id="@+id/edit_color_hex"
 		android:layout_width="wrap_content"
@@ -121,4 +121,4 @@
 		android:layout_marginLeft="32dp"
 		app:layout_constraintLeft_toLeftOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

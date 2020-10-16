@@ -15,12 +15,12 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
+
 	<SeekBar
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginLeft="16dp"
 		android:layout_marginRight="48dp" />
-	
+
 	<TextView
 		android:id="@+id/text_format_jpeg_quality"
 		android:layout_width="wrap_content"
@@ -41,4 +41,4 @@
 		android:layout_marginTop="1dp"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_format_jpeg_quality"
 		app:layout_constraintTop_toTopOf="@+id/seekBar_format_jpeg_quality" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

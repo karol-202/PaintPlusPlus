@@ -19,17 +19,17 @@ package pl.karol202.paintplus.activity;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSelect;
@@ -166,7 +166,8 @@ class ActivityPaintDrawers
 	{
 		drawerAdapter.syncState();
 
-		toolsAdapter = new ToolsAdapter(activity, activity.getTools(), this::onToolSelect);
+		toolsAdapter = new ToolsAdapter(activity, activity.getTools());
+		toolsAdapter.addOnToolSelectListener(this::onToolSelect);
 		drawerLeft.setAdapter(toolsAdapter);
 
 		tryToAttachPropertiesFragment();
@@ -225,7 +226,6 @@ class ActivityPaintDrawers
 		colorTrans.replace(R.id.colors_fragment, colorsSelect);
 		colorTrans.commit();
 	}
-
 	void togglePropertiesDrawer()
 	{
 		layoutDrawer.closeDrawer(drawerLeft);

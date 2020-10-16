@@ -19,7 +19,7 @@ package pl.karol202.paintplus.activity;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 public class PermissionRequest<A extends Activity & PermissionRequest.PermissionGrantingActivity>
 {
@@ -27,18 +27,18 @@ public class PermissionRequest<A extends Activity & PermissionRequest.Permission
 	{
 		void registerPermissionGrantListener(int requestCode, PermissionGrantListener permissionGrantListener);
 	}
-	
+
 	public interface PermissionGrantListener
 	{
 		void onPermissionGrant();
 	}
-	
+
 	private static final int REQUEST_CODE = 10;
-	
+
 	private A activity;
 	private String permission;
 	private PermissionGrantListener grantListener;
-	
+
 	public PermissionRequest(A activity, String permission, PermissionGrantListener grantListener)
 	{
 		this.activity = activity;
@@ -46,7 +46,7 @@ public class PermissionRequest<A extends Activity & PermissionRequest.Permission
 		this.grantListener = grantListener;
 		checkForPermission();
 	}
-	
+
 	private void checkForPermission()
 	{
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -56,12 +56,12 @@ public class PermissionRequest<A extends Activity & PermissionRequest.Permission
 		}
 		else permissionGranted();
 	}
-	
+
 	private void permissionGranted()
 	{
 		if(grantListener != null) grantListener.onPermissionGrant();
 	}
-	
+
 	private void requestForPermission()
 	{
 		activity.registerPermissionGrantListener(REQUEST_CODE, grantListener);

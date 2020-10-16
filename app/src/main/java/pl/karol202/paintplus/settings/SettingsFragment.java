@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.settings;
 
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceFragmentCompat;
 import pl.karol202.paintplus.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat

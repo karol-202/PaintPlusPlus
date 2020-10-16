@@ -15,12 +15,12 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools">
-	
+
 	<TextView
 		android:id="@+id/text_colors_numerical_channel"
 		android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
-	
+
 	<SeekBar
 		android:id="@+id/seekBar_colors_numerical_channel"
 		android:layout_width="0dp"
@@ -43,7 +43,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginRight="36dp"
 		android:layout_marginLeft="48dp" />
-	
+
 	<TextView
 		android:id="@+id/text_colors_numerical_channel_value"
 		android:layout_width="wrap_content"
@@ -51,5 +51,5 @@
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_colors_numerical_channel"
 		app:layout_constraintTop_toTopOf="@+id/text_colors_numerical_channel"
 		tools:text="@string/temp_100_" />
-	
-</android.support.constraint.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

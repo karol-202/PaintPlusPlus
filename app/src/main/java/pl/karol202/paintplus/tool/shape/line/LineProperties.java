@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.shape.line;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,57 +33,57 @@ public class LineProperties extends ShapeProperties implements SeekBar.OnSeekBar
 {
 	private ShapeLine line;
 	private CapAdapter capAdapter;
-	
+
 	private View view;
 	private SeekBar seekBarWidth;
 	private TextView textWidth;
 	private Spinner spinnerCap;
-	
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_line, container, false);
-		
+
 		line = (ShapeLine) shape;
 		capAdapter = new CapAdapter(getActivity());
-		
+
 		seekBarWidth = view.findViewById(R.id.seekBar_line_width);
 		seekBarWidth.setProgress(line.getLineWidth() - 1);
 		seekBarWidth.setOnSeekBarChangeListener(this);
 		seekBarWidth.setOnTouchListener(new SeekBarTouchListener());
-		
+
 		textWidth = view.findViewById(R.id.line_width);
 		textWidth.setText(String.valueOf(line.getLineWidth()));
-		
+
 		spinnerCap = view.findViewById(R.id.spinner_line_cap);
 		spinnerCap.setAdapter(capAdapter);
 		spinnerCap.setSelection(line.getLineCap().ordinal());
 		spinnerCap.setOnItemSelectedListener(this);
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
 		line.setLineWidth(progress + 1);
 		textWidth.setText(String.valueOf(progress + 1));
 	}
-	
+
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) { }
-	
+
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) { }
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
 		Cap cap = capAdapter.getItem(position);
 		line.setLineCap(cap);
 	}
-	
+
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) { }
 }

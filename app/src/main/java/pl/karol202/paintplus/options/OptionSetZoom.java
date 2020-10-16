@@ -17,13 +17,13 @@
 package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
@@ -35,17 +35,17 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 {
 	private double zoom;
 	private boolean dontFireEvent;
-	
+
 	private AlertDialog alertDialog;
 	private ImageButton buttonZoomOut;
 	private ImageButton buttonZoomIn;
 	private EditText editTextZoom;
-	
+
 	public OptionSetZoom(AppContext context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	@SuppressLint("InflateParams")
 	public void execute()
@@ -56,23 +56,23 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 		dialogBuilder.setTitle(R.string.dialog_set_zoom);
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, null);
-		
+
 		zoom = getImage().getZoom();
-		
+
 		buttonZoomOut = view.findViewById(R.id.button_zoom_out);
 		buttonZoomOut.setOnClickListener(this);
-		
+
 		buttonZoomIn = view.findViewById(R.id.button_zoom_in);
 		buttonZoomIn.setOnClickListener(this);
-		
+
 		editTextZoom = view.findViewById(R.id.edit_zoom);
 		updateZoom(zoom, true);
 		editTextZoom.addTextChangedListener(this);
-		
+
 		alertDialog = dialogBuilder.create();
 		alertDialog.show();
 	}
-	
+
 	@Override
 	public void onClick(View view)
 	{
@@ -87,13 +87,13 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 			updateZoom(zoom, true);
 		}
 	}
-	
+
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-	
+
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) { }
-	
+
 	@Override
 	public void afterTextChanged(Editable s)
 	{
@@ -105,14 +105,14 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 			editTextZoom.setSelection(editTextZoom.getText().length() - 1);
 			return;
 		}
-		
+
 		if(!string.equals("%")) updateZoom((float) textToZoom(string), false);
 	}
-	
+
 	private void updateZoom(double zoom, boolean updateText)
 	{
 		dontFireEvent = true;
-		
+
 		if(zoom < PanProperties.MIN_ZOOM) updateZoom(PanProperties.MIN_ZOOM, true);
 		else if(zoom > PanProperties.MAX_ZOOM) updateZoom(PanProperties.MAX_ZOOM, true);
 		else
@@ -121,20 +121,20 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 			if(updateText) editTextZoom.setText(zoomToText(zoom));
 			getImage().setZoom((float) zoom);
 		}
-		
+
 		dontFireEvent = false;
 	}
-	
+
 	private String zoomToText(double zoom)
 	{
 		return String.format(Locale.US, "%d%%", Math.round(zoom * 100));
 	}
-	
+
 	private double textToZoom(String text)
 	{
 		return Integer.parseInt(text.substring(0, text.length() - 1)) / 100d;
 	}
-	
+
 	private double getLowerZoom()
 	{
 		int position = 0;
@@ -157,7 +157,7 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 			}
 		}
 	}
-	
+
 	private double getGreaterZoom()
 	{
 		int position = 0;
@@ -180,7 +180,7 @@ public class OptionSetZoom extends Option implements View.OnClickListener, TextW
 			}
 		}
 	}
-	
+
 	private double calculateZoomRatio(int position)
 	{
 		int posAbs = Math.abs(position);

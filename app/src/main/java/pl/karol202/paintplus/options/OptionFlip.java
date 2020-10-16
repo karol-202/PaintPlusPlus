@@ -18,11 +18,11 @@ package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
@@ -31,15 +31,15 @@ import pl.karol202.paintplus.image.Image.FlipDirection;
 public abstract class OptionFlip extends Option implements DialogInterface.OnClickListener
 {
 	private AlertDialog dialog;
-	
+
 	private RadioButton radioHorizontal;
 	private RadioButton radioVertical;
-	
+
 	OptionFlip(AppContext context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	@SuppressLint("InflateParams")
 	public void execute()
@@ -51,18 +51,18 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.ok, this);
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
-		
+
 		radioHorizontal = view.findViewById(R.id.radio_horizontal);
 		radioHorizontal.setChecked(true);
-		
+
 		radioVertical = view.findViewById(R.id.radio_vertical);
-		
+
 		dialog = dialogBuilder.create();
 		dialog.show();
 	}
-	
+
 	protected abstract int getTitle();
-	
+
 	@Override
 	public void onClick(DialogInterface dialog, int which)
 	{
@@ -77,6 +77,6 @@ public abstract class OptionFlip extends Option implements DialogInterface.OnCli
 		flip(direction);
 		getImage().updateImage();
 	}
-	
+
 	protected abstract void flip(FlipDirection direction);
 }

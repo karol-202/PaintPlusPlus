@@ -18,12 +18,12 @@ package pl.karol202.paintplus.image.layer;
 
 import android.content.Context;
 import android.graphics.*;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.AppContext;
@@ -41,23 +41,23 @@ import static android.graphics.Bitmap.Config.ARGB_8888;
 public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
 	private final String DUPLICATE_INDICATOR;
-	
+
 	private AppContext appContext;
 	private Image image;
 	private ArrayList<Layer> layers;
-	
+
 	private HashMap<Integer, LayerViewHolder> viewHolders;
 	private LayerHandle layerHandle;
-	
+
 	public LayersAdapter(ActivityPaint activity)
 	{
 		this.appContext = activity;
 		this.viewHolders = new HashMap<>();
 		this.layerHandle = new LayerHandle(activity, this);
-		
+
 		DUPLICATE_INDICATOR = appContext.getContext().getString(R.string.duplicate);
 	}
-	
+
 	@NonNull
 	@Override
 	public LayerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -65,77 +65,77 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		View view = LayoutInflater.from(appContext.getContext()).inflate(R.layout.item_layer, parent, false);
 		return new LayerViewHolder(this, view);
 	}
-	
+
 	@Override
 	public void onBindViewHolder(@NonNull LayerViewHolder holder, int position)
 	{
 		holder.bind(layers.get(position));
 		viewHolders.put(position, holder);
 	}
-	
+
 	@Override
 	public int getItemCount()
 	{
 		return layers.size();
 	}
-	
+
 	Context getContext()
 	{
 		return appContext.getContext();
 	}
-	
+
 	Image getImage()
 	{
 		return image;
 	}
-	
+
 	public void setImage(Image image)
 	{
 		this.image = image;
 		this.layers = image.getLayers();
 		notifyDataSetChanged();
 	}
-	
+
 	HashMap<Integer, LayerViewHolder> getViewHolders()
 	{
 		return viewHolders;
 	}
-	
+
 	LayerHandle getLayerHandle()
 	{
 		return layerHandle;
 	}
-	
+
 	boolean isLastLayer(Layer layer)
 	{
 		return layers.indexOf(layer) == layers.size() - 1;
 	}
-	
+
 	boolean isLayerSelected(Layer layer)
 	{
 		return image.isLayerSelected(layer);
 	}
-	
+
 	boolean areLayersLocked()
 	{
 		return image.areLayersLocked();
 	}
-	
+
 	void moveLayer(int layerId, int target)
 	{
 		Layer selected = image.getSelectedLayer();
-		
+
 		Layer layer = layers.remove(layerId);
 		layers.add(target, layer);
-		
+
 		image.selectLayer(layers.indexOf(selected));
 		image.updateImage();
-		
+
 		ActionLayerOrderMove action = new ActionLayerOrderMove(image);
 		action.setSourceAndDestinationLayerPos(layerId, target);
 		action.applyAction();
 	}
-	
+
 	void duplicateLayer(Layer layer)
 	{
 		int layerIndex = layers.indexOf(layer);
@@ -149,48 +149,48 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 			appContext.createSnackbar(R.string.too_many_layers, Toast.LENGTH_SHORT).show();
 		else createDuplicateHistoryAction(newLayer);
 	}
-	
+
 	private void createDuplicateHistoryAction(Layer newLayer)
 	{
 		ActionLayerDuplicate action = new ActionLayerDuplicate(image);
 		action.setLayerAfterAdding(newLayer);
 		action.applyAction();
 	}
-	
+
 	void joinWithNextLayer(Layer firstLayer)
 	{
 		int firstIndex = layers.indexOf(firstLayer);
 		Layer secondLayer = layers.get(firstIndex + 1);
-		
+
 		Rect resultBounds = firstLayer.getBounds();
 		resultBounds.union(secondLayer.getBounds());
-		
+
 		Matrix matrix = new Matrix();
 		matrix.preTranslate(-resultBounds.left, -resultBounds.top);
-		
+
 		Bitmap resultBitmap = Bitmap.createBitmap(resultBounds.width(), resultBounds.height(), ARGB_8888);
 		Canvas resultCanvas = new Canvas(resultBitmap);
 		resultBitmap = secondLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
 		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
-		
+
 		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top,
 									  resultBounds.width(), resultBounds.height(),
 									  firstLayer.getName(), Color.TRANSPARENT);
 		resultLayer.setBitmap(resultBitmap);
-		
+
 		image.deleteLayer(firstLayer);
 		image.deleteLayer(secondLayer);
 		image.addLayer(resultLayer, firstIndex);
 		createJoinHistoryAction(firstLayer, secondLayer, firstIndex);
 	}
-	
+
 	private void createJoinHistoryAction(Layer firstLayer, Layer secondLayer, int resultLayerId)
 	{
 		ActionLayerJoin action = new ActionLayerJoin(image);
 		action.setLayers(firstLayer, secondLayer, resultLayerId);
 		action.applyAction();
 	}
-	
+
 	private LayerMode copyLayerMode(LayerMode mode)
 	{
 		try

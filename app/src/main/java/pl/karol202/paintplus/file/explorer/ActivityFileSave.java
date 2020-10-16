@@ -19,10 +19,10 @@ package pl.karol202.paintplus.file.explorer;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.file.ImageLoader;
 
@@ -31,30 +31,30 @@ import java.io.File;
 public class ActivityFileSave extends ActivityFileChoose implements View.OnClickListener
 {
 	private File file;
-	
+
 	private EditText editFileName;
 	private Button buttonSave;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		String fileName = getIntent().getStringExtra("fileName");
-		
+
 		editFileName = findViewById(R.id.edit_file_name);
 		editFileName.setText(fileName != null ? fileName : "");
-		
+
 		buttonSave = findViewById(R.id.button_save);
 		buttonSave.setOnClickListener(this);
 	}
-	
+
 	@Override
 	public int getLayout()
 	{
 		return R.layout.activity_file_save;
 	}
-	
+
 	@Override
 	public boolean onFileSelected(File file)
 	{
@@ -62,7 +62,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 		editFileName.setText(file.getName());
 		return true;
 	}
-	
+
 	@Override
 	public void onClick(View v)
 	{
@@ -76,7 +76,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 			else saveFile();
 		}
 	}
-	
+
 	private boolean hasProperFormat(String fileName)
 	{
 		String[] parts = fileName.split("\\.");
@@ -85,7 +85,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 			if(extension.equalsIgnoreCase(filter)) return true;
 		return false;
 	}
-	
+
 	private void showErrorDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -93,7 +93,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 		builder.setPositiveButton(R.string.ok, null);
 		builder.show();
 	}
-	
+
 	private void showReplaceDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -103,7 +103,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();
 	}
-	
+
 	private void saveFile()
 	{
 		Intent intent = new Intent();

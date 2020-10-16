@@ -15,12 +15,12 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@color/shape_properties">
-	
+
 	<TextView
 		android:id="@+id/text_line_width"
 		android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
 		android:text="@string/line_width"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
-	
+
 	<SeekBar
 		android:id="@+id/seekBar_line_width"
 		android:layout_width="0dp"
@@ -43,7 +43,7 @@
 		app:layout_constraintLeft_toRightOf="@+id/text_line_width"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
-	
+
 	<TextView
 		android:id="@+id/line_width"
 		android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
 		android:text="@string/temp_100_"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_line_width"
 		app:layout_constraintTop_toTopOf="parent" />
-	
+
 	<TextView
 		android:id="@+id/text_line_cap"
 		android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
 		android:text="@string/line_cap"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/seekBar_line_width" />
-	
+
 	<Spinner
 		android:id="@+id/spinner_line_cap"
 		android:layout_width="0dp"
@@ -79,4 +79,4 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		android:layout_marginBottom="0dp" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

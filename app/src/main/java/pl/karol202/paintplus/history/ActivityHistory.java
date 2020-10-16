@@ -17,15 +17,15 @@
 package pl.karol202.paintplus.history;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.util.ItemDivider;
@@ -35,22 +35,22 @@ public class ActivityHistory extends AppCompatActivity
 	private Image image;
 	private ActionBar actionBar;
 	private HistoryAdapter adapter;
-	
+
 	private Toolbar toolbar;
 	private RecyclerView recyclerHistory;
-	
+
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_history);
-		
+
 		image = ActivityHistoryHelper.getImage();
-		
+
 		initToolbar();
 		initRecyclerHistory();
 	}
-	
+
 	private void initToolbar()
 	{
 		toolbar = findViewById(R.id.toolbar);
@@ -60,17 +60,17 @@ public class ActivityHistory extends AppCompatActivity
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
-	
+
 	private void initRecyclerHistory()
 	{
 		adapter = new HistoryAdapter(this, image.getHistory());
-		
+
 		recyclerHistory = findViewById(R.id.recycler_history);
 		recyclerHistory.setLayoutManager(new LinearLayoutManager(this));
 		recyclerHistory.setAdapter(adapter);
 		recyclerHistory.addItemDecoration(new ItemDivider(this));
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -78,7 +78,7 @@ public class ActivityHistory extends AppCompatActivity
 		inflater.inflate(R.menu.menu_history, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
@@ -86,7 +86,7 @@ public class ActivityHistory extends AppCompatActivity
 		menu.findItem(R.id.action_redo).setEnabled(image.canRedo());
 		return super.onPrepareOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{

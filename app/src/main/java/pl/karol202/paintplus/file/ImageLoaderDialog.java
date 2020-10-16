@@ -22,7 +22,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.AsyncBlocker;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
@@ -33,7 +33,7 @@ public class ImageLoaderDialog
 	{
 		void onImageLoaded(Bitmap bitmap);
 	}
-	
+
 	private class ImageLoadAsyncBlocker implements AsyncBlocker
 	{
 		@Override
@@ -41,33 +41,33 @@ public class ImageLoaderDialog
 		{
 			onLoadingCancel();
 		}
-		
+
 		@Override
 		public int getMessage()
 		{
 			return R.string.dialog_load_wait_message;
 		}
 	}
-	
+
 	private Context context;
 	private OnImageLoadListener listener;
-	
+
 	private ParcelFileDescriptor fileDescriptor;
 	private Point bitmapSize;
-	
+
 	private AlertDialog dialog;
-	
+
 	private AsyncManager asyncManager;
 	private AsyncBlocker asyncBlocker;
 	private AsyncTask<BitmapLoadParams, Void, BitmapLoadResult> asyncTask;
-	
+
 	public ImageLoaderDialog(Context context, AsyncManager asyncManager, OnImageLoadListener listener)
 	{
 		this.context = context;
 		this.asyncManager = asyncManager;
 		this.listener = listener;
 	}
-	
+
 	public void loadBitmapAndAskForScalingIfTooBig(Uri uri)
 	{
 		this.fileDescriptor = UriUtils.createFileOpenDescriptor(context, uri);
@@ -77,7 +77,7 @@ public class ImageLoaderDialog
 			return;
 		}
 		this.bitmapSize = ImageLoader.getBitmapSize(fileDescriptor.getFileDescriptor());
-		
+
 		boolean tooBig = ImageLoader.isBitmapTooBig(bitmapSize);
 		if(!tooBig)
 		{
@@ -91,7 +91,7 @@ public class ImageLoaderDialog
 			showDialog();
 		}
 	}
-	
+
 	private void showDialog()
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -102,7 +102,7 @@ public class ImageLoaderDialog
 		dialog = builder.create();
 		dialog.show();
 	}
-	
+
 	private void onAccept()
 	{
 		asyncBlocker = new ImageLoadAsyncBlocker();
@@ -111,20 +111,20 @@ public class ImageLoaderDialog
 		asyncTask = new BitmapLoadAsyncTask();
 		asyncTask.execute(params);
 	}
-	
+
 	private void onBitmapLoaded(Bitmap bitmap)
 	{
 		asyncManager.unblock(asyncBlocker);
 		if(listener != null) listener.onImageLoaded(bitmap);
-		
+
 		UriUtils.closeFileDescriptor(fileDescriptor);
 	}
-	
+
 	private void onLoadingCancel()
 	{
 		asyncManager.unblock(asyncBlocker);
 		asyncTask.cancel(true);
-		
+
 		UriUtils.closeFileDescriptor(fileDescriptor);
 	}
 }

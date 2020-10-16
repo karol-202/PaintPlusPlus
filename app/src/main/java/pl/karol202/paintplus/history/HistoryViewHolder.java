@@ -16,8 +16,8 @@
 
 package pl.karol202.paintplus.history;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.history.action.Action;
 
 abstract class HistoryViewHolder extends RecyclerView.ViewHolder
@@ -26,6 +26,6 @@ abstract class HistoryViewHolder extends RecyclerView.ViewHolder
 	{
 		super(itemView);
 	}
-	
+
 	void bind(History history, Action action) { }
 }

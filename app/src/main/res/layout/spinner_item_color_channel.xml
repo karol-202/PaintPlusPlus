@@ -15,11 +15,11 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="48dp">
-	
+
 	<ImageView
 		android:layout_width="24dp"
 		android:layout_height="24dp"
@@ -30,7 +30,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginLeft="16dp"
 		tools:ignore="ContentDescription" />
-	
+
 	<TextView
 		android:text="@string/unknown"
 		android:layout_width="wrap_content"
@@ -43,4 +43,4 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="@color/black"
 		android:layout_marginLeft="8dp" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

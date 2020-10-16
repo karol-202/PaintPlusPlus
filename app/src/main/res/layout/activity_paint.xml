@@ -15,51 +15,51 @@
   ~    limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/main_container"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".activity.ActivityPaint">
-	
-	<android.support.design.widget.AppBarLayout
+
+	<com.google.android.material.appbar.AppBarLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
-		
+
 		<include android:id="@+id/toolbar"
 			layout="@layout/toolbar" />
-	</android.support.design.widget.AppBarLayout>
-	
+	</com.google.android.material.appbar.AppBarLayout>
+
 	<include layout="@layout/toolbar_shadow"/>
-	
-	<android.support.v4.widget.DrawerLayout
+
+	<androidx.drawerlayout.widget.DrawerLayout
 		android:id="@+id/layout_drawer"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
-		
+
 		<pl.karol202.paintplus.PaintView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:id="@+id/paint_view"
 			android:background="@color/paint_view_background" />
-		
-		<android.support.v7.widget.RecyclerView
+
+		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/drawer_left"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="start"
 			android:background="@color/drawer_background" />
-		
-		<android.support.constraint.ConstraintLayout
+
+		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/drawer_right"
 			android:layout_width="24dp"
 			android:layout_height="match_parent"
 			android:layout_gravity="end"
 			android:background="@color/drawer_background"
 			android:clickable="true">
-			
+
 			<ScrollView
 				android:layout_width="0dp"
 				android:layout_height="0dp"
@@ -69,13 +69,13 @@
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintBottom_toTopOf="@+id/colors_fragment">
-				
+
 				<FrameLayout
 					android:id="@+id/properties_fragment"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"/>
 			</ScrollView>
-			
+
 			<FrameLayout
 				android:id="@+id/colors_fragment"
 				android:layout_width="0dp"
@@ -83,32 +83,32 @@
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintRight_toRightOf="parent" />
-		
-		</android.support.constraint.ConstraintLayout>
-	
-	</android.support.v4.widget.DrawerLayout>
-	
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</androidx.drawerlayout.widget.DrawerLayout>
+
 	<LinearLayout
 		android:id="@+id/bottom_sheet"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:clickable="true"
 		android:orientation="vertical"
 		app:behavior_hideable="true"
-		app:layout_behavior="pl.karol202.paintplus.util.LayersSheetBehavior"
-		android:clickable="true">
-		
+		app:layout_behavior="pl.karol202.paintplus.util.LayersSheetBehavior">
+
 		<View
 			android:id="@+id/bottom_sheet_shadow"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/layers_sheet_shadow_height"
 			android:background="@drawable/layers_sheet_shadow" />
-		
-		<android.support.constraint.ConstraintLayout
+
+		<androidx.constraintlayout.widget.ConstraintLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:background="@color/layer_view_unselected"
 			android:clickable="true">
-			
+
 			<TextView
 				android:id="@+id/text_layers_sheet_title"
 				android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
 				app:layout_constraintBottom_toTopOf="@+id/recycler_layers"
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintTop_toTopOf="parent" />
-			
+
 			<ImageButton
 				android:id="@+id/button_add_layer"
 				android:layout_width="48dp"
@@ -131,7 +131,7 @@
 				app:layout_constraintRight_toRightOf="parent"
 				app:layout_constraintTop_toTopOf="parent"
 				app:srcCompat="@drawable/ic_add_black_24dp" />
-			
+
 			<pl.karol202.paintplus.image.layer.LayersRecyclerView
 				android:id="@+id/recycler_layers"
 				android:layout_width="0dp"
@@ -142,6 +142,6 @@
 				app:layout_constraintLeft_toLeftOf="parent"
 				app:layout_constraintRight_toRightOf="parent"
 				app:layout_constraintTop_toTopOf="parent" />
-		</android.support.constraint.ConstraintLayout>
+		</androidx.constraintlayout.widget.ConstraintLayout>
 	</LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

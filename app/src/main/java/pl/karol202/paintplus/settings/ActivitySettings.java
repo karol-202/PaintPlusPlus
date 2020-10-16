@@ -16,24 +16,24 @@
 
 package pl.karol202.paintplus.settings;
 
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import pl.karol202.paintplus.R;
 
 public class ActivitySettings extends AppCompatActivity
 {
 	public static final String KEY_VIEW_SMOOTH = "preference_view_smooth";
-	
+
 	private FragmentManager fragments;
 	private ActionBar actionBar;
-	
+
 	private Toolbar toolbar;
-	
+
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState)
 	{
@@ -41,7 +41,7 @@ public class ActivitySettings extends AppCompatActivity
 		setContentView(R.layout.activity_settings);
 		fragments = getSupportFragmentManager();
 		fragments.beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
-		
+
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
@@ -49,7 +49,7 @@ public class ActivitySettings extends AppCompatActivity
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{

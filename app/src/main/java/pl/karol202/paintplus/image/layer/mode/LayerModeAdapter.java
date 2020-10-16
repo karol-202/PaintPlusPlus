@@ -17,13 +17,13 @@
 package pl.karol202.paintplus.image.layer.mode;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import pl.karol202.paintplus.R;
 
 public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
@@ -32,20 +32,20 @@ public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
 	{
 		super(context, R.layout.spinner_item_layer_mode, LayerModeType.values());
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getItemView(position, convertView, parent, false);
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getItemView(position, convertView, parent, true);
 	}
-	
+
 	private View getItemView(int position, View convertView, ViewGroup parent, boolean dropdown)
 	{
 		View view;
@@ -56,18 +56,18 @@ public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
 		}
 		else view = convertView;
 		LayerModeType mode = getItem(position);
-		
+
 		int backgroundColor = ResourcesCompat.getColor(getContext().getResources(), R.color.layer_mode_item_background, null);
 		if(dropdown) view.setBackgroundColor(backgroundColor);
-		
+
 		TextView textView = view.findViewById(R.id.text_layer_mode_name);
 		textView.setText(mode.getName());
-		
+
 		View divider = view.findViewById(R.id.divider_layer_mode);
 		divider.setVisibility(doesShowDivider(position, mode) && dropdown ? View.VISIBLE : View.GONE);
 		return view;
 	}
-	
+
 	private boolean doesShowDivider(int position, LayerModeType mode)
 	{
 		return position != getCount() - 1 && getItem(position + 1).getCategory() != mode.getCategory();

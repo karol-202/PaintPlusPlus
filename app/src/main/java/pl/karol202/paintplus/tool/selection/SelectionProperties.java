@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.selection;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -31,26 +31,26 @@ public class SelectionProperties extends ToolProperties
 	private ToolSelection selection;
 	private SelectionShapeAdapter adapterShape;
 	private SelectionModeAdapter adapterMode;
-	
+
 	private View view;
 	private Spinner spinnerShape;
 	private Spinner spinnerMode;
 	private Button buttonSelectAll;
 	private Button buttonSelectNothing;
 	private Button buttonInvertSelection;
-	
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_selection, container, false);
 		setHasOptionsMenu(true);
-		
+
 		selection = (ToolSelection) tool;
 		selection.setSelectionListener(() -> getActivity().invalidateOptionsMenu());
 		adapterShape = new SelectionShapeAdapter(getActivity());
 		adapterMode = new SelectionModeAdapter(getActivity());
-		
+
 		spinnerShape = view.findViewById(R.id.spinner_selection_shape);
 		spinnerShape.setAdapter(adapterShape);
 		spinnerShape.setSelection(selection.getShape().ordinal());
@@ -60,14 +60,14 @@ public class SelectionProperties extends ToolProperties
 			{
 				onShapeSelected(position);
 			}
-			
+
 			@Override
 			public void onNothingSelected(AdapterView<?> parent)
 			{
-			
+
 			}
 		});
-		
+
 		spinnerMode = view.findViewById(R.id.spinner_selection_mode);
 		spinnerMode.setAdapter(adapterMode);
 		spinnerMode.setSelection(selection.getMode().ordinal());
@@ -77,32 +77,32 @@ public class SelectionProperties extends ToolProperties
 			{
 				onModeSelected(position);
 			}
-			
+
 			@Override
 			public void onNothingSelected(AdapterView<?> parent)
 			{
-			
+
 			}
 		});
-		
+
 		buttonSelectAll = view.findViewById(R.id.button_selection_all);
 		buttonSelectAll.setOnClickListener(v -> selection.selectAll());
-		
+
 		buttonSelectNothing = view.findViewById(R.id.button_selection_nothing);
 		buttonSelectNothing.setOnClickListener(v -> selection.selectNothing());
-		
+
 		buttonInvertSelection = view.findViewById(R.id.button_selection_invert);
 		buttonInvertSelection.setOnClickListener(v -> selection.invertSelection());
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		if(selection.isInEditMode()) inflater.inflate(R.menu.menu_tool_selection, menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -123,13 +123,13 @@ public class SelectionProperties extends ToolProperties
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void onShapeSelected(int position)
 	{
 		ToolSelectionShape shape = ToolSelectionShape.values()[position];
 		selection.setShape(shape);
 	}
-	
+
 	private void onModeSelected(int position)
 	{
 		ToolSelectionMode mode = ToolSelectionMode.values()[position];

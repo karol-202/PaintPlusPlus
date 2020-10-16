@@ -17,32 +17,32 @@
 package pl.karol202.paintplus.tool.drag;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 public class DragProperties extends ToolProperties
 {
 	private ToolDrag drag;
-	
+
 	private View view;
 	private CheckBox checkOneAxis;
-	
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_drag, container, false);
 		drag = (ToolDrag) tool;
-		
+
 		checkOneAxis = view.findViewById(R.id.check_drag_one_axis);
 		checkOneAxis.setChecked(drag.isOneAxis());
 		checkOneAxis.setOnCheckedChangeListener((buttonView, isChecked) -> drag.setOneAxis(isChecked));
-		
+
 		return view;
 	}
 }

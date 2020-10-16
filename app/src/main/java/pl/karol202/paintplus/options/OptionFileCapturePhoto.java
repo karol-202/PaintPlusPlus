@@ -22,9 +22,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
+import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
@@ -43,17 +43,17 @@ import static android.provider.MediaStore.EXTRA_OUTPUT;
 
 public class OptionFileCapturePhoto extends Option implements ActivityResultListener
 {
-	private static final int REQUEST_CAPTURE_PHOTO = 0;
-	
+	private static final int REQUEST_CAPTURE_PHOTO = 5;
+
 	private ActivityPaint activity;
 	private File photoFile;
-	
+
 	public OptionFileCapturePhoto(ActivityPaint activity, Image image)
 	{
 		super(activity, image);
 		this.activity = activity;
 	}
-	
+
 	@Override
 	public void execute()
 	{
@@ -64,21 +64,21 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		dialogBuilder.show();
 	}
-	
+
 	private void capturePhoto()
 	{
 		tryToCreatePhotoFile();
-		
+
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if(intent.resolveActivity(activity.getPackageManager()) == null)
 			throw new RuntimeException("Cannot resolve camera activity.");
-		
+
 		Uri photoUri = FileProvider.getUriForFile(getContext(), "pl.karol202.paintplus", photoFile);
 		intent.putExtra(EXTRA_OUTPUT, photoUri);
 		activity.registerActivityResultListener(REQUEST_CAPTURE_PHOTO, this);
 		activity.startActivityForResult(intent, REQUEST_CAPTURE_PHOTO);
 	}
-	
+
 	private void tryToCreatePhotoFile()
 	{
 		try
@@ -100,22 +100,22 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		photoFile = File.createTempFile(fileName, ".jpeg", directory);
 		return photoFile;
 	}
-	
+
 	@Override
 	public void onActivityResult(int resultCode, Intent data)
 	{
 		activity.unregisterActivityResultListener(REQUEST_CAPTURE_PHOTO);
 		if(resultCode != RESULT_OK) return;
-		
+
 		Uri uri = Uri.fromFile(photoFile);
 		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(getContext(), uri);
-		
+
 		if(fileDescriptor != null) openBitmap(fileDescriptor);
-		
+
 		UriUtils.closeFileDescriptor(fileDescriptor);
 		photoFile.delete();
 	}
-	
+
 	private void openBitmap(ParcelFileDescriptor fileDescriptor)
 	{
 		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor());

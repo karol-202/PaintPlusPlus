@@ -15,22 +15,22 @@
   ~    limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
-	<android.support.design.widget.AppBarLayout
+
+	<com.google.android.material.appbar.AppBarLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 			<include android:id="@+id/toolbar"
 				layout="@layout/toolbar" />
-	</android.support.design.widget.AppBarLayout>
-	
+	</com.google.android.material.appbar.AppBarLayout>
+
 	<include layout="@layout/toolbar_shadow"/>
-	
-	<android.support.v7.widget.RecyclerView
+
+	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/recycler_recent"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -38,14 +38,14 @@
 		android:padding="4dp"
 		android:visibility="visible"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-	
-	<android.support.constraint.ConstraintLayout
+
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:id="@+id/view_no_images"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:background="@color/no_images_background"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
-		
+
 		<ImageView
 			android:id="@+id/image_no_images"
 			android:layout_width="192dp"
@@ -56,7 +56,7 @@
 			app:layout_constraintTop_toTopOf="parent"
 			app:srcCompat="@drawable/palette_192dp"
 			tools:ignore="ContentDescription" />
-		
+
 		<TextView
 			android:id="@+id/text_no_images"
 			android:layout_width="wrap_content"
@@ -71,10 +71,10 @@
 			app:layout_constraintRight_toRightOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintVertical_bias="0.78" />
-	
-	</android.support.constraint.ConstraintLayout>
-	
-	<android.support.design.widget.FloatingActionButton
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/button_new_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -85,4 +85,4 @@
 		app:layout_anchorGravity="bottom|right"
 		app:srcCompat="@drawable/ic_add_white_24dp" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

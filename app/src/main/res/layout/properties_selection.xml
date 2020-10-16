@@ -15,11 +15,11 @@
   ~    limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="match_parent">
-	
+
 	<TextView
 		android:text="@string/selection_shape"
 		android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toTopOf="parent"
 		android:layout_marginLeft="16dp" />
-	
+
 	<Spinner
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginLeft="4dp"
 		android:layout_marginRight="16dp" />
-	
+
 	<TextView
 		android:text="@string/selection_mode"
 		android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/spinner_selection_shape"
 		android:layout_marginLeft="16dp" />
-	
+
 	<Spinner
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginRight="16dp"
 		android:layout_marginLeft="4dp" />
-	
+
 	<Button
 		android:id="@+id/button_selection_all"
 		style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -80,7 +80,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/spinner_selection_mode" />
-	
+
 	<Button
 		android:id="@+id/button_selection_nothing"
 		style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -94,7 +94,7 @@
 		app:layout_constraintHorizontal_bias="0.0"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/button_selection_all" />
-	
+
 	<Button
 		android:id="@+id/button_selection_invert"
 		style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -109,4 +109,4 @@
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/button_selection_nothing" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

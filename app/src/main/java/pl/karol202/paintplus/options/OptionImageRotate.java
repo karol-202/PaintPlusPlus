@@ -18,10 +18,10 @@ package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageRotate;
@@ -31,12 +31,12 @@ import pl.karol202.paintplus.image.Image.RotationAmount;
 public class OptionImageRotate extends Option
 {
 	private RadioGroup radioGroupAngle;
-	
+
 	public OptionImageRotate(AppContext context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	@SuppressLint("InflateParams")
 	public void execute()
@@ -48,12 +48,12 @@ public class OptionImageRotate extends Option
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, (dialog, which) -> rotate());
 		builder.setNegativeButton(R.string.cancel, null);
-		
+
 		radioGroupAngle = view.findViewById(R.id.radioGroup_angle);
-		
+
 		builder.show();
 	}
-	
+
 	private void rotate()
 	{
 		switch(radioGroupAngle.getCheckedRadioButtonId())
@@ -70,17 +70,17 @@ public class OptionImageRotate extends Option
 		default: showErrorSnackbar();
 		}
 	}
-	
+
 	private void rotate(RotationAmount rotationAmount)
 	{
 		ActionImageRotate action = new ActionImageRotate(getImage());
 		action.setRotationAmount(rotationAmount);
-		
+
 		getImage().rotate(rotationAmount);
-		
+
 		action.applyAction();
 	}
-	
+
 	private void showErrorSnackbar()
 	{
 		getAppContext().createSnackbar(R.string.message_rotation_angle, Snackbar.LENGTH_SHORT).show();

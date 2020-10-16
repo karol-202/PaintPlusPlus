@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.tool.selection;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ class SelectionShapeAdapter extends ArrayAdapter<ToolSelectionShape>
 	{
 		super(context, R.layout.spinner_item_selection_shape, ToolSelectionShape.values());
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
@@ -45,15 +45,15 @@ class SelectionShapeAdapter extends ArrayAdapter<ToolSelectionShape>
 		}
 		else view = convertView;
 		ToolSelectionShape mode = getItem(position);
-		
+
 		ImageView imageView = view.findViewById(R.id.image_selection_shape_icon);
 		imageView.setImageResource(mode.getIcon());
-		
+
 		TextView textView = view.findViewById(R.id.text_selection_shape_name);
 		textView.setText(mode.getName());
 		return view;
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{

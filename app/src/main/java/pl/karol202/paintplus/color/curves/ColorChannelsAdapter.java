@@ -17,13 +17,13 @@
 package pl.karol202.paintplus.color.curves;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 
@@ -33,7 +33,7 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 	{
 		super(context, R.layout.spinner_item_color_channel, ColorChannel.filterByType(channelType));
 	}
-	
+
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent)
@@ -45,15 +45,15 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 			view = inflater.inflate(R.layout.spinner_item_color_channel, parent, false);
 		}
 		ColorChannel channel = getItem(position);
-		
+
 		ImageView imageView = view.findViewById(R.id.image_color_channel);
 		imageView.setImageResource(channel.getIcon());
-		
+
 		TextView textView = view.findViewById(R.id.text_color_channel);
 		textView.setText(channel.getName());
 		return view;
 	}
-	
+
 	@Override
 	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{

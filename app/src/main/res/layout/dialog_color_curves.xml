@@ -20,10 +20,10 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
-	<android.support.constraint.ConstraintLayout
+
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent" android:layout_height="wrap_content">
-		
+
 		<TextView
 			android:text="@string/curves_channel_in"
 			android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
 			app:layout_constraintTop_toTopOf="@+id/spinner_curves_channel_in"
 			android:layout_marginTop="12dp"
 			android:layout_marginLeft="24dp" />
-		
+
 		<Spinner
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
 			app:layout_constraintTop_toTopOf="parent"
 			android:layout_marginRight="16dp"
 			android:layout_marginLeft="8dp" />
-		
+
 		<TextView
 			android:text="@string/curves_channel_out"
 			android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
 			app:layout_constraintTop_toTopOf="@+id/spinner_curves_channel_out"
 			android:layout_marginTop="12dp"
 			android:layout_marginLeft="24dp" />
-		
+
 		<Spinner
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/spinner_curves_channel_in"
 			app:layout_constraintLeft_toLeftOf="@+id/spinner_curves_channel_in"
 			android:layout_marginRight="16dp" />
-		
+
 		<pl.karol202.paintplus.color.curves.ColorCurvesView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
@@ -81,19 +81,20 @@
 			app:layout_constraintTop_toBottomOf="@+id/spinner_curves_channel_out"
 			android:layout_marginLeft="16dp"
 			android:layout_marginRight="8dp" />
-		
+
 		<TextView
 			android:id="@+id/text_curve_point"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
 			android:textAlignment="center"
+			android:gravity="center_horizontal"
 			android:textColor="@color/color_accent"
 			android:textStyle="normal|bold"
 			app:layout_constraintLeft_toLeftOf="parent"
 			app:layout_constraintRight_toRightOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/color_curves_view" />
-		
+
 		<Button
 			android:text="@string/preview"
 			android:layout_width="0dp"
@@ -108,7 +109,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/text_curve_point"
 			android:layout_marginLeft="16dp"
 			android:layout_marginRight="8dp" />
-		
+
 		<Button
 			android:text="@string/restore"
 			android:layout_width="0dp"
@@ -121,8 +122,8 @@
 			app:layout_constraintLeft_toLeftOf="@+id/guideline"
 			app:layout_constraintTop_toBottomOf="@+id/text_curve_point"
 			android:layout_marginRight="16dp" />
-		
-		<android.support.constraint.Guideline
+
+		<androidx.constraintlayout.widget.Guideline
 			android:layout_width="0dp"
 			android:layout_height="497dp"
 			android:id="@+id/guideline"
@@ -130,6 +131,6 @@
 			tools:layout_editor_absoluteY="0dp"
 			tools:layout_editor_absoluteX="192dp"
 			app:layout_constraintGuide_percent="0.5" />
-	
-	</android.support.constraint.ConstraintLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

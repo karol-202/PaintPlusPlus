@@ -17,11 +17,11 @@
 package pl.karol202.paintplus.activity;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 
 public interface AppContext
 {
 	Context getContext();
-	
+
 	Snackbar createSnackbar(int message, int duration);
 }

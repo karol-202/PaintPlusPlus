@@ -17,10 +17,10 @@
 package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerDrag;
@@ -31,9 +31,9 @@ public class OptionLayerDrag extends Option
 {
 	private EditText editX;
 	private EditText editY;
-	
+
 	private Layer layer;
-	
+
 	public OptionLayerDrag(AppContext context, Image image)
 	{
 		super(context, image);
@@ -51,26 +51,26 @@ public class OptionLayerDrag extends Option
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, (dialog, which) -> offsetLayer());
 		builder.setNegativeButton(R.string.cancel, null);
-		
+
 		editX = view.findViewById(R.id.edit_layer_offset_x);
 		editX.setText(String.valueOf(layer.getX()));
-		
+
 		editY = view.findViewById(R.id.edit_layer_offset_y);
 		editY.setText(String.valueOf(layer.getY()));
-		
+
 		builder.show();
 	}
-	
+
 	private void offsetLayer()
 	{
 		int x = Integer.parseInt(editX.getText().toString());
 		int y = Integer.parseInt(editY.getText().toString());
-		
+
 		ActionLayerDrag action = new ActionLayerDrag(getImage());
 		action.setLayerAndDragDelta(layer, x - layer.getX(), y - layer.getY());
-		
+
 		layer.setPosition(x, y);
-		
+
 		action.applyAction();
 	}
 }

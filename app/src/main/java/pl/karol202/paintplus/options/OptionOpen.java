@@ -20,7 +20,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.support.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.ErrorHandler;
 import pl.karol202.paintplus.R;
@@ -44,30 +44,30 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 	{
 		void onRotationNeed(int exifOrientation);
 	}
-	
+
 	private ActivityPaint activity;
 	private AsyncManager asyncManager;
-	
+
 	private Uri uri;
-	
+
 	OptionOpen(ActivityPaint activity, Image image, AsyncManager asyncManager)
 	{
 		super(activity, image);
 		this.activity = activity;
 		this.asyncManager = asyncManager;
 	}
-	
+
 	abstract int getRequestId();
-	
+
 	@Override
 	public void execute()
 	{
 		activity.registerActivityResultListener(getRequestId(), this);
-		
+
 		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
 		explorer.openFile(getRequestId());
 	}
-	
+
 	@Override
 	public void onActivityResult(int resultCode, Intent intent)
 	{
@@ -75,20 +75,20 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 		if(resultCode != RESULT_OK) return;
 		openFile(intent.getData());
 	}
-	
+
 	void openFile(Uri uri)
 	{
 		this.uri = uri;
 		new ImageLoaderDialog(getContext(), asyncManager, this).loadBitmapAndAskForScalingIfTooBig(uri);
 	}
-	
+
 	void askAboutExifRotation(RotationNeedListener rotationListener)
 	{
 		int orientation = getExifOrientation();
 		if(orientation != ExifInterface.ORIENTATION_NORMAL && orientation != ExifInterface.ORIENTATION_UNDEFINED)
 			showExifDialog(rotationListener, orientation);
 	}
-	
+
 	private int getExifOrientation()
 	{
 		try
@@ -106,7 +106,7 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 		}
 		return ExifInterface.ORIENTATION_UNDEFINED;
 	}
-	
+
 	private void showExifDialog(final RotationNeedListener rotationListener, final int exifOrientation)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -115,7 +115,7 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 		builder.setNegativeButton(R.string.no, null);
 		builder.show();
 	}
-	
+
 	Uri getUri()
 	{
 		return uri;
