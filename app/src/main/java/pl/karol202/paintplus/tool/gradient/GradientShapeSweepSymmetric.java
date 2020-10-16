@@ -74,13 +74,7 @@ class GradientShapeSweepSymmetric extends GradientShape
 		}
 		
 		List<Map.Entry<Float, Integer>> entries = new ArrayList<>(gradient.entrySet());
-		Collections.sort(entries, new Comparator<Map.Entry<Float, Integer>>() {
-			@Override
-			public int compare(Map.Entry<Float, Integer> e1, Map.Entry<Float, Integer> e2)
-			{
-				return Float.compare(e1.getKey(), e2.getKey());
-			}
-		});
+		Collections.sort(entries, (e1, e2) -> Float.compare(e1.getKey(), e2.getKey()));
 		int[] newColors = new int[gradient.size()];
 		float[] newPositions = new float[gradient.size()];
 		int i = 0;

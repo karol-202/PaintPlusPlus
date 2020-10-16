@@ -21,18 +21,18 @@ class ChannelXYSet
 	private ColorChannel channelX;
 	private ColorChannel channelY;
 	
-	public ChannelXYSet(ColorChannel channelX, ColorChannel channelY)
+	ChannelXYSet(ColorChannel channelX, ColorChannel channelY)
 	{
 		this.channelX = channelX;
 		this.channelY = channelY;
 	}
 	
-	public ColorChannel getChannelX()
+	ColorChannel getChannelX()
 	{
 		return channelX;
 	}
 	
-	public ColorChannel getChannelY()
+	ColorChannel getChannelY()
 	{
 		return channelY;
 	}

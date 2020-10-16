@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.image.layer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -34,7 +35,8 @@ class LayerInformationDialog
 		this.context = context;
 		this.layer = layer;
 	}
-	
+
+	@SuppressLint("InflateParams")
 	void show()
 	{
 		LayoutInflater inflater = LayoutInflater.from(context);
@@ -60,7 +62,7 @@ class LayerInformationDialog
 		textY.setText(String.valueOf(layer.getY()));
 		
 		TextView textOpacity = view.findViewById(R.id.text_layer_info_opacity_value);
-		textOpacity.setText(String.format("%d%%", (int) (layer.getOpacity() * 100)));
+		textOpacity.setText(context.getString(R.string.opacity, (int) (layer.getOpacity() * 100)));
 		
 		TextView textMode = view.findViewById(R.id.text_layer_info_mode_value);
 		LayerModeType type = LayerModeType.getTypeOfMode(layer.getMode());

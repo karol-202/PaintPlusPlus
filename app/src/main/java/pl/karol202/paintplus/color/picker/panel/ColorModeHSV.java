@@ -20,7 +20,7 @@ import android.graphics.Color;
 import pl.karol202.paintplus.color.HSVToRGB;
 import pl.karol202.paintplus.color.RGBToHSV;
 
-class ColorModeHSV extends ColorMode
+class ColorModeHSV implements ColorMode
 {
 	private ColorChannel channelHue;
 	private ColorChannel channelSaturation;
@@ -40,7 +40,7 @@ class ColorModeHSV extends ColorMode
 	}
 	
 	@Override
-	ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel)
+	public ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel)
 	{
 		if(mainChannel == channelHue) return new ChannelXYSet(channelValue, channelSaturation);
 		else if(mainChannel == channelSaturation) return new ChannelXYSet(channelValue, channelHue);
@@ -49,20 +49,20 @@ class ColorModeHSV extends ColorMode
 	}
 	
 	@Override
-	ColorChannel[] getChannels()
+	public ColorChannel[] getChannels()
 	{
 		return new ColorChannel[] { channelHue, channelSaturation, channelValue };
 	}
 	
 	@Override
-	int getColor()
+	public int getColor()
 	{
 		hsvToRGB.setColor(channelHue.getValue(), channelSaturation.getValue(), channelValue.getValue());
 		return Color.rgb(hsvToRGB.getR(), hsvToRGB.getG(), hsvToRGB.getB());
 	}
 	
 	@Override
-	void setColor(int color)
+	public void setColor(int color)
 	{
 		rgbToHSV.setColor(Color.red(color), Color.green(color), Color.blue(color));
 		channelHue.setValue(rgbToHSV.getH());

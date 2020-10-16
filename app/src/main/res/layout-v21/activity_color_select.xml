@@ -20,19 +20,19 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
+
 	<android.support.design.widget.AppBarLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:elevation="4dp">
-		
+
 		<android.support.v7.widget.Toolbar
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:background="@color/color_primary"
 			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-		
+
 		<android.support.design.widget.TabLayout
 			android:id="@+id/colors_tab_layout"
 			android:layout_width="match_parent"
@@ -40,25 +40,25 @@
 			app:tabMode="fixed"
 			app:tabGravity="fill"/>
 	</android.support.design.widget.AppBarLayout>
-	
+
 	<android.support.v4.view.ViewPager
 		android:id="@+id/colors_view_pager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-	
+
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		app:layout_behavior="pl.karol202.paintplus.color.picker.BottomBarBehaviour">
-		
+
 		<View
 			android:id="@+id/bottom_bar_shadow"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/bottom_bar_shadow_height"
 			android:background="@drawable/bottom_bar_shadow" />
-		
+
 		<android.support.design.widget.BottomNavigationView
 			android:id="@+id/bottom_bar_color_picker"
 			android:layout_width="match_parent"
@@ -66,7 +66,7 @@
 			app:itemBackground="@color/bottom_bar_background"
 			app:itemIconTint="@color/color_mode_item_tint"
 			app:itemTextColor="@color/color_mode_item_tint"
-			app:menu="@menu/menu_color_picker" />
+			app:menu="@menu/menu_color_picker"/>
 	</LinearLayout>
 	
 </android.support.design.widget.CoordinatorLayout>

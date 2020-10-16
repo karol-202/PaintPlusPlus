@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.color.picker.panel;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class ColorPanelFragment extends ColorPickerFragment
 	private Spinner spinnerChannel;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		modeRGB = new ColorModeRGB();
@@ -57,22 +58,12 @@ public class ColorPanelFragment extends ColorPickerFragment
 		colorView.setNewColor(getCurrentColor());
 		
 		squarePanel = view.findViewById(R.id.color_picker_square_panel);
-		squarePanel.setOnColorPanelUpdateListener(new ColorPickerSquarePanel.OnColorPanelUpdateListener() {
-			@Override
-			public void onChannelsValueChanged()
-			{
-				updateColor();
-			}
-		});
+		squarePanel.setOnColorPanelUpdateListener(this::updateColor);
 		
 		bar = view.findViewById(R.id.color_picker_bar);
-		bar.setOnColorBarUpdateListener(new ColorPickerBar.OnColorBarUpdateListener() {
-			@Override
-			public void onChannelValueChanged()
-			{
-				updateColor();
-				squarePanel.update();
-			}
+		bar.setOnColorBarUpdateListener(() -> {
+			updateColor();
+			squarePanel.update();
 		});
 		
 		spinnerChannel = view.findViewById(R.id.spinner_color_picker_channel);

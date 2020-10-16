@@ -18,17 +18,15 @@ package pl.karol202.paintplus.tool.gradient;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.color.picker.ActivityColorSelect;
 import pl.karol202.paintplus.util.ImageToggleButton;
 
@@ -71,13 +69,7 @@ class GradientDialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setTitle(R.string.dialog_gradient);
 		builder.setView(view);
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				onOKClick();
-			}
-		});
+		builder.setPositiveButton(R.string.ok, (dialog, which) -> onOKClick());
 		builder.setNegativeButton(R.string.cancel, null);
 		
 		gradientView = view.findViewById(R.id.gradient_view);
@@ -106,33 +98,15 @@ class GradientDialog
 		textGradientPosition.setText("");
 		
 		buttonAdd = view.findViewById(R.id.button_add_gradient_point);
-		buttonAdd.setOnCheckedChangeListener(new ImageToggleButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(ImageToggleButton button, boolean checked)
-			{
-				onAddButtonCheckedChange(checked);
-			}
-		});
+		buttonAdd.setOnCheckedChangeListener((button, checked) -> onAddButtonCheckedChange(checked));
 		
 		buttonDelete = view.findViewById(R.id.button_delete_gradient_point);
-		buttonDelete.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				onDeleteButtonClick();
-			}
-		});
+		buttonDelete.setOnClickListener(v -> onDeleteButtonClick());
 		buttonDelete.setEnabled(false);
 		
 		colorPreviewView = view.findViewById(R.id.gradient_color);
 		colorPreviewView.setColor(gradientView.getSelectedColor());
-		colorPreviewView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				onColorViewClick();
-			}
-		});
+		colorPreviewView.setOnClickListener(v -> onColorViewClick());
 		
 		builder.show();
 	}
@@ -187,13 +161,7 @@ class GradientDialog
 		Intent intent = new Intent(activity, ActivityColorSelect.class);
 		intent.putExtra(ActivityColorSelect.ALPHA_KEY, true);
 		intent.putExtra(ActivityColorSelect.COLOR_KEY, gradientView.getSelectedColor());
-		activity.registerActivityResultListener(REQUEST_CODE, new ActivityResultListener() {
-			@Override
-			public void onActivityResult(int resultCode, Intent data)
-			{
-				GradientDialog.this.onActivityResult(data);
-			}
-		});
+		activity.registerActivityResultListener(REQUEST_CODE, (resultCode, data) -> GradientDialog.this.onActivityResult(data));
 		activity.startActivityForResult(intent, REQUEST_CODE);
 	}
 	

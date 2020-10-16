@@ -18,7 +18,7 @@ package pl.karol202.paintplus.color.picker.panel;
 
 import android.graphics.Color;
 
-class ColorModeRGB extends ColorMode
+class ColorModeRGB implements ColorMode
 {
 	private ColorChannel channelRed;
 	private ColorChannel channelGreen;
@@ -32,7 +32,7 @@ class ColorModeRGB extends ColorMode
 	}
 	
 	@Override
-	ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel)
+	public ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel)
 	{
 		if(mainChannel == channelRed) return new ChannelXYSet(channelBlue, channelGreen);
 		else if(mainChannel == channelGreen) return new ChannelXYSet(channelBlue, channelRed);
@@ -41,19 +41,19 @@ class ColorModeRGB extends ColorMode
 	}
 	
 	@Override
-	ColorChannel[] getChannels()
+	public ColorChannel[] getChannels()
 	{
 		return new ColorChannel[] { channelRed, channelGreen, channelBlue };
 	}
 	
 	@Override
-	int getColor()
+	public int getColor()
 	{
 		return Color.rgb(channelRed.getValue(), channelGreen.getValue(), channelBlue.getValue());
 	}
 	
 	@Override
-	void setColor(int color)
+	public void setColor(int color)
 	{
 		channelRed.setValue(Color.red(color));
 		channelGreen.setValue(Color.green(color));

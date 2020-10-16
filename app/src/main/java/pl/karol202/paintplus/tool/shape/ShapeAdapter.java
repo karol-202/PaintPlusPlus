@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.shape;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,9 @@ class ShapeAdapter extends ArrayAdapter<Shape>
 		super(context, R.layout.spinner_item_shape, shapes);
 	}
 	
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		View view;
 		if(convertView == null)
@@ -46,16 +48,16 @@ class ShapeAdapter extends ArrayAdapter<Shape>
 		else view = convertView;
 		Shape shape = getItem(position);
 		
-		ImageView imageView = (ImageView) view.findViewById(R.id.image_shape_icon);
+		ImageView imageView = view.findViewById(R.id.image_shape_icon);
 		imageView.setImageResource(shape.getIcon());
 		
-		TextView textView = (TextView) view.findViewById(R.id.text_shape_name);
+		TextView textView = view.findViewById(R.id.text_shape_name);
 		textView.setText(shape.getName());
 		return view;
 	}
 	
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
+	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getView(position, convertView, parent);
 	}

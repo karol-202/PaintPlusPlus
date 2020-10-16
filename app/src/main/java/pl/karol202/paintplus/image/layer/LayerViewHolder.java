@@ -19,7 +19,6 @@ package pl.karol202.paintplus.image.layer;
 import android.animation.Animator.AnimatorListener;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
@@ -289,19 +288,14 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		final EditText editTextName = dialogView.findViewById(R.id.edit_layer_name);
 		editTextName.setText(layer.getName());
 		
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				ActionLayerNameChange action = new ActionLayerNameChange(adapter.getImage());
-				action.setLayer(layer);
-				
-				layer.setName(editTextName.getText().toString());
-				adapter.notifyDataSetChanged();
-				
-				action.applyAction();
-			}
+		builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+			ActionLayerNameChange action = new ActionLayerNameChange(adapter.getImage());
+			action.setLayer(layer);
+
+			layer.setName(editTextName.getText().toString());
+			adapter.notifyDataSetChanged();
+
+			action.applyAction();
 		});
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();
@@ -312,19 +306,14 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		String message = adapter.getContext().getString(R.string.dialog_layer_delete, layer.getName());
 		AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
 		builder.setMessage(message);
-		builder.setPositiveButton(R.string.layer_delete, new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				ActionLayerDelete action = new ActionLayerDelete(adapter.getImage());
-				action.setLayerBeforeDeleting(layer);
-				
-				adapter.getImage().deleteLayer(layer);
-				adapter.notifyDataSetChanged();
-				
-				action.applyAction();
-			}
+		builder.setPositiveButton(R.string.layer_delete, (dialog, which) -> {
+			ActionLayerDelete action = new ActionLayerDelete(adapter.getImage());
+			action.setLayerBeforeDeleting(layer);
+
+			adapter.getImage().deleteLayer(layer);
+			adapter.notifyDataSetChanged();
+
+			action.applyAction();
 		});
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();

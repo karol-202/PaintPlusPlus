@@ -80,7 +80,7 @@ class LayerHandle implements Animator.AnimatorListener
 		point.offset(view.getX(), view.getY());
 		
 		ViewParent parent = view.getParent();
-		if(!(parent instanceof View)) throw new RuntimeException("Unexcpected end of hierarchy.");
+		if(!(parent instanceof View)) throw new RuntimeException("Unexpected end of hierarchy.");
 		View parentView = (View) parent;
 		return findPointInMainContainer(parentView, point);
 	}

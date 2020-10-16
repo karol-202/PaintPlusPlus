@@ -27,12 +27,12 @@ abstract class MarkerAdapterSimple implements MarkerAdapter
 	private ToolMarker marker;
 	private ColorsSet colors;
 	
-	Paint pathPaint;
+	private Paint pathPaint;
 	Path path;
-	Paint ovalPaint;
-	RectF oval;
+	private Paint ovalPaint;
+	private RectF oval;
 	
-	boolean pathCreated;
+	private boolean pathCreated;
 	
 	MarkerAdapterSimple(ToolMarker marker)
 	{

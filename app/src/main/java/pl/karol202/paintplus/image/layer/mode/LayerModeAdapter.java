@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.image.layer.mode;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,14 +33,15 @@ public class LayerModeAdapter extends ArrayAdapter<LayerModeType>
 		super(context, R.layout.spinner_item_layer_mode, LayerModeType.values());
 	}
 	
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getItemView(position, convertView, parent, false);
 	}
 	
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
+	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getItemView(position, convertView, parent, true);
 	}

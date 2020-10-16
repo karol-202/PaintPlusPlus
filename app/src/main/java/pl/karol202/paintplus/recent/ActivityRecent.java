@@ -59,14 +59,14 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 		}
 		
 		@Override
-		public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-		                      RecyclerView.ViewHolder target)
+		public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+		                      @NonNull RecyclerView.ViewHolder target)
 		{
 			return false;
 		}
 		
 		@Override
-		public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+		public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction)
 		{
 			RecentAdapter.ViewHolder holder = (RecentAdapter.ViewHolder) viewHolder;
 			int imageId = holder.getAdapterPosition();
@@ -96,13 +96,7 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 		ImageLoader.setTemporaryFileLocation(getExternalFilesDir(Environment.DIRECTORY_PICTURES));
 		
 		loader = new RecentLoader(this);
-		adapter = new RecentAdapter(this, loader.getImages(), new OnImageSelectListener() {
-			@Override
-			public void onImageSelected(RecentImage image)
-			{
-				editImage(image.getUri());
-			}
-		});
+		adapter = new RecentAdapter(this, loader.getImages(), image -> editImage(image.getUri()));
 		animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 		permissionListeners = new HashMap<>();
 		
@@ -118,13 +112,7 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 		attachSwipingFeature();
 		
 		buttonNewImage = findViewById(R.id.button_new_image);
-		buttonNewImage.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				editImage(null);
-			}
-		});
+		buttonNewImage.setOnClickListener(v -> editImage(null));
 	}
 	
 	private void initFirebaseIfNotDebug()
@@ -177,15 +165,10 @@ public class ActivityRecent extends AppCompatActivity implements PermissionGrant
 	
 	private void selectImageToOpen()
 	{
-		new PermissionRequest<>(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener()
-		{
-			@Override
-			public void onPermissionGrant()
-			{
-				Intent intent = new Intent(ActivityRecent.this, ActivityPaint.class);
-				intent.putExtra(ActivityPaint.OPEN_KEY, true);
-				startActivity(intent);
-			}
+		new PermissionRequest<>(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, () -> {
+			Intent intent = new Intent(ActivityRecent.this, ActivityPaint.class);
+			intent.putExtra(ActivityPaint.OPEN_KEY, true);
+			startActivity(intent);
 		});
 	}
 	

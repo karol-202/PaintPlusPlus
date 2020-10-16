@@ -22,13 +22,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import pl.karol202.paintplus.ErrorHandler;
+import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class ColorCurvesView extends View
 {
@@ -355,7 +355,7 @@ public class ColorCurvesView extends View
 		{
 			RectF rect = points.get(i);
 			Point point = new Point((int) rect.centerX(), (int) rect.centerY());
-			float distance = distance(point, oldTouchPoint);
+			float distance = Utils.distance(point, oldTouchPoint);
 			if((nearest == null || distance < shortestDistance) && distance < MAX_TOUCH_DISTANCE_PX)
 			{
 				nearest = point;
@@ -447,11 +447,6 @@ public class ColorCurvesView extends View
 		return !shouldRemove;
 	}
 	
-	private float distance(Point first, Point second)
-	{
-		return (float) Math.sqrt(Math.pow(first.x - second.x, 2) + Math.pow(first.y - second.y, 2));
-	}
-	
 	private Point curveToScreen(Point point)
 	{
 		Point newPoint = new Point(point);
@@ -497,7 +492,7 @@ public class ColorCurvesView extends View
 	public String getInfoText()
 	{
 		if(newDraggedCurvePoint == null || draggedPointRemoved) return "";
-		return String.format(Locale.US, "X: %d   Y: %d", newDraggedCurvePoint.x, newDraggedCurvePoint.y);
+		return getContext().getString(R.string.color_curve_point_info, newDraggedCurvePoint.x, newDraggedCurvePoint.y);
 	}
 	
 	private ColorCurve getCurrentCurve()

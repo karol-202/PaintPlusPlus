@@ -97,7 +97,7 @@ class RecentLoader
 		else return file.exists() ? file : null;
 	}
 	
-	private void createParser(InputStream inputStream) throws XmlPullParserException, IOException, ParseException
+	private void createParser(InputStream inputStream) throws XmlPullParserException, IOException
 	{
 		parser = Xml.newPullParser();
 		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);

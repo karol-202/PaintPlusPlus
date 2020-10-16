@@ -38,10 +38,10 @@ public class Utils
 	{
 		return Math.min(Math.max(value, min), max);
 	}
-	
-	public static int roundAwayFromZero(float value)
+
+	public static float distance(Point first, Point second)
 	{
-		return (int) (value > 0 ? Math.ceil(value) : Math.floor(value));
+		return (float) Math.sqrt(Math.pow(first.x - second.x, 2) + Math.pow(first.y - second.y, 2));
 	}
 	
 	public static float dpToPixels(Context context, float dp)

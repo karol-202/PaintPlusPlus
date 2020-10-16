@@ -26,7 +26,6 @@ public class GradientPreviewView extends View
 {
 	private Gradient gradient;
 	
-	private Rect checkerboardRect;
 	private Paint checkerboardPaint;
 	
 	private Paint paint;

@@ -17,15 +17,14 @@
 package pl.karol202.paintplus.tool.shape.polygon;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.shape.Join;
@@ -54,7 +53,7 @@ public class PolygonProperties extends ShapeProperties
 	private Spinner spinnerJoin;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_polygon, container, false);
@@ -65,21 +64,13 @@ public class PolygonProperties extends ShapeProperties
 		adapter = new JoinAdapter(getActivity());
 		
 		buttonMinusSides = view.findViewById(R.id.button_minus_polygon_sides);
-		buttonMinusSides.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				if(getSides() > MIN_SIDES) editSides.setText(String.valueOf(getSides() - 1));
-			}
+		buttonMinusSides.setOnClickListener(v -> {
+			if(getSides() > MIN_SIDES) editSides.setText(String.valueOf(getSides() - 1));
 		});
 		
 		buttonPlusSides = view.findViewById(R.id.button_plus_polygon_sides);
-		buttonPlusSides.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				if(getSides() < MAX_SIDES) editSides.setText(String.valueOf(getSides() + 1));
-			}
+		buttonPlusSides.setOnClickListener(v -> {
+			if(getSides() < MAX_SIDES) editSides.setText(String.valueOf(getSides() + 1));
 		});
 		
 		editLayoutSides = view.findViewById(R.id.edit_layout_polygon_sides);
@@ -111,13 +102,7 @@ public class PolygonProperties extends ShapeProperties
 		
 		checkFill = view.findViewById(R.id.check_polygon_fill);
 		checkFill.setChecked(polygon.isFill());
-		checkFill.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-			{
-				polygon.setFill(isChecked);
-			}
-		});
+		checkFill.setOnCheckedChangeListener((buttonView, isChecked) -> polygon.setFill(isChecked));
 		
 		seekBarWidth = view.findViewById(R.id.seek_polygon_width);
 		seekBarWidth.setProgress(polygon.getLineWidth() - 1);

@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.gradient;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,9 @@ public class GradientRepeatabilityAdapter extends ArrayAdapter<GradientRepeatabi
 		super(context, R.layout.spinner_item_gradient_repeatability, GradientRepeatability.values());
 	}
 	
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		View view;
 		if(convertView == null)
@@ -44,16 +46,16 @@ public class GradientRepeatabilityAdapter extends ArrayAdapter<GradientRepeatabi
 		else view = convertView;
 		GradientRepeatability shape = getItem(position);
 		
-		ImageView imageIcon = (ImageView) view.findViewById(R.id.image_gradient_repeatability_icon);
+		ImageView imageIcon = view.findViewById(R.id.image_gradient_repeatability_icon);
 		imageIcon.setImageResource(shape.getIcon());
 		
-		TextView textName = (TextView) view.findViewById(R.id.text_gradient_repeatability_name);
+		TextView textName = view.findViewById(R.id.text_gradient_repeatability_name);
 		textName.setText(shape.getName());
 		return view;
 	}
 	
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
+	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getView(position, convertView, parent);
 	}

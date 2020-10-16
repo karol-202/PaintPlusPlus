@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.color;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -70,7 +71,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.colors, container, false);
 		image = activityPaint.getImage();

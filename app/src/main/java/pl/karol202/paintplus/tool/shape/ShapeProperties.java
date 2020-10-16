@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.tool.shape;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class ShapeProperties extends Fragment
 	protected Shape shape;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		Fragment parent = getParentFragment();
 		if(!(parent instanceof ShapeToolProperties))

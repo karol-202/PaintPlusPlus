@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.options;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
@@ -72,7 +73,8 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 		this.oldBitmap = Bitmap.createBitmap(layer.getBitmap());
 		this.manipulator = new ColorsCurveManipulator();
 	}
-	
+
+	@SuppressLint("InflateParams")
 	@Override
 	public void execute()
 	{

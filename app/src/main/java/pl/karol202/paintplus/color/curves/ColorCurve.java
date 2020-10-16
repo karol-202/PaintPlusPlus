@@ -21,7 +21,6 @@ import pl.karol202.paintplus.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class ColorCurve
 {
@@ -85,16 +84,7 @@ public class ColorCurve
 		sorted = true;
 		
 		Point[] array = convertToArray();
-		Arrays.sort(array, new Comparator<Point>()
-		{
-			@Override
-			public int compare(Point p1, Point p2)
-			{
-				if(p1.x > p2.x) return 1;
-				else if(p1.x < p2.x) return -1;
-				else return 0;
-			}
-		});
+		Arrays.sort(array, (p1, p2) -> Integer.compare(p1.x, p2.x));
 		points = new ArrayList<>(Arrays.asList(array));
 	}
 	
@@ -121,7 +111,7 @@ public class ColorCurve
 	{
 		ColorChannel inChannel = channels.getIn();
 		byte[] map = new byte[inChannel.getMaxValue() + 1];
-		for(int i = 0; i < inChannel.getMaxValue() + 1; i++)
+		for(int i = 0; i < map.length; i++)
 			map[i] = (byte) Math.round(evaluate(i));
 		return map;
 	}
@@ -130,7 +120,7 @@ public class ColorCurve
 	{
 		ColorChannel inChannel = channels.getIn();
 		short[] map = new short[inChannel.getMaxValue() + 1];
-		for(int i = 0; i < inChannel.getMaxValue() + 1; i++)
+		for(int i = 0; i < map.length; i++)
 			map[i] = (short) Math.round(evaluate(i));
 		return map;
 	}

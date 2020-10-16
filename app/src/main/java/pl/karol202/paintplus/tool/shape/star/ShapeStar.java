@@ -156,12 +156,9 @@ public class ShapeStar extends Shape
 	
 	private class DraggingInitial extends Dragging
 	{
-		private float ratio;
-		
 		DraggingInitial(Point draggingStart)
 		{
 			super(draggingStart);
-			ratio = getOuterToInnerRatio();
 		}
 		
 		@Override

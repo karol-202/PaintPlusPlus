@@ -63,6 +63,7 @@ public class UriUtils
 	
 	public static void deleteDocument(Context context, Uri uri)
 	{
-		DocumentFile.fromSingleUri(context, uri).delete();
+		DocumentFile file = DocumentFile.fromSingleUri(context, uri);
+		if(file != null) file.delete();
 	}
 }

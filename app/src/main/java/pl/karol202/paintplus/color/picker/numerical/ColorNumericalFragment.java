@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.color.picker.numerical;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -47,7 +48,7 @@ public class ColorNumericalFragment extends ColorPickerFragment
 	private EditText editHex;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.color_picker_numerical, container, false);

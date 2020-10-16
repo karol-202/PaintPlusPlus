@@ -18,7 +18,6 @@ package pl.karol202.paintplus.file;
 
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import pl.karol202.paintplus.R;
@@ -180,7 +179,7 @@ public interface BitmapSaveFormat
 		private static final boolean DEFAULT_DITHERING = false;
 		
 		private boolean dithering;
-		
+
 		private CheckBox checkBoxDithering;
 		
 		GIFSaveFormat()
@@ -211,14 +210,7 @@ public interface BitmapSaveFormat
 		{
 			checkBoxDithering = view.findViewById(R.id.check_format_gif_dithering);
 			checkBoxDithering.setChecked(dithering);
-			checkBoxDithering.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-			{
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-				{
-					GIFSaveFormat.this.dithering = isChecked;
-				}
-			});
+			checkBoxDithering.setOnCheckedChangeListener((buttonView, isChecked) -> dithering = isChecked);
 		}
 		
 		boolean getDithering()

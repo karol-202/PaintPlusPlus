@@ -18,7 +18,6 @@ package pl.karol202.paintplus.options;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +46,7 @@ public class OptionImageRotate extends Option
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(R.string.action_rotate_image);
 		builder.setView(view);
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				rotate();
-			}
-		});
+		builder.setPositiveButton(R.string.ok, (dialog, which) -> rotate());
 		builder.setNegativeButton(R.string.cancel, null);
 		
 		radioGroupAngle = view.findViewById(R.id.radioGroup_angle);

@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO This pager adapter handles fragments in illegal way. Use instantiateItem() and destroyItem() instead.
 public class ColorsPagerAdapter extends FragmentPagerAdapter
 {
 	private class TabFragment

@@ -18,7 +18,7 @@ package pl.karol202.paintplus.options;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.support.design.widget.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
@@ -59,13 +59,7 @@ public class OptionLayerOpen extends OptionOpen
 		else
 		{
 			createLayerAddHistoryAction(layer);
-			askAboutExifRotation(new RotationNeedListener() {
-				@Override
-				public void onRotationNeed(int exifOrientation)
-				{
-					rotateLayer(layer, exifOrientation);
-				}
-			});
+			askAboutExifRotation(exifOrientation -> rotateLayer(layer, exifOrientation));
 		}
 	}
 	

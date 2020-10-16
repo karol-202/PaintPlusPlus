@@ -16,11 +16,10 @@
 
 package pl.karol202.paintplus.file.explorer;
 
-import android.net.Uri;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,14 +99,7 @@ public class ActivityFileSave extends ActivityFileChoose implements View.OnClick
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.dialog_replace_file);
 		builder.setMessage(R.string.replace_file_text);
-		builder.setPositiveButton(R.string.replace, new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				saveFile();
-			}
-		});
+		builder.setPositiveButton(R.string.replace, (dialog, which) -> saveFile());
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();
 	}

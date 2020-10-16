@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.color.picker.panel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.support.v4.content.ContextCompat;
@@ -104,6 +105,7 @@ public class ColorPickerBar extends View
 	
 	private void initTriangles(Context context)
 	{
+		//TODO Paths to xml
 		TRIANGLE_OUTER_PATH.moveTo(0, -8);
 		TRIANGLE_OUTER_PATH.lineTo(16, 0);
 		TRIANGLE_OUTER_PATH.lineTo(0, 8);
@@ -183,6 +185,7 @@ public class ColorPickerBar extends View
 		indicatorInnerPath.offset(0, yOffset);
 	}
 	
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{

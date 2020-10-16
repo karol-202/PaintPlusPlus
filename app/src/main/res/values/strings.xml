@@ -21,7 +21,7 @@
 	<string name="activity_file_open">Open file</string>
 	<string name="activity_file_save">Save file</string>
 	<string name="activity_settings">Settings</string>
-	
+
 	<string name="action_drawer_open">Open tool pane</string>
 	<string name="action_drawer_close">Close tool pane</string>
 	<string name="properties">Properties</string>
@@ -48,42 +48,42 @@
 	<string name="dialog_save_message">Saving…</string>
 	<string name="dialog_set_zoom">Set zoom</string>
 	<string name="dialog_gradient">Gradient</string>
-	
+
 	<string name="preference_jpg_quality">JPG save quality</string>
 	<string name="preference_jpg_quality_dialog">JPG save quality</string>
 	<string name="preference_view_smooth">Smooth view</string>
 	<string name="preference_view_smooth_summary">Smoothing zoomed images</string>
 	<string name="preference_color_mode">Color selection mode</string>
 	<string name="preference_color_mode_dialog">Color selection mode</string>
-	
+
 	<string name="action_layers">Layers</string>
 	<string name="action_tool">Tool</string>
-	
+
 	<string name="action_file">File</string>
 	<string name="action_new_image">New image</string>
 	<string name="action_capture_photo">Capture photo</string>
 	<string name="action_open_image">Open image</string>
 	<string name="action_save_image">Save image</string>
 	<string name="action_save_image_as">Save image as</string>
-	
+
 	<string name="action_edit">Edit</string>
 	<string name="action_cut">Cut</string>
 	<string name="action_copy">Copy</string>
 	<string name="action_paste">Paste</string>
-	
+
 	<string name="action_view">View</string>
 	<string name="action_set_zoom">Set zoom</string>
 	<string name="action_zoom_default">Default zoom</string>
 	<string name="action_image_center">Image center</string>
 	<string name="action_grid">Grid</string>
 	<string name="action_snap_to_grid">Snap to grid</string>
-	
+
 	<string name="action_image">Image</string>
 	<string name="action_resize_image">Resize image</string>
 	<string name="action_scale_image">Scale image</string>
 	<string name="action_flip_image">Flip image</string>
 	<string name="action_rotate_image">Rotate image</string>
-	
+
 	<string name="action_layer">Layer</string>
 	<string name="action_new_layer">New layer</string>
 	<string name="action_open_layer">Open layer</string>
@@ -92,18 +92,18 @@
 	<string name="action_scale_layer">Scale layer</string>
 	<string name="action_flip_layer">Flip layer</string>
 	<string name="action_rotate_layer">Rotate layer</string>
-	
+
 	<string name="action_selection">Selection</string>
 	<string name="action_select_all">Select all</string>
 	<string name="action_select_nothing">Remove selection</string>
 	<string name="action_revert_selection">Invert selection</string>
-	
+
 	<string name="action_colors">Colors</string>
 	<string name="action_colors_invert">Invert colors</string>
 	<string name="action_colors_brightness">Brightness</string>
 	<string name="action_color_curves_rgb">RGB color curves</string>
 	<string name="action_color_curves_hsv">HSV color curves</string>
-	
+
 	<string name="action_settings">Settings</string>
 
 	<string name="tool_pan">Pan</string>
@@ -115,33 +115,33 @@
 	<string name="tool_color_pick">Color picker</string>
 	<string name="tool_drag">Layer drag</string>
 	<string name="tool_rubber">Rubber</string>
-	
+
 	<string name="shape_line">Line</string>
 	<string name="shape_circle">Circle</string>
 	<string name="shape_polygon">Polygon</string>
-	
+
 	<string name="line_cap_round">Round</string>
 	<string name="line_cap_square">Square</string>
 	<string name="line_cap_butt">Stub</string>
-	
+
 	<string name="selection_mode_new">Replace</string>
 	<string name="selection_mode_add">Add</string>
 	<string name="selection_mode_subtract">Subtract</string>
 	<string name="selection_mode_multiply">Intersect</string>
-	
+
 	<string name="selection_shape_rectangle">Rectangle</string>
 	<string name="selection_shape_oval">Oval</string>
-	
+
 	<string name="layer_properties">Properties</string>
 	<string name="layer_change_name">Change name</string>
 	<string name="layer_duplicate">Duplicate</string>
 	<string name="layer_join">Join to below</string>
 	<string name="layer_delete">Delete</string>
-	
+
 	<string name="layer_mode_standard">Standard</string>
 	<string name="layer_mode_add">Add</string>
 	<string name="layer_mode_multiply">Multiply</string>
-	
+
 	<string name="choice_of_tool">Tool choice</string>
 	<string name="tool_size">Size</string>
 	<string name="image_x">X</string>
@@ -358,4 +358,8 @@
 	<string name="join_bevel">Bevel</string>
 	<string name="join_round">Round</string>
 	<string name="polygon_join">Join</string>
+	<string name="color_curve_point_info"
+		translatable="false">X: %d Y: %d</string>
+	<string name="opacity"
+		translatable="false">%d%%</string>
 </resources>

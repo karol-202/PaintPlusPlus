@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.shape.line;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,9 @@ public class CapAdapter extends ArrayAdapter<Cap>
 		super(context, R.layout.spinner_item_cap, Cap.values());
 	}
 	
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		View view;
 		if(convertView == null)
@@ -53,7 +55,7 @@ public class CapAdapter extends ArrayAdapter<Cap>
 	}
 	
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
+	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getView(position, convertView, parent);
 	}

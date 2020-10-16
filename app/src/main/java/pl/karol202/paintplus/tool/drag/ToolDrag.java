@@ -182,12 +182,12 @@ public class ToolDrag extends StandardTool
 	@Override
 	public void onTopDraw(Canvas canvas) { }
 	
-	public boolean isOneAxis()
+	boolean isOneAxis()
 	{
 		return oneAxis;
 	}
 	
-	public void setOneAxis(boolean oneAxis)
+	void setOneAxis(boolean oneAxis)
 	{
 		this.oneAxis = oneAxis;
 	}

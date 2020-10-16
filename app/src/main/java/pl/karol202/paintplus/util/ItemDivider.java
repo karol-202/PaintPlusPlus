@@ -19,6 +19,7 @@ package pl.karol202.paintplus.util;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -34,7 +35,7 @@ public class ItemDivider extends RecyclerView.ItemDecoration
 	}
 	
 	@Override
-	public void onDrawOver(Canvas canvas, RecyclerView parent, RecyclerView.State state)
+	public void onDrawOver(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state)
 	{
 		int left = parent.getPaddingLeft();
 		int right = parent.getWidth() - parent.getPaddingRight();

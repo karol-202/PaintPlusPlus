@@ -16,13 +16,13 @@
 
 package pl.karol202.paintplus.color.picker.panel;
 
-abstract class ColorMode
+interface ColorMode
 {
-	abstract ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel);
+	ChannelXYSet getChannelXYSetForMainChannel(ColorChannel mainChannel);
 	
-	abstract ColorChannel[] getChannels();
+	ColorChannel[] getChannels();
 	
-	abstract int getColor();
+	int getColor();
 	
-	abstract void setColor(int color);
+	void setColor(int color);
 }

@@ -16,7 +16,7 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +39,8 @@ public class OptionLayerDrag extends Option
 		super(context, image);
 		layer = getImage().getSelectedLayer();
 	}
-	
+
+	@SuppressLint("InflateParams")
 	@Override
 	public void execute()
 	{
@@ -48,13 +49,7 @@ public class OptionLayerDrag extends Option
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(R.string.dialog_drag_layer);
 		builder.setView(view);
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				offsetLayer();
-			}
-		});
+		builder.setPositiveButton(R.string.ok, (dialog, which) -> offsetLayer());
 		builder.setNegativeButton(R.string.cancel, null);
 		
 		editX = view.findViewById(R.id.edit_layer_offset_x);

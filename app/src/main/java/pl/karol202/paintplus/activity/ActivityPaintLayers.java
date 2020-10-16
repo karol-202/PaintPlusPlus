@@ -24,7 +24,6 @@ import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.LayersAdapter;
 import pl.karol202.paintplus.image.layer.LayersRecyclerView;
 import pl.karol202.paintplus.options.OptionLayerNew;
-import pl.karol202.paintplus.options.OptionLayerNew.OnLayerAddListener;
 import pl.karol202.paintplus.util.LayersSheetBehavior;
 import pl.karol202.paintplus.util.Utils;
 
@@ -108,13 +107,6 @@ class ActivityPaintLayers implements View.OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		new OptionLayerNew(activity, image, new OnLayerAddListener()
-		{
-			@Override
-			public void onLayerAdded()
-			{
-				layersAdapter.notifyDataSetChanged();
-			}
-		}).execute();
+		new OptionLayerNew(activity, image, () -> layersAdapter.notifyDataSetChanged()).execute();
 	}
 }

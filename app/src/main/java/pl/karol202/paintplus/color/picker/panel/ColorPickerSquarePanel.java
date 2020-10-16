@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.color.picker.panel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +34,8 @@ public class ColorPickerSquarePanel extends View
 	{
 		void onChannelsValueChanged();
 	}
-	
+
+	//TODO Repetition of code in ColorPickerBar. Move to another class.
 	private static final int[] HUE_COLORS = new int[] { Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED };
 	
 	private final float LEFT_MARGIN_DP = 10;
@@ -219,6 +221,7 @@ public class ColorPickerSquarePanel extends View
 		canvas.drawCircle(x, y, INDICATOR_RING_RADIUS_PX, indicatorPaint);
 	}
 	
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{

@@ -17,7 +17,6 @@
 package pl.karol202.paintplus.file;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
@@ -98,13 +97,7 @@ public class ImageLoaderDialog
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.dialog_image_too_big);
 		builder.setMessage(context.getString(R.string.dialog_image_too_big_question, bitmapSize.x, bitmapSize.y));
-		builder.setPositiveButton(R.string.scale_down, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i)
-			{
-				onAccept();
-			}
-		});
+		builder.setPositiveButton(R.string.scale_down, (dialogInterface, i) -> onAccept());
 		builder.setNegativeButton(R.string.cancel, null);
 		dialog = builder.create();
 		dialog.show();
@@ -114,13 +107,7 @@ public class ImageLoaderDialog
 	{
 		asyncBlocker = new ImageLoadAsyncBlocker();
 		asyncManager.block(asyncBlocker);
-		BitmapLoadParams params = new BitmapLoadParams(new BitmapLoadAsyncTask.OnBitmapLoadListener() {
-			@Override
-			public void onBitmapLoad(Bitmap bitmap)
-			{
-				onBitmapLoaded(bitmap);
-			}
-		}, fileDescriptor.getFileDescriptor(), bitmapSize);
+		BitmapLoadParams params = new BitmapLoadParams(this::onBitmapLoaded, fileDescriptor.getFileDescriptor(), bitmapSize);
 		asyncTask = new BitmapLoadAsyncTask();
 		asyncTask.execute(params);
 	}

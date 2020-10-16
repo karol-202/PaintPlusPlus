@@ -22,7 +22,7 @@ import pl.karol202.paintplus.image.Image;
 
 public class ActivityHistoryHelper
 {
-	private static Image image;//Is there any way to remove this ugly static veriable?
+	private static Image image;//Is there any way to remove this ugly static variable?
 	
 	private Context context;
 	
@@ -40,7 +40,7 @@ public class ActivityHistoryHelper
 	
 	static Image getImage()
 	{
-		if(image == null) throw new NullPointerException("Image object has been already used.");
+		if(ActivityHistoryHelper.image == null) throw new NullPointerException("Image object has been already used.");
 		Image image = ActivityHistoryHelper.image;
 		ActivityHistoryHelper.image = null;
 		return image;

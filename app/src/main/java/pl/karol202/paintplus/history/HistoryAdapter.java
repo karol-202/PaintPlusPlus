@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.history;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +39,9 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder>
 		this.history = history;
 	}
 	
+	@NonNull
 	@Override
-	public HistoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
+	public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType)
 	{
 		int layout = viewType == VIEW_TYPE_ACTION ? R.layout.item_history_action : R.layout.item_history_current_position;
 		View view = LayoutInflater.from(context).inflate(layout, viewGroup, false);
@@ -49,7 +51,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder>
 	}
 	
 	@Override
-	public void onBindViewHolder(HistoryViewHolder viewHolder, int position)
+	public void onBindViewHolder(@NonNull HistoryViewHolder viewHolder, int position)
 	{
 		viewHolder.bind(history, getActionAtPosition(position));
 	}

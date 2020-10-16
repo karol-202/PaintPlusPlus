@@ -80,7 +80,7 @@ public class ImageLoader
 		options.inJustDecodeBounds = true;
 		
 		BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
-		return new Point(options.outWidth,options.outHeight);
+		return new Point(options.outWidth, options.outHeight);
 	}
 	
 	static Point scaleBitmapSizeIfNecessary(Point originalSize)

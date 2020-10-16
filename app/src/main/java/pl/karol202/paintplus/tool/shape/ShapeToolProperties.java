@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.tool.shape;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	private CheckBox checkBoxSmooth;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_shape, container, false);

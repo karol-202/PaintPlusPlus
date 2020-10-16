@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.gradient;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -40,7 +41,7 @@ public class GradientProperties extends ToolProperties implements OnGradientEdit
 	private Spinner spinnerGradientRepeatability;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		setHasOptionsMenu(true);

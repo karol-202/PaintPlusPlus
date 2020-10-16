@@ -17,7 +17,6 @@
 package pl.karol202.paintplus.options;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -45,10 +44,10 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	private OnFileEditListener listener;
 	private AsyncManager asyncManager;
 	
-	BitmapSaveAsyncTask asyncTask;
+	private BitmapSaveAsyncTask asyncTask;
 	Uri uri;
-	BitmapSaveFormat format;
-	ParcelFileDescriptor parcelFileDescriptor;
+	private BitmapSaveFormat format;
+	private ParcelFileDescriptor parcelFileDescriptor;
 	
 	OptionSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
@@ -113,13 +112,7 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(format.getSettingsDialogTitle());
 		builder.setView(view);
-		builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				saveBitmapAsynchronously();
-			}
-		});
+		builder.setPositiveButton(R.string.save, (dialog, which) -> saveBitmapAsynchronously());
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();
 		return true;

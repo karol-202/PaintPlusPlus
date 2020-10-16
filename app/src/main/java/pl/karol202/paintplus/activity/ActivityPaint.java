@@ -90,14 +90,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 		
 		setContentView(R.layout.activity_paint);
 		decorView = getWindow().getDecorView();
-		decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
-		{
-			@Override
-			public void onSystemUiVisibilityChange(int visibility)
-			{
-				initSystemUIVisibility();
-			}
-		});
+		decorView.setOnSystemUiVisibilityChangeListener(visibility -> initSystemUIVisibility());
 		initSystemUIVisibility();
 		
 		fragments = getSupportFragmentManager();

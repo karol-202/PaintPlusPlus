@@ -181,14 +181,7 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 		checkKeepRatio.setOnCheckedChangeListener(this);
 		
 		dialog = dialogBuilder.create();
-		dialog.setOnShowListener(new DialogInterface.OnShowListener()
-		{
-			@Override
-			public void onShow(DialogInterface dialog)
-			{
-				createPreview();
-			}
-		});
+		dialog.setOnShowListener(dialog -> createPreview());
 		dialog.show();
 	}
 	

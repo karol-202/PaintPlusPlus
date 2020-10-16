@@ -24,16 +24,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import pl.karol202.paintplus.PaintView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.history.ActivityHistoryHelper;
 import pl.karol202.paintplus.history.History;
-import pl.karol202.paintplus.history.OnHistoryUpdateListener;
 import pl.karol202.paintplus.image.Clipboard;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.options.*;
 import pl.karol202.paintplus.tool.selection.Selection;
-import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
 
 class ActivityPaintActions
 {
@@ -55,21 +52,10 @@ class ActivityPaintActions
 		menuInflater.inflate(R.menu.menu_paint, menu);
 		paintView = activity.getPaintView();
 		image = activity.getImage();
-		image.addOnSelectionChangeListener(new OnSelectionChangeListener()
-		{
-			@Override
-			public void onSelectionChanged()
-			{
-				activity.invalidateOptionsMenu();
-			}
-		});
-		image.setOnHistoryUpdateListener(new OnHistoryUpdateListener() {
-			@Override
-			public void onHistoryUpdated()
-			{
-				activity.invalidateOptionsMenu();
-				image.updateImage();
-			}
+		image.addOnSelectionChangeListener(() -> activity.invalidateOptionsMenu());
+		image.setOnHistoryUpdateListener(() -> {
+			activity.invalidateOptionsMenu();
+			image.updateImage();
 		});
 	}
 	
@@ -165,31 +151,19 @@ class ActivityPaintActions
 			new OptionFileCapturePhoto(activity, image).execute();
 			return true;
 		case R.id.action_open_image:
-			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
-				@Override
-				public void onPermissionGrant()
-				{
-					new OptionFileOpen(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
-				}
-			});
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, () ->
+					new OptionFileOpen(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute()
+			);
 			return true;
 		case R.id.action_save_image:
-			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
-				@Override
-				public void onPermissionGrant()
-				{
-					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(image.getLastUri(), image.getLastFormat());
-				}
-			});
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, () ->
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute(image.getLastUri(), image.getLastFormat())
+			);
 			return true;
 		case R.id.action_save_image_as:
-			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionGrantListener() {
-				@Override
-				public void onPermissionGrant()
-				{
-					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute();
-				}
-			});
+			new PermissionRequest<>(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, () ->
+					new OptionFileSave(activity, image, activity.getAsyncManager(), activity.getFileEditListener()).execute()
+			);
 			return true;
 		
 		case R.id.action_undo:

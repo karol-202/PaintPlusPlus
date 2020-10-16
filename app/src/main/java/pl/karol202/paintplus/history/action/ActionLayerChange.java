@@ -17,7 +17,6 @@
 package pl.karol202.paintplus.history.action;
 
 import android.graphics.*;
-import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
 
@@ -29,11 +28,6 @@ public class ActionLayerChange extends Action
 	private Bitmap bitmap;
 	
 	private Paint bitmapPaint;
-	
-	public ActionLayerChange(Image image)
-	{
-		this(image, R.string.history_action_layer_name_change);
-	}
 	
 	public ActionLayerChange(Image image, int name)
 	{

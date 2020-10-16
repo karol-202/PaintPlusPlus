@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.color.curves;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,9 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 		super(context, R.layout.spinner_item_color_channel, ColorChannel.filterByType(channelType));
 	}
 	
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		View view = convertView;
 		if(convertView == null)
@@ -53,7 +55,7 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 	}
 	
 	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
+	public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
 	{
 		return getView(position, convertView, parent);
 	}

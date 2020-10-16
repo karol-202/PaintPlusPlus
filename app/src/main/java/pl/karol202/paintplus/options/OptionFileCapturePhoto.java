@@ -16,7 +16,7 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -60,13 +60,7 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
 		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
-		dialogBuilder.setPositiveButton(R.string.dialog_capture_photo_positive, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				capturePhoto();
-			}
-		});
+		dialogBuilder.setPositiveButton(R.string.dialog_capture_photo_positive, (dialog, which) -> capturePhoto());
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		dialogBuilder.show();
 	}
@@ -96,7 +90,8 @@ public class OptionFileCapturePhoto extends Option implements ActivityResultList
 			throw new RuntimeException("Cannot create temporary file for photo.", ex);
 		}
 	}
-	
+
+	@SuppressLint("SimpleDateFormat")
 	private File createPhotoFile() throws IOException
 	{
 		String dateString = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss").format(new Date());

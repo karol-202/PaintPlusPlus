@@ -18,6 +18,7 @@ package pl.karol202.paintplus.image.layer;
 
 import android.content.Context;
 import android.graphics.*;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,15 +58,16 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		DUPLICATE_INDICATOR = appContext.getContext().getString(R.string.duplicate);
 	}
 	
+	@NonNull
 	@Override
-	public LayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public LayerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View view = LayoutInflater.from(appContext.getContext()).inflate(R.layout.item_layer, parent, false);
 		return new LayerViewHolder(this, view);
 	}
 	
 	@Override
-	public void onBindViewHolder(LayerViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull LayerViewHolder holder, int position)
 	{
 		holder.bind(layers.get(position));
 		viewHolders.put(position, holder);

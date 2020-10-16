@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.options;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.*;
 import android.support.design.widget.Snackbar;
@@ -69,7 +70,8 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		super(context, image);
 		this.listener = listener;
 	}
-	
+
+	@SuppressLint("InflateParams")
 	@Override
 	public void execute()
 	{
@@ -106,14 +108,7 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 		imagePreview = view.findViewById(R.id.image_size_preview);
 		
 		dialog = dialogBuilder.create();
-		dialog.setOnShowListener(new DialogInterface.OnShowListener()
-		{
-			@Override
-			public void onShow(DialogInterface dialog)
-			{
-				createPreview();
-			}
-		});
+		dialog.setOnShowListener(dialog -> createPreview());
 		dialog.show();
 	}
 	

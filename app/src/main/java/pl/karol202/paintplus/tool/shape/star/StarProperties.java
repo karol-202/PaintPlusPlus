@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.shape.star;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -51,7 +52,7 @@ public class StarProperties extends ShapeProperties
 	private Spinner spinnerJoin;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_star, container, false);
@@ -62,21 +63,13 @@ public class StarProperties extends ShapeProperties
 		adapter = new JoinAdapter(getActivity());
 		
 		buttonMinusCorners = view.findViewById(R.id.button_minus_star_corners);
-		buttonMinusCorners.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				if(getSides() > MIN_CORNERS) editCorners.setText(String.valueOf(getSides() - 1));
-			}
+		buttonMinusCorners.setOnClickListener(v -> {
+			if(getSides() > MIN_CORNERS) editCorners.setText(String.valueOf(getSides() - 1));
 		});
 		
 		buttonPlusCorners = view.findViewById(R.id.button_plus_star_corners);
-		buttonPlusCorners.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				if(getSides() < MAX_CORNERS) editCorners.setText(String.valueOf(getSides() + 1));
-			}
+		buttonPlusCorners.setOnClickListener(v -> {
+			if(getSides() < MAX_CORNERS) editCorners.setText(String.valueOf(getSides() + 1));
 		});
 		
 		editLayoutCorners = view.findViewById(R.id.edit_layout_star_corners);
@@ -108,13 +101,7 @@ public class StarProperties extends ShapeProperties
 		
 		checkFill = view.findViewById(R.id.check_star_fill);
 		checkFill.setChecked(star.isFill());
-		checkFill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-			{
-				star.setFill(isChecked);
-			}
-		});
+		checkFill.setOnCheckedChangeListener((buttonView, isChecked) -> star.setFill(isChecked));
 		
 		seekBarWidth = view.findViewById(R.id.seek_star_width);
 		seekBarWidth.setProgress(star.getLineWidth() - 1);

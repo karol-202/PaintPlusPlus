@@ -122,7 +122,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
 		opacity = progress / 100f;
-		textOpacity.setText(String.format(Locale.US, "%d%%", seekBarOpacity.getProgress()));
+		textOpacity.setText(context.getString(R.string.opacity, seekBarOpacity.getProgress()));
 	}
 	
 	@Override

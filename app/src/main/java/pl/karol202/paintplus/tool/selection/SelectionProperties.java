@@ -17,6 +17,7 @@
 package pl.karol202.paintplus.tool.selection;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -39,20 +40,14 @@ public class SelectionProperties extends ToolProperties
 	private Button buttonInvertSelection;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.properties_selection, container, false);
 		setHasOptionsMenu(true);
 		
 		selection = (ToolSelection) tool;
-		selection.setSelectionListener(new OnSelectionEditListener() {
-			@Override
-			public void onStartSelectionEditing()
-			{
-				getActivity().invalidateOptionsMenu();
-			}
-		});
+		selection.setSelectionListener(() -> getActivity().invalidateOptionsMenu());
 		adapterShape = new SelectionShapeAdapter(getActivity());
 		adapterMode = new SelectionModeAdapter(getActivity());
 		
@@ -91,31 +86,13 @@ public class SelectionProperties extends ToolProperties
 		});
 		
 		buttonSelectAll = view.findViewById(R.id.button_selection_all);
-		buttonSelectAll.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				selection.selectAll();
-			}
-		});
+		buttonSelectAll.setOnClickListener(v -> selection.selectAll());
 		
 		buttonSelectNothing = view.findViewById(R.id.button_selection_nothing);
-		buttonSelectNothing.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				selection.selectNothing();
-			}
-		});
+		buttonSelectNothing.setOnClickListener(v -> selection.selectNothing());
 		
 		buttonInvertSelection = view.findViewById(R.id.button_selection_invert);
-		buttonInvertSelection.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
-				selection.invertSelection();
-			}
-		});
+		buttonInvertSelection.setOnClickListener(v -> selection.invertSelection());
 		
 		return view;
 	}

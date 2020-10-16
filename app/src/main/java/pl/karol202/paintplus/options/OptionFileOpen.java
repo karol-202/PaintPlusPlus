@@ -16,9 +16,8 @@
 
 package pl.karol202.paintplus.options;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -60,13 +59,7 @@ public class OptionFileOpen extends OptionOpen
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 		dialogBuilder.setTitle(R.string.dialog_are_you_sure);
 		dialogBuilder.setMessage(R.string.dialog_unsaved_changes);
-		dialogBuilder.setPositiveButton(R.string.dialog_open_file_positive, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				OptionFileOpen.super.execute();
-			}
-		});
+		dialogBuilder.setPositiveButton(R.string.dialog_open_file_positive, (dialog, which) -> OptionFileOpen.super.execute());
 		dialogBuilder.setNegativeButton(R.string.cancel, null);
 		dialogBuilder.show();
 	}
@@ -76,7 +69,7 @@ public class OptionFileOpen extends OptionOpen
 		super.execute();
 	}
 	
-	@Override
+	@Override //Overridden only to make public
 	public void openFile(Uri uri)
 	{
 		super.openFile(uri);
@@ -96,13 +89,7 @@ public class OptionFileOpen extends OptionOpen
 		getImage().centerView();
 		
 		if(listener != null) listener.onFileEdited(getUri(), bitmap);
-		askAboutExifRotation(new RotationNeedListener() {
-			@Override
-			public void onRotationNeed(int exifOrientation)
-			{
-				rotateImage(exifOrientation);
-			}
-		});
+		askAboutExifRotation(this::rotateImage);
 	}
 	
 	private void rotateImage(int exifOrientation)

@@ -17,7 +17,6 @@
 package pl.karol202.paintplus.options;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -112,13 +111,7 @@ public abstract class OptionOpen extends Option implements ActivityResultListene
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(R.string.dialog_exif_rotation);
-		builder.setPositiveButton(R.string.rotate, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				rotationListener.onRotationNeed(exifOrientation);
-			}
-		});
+		builder.setPositiveButton(R.string.rotate, (dialog, which) -> rotationListener.onRotationNeed(exifOrientation));
 		builder.setNegativeButton(R.string.no, null);
 		builder.show();
 	}
