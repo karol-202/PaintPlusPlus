@@ -15,7 +15,8 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -25,49 +26,45 @@
 	android:background="@drawable/layer_view">
 
 	<ImageView
+		android:id="@+id/image_layer_handle"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		app:srcCompat="@drawable/ic_drag_handle_black_24dp"
-		android:id="@+id/image_layer_handle"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
-		android:layout_marginLeft="16dp"
 		android:contentDescription="@string/desc_layer_handle" />
 
 	<ImageView
+		android:id="@+id/image_layer_preview"
 		android:layout_width="60dp"
 		android:layout_height="60dp"
-		android:id="@+id/image_layer_preview"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toRightOf="@+id/image_layer_handle"
 		android:scaleType="fitCenter"
-		android:layout_marginLeft="24dp"
 		tools:ignore="ContentDescription" />
 
 	<TextView
+		android:id="@+id/text_layer_name"
 		android:text="@string/unknown"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:id="@+id/text_layer_name"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
 		android:textSize="16sp"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toRightOf="@+id/image_layer_preview"
 		app:layout_constraintRight_toLeftOf="@+id/button_layer_visibility"
-		android:layout_marginEnd="8dp"
-		android:layout_marginLeft="16dp"
-		android:layout_marginRight="8dp" />
+		android:layout_marginEnd="8dp" />
 
 	<ImageButton
+		android:id="@+id/button_layer_visibility"
 		android:layout_width="48dp"
 		android:layout_height="48dp"
 		app:srcCompat="@drawable/ic_visible_black_24dp"
-		android:id="@+id/button_layer_visibility"
 		android:background="?attr/borderlessSelectableBackground"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -75,10 +72,10 @@
 		android:contentDescription="@string/desc_layer_visibility" />
 
 	<ImageButton
+		android:id="@+id/button_layer_menu"
 		android:layout_width="48dp"
 		android:layout_height="48dp"
 		app:srcCompat="@drawable/ic_menu_black_24dp"
-		android:id="@+id/button_layer_menu"
 		android:background="?attr/borderlessSelectableBackground"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"

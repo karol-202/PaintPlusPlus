@@ -15,7 +15,8 @@
   ~    limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="vertical"
@@ -23,9 +24,9 @@
 	android:layout_height="wrap_content">
 
 	<androidx.cardview.widget.CardView
+            android:id="@+id/card_recent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/card_recent"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true">
 
@@ -33,14 +34,15 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:orientation="horizontal"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true">
+			android:background="?android:attr/selectableItemBackground"
+			android:clickable="true"
+			android:focusable="true">
 
 			<ImageView
+				android:id="@+id/image_recent_thumbnail"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				app:srcCompat="@drawable/checkerboard"
-				android:id="@+id/image_recent_thumbnail"
 				android:scaleType="fitCenter"
 				android:layout_weight="1"
 				android:layout_margin="8dp"
@@ -52,22 +54,22 @@
 				android:layout_width="180dp">
 
 				<TextView
+					android:id="@+id/text_recent_name"
 					android:text="@string/unknown"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginTop="16dp"
 					android:layout_marginStart="8dp"
 					android:layout_marginEnd="8dp"
-					android:id="@+id/text_recent_name"
 					android:textAppearance="?android:attr/textAppearanceMedium"
 					android:textColor="@color/black"
 					android:layout_marginBottom="8dp" />
 
 				<Button
+					android:id="@+id/button_recent_open"
 					android:text="@string/open"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:id="@+id/button_recent_open"
 					style="@style/Widget.AppCompat.Button.Borderless.Colored"
 					android:layout_margin="8dp"/>
 			</LinearLayout>

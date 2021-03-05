@@ -15,7 +15,8 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -25,7 +26,6 @@
 		android:id="@+id/text_line_width"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="16dp"
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="8dp"
 		android:text="@string/line_width"
@@ -37,7 +37,6 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="32dp"
-		android:layout_marginRight="32dp"
 		android:layout_marginTop="8dp"
 		android:max="99"
 		app:layout_constraintLeft_toRightOf="@+id/text_line_width"
@@ -57,7 +56,6 @@
 		android:id="@+id/text_line_cap"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="16dp"
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="12dp"
 		android:text="@string/line_cap"
@@ -69,8 +67,6 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="16dp"
-		android:layout_marginLeft="16dp"
-		android:layout_marginRight="16dp"
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="8dp"
 		app:layout_constraintLeft_toLeftOf="parent"

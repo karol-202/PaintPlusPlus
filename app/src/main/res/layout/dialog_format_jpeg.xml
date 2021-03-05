@@ -22,17 +22,15 @@
 	android:layout_height="match_parent">
 
 	<SeekBar
+		android:id="@+id/seekBar_format_jpeg_quality"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:id="@+id/seekBar_format_jpeg_quality"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginTop="16dp"
 		app:layout_constraintTop_toTopOf="parent"
 		android:layout_marginEnd="48dp"
-		app:layout_constraintRight_toRightOf="parent"
-		android:layout_marginLeft="16dp"
-		android:layout_marginRight="48dp" />
+		app:layout_constraintRight_toRightOf="parent"/>
 
 	<TextView
 		android:id="@+id/text_format_jpeg_quality"

@@ -15,17 +15,17 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools">
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
 	<TextView
 		android:id="@+id/text_colors_numerical_channel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="24dp"
 		android:layout_marginStart="24dp"
 		android:text="@string/channel_r"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -41,8 +41,8 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintVertical_bias="0.0"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginRight="36dp"
-		android:layout_marginLeft="48dp" />
+		android:layout_marginEnd="36dp"
+		android:layout_marginStart="48dp" />
 
 	<TextView
 		android:id="@+id/text_colors_numerical_channel_value"

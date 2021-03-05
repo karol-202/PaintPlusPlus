@@ -23,7 +23,8 @@
 
 	<com.google.android.material.appbar.AppBarLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:elevation="4dp">
 
 		<androidx.appcompat.widget.Toolbar
 			android:id="@+id/toolbar"
@@ -40,13 +41,10 @@
 			app:tabGravity="fill"/>
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<include layout="@layout/toolbar_shadow"/>
-
 	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/colors_view_pager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_alignParentBottom="true"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 	<LinearLayout
@@ -68,7 +66,7 @@
 			app:itemBackground="@color/bottom_bar_background"
 			app:itemIconTint="@color/color_mode_item_tint"
 			app:itemTextColor="@color/color_mode_item_tint"
-			app:menu="@menu/menu_color_picker" />
+			app:menu="@menu/menu_color_picker"/>
 	</LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

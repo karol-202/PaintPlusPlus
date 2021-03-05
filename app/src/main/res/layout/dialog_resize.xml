@@ -15,33 +15,31 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
 	<TextView
+		android:id="@+id/text_width"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_width"
-		android:id="@+id/text_width"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginLeft="24dp"
 		app:layout_constraintTop_toTopOf="@+id/inputLayout_object_width"
 		android:layout_marginTop="10dp" />
 
 	<TextView
+		android:id="@+id/text_height"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_height"
-		android:id="@+id/text_height"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginLeft="16dp"
 		app:layout_constraintTop_toTopOf="@+id/inputLayout_object_height"
 		android:layout_marginTop="10dp" />
 
@@ -50,8 +48,6 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="16dp"
-		android:layout_marginLeft="24dp"
-		android:layout_marginRight="16dp"
 		android:layout_marginStart="24dp"
 		app:hintEnabled="false"
 		app:layout_constraintLeft_toRightOf="@+id/text_width"
@@ -72,8 +68,6 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="16dp"
-		android:layout_marginLeft="24dp"
-		android:layout_marginRight="16dp"
 		android:layout_marginStart="24dp"
 		app:hintEnabled="false"
 		app:layout_constraintLeft_toRightOf="@+id/text_height"
@@ -90,77 +84,68 @@
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<CheckBox
+		android:id="@+id/check_keep_ratio"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/keep_ratio"
-		android:id="@+id/check_keep_ratio"
 		app:layout_constraintTop_toBottomOf="@+id/inputLayout_object_height"
 		android:layout_marginStart="16dp"
-		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginLeft="16dp" />
+		app:layout_constraintLeft_toLeftOf="parent"/>
 
 	<TextView
+		android:id="@+id/text_x"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_x"
-		android:id="@+id/text_x"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_x"
-		android:layout_marginLeft="24dp" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_x" />
 
 	<TextView
+		android:id="@+id/text_y"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:text="@string/image_y"
-		android:id="@+id/text_y"
 		android:layout_marginStart="24dp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_y"
-		android:layout_marginLeft="24dp" />
+		app:layout_constraintBaseline_toBaselineOf="@+id/edit_object_y" />
 
 	<EditText
+		android:id="@+id/edit_object_x"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number|numberSigned"
 		android:ems="10"
-		android:id="@+id/edit_object_x"
 		android:maxLength="9"
 		app:layout_constraintTop_toBottomOf="@+id/check_keep_ratio"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:layout_marginStart="24dp"
-		app:layout_constraintLeft_toRightOf="@+id/text_x"
-		android:layout_marginRight="16dp"
-		android:layout_marginLeft="24dp" />
+		app:layout_constraintLeft_toRightOf="@+id/text_x"/>
 
 	<EditText
+		android:id="@+id/edit_object_y"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:inputType="number|numberSigned"
 		android:ems="10"
-		android:id="@+id/edit_object_y"
 		android:maxLength="9"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/edit_object_x"
 		android:layout_marginStart="24dp"
-		app:layout_constraintLeft_toRightOf="@+id/text_y"
-		android:layout_marginRight="16dp"
-		android:layout_marginLeft="24dp" />
+		app:layout_constraintLeft_toRightOf="@+id/text_y"/>
 
 	<ImageView
+		android:id="@+id/image_resize_preview"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
-		android:id="@+id/image_resize_preview"
 		app:layout_constraintTop_toBottomOf="@+id/edit_object_y"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintDimensionRatio="h,1:1"
-		android:layout_marginRight="64dp"
-		android:layout_marginLeft="64dp"
 		android:layout_marginStart="64dp"
 		android:layout_marginEnd="64dp" />
 

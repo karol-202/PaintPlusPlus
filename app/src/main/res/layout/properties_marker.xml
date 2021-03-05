@@ -15,74 +15,71 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
 	<TextView
+		android:id="@+id/text_marker_size"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/tool_size"
-		android:id="@+id/text_marker_size"
 		android:paddingBottom="4dp"
 		android:layout_marginStart="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		android:layout_marginTop="8dp"
-		app:layout_constraintTop_toTopOf="parent"
-		android:layout_marginLeft="16dp" />
+		app:layout_constraintTop_toTopOf="parent"/>
 
 	<SeekBar
+		android:id="@+id/seekBar_marker_size"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:id="@+id/seekBar_marker_size"
 		android:max="99"
 		android:paddingBottom="4dp"
 		app:layout_constraintLeft_toRightOf="@+id/text_marker_size"
 		android:layout_marginEnd="32dp"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/text_marker_size"
-		app:layout_constraintHorizontal_bias="0.03"
-		android:layout_marginRight="32dp" />
+		app:layout_constraintHorizontal_bias="0.03"/>
 
 	<TextView
+		android:id="@+id/marker_size"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/marker_size"
 		android:paddingBottom="4dp"
 		tools:text="100"
 		app:layout_constraintTop_toTopOf="@+id/text_marker_size"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_marker_size" />
 
 	<TextView
+		android:id="@+id/text_marker_translucency"
 		android:text="@string/translucency"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/text_marker_translucency"
 		android:layout_marginTop="8dp"
 		app:layout_constraintTop_toBottomOf="@+id/text_marker_size"
 		android:layout_marginStart="16dp"
-		app:layout_constraintLeft_toLeftOf="parent"
-		android:layout_marginLeft="16dp" />
+		app:layout_constraintLeft_toLeftOf="parent" />
 
 	<SeekBar
+		android:id="@+id/seekBar_marker_translucency"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:id="@+id/seekBar_marker_translucency"
 		app:layout_constraintLeft_toRightOf="@+id/text_marker_translucency"
 		android:layout_marginEnd="34dp"
 		app:layout_constraintRight_toRightOf="parent"
 		android:max="100"
 		android:progress="0"
-		app:layout_constraintTop_toTopOf="@+id/text_marker_translucency"
-		android:layout_marginRight="34dp" />
+		app:layout_constraintTop_toTopOf="@+id/text_marker_translucency" />
 
 	<TextView
+		android:id="@+id/marker_translucency"
 		android:text="@string/temp_100"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/marker_translucency"
 		app:layout_constraintTop_toTopOf="@+id/seekBar_marker_translucency"
 		app:layout_constraintLeft_toRightOf="@+id/seekBar_marker_translucency" />
 
@@ -94,7 +91,6 @@
 		android:layout_marginTop="8dp"
 		android:text="@string/marker_smooth_edge"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/seekBar_marker_translucency"
-		android:layout_marginLeft="12dp" />
+		app:layout_constraintTop_toBottomOf="@+id/seekBar_marker_translucency" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

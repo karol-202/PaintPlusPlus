@@ -15,7 +15,8 @@
   ~    limitations under the License.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
@@ -44,9 +45,9 @@
 	</FrameLayout>
 
 	<ImageButton
+		android:id="@+id/button_colors_swap"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/button_colors_swap"
 		app:srcCompat="@drawable/ic_swap_horiz_black_48dp"
 		tools:layout_constraintTop_creator="1"
 		tools:layout_constraintRight_creator="1"
