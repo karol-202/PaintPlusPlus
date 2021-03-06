@@ -16,8 +16,8 @@
 
 package pl.karol202.paintplus.image.layer.mode;
 
-import androidx.renderscript.Allocation;
-import androidx.renderscript.RenderScript;
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
 
 public class LayerModeAdd extends LayerModeRenderscript<LayerModeAdd.ScriptAdd>
 {

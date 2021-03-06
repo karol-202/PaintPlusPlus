@@ -17,8 +17,8 @@
 package pl.karol202.paintplus.image.layer.mode;
 
 import android.graphics.*;
-import androidx.renderscript.Allocation;
-import androidx.renderscript.RenderScript;
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.GraphicsHelper;
 

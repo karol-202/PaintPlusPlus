@@ -18,9 +18,9 @@ package pl.karol202.paintplus.color.manipulators;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import androidx.renderscript.Allocation;
-import androidx.renderscript.Element;
-import androidx.renderscript.RenderScript;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.util.GraphicsHelper;
