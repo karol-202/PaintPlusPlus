@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeAdd extends LayerModeRenderscript<LayerModeAdd.ScriptAdd>
 {
-	protected class ScriptAdd extends LayerScript<ScriptC_lm_add>
+	protected static class ScriptAdd extends LayerScript<ScriptC_lm_add>
 	{
 		ScriptAdd(RenderScript renderScript)
 		{

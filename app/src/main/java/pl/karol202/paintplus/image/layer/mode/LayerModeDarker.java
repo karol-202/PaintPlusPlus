@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeDarker extends LayerModeRenderscript<LayerModeDarker.ScriptDarker>
 {
-	protected class ScriptDarker extends LayerScript<ScriptC_lm_darker>
+	protected static class ScriptDarker extends LayerScript<ScriptC_lm_darker>
 	{
 		ScriptDarker(RenderScript renderScript)
 		{

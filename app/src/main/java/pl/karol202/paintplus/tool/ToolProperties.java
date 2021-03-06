@@ -16,7 +16,6 @@
 
 package pl.karol202.paintplus.tool;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,14 +29,6 @@ public abstract class ToolProperties extends Fragment
 {
 	private ActivityPaint activityPaint;
 	protected Tool tool;
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		init(activity);
-	}
 
 	@Override
 	public void onAttach(Context context)

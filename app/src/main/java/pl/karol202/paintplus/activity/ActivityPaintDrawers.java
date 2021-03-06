@@ -104,9 +104,9 @@ class ActivityPaintDrawers
 		}
 	}
 
-	private final int LEFT_DRAWER_WIDTH = 280;
-	private final int RIGHT_DRAWER_WIDTH = 320;
-	private final int MIN_SPACE_TO_EDGE = 112;
+	private static final int LEFT_DRAWER_WIDTH = 280;
+	private static final int RIGHT_DRAWER_WIDTH = 320;
+	private static final int MIN_SPACE_TO_EDGE = 112;
 
 	private ActivityPaint activity;
 	private DrawerAdapter drawerAdapter;
@@ -220,12 +220,13 @@ class ActivityPaintDrawers
 		}
 	}
 
-	private void attachColorsFragment() throws InstantiationException, IllegalAccessException
+	private void attachColorsFragment()
 	{
 		FragmentTransaction colorTrans = fragments.beginTransaction();
 		colorTrans.replace(R.id.colors_fragment, colorsSelect);
 		colorTrans.commit();
 	}
+
 	void togglePropertiesDrawer()
 	{
 		layoutDrawer.closeDrawer(drawerLeft);

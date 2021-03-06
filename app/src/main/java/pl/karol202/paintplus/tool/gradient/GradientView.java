@@ -66,21 +66,21 @@ public class GradientView extends View
 		}
 	}
 
-	private final float MAX_TOUCH_DISTANCE = 0.05f;
+	private static final float MAX_TOUCH_DISTANCE = 0.05f;
 
-	private final float BORDER_WIDTH_PX = 1;
+	private static final float BORDER_WIDTH_PX = 1;
 
-	private final float SIDE_MARGIN_DP = 10;
-	private final float TOP_MARGIN_PX = 1;
+	private static final float SIDE_MARGIN_DP = 10;
+	private static final float TOP_MARGIN_PX = 1;
 
-	private final float TOP_BAR_HEIGHT_DP = 15;
-	private final float BOTTOM_BAR_HEIGHT_DP = 25;
+	private static final float TOP_BAR_HEIGHT_DP = 15;
+	private static final float BOTTOM_BAR_HEIGHT_DP = 25;
 
-	private final float HEIGHT_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP + 20;
+	private static final float HEIGHT_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP + 20;
 
-	private final float TRIANGLE_Y_OFFSET_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP - 5;
-	private final Path TRIANGLE_OUTER_PATH = new Path();
-	private final Path TRIANGLE_INNER_PATH = new Path();
+	private static final float TRIANGLE_Y_OFFSET_DP = TOP_BAR_HEIGHT_DP + BOTTOM_BAR_HEIGHT_DP - 5;
+	private static final Path TRIANGLE_OUTER_PATH = new Path();
+	private static final Path TRIANGLE_INNER_PATH = new Path();
 
 	private final float SIDE_MARGIN_PX;
 	private final float TOP_BAR_HEIGHT_PX;

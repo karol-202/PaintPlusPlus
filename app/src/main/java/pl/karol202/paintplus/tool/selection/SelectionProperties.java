@@ -63,9 +63,7 @@ public class SelectionProperties extends ToolProperties
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent)
-			{
-
-			}
+			{}
 		});
 
 		spinnerMode = view.findViewById(R.id.spinner_selection_mode);
@@ -80,9 +78,7 @@ public class SelectionProperties extends ToolProperties
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent)
-			{
-
-			}
+			{}
 		});
 
 		buttonSelectAll = view.findViewById(R.id.button_selection_all);
@@ -98,7 +94,7 @@ public class SelectionProperties extends ToolProperties
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
 	{
 		if(selection.isInEditMode()) inflater.inflate(R.menu.menu_tool_selection, menu);
 	}

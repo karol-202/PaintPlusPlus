@@ -16,6 +16,7 @@
 
 package pl.karol202.paintplus.color.picker;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -23,10 +24,10 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO This pager adapter handles fragments in illegal way. Use instantiateItem() and destroyItem() instead.
+// TODO This pager adapter handles fragments in illegal way. Use instantiateItem() and destroyItem() instead.
 public class ColorsPagerAdapter extends FragmentPagerAdapter
 {
-	private class TabFragment
+	private static class TabFragment
 	{
 		private ColorPickerFragment fragment;
 		private int icon;
@@ -52,10 +53,11 @@ public class ColorsPagerAdapter extends FragmentPagerAdapter
 
 	ColorsPagerAdapter(FragmentManager fm)
 	{
-		super(fm);
+		super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 		this.fragments = new ArrayList<>();
 	}
 
+	@NonNull
 	@Override
 	public ColorPickerFragment getItem(int position)
 	{

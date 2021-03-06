@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeLighter extends LayerModeRenderscript<LayerModeLighter.ScriptLighter>
 {
-	protected class ScriptLighter extends LayerScript<ScriptC_lm_lighter>
+	protected static class ScriptLighter extends LayerScript<ScriptC_lm_lighter>
 	{
 		ScriptLighter(RenderScript renderScript)
 		{

@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeMultiply extends LayerModeRenderscript<LayerModeMultiply.ScriptMultiply>
 {
-	protected class ScriptMultiply extends LayerScript<ScriptC_lm_multiply>
+	protected static class ScriptMultiply extends LayerScript<ScriptC_lm_multiply>
 	{
 		ScriptMultiply(RenderScript renderScript)
 		{

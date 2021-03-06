@@ -32,25 +32,25 @@ import java.util.HashMap;
 
 public class ColorCurvesView extends View
 {
-	private final int HORIZONTAL_GRID_LINES = 7;
-	private final int VERTICAL_GRID_LINES = 7;
-	
-	private final float LEFT_GRID_MARGIN_DP = 10;
-	private final float TOP_GRID_MARGIN_DP = 5;
-	private final float RIGHT_GRID_MARGIN_DP = 5;
-	private final float BOTTOM_GRID_MARGIN_DP = 10;
-	private final float GRID_LINE_WIDTH_DP = 1.5f;
-	
-	private final float HORIZONTAL_SCALE_HEIGHT_DP = 5;
-	private final float VERTICAL_SCALE_WIDTH_DP = 5;
-	
-	private final float POINT_RADIUS_DP = 4;
-	private final float POINT_INNER_RADIUS_DP = 1.5f;
-	private final float CURVE_WIDTH_DP = 1;
-	
-	private final float MAX_TOUCH_DISTANCE_DP = 32;
-	private final float REMOVE_LIMIT_DP = 50;
-	
+	private static final int HORIZONTAL_GRID_LINES = 7;
+	private static final int VERTICAL_GRID_LINES = 7;
+
+	private static final float LEFT_GRID_MARGIN_DP = 10;
+	private static final float TOP_GRID_MARGIN_DP = 5;
+	private static final float RIGHT_GRID_MARGIN_DP = 5;
+	private static final float BOTTOM_GRID_MARGIN_DP = 10;
+	private static final float GRID_LINE_WIDTH_DP = 1.5f;
+
+	private static final float HORIZONTAL_SCALE_HEIGHT_DP = 5;
+	private static final float VERTICAL_SCALE_WIDTH_DP = 5;
+
+	private static final float POINT_RADIUS_DP = 4;
+	private static final float POINT_INNER_RADIUS_DP = 1.5f;
+	private static final float CURVE_WIDTH_DP = 1;
+
+	private static final float MAX_TOUCH_DISTANCE_DP = 32;
+	private static final float REMOVE_LIMIT_DP = 50;
+
 	private final float LEFT_GRID_MARGIN_PX;
 	private final float TOP_GRID_MARGIN_PX;
 	private final float RIGHT_GRID_MARGIN_PX;
@@ -63,13 +63,13 @@ public class ColorCurvesView extends View
 	private final float CURVE_WIDTH_PX;
 	private final float MAX_TOUCH_DISTANCE_PX;
 	private final float REMOVE_LIMIT_PX;
-	
+
 	private OnCurveEditListener listener;
 	private ColorChannelType channelType;
 	private ColorChannel channelIn;
 	private ColorChannel channelOut;
 	private HashMap<ChannelInOutSet, ColorCurve> curves;
-	
+
 	private Point viewSize;
 	private float[] grid;
 	private Paint gridPaint;
@@ -82,12 +82,12 @@ public class ColorCurvesView extends View
 	private Paint pointPaint;
 	private Paint pointInnerPaint;
 	private Paint curvePaint;
-	
+
 	private Point oldTouchPoint;
 	private Point oldDraggedScreenPoint;
 	private Point newDraggedCurvePoint;
 	private boolean draggedPointRemoved;
-	
+
 	public ColorCurvesView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -103,31 +103,31 @@ public class ColorCurvesView extends View
 		CURVE_WIDTH_PX = Utils.dpToPixels(context, CURVE_WIDTH_DP);
 		MAX_TOUCH_DISTANCE_PX = Utils.dpToPixels(context, MAX_TOUCH_DISTANCE_DP);
 		REMOVE_LIMIT_PX = Utils.dpToPixels(context, REMOVE_LIMIT_DP);
-		
+
 		channelType = null;
 		channelIn = null;
 		channelOut = null;
-		
+
 		viewSize = new Point();
-		
+
 		gridPaint = new Paint();
 		gridPaint.setColor(Color.LTGRAY);
 		gridPaint.setStrokeWidth(GRID_LINE_WIDTH_PX);
-		
+
 		pointPaint = new Paint();
 		pointPaint.setColor(Color.BLACK);
 		pointPaint.setAntiAlias(true);
-		
+
 		pointInnerPaint = new Paint();
 		pointInnerPaint.setColor(Color.WHITE);
 		pointInnerPaint.setAntiAlias(true);
-		
+
 		curvePaint = new Paint();
 		curvePaint.setColor(Color.BLACK);
 		curvePaint.setStrokeWidth(CURVE_WIDTH_PX);
 		curvePaint.setAntiAlias(true);
 	}
-	
+
 	private void initChannels(ColorChannelType type)
 	{
 		if(channelType != null)
@@ -136,25 +136,25 @@ public class ColorCurvesView extends View
 			return;
 		}
 		channelType = type;
-		
+
 		curves = new HashMap<>();
 		for(ColorChannel channelIn : ColorChannel.filterByType(channelType))
 			for(ColorChannel channelOut : ColorChannel.filterByType(channelType))
 				initChannel(channelIn, channelOut);
 	}
-	
+
 	private void initChannel(ColorChannel in, ColorChannel out)
 	{
 		ChannelInOutSet set = new ChannelInOutSet(in, out);
 		curves.put(set, getDefaultCurve(set));
 	}
-	
+
 	private ColorCurve getDefaultCurve(ChannelInOutSet set)
 	{
 		if(set.getIn() == set.getOut()) return ColorCurve.defaultCurve(set);
 		else return ColorCurve.zeroCurve(set);
 	}
-	
+
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
@@ -162,7 +162,7 @@ public class ColorCurvesView extends View
 		int width = getMeasuredWidth();
 		setMeasuredDimension(width, width);
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
@@ -173,24 +173,24 @@ public class ColorCurvesView extends View
 			setChannelIn(ColorChannel.VALUE);
 			setChannelOut(ColorChannel.VALUE);
 		}
-		
+
 		if(channelType == null) return;
 		viewSize.x = getWidth();
 		viewSize.y = getHeight();
-		
+
 		drawGrid(canvas);
 		drawScale(canvas);
-		
+
 		drawCurve(canvas);
 		drawPoints(canvas);
 	}
-	
+
 	private void drawGrid(Canvas canvas)
 	{
 		if(grid == null) createGrid();
 		canvas.drawLines(grid, gridPaint);
 	}
-	
+
 	private void drawScale(Canvas canvas)
 	{
 		if(horizontalScaleShader == null || verticalScaleShader == null) createScalePaints();
@@ -199,19 +199,19 @@ public class ColorCurvesView extends View
 		canvas.drawRect(0, TOP_GRID_MARGIN_PX, VERTICAL_SCALE_WIDTH_PX,
 				viewSize.y - BOTTOM_GRID_MARGIN_PX, verticalScalePaint);
 	}
-	
+
 	private void drawPoints(Canvas canvas)
 	{
 		if(points == null) createPoints();
-		
+
 		for(RectF point : points) canvas.drawOval(point, pointPaint);
 		for(RectF point : innerPoints) canvas.drawOval(point, pointInnerPaint);
 	}
-	
+
 	private void drawCurve(Canvas canvas)
 	{
 		if(points == null) createPoints();
-		
+
 		float lastX = LEFT_GRID_MARGIN_PX;
 		float lastY = points.get(0).centerY();
 		for(RectF rect : points)
@@ -224,7 +224,7 @@ public class ColorCurvesView extends View
 		}
 		canvas.drawLine(lastX, lastY, canvas.getWidth() - RIGHT_GRID_MARGIN_PX, lastY, curvePaint);
 	}
-	
+
 	private void createGrid()
 	{
 		float[] linesHorizontal = new float[HORIZONTAL_GRID_LINES * 4];
@@ -237,7 +237,7 @@ public class ColorCurvesView extends View
 			linesHorizontal[i * 4 + 2] = viewSize.x - RIGHT_GRID_MARGIN_PX;
 			linesHorizontal[i * 4 + 3] = y;
 		}
-		
+
 		float[] linesVertical = new float[VERTICAL_GRID_LINES * 4];
 		for(int i = 0; i < VERTICAL_GRID_LINES; i++)
 		{
@@ -248,18 +248,18 @@ public class ColorCurvesView extends View
 			linesVertical[i * 4 + 2] = x;
 			linesVertical[i * 4 + 3] = viewSize.y - BOTTOM_GRID_MARGIN_PX;
 		}
-		
+
 		grid = new float[linesHorizontal.length + linesVertical.length];
 		System.arraycopy(linesHorizontal, 0, grid, 0, linesHorizontal.length);
 		System.arraycopy(linesVertical, 0, grid, linesHorizontal.length, linesVertical.length);
 	}
-	
+
 	private void createScalePaints()
 	{
 		createHorizontalScalePaints();
 		createVerticalScalePaints();
 	}
-	
+
 	private void createHorizontalScalePaints()
 	{
 		if(channelIn != ColorChannel.HUE)
@@ -287,7 +287,7 @@ public class ColorCurvesView extends View
 		horizontalScalePaint.setShader(horizontalScaleShader);
 		horizontalScalePaint.setStyle(Paint.Style.FILL);
 	}
-	
+
 	private void createVerticalScalePaints()
 	{
 		if(channelOut != ColorChannel.HUE)
@@ -315,7 +315,7 @@ public class ColorCurvesView extends View
 		verticalScalePaint.setShader(verticalScaleShader);
 		verticalScalePaint.setStyle(Paint.Style.FILL);
 	}
-	
+
 	private void createPoints()
 	{
 		Point[] curvePoints = getCurrentCurve().getPoints();
@@ -332,22 +332,22 @@ public class ColorCurvesView extends View
 			innerPoints.add(innerOval);
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN) onTouchDown((int) event.getX(), (int) event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) onTouchMove((int) event.getX(), (int) event.getY());
 		else if(event.getAction() == MotionEvent.ACTION_UP) onTouchUp((int) event.getX(), (int) event.getY());
-		
+
 		invalidate();
 		return true;
 	}
-	
+
 	private void onTouchDown(int x, int y)
 	{
 		oldTouchPoint = new Point(x, y);
-		
+
 		Point nearest = null;
 		int nearestIndex = -1;
 		float shortestDistance = -1;
@@ -363,7 +363,7 @@ public class ColorCurvesView extends View
 				shortestDistance = distance;
 			}
 		}
-		
+
 		ColorCurve curve = getCurrentCurve();
 		if(nearest != null)
 		{
@@ -377,10 +377,10 @@ public class ColorCurvesView extends View
 			curve.addPoint(newDraggedCurvePoint);
 			createPoints();
 		}
-		
+
 		if(listener != null) listener.onCurveEdited();
 	}
-	
+
 	private void onTouchMove(int x, int y)
 	{
 		if(oldDraggedScreenPoint != null)
@@ -395,16 +395,16 @@ public class ColorCurvesView extends View
 				getCurrentCurve().addPoint(newDraggedCurvePoint);
 				draggedPointRemoved = false;
 			}
-			
+
 			Point newCurvePoint = screenToCurve(newScreenPoint);
 			boolean moved = getCurrentCurve().movePoint(newDraggedCurvePoint, newCurvePoint);
-			
+
 			createPoints();
 			if(moved) newDraggedCurvePoint = newCurvePoint;
 			if(listener != null) listener.onCurveEdited();
 		}
 	}
-	
+
 	private void onTouchUp(int x, int y)
 	{
 		if(oldDraggedScreenPoint != null)
@@ -415,13 +415,13 @@ public class ColorCurvesView extends View
 			boolean removed = false;
 			if(shouldRemove && !draggedPointRemoved && getCurrentCurve().removePoint(newDraggedCurvePoint))
 				removed = true;
-			
+
 			if(!removed)
 			{
 				Point newCurvePoint = screenToCurve(newScreenPoint);
 				getCurrentCurve().movePoint(newDraggedCurvePoint, newCurvePoint);
 			}
-			
+
 			createPoints();
 			oldTouchPoint = null;
 			oldDraggedScreenPoint = null;
@@ -430,14 +430,14 @@ public class ColorCurvesView extends View
 			if(listener != null) listener.onCurveEdited();
 		}
 	}
-	
+
 	private boolean checkBounds(Point point)
 	{
 		float left = point.x - LEFT_GRID_MARGIN_PX;
 		float top = point.y - TOP_GRID_MARGIN_PX;
 		float right = point.x - (viewSize.x - RIGHT_GRID_MARGIN_PX);
 		float bottom = point.y - (viewSize.y - BOTTOM_GRID_MARGIN_PX);
-		
+
 		boolean shouldRemove = left <= -REMOVE_LIMIT_PX || top <= -REMOVE_LIMIT_PX ||
 							   right >= REMOVE_LIMIT_PX || bottom >= REMOVE_LIMIT_PX;
 		if(left < 0) point.x = (int) LEFT_GRID_MARGIN_PX;
@@ -446,7 +446,7 @@ public class ColorCurvesView extends View
 		else if(bottom > 0) point.y = (int) (viewSize.y - BOTTOM_GRID_MARGIN_PX);
 		return !shouldRemove;
 	}
-	
+
 	private Point curveToScreen(Point point)
 	{
 		Point newPoint = new Point(point);
@@ -456,7 +456,7 @@ public class ColorCurvesView extends View
 										  TOP_GRID_MARGIN_PX, viewSize.y - BOTTOM_GRID_MARGIN_PX));
 		return newPoint;
 	}
-	
+
 	private Point screenToCurve(Point point)
 	{
 		Point newPoint = new Point(point);
@@ -466,12 +466,12 @@ public class ColorCurvesView extends View
 									  	  channelOut.getMaxValue(), 0));
 		return newPoint;
 	}
-	
+
 	private void updatePoints()
 	{
 		this.points = null;
 	}
-	
+
 	public void attachCurvesToParamsObject(CurveManipulatorParams params)
 	{
 		for(ChannelInOutSet set : curves.keySet())
@@ -481,36 +481,36 @@ public class ColorCurvesView extends View
 			if(!curve.equals(defaultCurve)) params.addCurve(set, curve);
 		}
 	}
-	
+
 	public void restoreCurrentCurve()
 	{
 		initChannel(channelIn, channelOut);
 		updatePoints();
 		invalidate();
 	}
-	
+
 	public String getInfoText()
 	{
 		if(newDraggedCurvePoint == null || draggedPointRemoved) return "";
 		return getContext().getString(R.string.color_curve_point_info, newDraggedCurvePoint.x, newDraggedCurvePoint.y);
 	}
-	
+
 	private ColorCurve getCurrentCurve()
 	{
 		ChannelInOutSet set = new ChannelInOutSet(channelIn, channelOut);
 		return curves.get(set);
 	}
-	
+
 	public void setChannelType(ColorChannelType channelType)
 	{
 		initChannels(channelType);
 	}
-	
+
 	public void setOnCurveEditListener(OnCurveEditListener listener)
 	{
 		this.listener = listener;
 	}
-	
+
 	public void setChannelIn(ColorChannel channelIn)
 	{
 		this.channelIn = channelIn;
@@ -519,7 +519,7 @@ public class ColorCurvesView extends View
 		updatePoints();
 		invalidate();
 	}
-	
+
 	public void setChannelOut(ColorChannel channelOut)
 	{
 		this.channelOut = channelOut;

@@ -46,7 +46,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 {
 	static final int HEIGHT_DP = 64;
 
-	private final int ELEVATION_DP = 18;
+	private static final int ELEVATION_DP = 18;
 
 	private LayersAdapter adapter;
 	private Layer layer;
@@ -139,7 +139,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) rippleDrawable = (RippleDrawable) drawable;
 	}
 
-	//Long click on the whole view
+	// Long click on the whole view
 	@Override
 	public boolean onLongClick(View v)
 	{
@@ -156,7 +156,7 @@ public class LayerViewHolder extends RecyclerView.ViewHolder
 			if(event.getAction() == MotionEvent.ACTION_DOWN)
 			{
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) showRipple(event.getX(), event.getY());
-			}//Te nawiasy są potrzebne
+			} // Te nawiasy są potrzebne
 			else if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
 			{
 				select();

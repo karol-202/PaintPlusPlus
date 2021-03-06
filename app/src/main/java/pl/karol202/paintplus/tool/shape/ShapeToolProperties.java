@@ -30,7 +30,8 @@ import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import java.util.Locale;
 
-public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener, OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener
+public class ShapeToolProperties extends ToolProperties implements OnItemSelectedListener, OnShapeEditListener,
+                                                                   OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener
 {
 	private FragmentManager fragments;
 	private ToolShape shapeTool;
@@ -79,13 +80,13 @@ public class ShapeToolProperties extends ToolProperties implements OnItemSelecte
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
 	{
 		if(shapeTool.isInEditMode()) inflater.inflate(R.menu.menu_tool_shape, menu);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		if(shapeTool.isInEditMode())
 		{

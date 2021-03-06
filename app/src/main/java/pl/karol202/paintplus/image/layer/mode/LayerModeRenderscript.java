@@ -22,7 +22,7 @@ import android.renderscript.RenderScript;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
-public abstract class LayerModeRenderscript<S extends LayerScript> implements LayerMode
+public abstract class LayerModeRenderscript<S extends LayerScript<?>> implements LayerMode
 {
 	private Layer layer;
 	private Paint paint;

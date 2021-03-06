@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeDifference extends LayerModeRenderscript<LayerModeDifference.ScriptDifference>
 {
-	protected class ScriptDifference extends LayerScript<ScriptC_lm_difference>
+	protected static class ScriptDifference extends LayerScript<ScriptC_lm_difference>
 	{
 		ScriptDifference(RenderScript renderScript)
 		{

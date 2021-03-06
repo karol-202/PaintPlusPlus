@@ -29,8 +29,8 @@ import pl.karol202.paintplus.util.Utils;
 
 class ActivityPaintLayers implements View.OnClickListener
 {
-	private final float KEYLINE_3_2 = 3f / 2f;
-	private final int SHEET_PANEL_SIZE_DP = 56;
+	private static final float KEYLINE_3_2 = 3f / 2f;
+	private static final int SHEET_PANEL_SIZE_DP = 56;
 
 	private ActivityPaint activity;
 	private Image image;

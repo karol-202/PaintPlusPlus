@@ -28,11 +28,11 @@ public class NavigationBarUtils
 	{
 		int appHeight = getAppHeight(context);
 		int screenSize = getScreenHeight(context);
-		
+
 		if(appHeight < screenSize) return screenSize - appHeight;
 		else return 0;
 	}
-	
+
 	private static int getAppHeight(Context context)
 	{
 		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -41,28 +41,14 @@ public class NavigationBarUtils
 		display.getSize(size);
 		return size.y;
 	}
-	
+
 	private static int getScreenHeight(Context context)
 	{
 		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = windowManager.getDefaultDisplay();
-		
-		if(Build.VERSION.SDK_INT >= 17)
-		{
-			Point size = new Point();
-			display.getRealSize(size);
-			return size.y;
-		}
-		else return getScreenHeightAPI16(display);
-	}
-	
-	private static int getScreenHeightAPI16(Display display)
-	{
-		try
-		{
-			return (Integer) Display.class.getMethod("getRawHeight").invoke(display);
-		}
-		catch (Exception ignored) {}
-		return 0;
+
+		Point size = new Point();
+		display.getRealSize(size);
+		return size.y;
 	}
 }

@@ -21,7 +21,7 @@ import android.renderscript.RenderScript;
 
 public class LayerModeSubtraction extends LayerModeRenderscript<LayerModeSubtraction.ScriptSubtraction>
 {
-	protected class ScriptSubtraction extends LayerScript<ScriptC_lm_subtraction>
+	protected static class ScriptSubtraction extends LayerScript<ScriptC_lm_subtraction>
 	{
 		ScriptSubtraction(RenderScript renderScript)
 		{

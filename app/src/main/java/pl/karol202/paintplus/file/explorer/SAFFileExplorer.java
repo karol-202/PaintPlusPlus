@@ -16,21 +16,18 @@
 
 package pl.karol202.paintplus.file.explorer;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 
-@TargetApi(Build.VERSION_CODES.KITKAT)
 public class SAFFileExplorer implements FileExplorer
 {
-	private Activity activity;
-	
+	private final Activity activity;
+
 	SAFFileExplorer(Activity activity)
 	{
 		this.activity = activity;
 	}
-	
+
 	@Override
 	public void openFile(int requestCode)
 	{
@@ -39,7 +36,7 @@ public class SAFFileExplorer implements FileExplorer
 		intent.setType("image/*");
 		activity.startActivityForResult(intent, requestCode);
 	}
-	
+
 	@Override
 	public void saveFile(int requestCode)
 	{

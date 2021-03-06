@@ -24,15 +24,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
@@ -63,7 +63,6 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 	private ActivityPaintDrawers drawers;
 	private ActivityPaintLayers layers;
 
-	private View decorView;
 	private FragmentManager fragments;
 	private HashMap<Integer, ActivityResultListener> resultListeners;
 	private HashMap<Integer, PermissionGrantListener> permissionListeners;
@@ -90,8 +89,7 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 		layers = new ActivityPaintLayers(this);
 
 		setContentView(R.layout.activity_paint);
-		decorView = getWindow().getDecorView();
-		decorView.setOnSystemUiVisibilityChangeListener(visibility -> initSystemUIVisibility());
+		getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> initSystemUIVisibility());
 		initSystemUIVisibility();
 
 		fragments = getSupportFragmentManager();
@@ -126,24 +124,30 @@ public class ActivityPaint extends AppCompatActivity implements PermissionReques
 
 	private void initSystemUIVisibility()
 	{
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) initSystemUIVisibilityKitkat();
-		else initSystemUIVisibilityPreKitkat();
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) initSystemUIVisibility30();
+		else initSystemUIVisibilityPre30();
 	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
-	private void initSystemUIVisibilityKitkat()
+	private void initSystemUIVisibility30()
 	{
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-									  | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-									  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-									  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-									  | View.SYSTEM_UI_FLAG_FULLSCREEN
-									  | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		Window window = getWindow();
+		window.setDecorFitsSystemWindows(false);
+		window.getInsetsController().setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+		window.getInsetsController().hide(WindowInsets.Type.systemBars());
 	}
 
-	private void initSystemUIVisibilityPreKitkat()
+	// Can be replaced with usage of WindowInsetsControllerCompat as soon as the bug is resolved:
+	// https://issuetracker.google.com/issues/173203649
+	@SuppressWarnings("deprecation")
+	private void initSystemUIVisibilityPre30()
 	{
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+				                                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+				                                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+				                                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+				                                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
+				                                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 	}
 
 	private String makeTitle(Bundle savedInstanceState)

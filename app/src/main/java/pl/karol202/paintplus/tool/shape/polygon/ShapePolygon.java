@@ -31,18 +31,18 @@ public class ShapePolygon extends Shape
 	private boolean fill;
 	private int lineWidth;
 	private Join join;
-	
+
 	private boolean polygonCreated;
 	private Point center;
-	private float radiusOCC; //Radius of circumscribed circle
+	private float radiusOCC; // Radius of circumscribed circle
 	private float angle;
 	private Path path;
-	
+
 	private Point draggingStart;
 	private int draggedIndex;
 	private Point centerAtBeginning;
 	private float radiusOCCAtBeginning;
-	
+
 	public ShapePolygon(Image image, OnShapeEditListener shapeEditListener)
 	{
 		super(image, shapeEditListener);
@@ -50,28 +50,28 @@ public class ShapePolygon extends Shape
 		this.fill = false;
 		this.lineWidth = 30;
 		this.join = Join.MITTER;
-		
+
 		update();
 	}
-	
+
 	@Override
 	public int getName()
 	{
 		return R.string.shape_polygon;
 	}
-	
+
 	@Override
 	public int getIcon()
 	{
 		return R.drawable.ic_shape_polygon_black_24dp;
 	}
-	
+
 	@Override
 	public Class<? extends ShapeProperties> getPropertiesClass()
 	{
 		return PolygonProperties.class;
 	}
-	
+
 	public void onTouchStart(int x, int y)
 	{
 		Point touchPoint = new Point(x, y);
@@ -81,7 +81,7 @@ public class ShapePolygon extends Shape
 		{
 			float side = (float) (2 * radiusOCC * Math.sin(Math.PI / sides));
 			float radiusOIC = (float) (side / (2 * Math.tan(Math.PI / sides)));
-			
+
 			float centralAngle = 360f / sides;
 			float halfOfCentral = centralAngle / 2;
 			float angle = (float) Utils.getAngle(center, touchPoint) - this.angle;
@@ -89,10 +89,10 @@ public class ShapePolygon extends Shape
 			float angleMod = angle % centralAngle;
 			float a = Math.abs(angleMod - halfOfCentral);
 			float centerToSide = Utils.map(a, 0, halfOfCentral, radiusOIC, radiusOCC);
-			
+
 			float distanceToCenter = calcDistance(center, x, y);
 			float distanceToSide = Math.abs(distanceToCenter - centerToSide);
-			
+
 			draggingStart = touchPoint;
 			centerAtBeginning = center;
 			radiusOCCAtBeginning = radiusOCC;
@@ -101,39 +101,39 @@ public class ShapePolygon extends Shape
 			else draggedIndex = 1;
 		}
 	}
-	
+
 	public void onTouchMove(int x, int y)
 	{
 		Point current = new Point(x, y);
 		if(!polygonCreated) dragRadius(current);
 		else drag(current);
 	}
-	
+
 	public void onTouchStop(int x, int y)
 	{
 		onTouchMove(x, y);
 		polygonCreated = true;
 	}
-	
+
 	private void drag(Point current)
 	{
 		if(draggedIndex == 0) dragCenter(current);
 		else if(draggedIndex == 1) dragRadius(current);
 	}
-	
+
 	private void dragCenter(Point current)
 	{
 		Point delta = new Point(current);
 		delta.x -= draggingStart.x;
 		delta.y -= draggingStart.y;
-		
+
 		Point newCenter = new Point(centerAtBeginning);
 		newCenter.offset(delta.x, delta.y);
 		setCenterPoint(newCenter);
-		
+
 		createPath();
 	}
-	
+
 	private void dragRadius(Point current)
 	{
 		if(draggingStart != null)
@@ -142,17 +142,17 @@ public class ShapePolygon extends Shape
 			float rCurrent = calcDistance(center, current.x, current.y);
 			float rDraggingStart = calcDistance(center, draggingStart.x, draggingStart.y);
 			float rBeginning = radiusOCCAtBeginning;
-			
+
 			float rDelta = rCurrent - rDraggingStart;
 			float rResult = rBeginning + rDelta;
-			
+
 			float x = (float) (rResult * Math.cos(theta)) + center.x;
 			float y = (float) (rResult * Math.sin(theta)) + center.y;
 			PointF result = new PointF(x, y);
 			getHelpersManager().snapPoint(result);
-			
+
 			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
-			
+
 			angle = (float) Utils.getAngle(center, new Point((int) result.x, (int) result.y)) - 90;
 		}
 		else
@@ -160,20 +160,20 @@ public class ShapePolygon extends Shape
 			PointF snapped = new PointF(current);
 			getHelpersManager().snapPoint(snapped);
 			radiusOCC = calcDistance(center, (int) snapped.x, (int) snapped.y);
-			
+
 			angle = (float) Utils.getAngle(center, new Point((int) snapped.x, (int) snapped.y)) - 90;
 		}
-		
+
 		createPath();
 	}
-	
+
 	private void setCenterPoint(Point point)
 	{
 		PointF snapped = new PointF(point);
 		getHelpersManager().snapPoint(snapped);
 		center = new Point((int) snapped.x, (int) snapped.y);
 	}
-	
+
 	@Override
 	public void expandDirtyRect(Rect dirtyRect)
 	{
@@ -182,7 +182,7 @@ public class ShapePolygon extends Shape
 		dirtyRect.right = Math.max(dirtyRect.right, (int) (center.x + radiusOCC + lineWidth));
 		dirtyRect.bottom = Math.max(dirtyRect.bottom, (int) (center.y + radiusOCC + lineWidth));
 	}
-	
+
 	@Override
 	public void onScreenDraw(Canvas canvas, boolean translucent)
 	{
@@ -190,7 +190,7 @@ public class ShapePolygon extends Shape
 		updateColor(translucent);
 		canvas.drawPath(path, getPaint());
 	}
-	
+
 	@Override
 	public Rect getBoundsOfShape()
 	{
@@ -205,7 +205,7 @@ public class ShapePolygon extends Shape
 		rect.bottom += lineWidth;
 		return rect;
 	}
-	
+
 	@Override
 	public void apply(Canvas imageCanvas)
 	{
@@ -214,20 +214,20 @@ public class ShapePolygon extends Shape
 		imageCanvas.drawPath(path, getPaint());
 		cleanUp();
 	}
-	
+
 	@Override
 	public void cancel()
 	{
 		cleanUp();
 	}
-	
+
 	@Override
 	public void offsetShape(int x, int y)
 	{
 		if(center != null) center.offset(x, y);
 		createPath();
 	}
-	
+
 	@Override
 	public void update()
 	{
@@ -237,7 +237,7 @@ public class ShapePolygon extends Shape
 		createPath();
 		super.update();
 	}
-	
+
 	@Override
 	public void cleanUp()
 	{
@@ -248,7 +248,7 @@ public class ShapePolygon extends Shape
 		path = null;
 		super.cleanUp();
 	}
-	
+
 	@Override
 	public void enableEditMode()
 	{
@@ -259,12 +259,12 @@ public class ShapePolygon extends Shape
 		path = null;
 		super.enableEditMode();
 	}
-	
+
 	private void createPath()
 	{
 		if(center == null || radiusOCC == -1) return;
 		float central = 360f / sides;
-		
+
 		path = new Path();
 		for(int i = 0; i < sides; i++)
 		{
@@ -276,46 +276,46 @@ public class ShapePolygon extends Shape
 		}
 		path.close();
 	}
-	
+
 	int getSides()
 	{
 		return sides;
 	}
-	
+
 	void setSides(int sides)
 	{
 		if(sides < 3) throw new IllegalArgumentException("Number of sides of polygon cannot be lower than 3.");
 		this.sides = sides;
 		update();
 	}
-	
+
 	boolean isFill()
 	{
 		return fill;
 	}
-	
+
 	void setFill(boolean fill)
 	{
 		this.fill = fill;
 		update();
 	}
-	
+
 	int getLineWidth()
 	{
 		return lineWidth;
 	}
-	
+
 	void setLineWidth(int lineWidth)
 	{
 		this.lineWidth = lineWidth;
 		update();
 	}
-	
+
 	Join getJoin()
 	{
 		return join;
 	}
-	
+
 	void setJoin(Join join)
 	{
 		this.join = join;

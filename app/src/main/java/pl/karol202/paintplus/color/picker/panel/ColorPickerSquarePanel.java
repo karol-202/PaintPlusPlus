@@ -35,16 +35,16 @@ public class ColorPickerSquarePanel extends View
 		void onChannelsValueChanged();
 	}
 
-	//TODO Repetition of code in ColorPickerBar. Move to another class.
+	// TODO Repetition of code in ColorPickerBar. Move to another class.
 	private static final int[] HUE_COLORS = new int[] { Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED };
 
-	private final float LEFT_MARGIN_DP = 10;
-	private final float TOP_MARGIN_DP = 10;
-	private final float RIGHT_MARGIN_DP = 10;
-	private final float BOTTOM_MARGIN_DP = 10;
-	private final float INDICATOR_RING_RADIUS_DP = 6;
-	private final float INDICATOR_RING_THICKNESS_DP = 2;
-	private final float BORDER_WIDTH_DP = 1;
+	private static final float LEFT_MARGIN_DP = 10;
+	private static final float TOP_MARGIN_DP = 10;
+	private static final float RIGHT_MARGIN_DP = 10;
+	private static final float BOTTOM_MARGIN_DP = 10;
+	private static final float INDICATOR_RING_RADIUS_DP = 6;
+	private static final float INDICATOR_RING_THICKNESS_DP = 2;
+	private static final float BORDER_WIDTH_DP = 1;
 
 	private final float LEFT_MARGIN_PX;
 	private final float TOP_MARGIN_PX;

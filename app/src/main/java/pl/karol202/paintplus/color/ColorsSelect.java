@@ -49,15 +49,7 @@ public class ColorsSelect extends Fragment implements View.OnClickListener, Colo
 	private int target;
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		init(activity);
-	}
-
-	@Override
-	public void onAttach(Context context)
+	public void onAttach(@NonNull Context context)
 	{
 		super.onAttach(context);
 		init(context);

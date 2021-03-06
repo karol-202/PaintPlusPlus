@@ -16,9 +16,9 @@
 
 package pl.karol202.paintplus.color.picker;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public abstract class ColorPickerFragment extends Fragment
@@ -33,16 +33,8 @@ public abstract class ColorPickerFragment extends Fragment
 		if(getArguments() != null) useAlpha = getArguments().getBoolean("useAlpha");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		init(activity);
-	}
-
-	@Override
-	public void onAttach(Context context)
+	public void onAttach(@NonNull Context context)
 	{
 		super.onAttach(context);
 		init(context);

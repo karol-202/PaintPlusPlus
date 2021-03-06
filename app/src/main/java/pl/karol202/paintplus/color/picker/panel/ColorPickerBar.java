@@ -35,14 +35,14 @@ public class ColorPickerBar extends View
 
 	private static final int[] HUE_COLORS = new int[] { Color.RED, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED };
 
-	private final float LEFT_MARGIN_DP = 12;
-	private final float TOP_MARGIN_DP = 10;
-	private final float RIGHT_MARGIN_DP = 1;
-	private final float BOTTOM_MARGIN_DP = 10;
-	private final float INDICATOR_LINE_WIDTH_DP = 2;
-	private final float BORDER_WIDTH_DP = 1;
-	private final Path TRIANGLE_OUTER_PATH = new Path();
-	private final Path TRIANGLE_INNER_PATH = new Path();
+	private static final float LEFT_MARGIN_DP = 12;
+	private static final float TOP_MARGIN_DP = 10;
+	private static final float RIGHT_MARGIN_DP = 1;
+	private static final float BOTTOM_MARGIN_DP = 10;
+	private static final float INDICATOR_LINE_WIDTH_DP = 2;
+	private static final float BORDER_WIDTH_DP = 1;
+	private static final Path TRIANGLE_OUTER_PATH = new Path();
+	private static final Path TRIANGLE_INNER_PATH = new Path();
 
 	private final float LEFT_MARGIN_PX;
 	private final float TOP_MARGIN_PX;
@@ -105,7 +105,7 @@ public class ColorPickerBar extends View
 
 	private void initTriangles(Context context)
 	{
-		//TODO Paths to xml
+		// TODO Paths to xml
 		TRIANGLE_OUTER_PATH.moveTo(0, -8);
 		TRIANGLE_OUTER_PATH.lineTo(16, 0);
 		TRIANGLE_OUTER_PATH.lineTo(0, 8);

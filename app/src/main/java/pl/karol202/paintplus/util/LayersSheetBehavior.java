@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -34,7 +35,7 @@ public class LayersSheetBehavior<V extends View> extends BottomSheetBehavior<V>
 	}
 
 	@Override
-	public boolean onInterceptTouchEvent(CoordinatorLayout parent, V child, MotionEvent event)
+	public boolean onInterceptTouchEvent(@NonNull CoordinatorLayout parent, @NonNull V child, @NonNull MotionEvent event)
 	{
 		return allowDragging && super.onInterceptTouchEvent(parent, child, event);
 	}

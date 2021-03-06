@@ -29,7 +29,8 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
-public class ColorPickProperties extends ToolProperties implements CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener
+public class ColorPickProperties extends ToolProperties implements CompoundButton.OnCheckedChangeListener,
+                                                                   SeekBar.OnSeekBarChangeListener
 {
 	private ToolColorPick colorPick;
 

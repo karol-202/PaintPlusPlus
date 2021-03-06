@@ -50,7 +50,7 @@ class ColorChannelViews
 	private SeekBar seekBarChannelValue;
 	private TextView textChannelValue;
 
-	//Constructor for hiding channelView
+	// Constructor for hiding channelView
 	ColorChannelViews(View channelView)
 	{
 		this.channelView = channelView;

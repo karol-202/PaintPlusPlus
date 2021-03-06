@@ -38,7 +38,8 @@ import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Locale;
 
-public class OptionColorsBrightness extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener
+public class OptionColorsBrightness extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener,
+                                                              View.OnTouchListener
 {
 	private ColorsBrightness manipulator;
 	private Layer layer;
