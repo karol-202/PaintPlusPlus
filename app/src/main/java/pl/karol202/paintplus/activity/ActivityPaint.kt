@@ -21,7 +21,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -41,6 +40,8 @@ import pl.karol202.paintplus.util.NavigationBarUtils
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.viewBinding
 import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
+import pl.karol202.paintplus.viewmodel.PaintViewModel.TitleOverride
 
 class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContext
 {
@@ -142,9 +143,19 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 			val toolName = getString(paintViewModel.currentToolFlow.value.name)
 			views.toolbar.root.title = when(it)
 			{
-				PaintViewModel.TitleOverride.NONE -> toolName
-				PaintViewModel.TitleOverride.TOOL_SELECTION -> getString(R.string.choice_of_tool)
-				PaintViewModel.TitleOverride.TOOL_PROPERTIES -> getString(R.string.properties, toolName)
+				TitleOverride.NONE -> toolName
+				TitleOverride.TOOL_SELECTION -> getString(R.string.choice_of_tool)
+				TitleOverride.TOOL_PROPERTIES -> getString(R.string.properties, toolName)
+			}
+		}
+		paintViewModel.imageEventFlow.collectIn(lifecycleScope) {
+			when(it)
+			{
+				ImageEvent.IMAGE_CHANGED -> views.paintView.notifyImageChanged()
+				ImageEvent.LAYERS_CHANGED -> views.paintView.notifyLayersChanged()
+				ImageEvent.IMAGE_MATRIX_CHANGED -> views.paintView.notifyImageMatrixChanged()
+				ImageEvent.SELECTION_CHANGED -> views.paintView.notifySelectionChanged()
+				else -> {}
 			}
 		}
 	}
@@ -254,7 +265,4 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	fun closeLayersSheet() = layers.closeLayersSheet()
 
 	fun setScrollingBlocked(blocked: Boolean) = layers.setScrollingBlocked(blocked)
-
-	// TODO Should be called on image update
-	fun updateLayersPreview() = layers.updateData()
 }

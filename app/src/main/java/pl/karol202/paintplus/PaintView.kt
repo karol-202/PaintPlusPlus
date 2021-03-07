@@ -36,7 +36,7 @@ private val PAINT_DASH = floatArrayOf(5f, 5f)
 private const val CHECKERBOARD_OFFSET = 8f
 
 class PaintView(context: Context,
-                attrs: AttributeSet?) : SurfaceView(context, attrs), OnImageChangeListener, OnSelectionChangeListener
+                attrs: AttributeSet?) : SurfaceView(context, attrs)
 {
 	private var image: Image? = null
 	private var selection: Selection? = null
@@ -214,22 +214,20 @@ class PaintView(context: Context,
 		return true
 	}
 
-	override fun onImageChanged()
+	fun notifyImageChanged()
 	{
 		if(image == null) return
 		updateLayerBounds()
-		// activity.updateLayersPreview() TODO Update activity
 		invalidate()
 	}
 
-	override fun onLayersChanged()
+	fun notifyLayersChanged()
 	{
 		if(image == null) return
-		// activity.updateLayersPreview()
 		updateLayerBounds()
 	}
 
-	override fun onImageMatrixChanged()
+	fun notifyImageMatrixChanged()
 	{
 		if(image == null) return
 		updateCheckerboardMatrix()
@@ -238,8 +236,9 @@ class PaintView(context: Context,
 		invalidate()
 	}
 
-	override fun onSelectionChanged()
+	fun notifySelectionChanged()
 	{
+		if(image == null) return
 		createSelectionPath()
 	}
 
@@ -296,18 +295,15 @@ class PaintView(context: Context,
 		selection = image.selection
 		helpersManager = image.helpersManager
 
-		image.setOnImageChangeListener(this)
-		image.addOnSelectionChangeListener(this)
-
-		onSelectionChanged()
-		onImageChanged()
-		onLayersChanged()
+		notifySelectionChanged()
+		notifyImageChanged()
+		notifyLayersChanged()
 	}
 
 	fun setCurrentTool(tool: Tool)
 	{
 		currentTool = tool
-		onImageChanged()
+		notifyImageChanged()
 	}
 
 	fun setSettings(settings: Settings)

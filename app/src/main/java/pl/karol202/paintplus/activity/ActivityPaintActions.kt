@@ -26,6 +26,7 @@ import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.forEach
+import androidx.lifecycle.lifecycleScope
 import pl.karol202.paintplus.options.OptionFileNew
 import pl.karol202.paintplus.options.OptionFileCapturePhoto
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
@@ -54,10 +55,12 @@ import pl.karol202.paintplus.options.OptionCropLayerBySelection
 import pl.karol202.paintplus.options.OptionColorsInvert
 import pl.karol202.paintplus.options.OptionColorsBrightness
 import pl.karol202.paintplus.options.OptionColorCurves
+import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 
 class ActivityPaintActions(private val activity: ActivityPaint,
-                           paintViewModel: PaintViewModel)
+                           private val paintViewModel: PaintViewModel)
 {
 	private val menuInflater = activity.menuInflater
 	private val packageManager = activity.packageManager
@@ -67,10 +70,14 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 	fun inflateMenu(menu: Menu?)
 	{
 		menuInflater.inflate(R.menu.menu_paint, menu)
-		image.addOnSelectionChangeListener { activity.invalidateOptionsMenu() }
-		image.setOnHistoryUpdateListener {
-			activity.invalidateOptionsMenu()
-			image.updateImage()
+
+		paintViewModel.imageEventFlow.collectIn(activity.lifecycleScope) {
+			when(it)
+			{
+				ImageEvent.SELECTION_CHANGED -> activity.invalidateOptionsMenu()
+				ImageEvent.HISTORY_CHANGED -> activity.invalidateOptionsMenu()
+				else -> {}
+			}
 		}
 	}
 

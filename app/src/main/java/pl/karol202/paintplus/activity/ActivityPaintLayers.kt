@@ -15,12 +15,14 @@
  */
 package pl.karol202.paintplus.activity
 
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.image.layer.LayersAdapter
 import pl.karol202.paintplus.options.OptionLayerNew
 import pl.karol202.paintplus.util.LayersSheetBehavior
 import pl.karol202.paintplus.util.Utils
+import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 private const val KEYLINE_3_2 = 3f / 2f
@@ -47,7 +49,13 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 		views.buttonAddLayer.setOnClickListener {
 			OptionLayerNew(activity, paintViewModel.image) { layersAdapter.notifyDataSetChanged() }.execute()
 		}
+
+		paintViewModel.imageEventFlow.collectIn(activity.lifecycleScope) {
+			if(it == PaintViewModel.ImageEvent.LAYERS_CHANGED) updateData()
+		}
 	}
+
+	private fun updateData() = layersAdapter.notifyDataSetChanged()
 
 	fun updateView()
 	{
@@ -56,8 +64,6 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 		val maxRecyclerHeight = maxSheetHeight - sheetPanelSizePx
 		views.recyclerLayers.setMaxHeight(maxRecyclerHeight)
 	}
-
-	fun updateData() = layersAdapter.notifyDataSetChanged()
 
 	fun toggleLayersSheet() = when(bottomSheetBehaviour.state)
 	{

@@ -470,6 +470,7 @@ public class Image
 		for(Layer layer : layers) layer.setImageChangeListener(listener);
 	}
 
+	// Can be changed to setOnSelectionChangeListener
 	public void addOnSelectionChangeListener(OnSelectionChangeListener listener)
 	{
 		selection.addListener(listener);
