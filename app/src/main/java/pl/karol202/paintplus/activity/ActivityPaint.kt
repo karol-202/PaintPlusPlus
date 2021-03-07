@@ -33,7 +33,7 @@ import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.options.OptionFileOpen
-import pl.karol202.paintplus.recent.RecentImageCreator
+import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.util.NavigationBarUtils
@@ -51,7 +51,9 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 		const val OPEN_KEY = "open"
 	}
 
+	private val recentViewModel by viewModel<RecentViewModel>()
 	private val paintViewModel by viewModel<PaintViewModel>()
+	private val views by viewBinding(ActivityPaintBinding::inflate)
 
 	private lateinit var actions: ActivityPaintActions
 	private lateinit var drawers: ActivityPaintDrawers
@@ -61,7 +63,6 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	private var permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
 	var asyncManager = AsyncManager(this)
 		private set
-	private var recentImageCreator = RecentImageCreator(this)
 
 	private var initUri: Uri? = null
 	private var openFile = false
@@ -69,10 +70,7 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	val image get() = paintViewModel.image
 	val tools get() = paintViewModel.tools
 	val isAnyDrawerOpen get() = drawers.isAnyDrawerOpen
-	val fileEditListener get() = recentImageCreator
 	val mainContainer get() = views.mainContainer
-
-	private val views by viewBinding(ActivityPaintBinding::inflate)
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -171,17 +169,18 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 
 	private fun loadImageIfPathIsPresent()
 	{
-		if(initUri != null) OptionFileOpen(this, image, asyncManager, recentImageCreator).openFile(initUri)
+		if(initUri != null) OptionFileOpen(this, image, asyncManager, recentViewModel::onFileEdit).openFile(initUri)
 	}
 
 	private fun selectImageToOpenIfNeeded()
 	{
-		if(openFile) OptionFileOpen(this, image, asyncManager, recentImageCreator).executeWithoutAsking()
+		if(openFile) OptionFileOpen(this, image, asyncManager, recentViewModel::onFileEdit).executeWithoutAsking()
 	}
 
 	override fun onSaveInstanceState(outState: Bundle)
 	{
-		intent.putExtra("path", null as String?)
+		intent.putExtra(URI_KEY, null as String?)
+		intent.putExtra(OPEN_KEY, false)
 		super.onSaveInstanceState(outState)
 	}
 
@@ -226,6 +225,8 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
 		return snackbar
 	}
+
+	fun onFileEdit(uri: Uri) = recentViewModel.onFileEdit(uri)
 
 	fun registerActivityResultListener(requestCode: Int, listener: ActivityResultListener)
 	{

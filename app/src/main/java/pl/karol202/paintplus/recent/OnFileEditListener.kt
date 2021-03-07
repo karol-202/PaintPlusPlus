@@ -13,13 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.recent
 
-package pl.karol202.paintplus.recent;
+import android.net.Uri
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-
-public interface OnFileEditListener
+fun interface OnFileEditListener
 {
-	void onFileEdited(Uri uri, Bitmap bitmap);
+	fun onFileEdited(uri: Uri)
 }

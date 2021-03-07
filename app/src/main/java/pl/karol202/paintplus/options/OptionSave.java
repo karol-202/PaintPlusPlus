@@ -35,6 +35,7 @@ import pl.karol202.paintplus.file.explorer.FileExplorer;
 import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.recent.OnFileEditListener;
+import pl.karol202.paintplus.util.UriExtKt;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,12 +44,12 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 	private ActivityPaint activity;
 	private OnFileEditListener listener;
 	private AsyncManager asyncManager;
-	
+
 	BitmapSaveAsyncTask asyncTask;
 	Uri uri;
 	BitmapSaveFormat format;
 	ParcelFileDescriptor parcelFileDescriptor;
-	
+
 	OptionSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
 		super(activity, image);
@@ -56,20 +57,20 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 		this.asyncManager = asyncManager;
 		this.listener = listener;
 	}
-	
+
 	abstract int getRequestId();
-	
+
 	abstract Bitmap getBitmapToSave();
-	
+
 	@Override
 	public void execute()
 	{
 		activity.registerActivityResultListener(getRequestId(), this);
-		
+
 		FileExplorer explorer = FileExplorerFactory.createFileExplorer(activity);
 		explorer.saveFile(getRequestId());
 	}
-	
+
 	public void execute(Uri uri, BitmapSaveFormat format)
 	{
 		this.uri = uri;
@@ -77,7 +78,7 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 		if(format != null) saveBitmapAsynchronously();
 		else if(checkFileFormat() && !showSettingsDialog()) saveBitmapAsynchronously();
 	}
-	
+
 	@Override
 	public void onActivityResult(int resultCode, Intent intent)
 	{
@@ -86,29 +87,28 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 		uri = intent.getData();
 		if(checkFileFormat() && !showSettingsDialog()) saveBitmapAsynchronously();
 	}
-	
+
 	private boolean checkFileFormat()
 	{
-		UriMetadata metadata = new UriMetadata(getContext(), uri);
-		format = ImageLoader.getFormat(metadata.getDisplayName());
+		format = ImageLoader.getFormat(uri.getLastPathSegment());
 		if(format == null) unsupportedFormat();
 		return format != null;
 	}
-	
+
 	private void unsupportedFormat()
 	{
 		UriUtils.deleteDocument(getContext(), uri);
 		getAppContext().createSnackbar(R.string.message_unsupported_format, Toast.LENGTH_SHORT).show();
 	}
-	
+
 	private boolean showSettingsDialog()
 	{
 		if(!format.providesSettingsDialog()) return false;
-		
+
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(format.getSettingsDialogLayout(), null);
 		format.customizeSettingsDialog(view);
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setTitle(format.getSettingsDialogTitle());
 		builder.setView(view);
@@ -117,41 +117,41 @@ abstract class OptionSave extends Option implements ActivityResultListener, Asyn
 		builder.show();
 		return true;
 	}
-	
+
 	void saveBitmapAsynchronously()
 	{
 		asyncManager.block(this);
-		
+
 		parcelFileDescriptor = UriUtils.createFileSaveDescriptor(getContext(), uri);
 		BitmapSaveParams params = new BitmapSaveParams(this, getBitmapToSave(),
 														parcelFileDescriptor.getFileDescriptor(), format);
 		asyncTask = new BitmapSaveAsyncTask();
 		asyncTask.execute(params);
 	}
-	
+
 	@Override
 	public void cancel()
 	{
 		asyncTask.cancel(true);
 		asyncManager.unblock(this);
 	}
-	
+
 	@Override
 	public int getMessage()
 	{
 		return R.string.dialog_save_message;
 	}
-	
+
 	@Override
 	public void onBitmapSaved(BitmapSaveResult result)
 	{
 		asyncManager.unblock(this);
 		UriUtils.closeFileDescriptor(parcelFileDescriptor);
-		
+
 		switch(result.getResult())
 		{
 		case SUCCESSFUL:
-			if(listener != null) listener.onFileEdited(uri, result.getBitmap());
+			if(listener != null) listener.onFileEdited(uri);
 			break;
 		case ERROR:
 			UriUtils.deleteDocument(getContext(), uri);

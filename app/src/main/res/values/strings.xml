@@ -189,6 +189,7 @@
 	<string name="layer_name">Name</string>
 	<string name="message_invalid_bounds">Given dimensions are invalid</string>
 	<string name="new_layer_name">New layer</string>
+	<string name="opened_layer_name">Layer from file</string>
 	<string name="message_flip_direction">Choose flip direction</string>
 	<string name="rubber_strength">Strength</string>
 	<string name="rubber_smooth">Smooth</string>

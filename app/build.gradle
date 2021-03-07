@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.kapt'
 
 android {
     compileSdkVersion 30
@@ -11,6 +12,13 @@ android {
         targetSdkVersion 30
         versionCode 10
         versionName "1.1"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.incremental": "true"]
+            }
+        }
+
     }
 
     buildTypes {
@@ -46,8 +54,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.3.0'
-
     implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.room:room-ktx:2.2.6'
+    kapt 'androidx.room:room-compiler:2.2.6'
+
     implementation 'com.google.firebase:firebase-core:18.0.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.3.1'
     implementation 'com.google.android.material:material:1.3.0'

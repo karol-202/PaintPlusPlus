@@ -13,18 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.settings
 
-package pl.karol202.paintplus.settings;
+import androidx.preference.PreferenceFragmentCompat
+import android.os.Bundle
+import pl.karol202.paintplus.R
 
-import android.os.Bundle;
-import androidx.preference.PreferenceFragmentCompat;
-import pl.karol202.paintplus.R;
-
-public class SettingsFragment extends PreferenceFragmentCompat
+class SettingsFragment : PreferenceFragmentCompat()
 {
-	@Override
-	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
+	override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String)
 	{
-		setPreferencesFromResource(R.xml.preferences, rootKey);
+		setPreferencesFromResource(R.xml.preferences, rootKey)
 	}
 }

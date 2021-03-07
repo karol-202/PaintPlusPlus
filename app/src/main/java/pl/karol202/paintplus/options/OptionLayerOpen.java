@@ -23,11 +23,11 @@ import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.file.UriMetadata;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.util.UriExtKt;
 
 public class OptionLayerOpen extends OptionOpen
 {
@@ -65,8 +65,8 @@ public class OptionLayerOpen extends OptionOpen
 
 	private String getLayerName()
 	{
-		UriMetadata metadata = new UriMetadata(getContext(), getUri());
-		return metadata.getDisplayName();
+		String displayName = UriExtKt.getDisplayName(getUri(), getContext());
+		return displayName != null ? displayName : getAppContext().getContext().getString(R.string.opened_layer_name);
 	}
 
 	private void createLayerAddHistoryAction(Layer layer)

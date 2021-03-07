@@ -16,45 +16,17 @@
 package pl.karol202.paintplus.activity
 
 import android.Manifest
-import android.view.MenuInflater
 import android.content.pm.PackageManager
-import pl.karol202.paintplus.PaintView
-import pl.karol202.paintplus.R
-import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener
-import pl.karol202.paintplus.history.OnHistoryUpdateListener
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.forEach
 import androidx.lifecycle.lifecycleScope
-import pl.karol202.paintplus.options.OptionFileNew
-import pl.karol202.paintplus.options.OptionFileCapturePhoto
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
-import pl.karol202.paintplus.options.OptionFileOpen
-import pl.karol202.paintplus.options.OptionFileSave
 import pl.karol202.paintplus.history.ActivityHistoryHelper
 import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.options.OptionSetZoom
-import pl.karol202.paintplus.options.OptionImageResize
-import pl.karol202.paintplus.options.OptionImageScale
-import pl.karol202.paintplus.options.OptionImageFlip
-import pl.karol202.paintplus.options.OptionImageRotate
-import pl.karol202.paintplus.options.OptionImageFlatten
-import pl.karol202.paintplus.options.OptionCropImageBySelection
-import pl.karol202.paintplus.options.OptionLayerNew
-import pl.karol202.paintplus.options.OptionLayerOpen
-import pl.karol202.paintplus.options.OptionLayerSave
-import pl.karol202.paintplus.options.OptionLayerResize
-import pl.karol202.paintplus.options.OptionLayerScale
-import pl.karol202.paintplus.options.OptionLayerFlip
-import pl.karol202.paintplus.options.OptionLayerRotate
-import pl.karol202.paintplus.options.OptionLayerDrag
-import pl.karol202.paintplus.options.OptionLayerToImageSize
-import pl.karol202.paintplus.options.OptionCropLayerBySelection
-import pl.karol202.paintplus.options.OptionColorsInvert
-import pl.karol202.paintplus.options.OptionColorsBrightness
-import pl.karol202.paintplus.options.OptionColorCurves
+import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
@@ -164,17 +136,17 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 				OptionFileCapturePhoto(activity, image).execute()
 			R.id.action_open_image ->
 				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileOpen(activity, image, activity.asyncManager, activity.fileEditListener).execute()
-				})
+					OptionFileOpen(activity, image, activity.asyncManager, activity::onFileEdit).execute()
+				}).execute()
 			R.id.action_save_image ->
 				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileSave(activity, image, activity.asyncManager, activity.fileEditListener)
+					OptionFileSave(activity, image, activity.asyncManager, activity::onFileEdit)
 							.execute(image.lastUri, image.lastFormat)
-				})
+				}).execute()
 			R.id.action_save_image_as ->
 				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileSave(activity, image, activity.asyncManager, activity.fileEditListener).execute()
-				})
+					OptionFileSave(activity, image, activity.asyncManager, activity::onFileEdit).execute()
+				}).execute()
 			R.id.action_undo ->
 				image.undo()
 			R.id.action_redo ->
@@ -226,7 +198,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_open_layer ->
 				OptionLayerOpen(activity, image, activity.asyncManager).execute()
 			R.id.action_save_layer ->
-				OptionLayerSave(activity, image, activity.asyncManager, activity.fileEditListener).execute()
+				OptionLayerSave(activity, image, activity.asyncManager, activity::onFileEdit).execute()
 			R.id.action_resize_layer ->
 				OptionLayerResize(activity, image).execute()
 			R.id.action_scale_layer ->

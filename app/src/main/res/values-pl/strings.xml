@@ -189,6 +189,7 @@
 	<string name="layer_name">Nazwa</string>
 	<string name="message_invalid_bounds">Podane wymiary są nieprawidłowe</string>
 	<string name="new_layer_name">Nowa warstwa</string>
+	<string name="opened_layer_name">Warstwa z pliku</string>
 	<string name="message_flip_direction">Wybierz kierunek, w którym ma nastąpić odbicie</string>
 	<string name="rubber_strength">Siła</string>
 	<string name="rubber_smooth">Wygładź</string>

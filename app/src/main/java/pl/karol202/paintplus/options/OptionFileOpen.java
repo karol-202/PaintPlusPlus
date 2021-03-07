@@ -88,7 +88,7 @@ public class OptionFileOpen extends OptionOpen
 		getImage().setLastUri(getUri());
 		getImage().centerView();
 
-		if(listener != null) listener.onFileEdited(getUri(), bitmap);
+		if(listener != null) listener.onFileEdited(getUri());
 		askAboutExifRotation(this::rotateImage);
 	}
 

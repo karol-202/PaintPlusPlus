@@ -13,10 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.recent
 
-package pl.karol202.paintplus.recent;
+import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-interface OnImageSelectListener
-{
-	void onImageSelected(RecentImage image);
-}
+@Entity
+data class RecentImage(@PrimaryKey val uri: Uri,
+                       val name: String,
+                       var date: Long)

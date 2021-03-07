@@ -44,10 +44,9 @@ public class PermissionRequest<A extends Activity & PermissionRequest.Permission
 		this.activity = activity;
 		this.permission = permission;
 		this.grantListener = grantListener;
-		checkForPermission();
 	}
 
-	private void checkForPermission()
+	public void execute()
 	{
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		{
