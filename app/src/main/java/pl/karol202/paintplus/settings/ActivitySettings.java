@@ -27,8 +27,6 @@ import pl.karol202.paintplus.R;
 
 public class ActivitySettings extends AppCompatActivity
 {
-	public static final String KEY_VIEW_SMOOTH = "preference_view_smooth";
-
 	private FragmentManager fragments;
 	private ActionBar actionBar;
 

@@ -37,16 +37,13 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	private float opacity;
 
 	private Canvas canvas;
-	private AsyncManager asyncManager;
 	private AsyncTask asyncTask;
 
-	public ToolFill(Image image, AsyncManager asyncManager)
+	public ToolFill(Image image)
 	{
 		super(image);
 		this.fillThreshold = 0;
 		this.opacity = 1;
-
-		this.asyncManager = asyncManager;
 	}
 
 	@Override
@@ -88,7 +85,7 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
 
-		if(!asyncManager.block(this)) return false;
+		//if(!asyncManager.block(this)) return false;
 		cancelClipping();
 
 		FillParams params = new FillParams(this, image, fillThreshold, 1 - opacity, (int) x, (int) y);
@@ -165,14 +162,14 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 	{
 		canvas.drawBitmap(bitmap, 0, 0, null); // TODO Paint opacity = strength
 		image.updateImage();
-		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
+		//if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
 
 	@Override
 	public void cancel()
 	{
 		asyncTask.cancel(true);
-		if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
+		//if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import pl.karol202.paintplus.activity.ActivityPaint;
+import pl.karol202.paintplus.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +52,8 @@ class LayerHandle implements Animator.AnimatorListener
 		this.mainContainer = activity.getMainContainer();
 		this.adapter = adapter;
 		this.viewHolders = adapter.getViewHolders();
-		this.viewHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, LayerViewHolder.HEIGHT_DP,
-		                                                  activity.getDisplayMetrics());
+
+		this.viewHeight = (int) Utils.dpToPixels(activity, LayerViewHolder.HEIGHT_DP);
 	}
 
 	void onTouchStart(float x, float y)

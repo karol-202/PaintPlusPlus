@@ -22,11 +22,11 @@
 	<string name="activity_file_open">Otwórz plik</string>
 	<string name="activity_file_save">Zapisz plik</string>
 	<string name="activity_settings">Ustawienia</string>
-	
+
 	<string name="action_drawer_open">Otwórz panel narzędzi</string>
 	<string name="action_drawer_close">Zamknij panel narzędzi</string>
-	<string name="properties">Właściwości</string>
-	
+	<string name="properties">Właściwości: %s</string>
+
 	<string name="dialog_new_image">Nowy obraz</string>
 	<string name="dialog_resize_image">Zmień wymiary</string>
 	<string name="dialog_scale_image">Skaluj obraz</string>
@@ -48,42 +48,42 @@
 	<string name="dialog_colors_brightness">Ustawienia jasności</string>
 	<string name="dialog_set_zoom">Ustaw powiększenie</string>
 	<string name="dialog_save_message">Trwa zapisywanie…</string>
-	
+
 	<string name="preference_jpg_quality">Jakość zapisywania JPG</string>
 	<string name="preference_jpg_quality_dialog">Jakość zapisywania JPG</string>
 	<string name="preference_view_smooth">Wygładzanie wyświetlanego obrazu</string>
 	<string name="preference_view_smooth_summary">Wygładzanie powiększanych obrazów</string>
 	<string name="preference_color_mode">Sposób wyboru koloru</string>
 	<string name="preference_color_mode_dialog">Sposób wyboru koloru</string>
-	
+
 	<string name="action_layers">Warstwy</string>
 	<string name="action_tool">Narzędzie</string>
-	
+
 	<string name="action_file">Plik</string>
 	<string name="action_new_image">Nowy obraz</string>
 	<string name="action_capture_photo">Zrób zdjęcie</string>
 	<string name="action_open_image">Otwórz plik</string>
 	<string name="action_save_image">Zapisz plik</string>
 	<string name="action_save_image_as">Zapisz jako</string>
-	
+
 	<string name="action_edit">Edycja</string>
 	<string name="action_cut">Wytnij</string>
 	<string name="action_copy">Kopiuj</string>
 	<string name="action_paste">Wklej</string>
-	
+
 	<string name="action_view">Widok</string>
 	<string name="action_set_zoom">Ustaw powiększenie</string>
 	<string name="action_zoom_default">Domyślne powiększenie</string>
 	<string name="action_image_center">Wyśrodkuj</string>
 	<string name="action_grid">Siatka</string>
 	<string name="action_snap_to_grid">Przyciąganie do siatki</string>
-	
+
 	<string name="action_image">Obraz</string>
 	<string name="action_resize_image">Zmień wymiary obrazu</string>
 	<string name="action_scale_image">Skaluj obraz</string>
 	<string name="action_flip_image">Odbij obraz</string>
 	<string name="action_rotate_image">Obróć obraz</string>
-	
+
 	<string name="action_layer">Warstwa</string>
 	<string name="action_new_layer">Nowa warstwa</string>
 	<string name="action_open_layer">Otwórz warstwę</string>
@@ -92,20 +92,20 @@
 	<string name="action_scale_layer">Skaluj warstwę</string>
 	<string name="action_flip_layer">Odbij warstwę</string>
 	<string name="action_rotate_layer">Obróć warstwę</string>
-	
+
 	<string name="action_selection">Zaznaczenie</string>
 	<string name="action_select_all">Zaznacz wszystko</string>
 	<string name="action_select_nothing">Usuń zaznaczenie</string>
 	<string name="action_revert_selection">Odwróć zazanaczenie</string>
-	
+
 	<string name="action_colors">Kolory</string>
 	<string name="action_colors_invert">Odwróć kolory</string>
 	<string name="action_colors_brightness">Jasność</string>
 	<string name="action_color_curves_rgb">Krzywe kolorów RGB</string>
 	<string name="action_color_curves_hsv">Krzywe kolorów HSV</string>
-	
+
 	<string name="action_settings">Ustawienia</string>
-	
+
 	<string name="tool_pan">Widok</string>
 	<string name="tool_marker">Pisak</string>
 	<string name="tool_brush">Pędzel</string>
@@ -115,33 +115,33 @@
 	<string name="tool_color_pick">Pobierz kolor</string>
 	<string name="tool_drag">Przesunięcie warstwy</string>
 	<string name="tool_rubber">Gumka</string>
-	
+
 	<string name="shape_line">Linia</string>
 	<string name="shape_circle">Okrąg</string>
 	<string name="shape_polygon">Wielokąt foremny</string>
-	
+
 	<string name="line_cap_round">Zaokrąglone</string>
 	<string name="line_cap_square">Kwadratowe</string>
 	<string name="line_cap_butt">Ucięte</string>
-	
+
 	<string name="selection_mode_new">Zastąp</string>
 	<string name="selection_mode_add">Dodaj</string>
 	<string name="selection_mode_subtract">Odejmij</string>
 	<string name="selection_mode_multiply">Część wspólna</string>
-	
+
 	<string name="selection_shape_rectangle">Prostokąt</string>
 	<string name="selection_shape_oval">Koło</string>
-	
+
 	<string name="layer_properties">Właściwości</string>
 	<string name="layer_change_name">Zmień nazwę</string>
 	<string name="layer_duplicate">Duplikuj</string>
 	<string name="layer_join">Połącz w dół</string>
 	<string name="layer_delete">Usuń</string>
-	
+
 	<string name="layer_mode_standard">Standardowy</string>
 	<string name="layer_mode_add">Suma</string>
 	<string name="layer_mode_multiply">Iloczyn</string>
-	
+
 	<string name="choice_of_tool">Wybór narzędzia</string>
 	<string name="tool_size">Wielkość</string>
 	<string name="image_x">X</string>

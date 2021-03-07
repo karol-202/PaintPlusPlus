@@ -24,7 +24,7 @@
 
 	<string name="action_drawer_open">Open tool pane</string>
 	<string name="action_drawer_close">Close tool pane</string>
-	<string name="properties">Properties</string>
+	<string name="properties">Properties: %s</string>
 
 	<string name="dialog_new_image">New image</string>
 	<string name="dialog_resize_image">Resize image</string>
