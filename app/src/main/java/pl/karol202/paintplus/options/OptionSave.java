@@ -34,12 +34,12 @@ import pl.karol202.paintplus.file.BitmapSaveAsyncTask.OnBitmapSaveListener;
 import pl.karol202.paintplus.file.explorer.FileExplorer;
 import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.recent.OnFileEditListener;
-import pl.karol202.paintplus.util.UriExtKt;
 
 import static android.app.Activity.RESULT_OK;
 
-abstract class OptionSave extends Option implements ActivityResultListener, AsyncBlocker, OnBitmapSaveListener
+abstract class OptionSave extends OptionLegacy implements ActivityResultListener, AsyncBlocker, OnBitmapSaveListener
 {
 	private ActivityPaint activity;
 	private OnFileEditListener listener;

@@ -24,13 +24,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.Utils;
 
-public class OptionLayerRotate extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class OptionLayerRotate extends OptionLegacy implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private AlertDialog dialog;
 	private SeekBar seekBarAngle;
@@ -38,7 +39,7 @@ public class OptionLayerRotate extends Option implements DialogInterface.OnClick
 
 	private Layer layer;
 
-	public OptionLayerRotate(AppContext context, Image image)
+	public OptionLayerRotate(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 		layer = image.getSelectedLayer();

@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +33,7 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
+import pl.karol202.paintplus.legacy.AppContextLegacy
 import pl.karol202.paintplus.options.OptionFileOpen
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
@@ -43,7 +45,7 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 import pl.karol202.paintplus.viewmodel.PaintViewModel.TitleOverride
 
-class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContext
+class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContextLegacy
 {
 	companion object
 	{
@@ -59,13 +61,14 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	private lateinit var drawers: ActivityPaintDrawers
 	private lateinit var layers: ActivityPaintLayers
 
-	private var resultListeners = mutableMapOf<Int, ActivityResultListener>()
-	private var permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
-	var asyncManager = AsyncManager(this)
-		private set
+	private val resultListeners = mutableMapOf<Int, ActivityResultListener>()
+	private val permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
+	val asyncManager = AsyncManager(this)
 
 	private var initUri: Uri? = null
 	private var openFile = false
+
+	private var currentDialog: AlertDialog? = null
 
 	val image get() = paintViewModel.image
 	val tools get() = paintViewModel.tools
@@ -146,6 +149,18 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 				TitleOverride.TOOL_PROPERTIES -> getString(R.string.properties, toolName)
 			}
 		}
+		paintViewModel.dialogFlow.collectIn(lifecycleScope) { definition ->
+			currentDialog?.dismiss()
+			currentDialog =
+					if(definition != null) AlertDialog.Builder(this)
+							.apply(definition::init)
+							.setOnDismissListener { paintViewModel.hideDialog() }
+							.show()
+					else null
+		}
+		paintViewModel.messageEventFlow.collectIn(lifecycleScope) {
+			showSnackbar(it.text)
+		}
 		paintViewModel.imageEventFlow.collectIn(lifecycleScope) {
 			when(it)
 			{
@@ -156,6 +171,14 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 				else -> {}
 			}
 		}
+	}
+
+	private fun showSnackbar(message: Int)
+	{
+		val snackbar = Snackbar.make(views.mainContainer, message, Snackbar.LENGTH_SHORT)
+		val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
+		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
+		snackbar.show()
 	}
 
 	override fun onPostCreate(savedInstanceState: Bundle?)
@@ -216,16 +239,6 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 
 	fun showSettingsActivity() = startActivity(Intent(this, ActivitySettings::class.java))
 
-	override fun getContext() = this
-
-	override fun createSnackbar(message: Int, duration: Int): Snackbar
-	{
-		val snackbar = Snackbar.make(views.mainContainer, message, duration)
-		val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
-		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
-		return snackbar
-	}
-
 	fun onFileEdit(uri: Uri) = recentViewModel.onFileEdit(uri)
 
 	fun registerActivityResultListener(requestCode: Int, listener: ActivityResultListener)
@@ -266,4 +279,16 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	fun closeLayersSheet() = layers.closeLayersSheet()
 
 	fun setScrollingBlocked(blocked: Boolean) = layers.setScrollingBlocked(blocked)
+
+	// LEGACY
+
+	override fun getContext() = this
+
+	override fun createSnackbar(message: Int, duration: Int): Snackbar
+	{
+		val snackbar = Snackbar.make(views.mainContainer, message, duration)
+		val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
+		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
+		return snackbar
+	}
 }

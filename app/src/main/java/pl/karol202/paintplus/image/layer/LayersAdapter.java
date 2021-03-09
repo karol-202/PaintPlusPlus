@@ -26,12 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
 import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
 	private final String DUPLICATE_INDICATOR;
 
-	private AppContext appContext;
+	private AppContextLegacy appContext;
 	private Image image;
 	private ArrayList<Layer> layers;
 

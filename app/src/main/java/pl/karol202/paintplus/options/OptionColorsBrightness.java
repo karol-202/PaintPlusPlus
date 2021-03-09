@@ -27,19 +27,20 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Locale;
 
-public class OptionColorsBrightness extends Option implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener,
-                                                              View.OnTouchListener
+public class OptionColorsBrightness extends OptionLegacy implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener,
+                                                                    View.OnTouchListener
 {
 	private ColorsBrightness manipulator;
 	private Layer layer;
@@ -52,7 +53,7 @@ public class OptionColorsBrightness extends Option implements DialogInterface.On
 	private TextView textContrast;
 	private Button buttonPreview;
 
-	public OptionColorsBrightness(AppContext context, Image image)
+	public OptionColorsBrightness(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 		this.manipulator = new ColorsBrightness();

@@ -17,71 +17,71 @@
 package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerResize;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionLayerResize extends OptionResize
 {
 	private Layer layer;
-	
-	public OptionLayerResize(AppContext context, Image image)
+
+	public OptionLayerResize(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 		this.layer = image.getSelectedLayer();
 	}
-	
+
 	@Override
 	protected int getTitle()
 	{
 		return R.string.dialog_resize_layer;
 	}
-	
+
 	@Override
 	protected int getObjectWidth()
 	{
 		return layer.getWidth();
 	}
-	
+
 	@Override
 	protected int getObjectHeight()
 	{
 		return layer.getHeight();
 	}
-	
+
 	@Override
 	protected int getOldObjectWidth()
 	{
 		return layer.getWidth();
 	}
-	
+
 	@Override
 	protected int getOldObjectHeight()
 	{
 		return layer.getHeight();
 	}
-	
+
 	@Override
 	protected int getObjectX()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	protected int getObjectY()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
 		ActionLayerResize action = new ActionLayerResize(getImage());
 		action.setLayerBeforeResize(layer);
-		
+
 		layer.resize(x, y, width, height);
-		
+
 		action.applyAction();
 	}
 }

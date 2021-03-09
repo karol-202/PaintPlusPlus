@@ -29,7 +29,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.color.curves.ColorChannel;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.curves.ColorChannelsAdapter;
@@ -41,14 +40,16 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.HSV;
 import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.RGB;
 
-public class OptionColorCurves extends Option implements OnClickListener, AdapterView.OnItemSelectedListener,
-														 View.OnTouchListener, View.OnClickListener, OnCurveEditListener
+public class OptionColorCurves extends OptionLegacy implements OnClickListener, AdapterView.OnItemSelectedListener,
+                                                               View.OnTouchListener, View.OnClickListener, OnCurveEditListener
 {
 	private ColorChannelType channelType;
 	private ColorChannelsAdapter adapterIn;
@@ -65,7 +66,7 @@ public class OptionColorCurves extends Option implements OnClickListener, Adapte
 	private Button buttonPreview;
 	private Button buttonRestore;
 
-	public OptionColorCurves(AppContext context, Image image, ColorChannelType type)
+	public OptionColorCurves(AppContextLegacy context, Image image, ColorChannelType type)
 	{
 		super(context, image);
 		this.channelType = type;

@@ -31,14 +31,15 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.Utils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public abstract class OptionResize extends Option implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
+public abstract class OptionResize extends OptionLegacy implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
 	private class BoundsChangeListener implements TextWatcher
 	{
@@ -132,7 +133,7 @@ public abstract class OptionResize extends Option implements DialogInterface.OnC
 	private float ratio;
 	private boolean dontFireEvent;
 
-	OptionResize(AppContext context, Image image)
+	OptionResize(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}

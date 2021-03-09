@@ -27,6 +27,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.Image.RotationAmount;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.recent.OnFileEditListener;
 
 public class OptionFileOpen extends OptionOpen

@@ -17,67 +17,67 @@
 package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageResize;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionImageResize extends OptionResize
 {
-	public OptionImageResize(AppContext context, Image image)
+	public OptionImageResize(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	protected int getTitle()
 	{
 		return R.string.dialog_resize_image;
 	}
-	
+
 	@Override
 	protected int getObjectWidth()
 	{
 		return getImage().getWidth();
 	}
-	
+
 	@Override
 	protected int getObjectHeight()
 	{
 		return getImage().getHeight();
 	}
-	
+
 	@Override
 	protected int getOldObjectWidth()
 	{
 		return getImage().getWidth();
 	}
-	
+
 	@Override
 	protected int getOldObjectHeight()
 	{
 		return getImage().getHeight();
 	}
-	
+
 	@Override
 	protected int getObjectX()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	protected int getObjectY()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
 		ActionImageResize action = new ActionImageResize(getImage());
 		action.setDataBeforeResizing(getImage().getWidth(), getImage().getHeight(), x, y);
-		
+
 		getImage().resize(x, y, width, height);
-		
+
 		action.applyAction();
 	}
 }

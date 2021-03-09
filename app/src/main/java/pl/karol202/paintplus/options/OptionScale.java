@@ -29,11 +29,12 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.GraphicsHelper;
 
-public abstract class OptionScale extends Option implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
+public abstract class OptionScale extends OptionLegacy implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
 	private class EditTextListener implements TextWatcher
 	{
@@ -106,7 +107,7 @@ public abstract class OptionScale extends Option implements DialogInterface.OnCl
 	private float ratio;
 	private boolean dontFireEvent;
 
-	OptionScale(AppContext context, Image image)
+	OptionScale(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}

@@ -31,6 +31,7 @@ import pl.karol202.paintplus.file.UriUtils;
 import pl.karol202.paintplus.file.explorer.FileExplorer;
 import pl.karol202.paintplus.file.explorer.FileExplorerFactory;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
-public abstract class OptionOpen extends Option implements ActivityResultListener, ImageLoaderDialog.OnImageLoadListener
+public abstract class OptionOpen extends OptionLegacy implements ActivityResultListener, ImageLoaderDialog.OnImageLoadListener
 {
 	interface RotationNeedListener
 	{

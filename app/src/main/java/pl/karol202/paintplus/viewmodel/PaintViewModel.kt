@@ -1,8 +1,8 @@
 package pl.karol202.paintplus.viewmodel
 
 import android.app.Application
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,11 +28,15 @@ class PaintViewModel(application: Application,
 		IMAGE_CHANGED, LAYERS_CHANGED, IMAGE_MATRIX_CHANGED, SELECTION_CHANGED, HISTORY_CHANGED
 	}
 
+	data class MessageEvent(@StringRes val text: Int)
+
 	val image = Image(application)
 	val tools = Tools(image)
 
 	private val _currentToolFlow = MutableStateFlow(tools.defaultTool)
 	private val _titleOverrideFlow = MutableStateFlow(TitleOverride.NONE)
+	private val _dialogFlow = MutableStateFlow<DialogDefinition?>(null)
+	private val _messageEventFlow = MutableSharedFlow<MessageEvent>()
 	private val _imageEventFlow = MutableSharedFlow<ImageEvent>(replay = 16)
 
 	val currentTool get() = currentToolFlow.value
@@ -41,6 +45,8 @@ class PaintViewModel(application: Application,
 	val settingsFlow = settingsRepository.settings
 	val currentToolFlow: StateFlow<Tool> = _currentToolFlow
 	val titleOverrideFlow: StateFlow<TitleOverride> = _titleOverrideFlow
+	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
+	val messageEventFlow: Flow<MessageEvent> = _messageEventFlow
 	val imageEventFlow: Flow<ImageEvent> = _imageEventFlow
 
 	init
@@ -79,5 +85,20 @@ class PaintViewModel(application: Application,
 	fun setTitleOverride(titleOverride: TitleOverride)
 	{
 		_titleOverrideFlow.value = titleOverride
+	}
+
+	fun showDialog(dialogDefinition: DialogDefinition)
+	{
+		_dialogFlow.value = dialogDefinition
+	}
+
+	fun hideDialog()
+	{
+		_dialogFlow.value = null
+	}
+
+	fun showMessage(@StringRes text: Int)
+	{
+		_messageEventFlow.tryEmit(MessageEvent(text))
 	}
 }

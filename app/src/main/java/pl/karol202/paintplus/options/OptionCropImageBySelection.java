@@ -17,29 +17,30 @@
 package pl.karol202.paintplus.options;
 
 import android.graphics.Rect;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageCrop;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public class OptionCropImageBySelection extends Option
+public class OptionCropImageBySelection extends OptionLegacy
 {
-	public OptionCropImageBySelection(AppContext context, Image image)
+	public OptionCropImageBySelection(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	public void execute()
 	{
 		Image image = getImage();
 		Rect bounds = image.getSelection().getBounds();
-		
+
 		ActionImageCrop action = new ActionImageCrop(image);
 		action.setDataBeforeResizing(image.getWidth(), image.getHeight(), bounds.left, bounds.top);
-		
+
 		image.resize(bounds.left, bounds.top, bounds.width(), bounds.height());
 		getImage().updateImage();
-		
+
 		action.applyAction();
 	}
 }

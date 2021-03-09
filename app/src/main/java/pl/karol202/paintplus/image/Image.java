@@ -69,6 +69,8 @@ public class Image
 	}
 
 	public static final int MAX_LAYERS = 8;
+	public static final float MIN_ZOOM = 0.009f;
+	public static final float MAX_ZOOM = 16f;
 
 	private final String DEFAULT_LAYER_NAME;
 	private final String FLATTENED_LAYER_NAME;

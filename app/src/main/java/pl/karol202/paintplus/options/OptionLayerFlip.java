@@ -17,36 +17,36 @@
 package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerFlip;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionLayerFlip extends OptionFlip
 {
 	private Layer layer;
-	
-	public OptionLayerFlip(AppContext context, Image image)
+
+	public OptionLayerFlip(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 		this.layer = image.getSelectedLayer();
 	}
-	
+
 	@Override
 	protected int getTitle()
 	{
 		return R.string.dialog_flip_layer;
 	}
-	
+
 	@Override
 	protected void flip(FlipDirection direction)
 	{
 		ActionLayerFlip action = new ActionLayerFlip(getImage());
 		action.setLayerAndFlipDirection(getImage().getLayerIndex(layer), direction);
-		
+
 		layer.flip(direction);
-		
+
 		action.applyAction();
 	}
 }

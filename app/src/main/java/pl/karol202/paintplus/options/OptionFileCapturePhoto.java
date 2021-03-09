@@ -31,6 +31,7 @@ import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.file.UriUtils;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static android.provider.MediaStore.EXTRA_OUTPUT;
 
-public class OptionFileCapturePhoto extends Option implements ActivityResultListener
+public class OptionFileCapturePhoto extends OptionLegacy implements ActivityResultListener
 {
 	private static final int REQUEST_CAPTURE_PHOTO = 5;
 

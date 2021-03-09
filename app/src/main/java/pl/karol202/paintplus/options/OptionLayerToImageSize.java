@@ -16,29 +16,30 @@
 
 package pl.karol202.paintplus.options;
 
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerResize;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public class OptionLayerToImageSize extends Option
+public class OptionLayerToImageSize extends OptionLegacy
 {
-	public OptionLayerToImageSize(AppContext context, Image image)
+	public OptionLayerToImageSize(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	public void execute()
 	{
 		Layer layer = getImage().getSelectedLayer();
-		
+
 		ActionLayerResize action = new ActionLayerResize(getImage());
 		action.setLayerBeforeResize(layer);
-		
+
 		layer.resize(-layer.getX(), -layer.getY(), getImage().getWidth(), getImage().getHeight());
 		getImage().updateImage();
-		
+
 		action.applyAction();
 	}
 }

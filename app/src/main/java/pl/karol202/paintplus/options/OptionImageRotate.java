@@ -23,16 +23,17 @@ import android.view.View;
 import android.widget.RadioGroup;
 import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.RotationAmount;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public class OptionImageRotate extends Option
+public class OptionImageRotate extends OptionLegacy
 {
 	private RadioGroup radioGroupAngle;
 
-	public OptionImageRotate(AppContext context, Image image)
+	public OptionImageRotate(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}

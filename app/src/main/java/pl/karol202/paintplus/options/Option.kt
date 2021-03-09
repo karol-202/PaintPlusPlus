@@ -13,38 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.options
 
-package pl.karol202.paintplus.options;
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
+import androidx.viewbinding.ViewBinding
+import pl.karol202.paintplus.util.layoutInflater
+import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-import android.content.Context;
-import pl.karol202.paintplus.activity.AppContext;
-import pl.karol202.paintplus.image.Image;
-
-public abstract class Option
+fun interface Option
 {
-	private AppContext context;
-	private Image image;
-
-	public Option(AppContext context, Image image)
+	abstract class Dialog<B : ViewBinding>(builder: AlertDialog.Builder,
+	                                       binding: (LayoutInflater) -> B)
 	{
-		this.context = context;
-		this.image = image;
+		protected val context = builder.context
+		protected val views = binding(context.layoutInflater)
 	}
 
-	public abstract void execute();
-	
-	public AppContext getAppContext()
-	{
-		return context;
-	}
-	
-	public Context getContext()
-	{
-		return context.getContext();
-	}
-	
-	public Image getImage()
-	{
-		return image;
-	}
+	fun execute(viewModel: PaintViewModel)
 }

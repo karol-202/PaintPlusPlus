@@ -17,32 +17,32 @@
 package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageFlip;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.FlipDirection;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionImageFlip extends OptionFlip
 {
-	public OptionImageFlip(AppContext context, Image image)
+	public OptionImageFlip(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	protected int getTitle()
 	{
 		return R.string.dialog_flip_image;
 	}
-	
+
 	@Override
 	protected void flip(FlipDirection direction)
 	{
 		ActionImageFlip action = new ActionImageFlip(getImage());
 		action.setDirectionBeforeFlip(direction);
-		
+
 		getImage().flip(direction);
-		
+
 		action.applyAction();
 	}
 }

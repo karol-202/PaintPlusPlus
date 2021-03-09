@@ -13,15 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus
 
-package pl.karol202.paintplus.activity;
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.lang.Exception
 
-import android.content.Context;
-import com.google.android.material.snackbar.Snackbar;
-
-public interface AppContext
+object ErrorHandler
 {
-	Context getContext();
-
-	Snackbar createSnackbar(int message, int duration);
+	@JvmStatic
+	fun report(e: Exception)
+	{
+		e.printStackTrace()
+		FirebaseCrashlytics.getInstance().recordException(e)
+	}
 }

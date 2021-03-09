@@ -27,16 +27,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 import java.util.Locale;
 
 public class PanProperties extends ToolProperties implements View.OnClickListener, TextWatcher, ToolPan.OnZoomChangeListener
 {
-	public static final double SQRT2 = Math.sqrt(2);
-	public static final double MIN_ZOOM = 0.009;
-	public static final double MAX_ZOOM = 16;
-
 	private ToolPan pan;
 	private double zoom;
 	private boolean dontFireEvent;
@@ -111,8 +108,8 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	{
 		dontFireEvent = true;
 
-		if(zoom < MIN_ZOOM) updateZoom(MIN_ZOOM, true);
-		else if(zoom > MAX_ZOOM) updateZoom(MAX_ZOOM, true);
+		if(zoom < Image.MIN_ZOOM) updateZoom(Image.MIN_ZOOM, true);
+		else if(zoom > Image.MAX_ZOOM) updateZoom(Image.MAX_ZOOM, true);
 		else
 		{
 			this.zoom = zoom;
@@ -182,7 +179,7 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	private double calculateZoomRatio(int position)
 	{
 		int posAbs = Math.abs(position);
-		double fract = Math.pow(SQRT2, posAbs);
+		double fract = Math.pow(Math.sqrt(2), posAbs);
 		double round = Math.round(fract * 2) / 2f;
 		if(position >= 0) return round;
 		else return 1 / round;

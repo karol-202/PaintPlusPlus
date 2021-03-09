@@ -17,42 +17,42 @@
 package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionImageScale;
 import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionImageScale extends OptionScale
 {
-	public OptionImageScale(AppContext context, Image image)
+	public OptionImageScale(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}
-	
+
 	@Override
 	protected int getTitle()
 	{
 		return R.string.dialog_scale_image;
 	}
-	
+
 	@Override
 	protected int getObjectWidth()
 	{
 		return getImage().getWidth();
 	}
-	
+
 	@Override
 	protected int getObjectHeight()
 	{
 		return getImage().getHeight();
 	}
-	
+
 	@Override
 	protected void applySize(int width, int height, boolean smooth)
 	{
 		ActionImageScale action = new ActionImageScale(getImage());
-		
+
 		getImage().scale(width, height, smooth);
-		
+
 		action.applyAction();
 	}
 }

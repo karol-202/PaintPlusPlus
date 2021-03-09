@@ -22,19 +22,20 @@ import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerDrag;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public class OptionLayerDrag extends Option
+public class OptionLayerDrag extends OptionLegacy
 {
 	private EditText editX;
 	private EditText editY;
 
 	private Layer layer;
 
-	public OptionLayerDrag(AppContext context, Image image)
+	public OptionLayerDrag(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 		layer = getImage().getSelectedLayer();

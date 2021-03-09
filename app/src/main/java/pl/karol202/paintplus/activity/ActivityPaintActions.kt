@@ -131,7 +131,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_tool ->
 				activity.togglePropertiesDrawer()
 			R.id.action_new_image ->
-				OptionFileNew(activity, image).execute()
+				OptionFileNew().execute(paintViewModel)
 			R.id.action_capture_photo ->
 				OptionFileCapturePhoto(activity, image).execute()
 			R.id.action_open_image ->
@@ -166,7 +166,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_paste ->
 				image.paste()
 			R.id.action_set_zoom ->
-				OptionSetZoom(activity, image).execute()
+				OptionSetZoom().execute(paintViewModel)
 			R.id.action_zoom_default ->
 				image.zoom = 1f
 			R.id.action_image_center ->

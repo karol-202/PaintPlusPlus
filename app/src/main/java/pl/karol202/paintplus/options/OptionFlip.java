@@ -24,18 +24,19 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.Image.FlipDirection;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public abstract class OptionFlip extends Option implements DialogInterface.OnClickListener
+public abstract class OptionFlip extends OptionLegacy implements DialogInterface.OnClickListener
 {
 	private AlertDialog dialog;
 
 	private RadioButton radioHorizontal;
 	private RadioButton radioVertical;
 
-	OptionFlip(AppContext context, Image image)
+	OptionFlip(AppContextLegacy context, Image image)
 	{
 		super(context, image);
 	}

@@ -29,14 +29,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.activity.AppContext;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.Utils;
 
-public class OptionLayerNew extends Option implements DialogInterface.OnClickListener, TextWatcher
+public class OptionLayerNew extends OptionLegacy implements DialogInterface.OnClickListener, TextWatcher
 {
 	public interface OnLayerAddListener
 	{
@@ -60,12 +61,12 @@ public class OptionLayerNew extends Option implements DialogInterface.OnClickLis
 	private EditText editY;
 	private ImageView imagePreview;
 
-	public OptionLayerNew(AppContext context, Image image)
+	public OptionLayerNew(AppContextLegacy context, Image image)
 	{
 		this(context, image, null);
 	}
 
-	public OptionLayerNew(AppContext context, Image image, OnLayerAddListener listener)
+	public OptionLayerNew(AppContextLegacy context, Image image, OnLayerAddListener listener)
 	{
 		super(context, image);
 		this.listener = listener;
