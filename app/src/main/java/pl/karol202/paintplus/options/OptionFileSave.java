@@ -17,7 +17,6 @@
 package pl.karol202.paintplus.options;
 
 import android.graphics.Bitmap;
-import pl.karol202.paintplus.AsyncManager;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.recent.OnFileEditListener;
@@ -25,24 +24,24 @@ import pl.karol202.paintplus.recent.OnFileEditListener;
 public class OptionFileSave extends OptionSave
 {
 	private static final int REQUEST_SAVE_FILE = 2;
-	
+
 	public OptionFileSave(ActivityPaint activity, Image image, AsyncManager asyncManager, OnFileEditListener listener)
 	{
 		super(activity, image, asyncManager, listener);
 	}
-	
+
 	@Override
 	int getRequestId()
 	{
 		return REQUEST_SAVE_FILE;
 	}
-	
+
 	@Override
 	Bitmap getBitmapToSave()
 	{
 		return getImage().getFullImage();
 	}
-	
+
 	@Override
 	void saveBitmapAsynchronously()
 	{

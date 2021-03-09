@@ -127,7 +127,7 @@ public class Image
 		changedSinceSave = false;
 
 		layers.clear();
-		Layer layer = new Layer(0, 0, width, height, DEFAULT_LAYER_NAME, colorsSet.getSecondColor());
+		Layer layer = new Layer(0, 0, DEFAULT_LAYER_NAME, width, height, colorsSet.getSecondColor());
 		layer.setImageChangeListener(listener);
 		layers.add(layer);
 		selectedLayer = 0;
@@ -260,8 +260,8 @@ public class Image
 			bitmap = layer.drawLayerAndReturnBitmap(bitmap, canvas, null, matrix);
 		}
 
-		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top, resultBounds.width(), resultBounds.height(),
-									  FLATTENED_LAYER_NAME, Color.TRANSPARENT);
+		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top, FLATTENED_LAYER_NAME,
+		                              resultBounds.width(), resultBounds.height(), Color.TRANSPARENT);
 		resultLayer.setBitmap(bitmap);
 
 		layers.clear();
@@ -276,7 +276,7 @@ public class Image
 	public Layer newLayer(int width, int height, String name)
 	{
 		if(layers.size() >= MAX_LAYERS) return null;
-		Layer layer = new Layer(0, 0, width, height, name, Color.TRANSPARENT);
+		Layer layer = new Layer(0, 0, name, width, height, Color.TRANSPARENT);
 		layer.setImageChangeListener(listener);
 		layers.add(0, layer);
 		selectLayer(0);

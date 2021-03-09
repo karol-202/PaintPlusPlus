@@ -26,7 +26,7 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 import kotlin.math.roundToInt
 
-class OptionSetZoom : Option
+class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 {
 	class Dialog(builder: AlertDialog.Builder,
 	             private val image: Image) :
@@ -85,5 +85,5 @@ class OptionSetZoom : Option
 		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toIntOrNull()?.div(100f)
 	}
 
-	override fun execute(viewModel: PaintViewModel) = viewModel.showDialog { Dialog(it, viewModel.image) }
+	override fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
 }

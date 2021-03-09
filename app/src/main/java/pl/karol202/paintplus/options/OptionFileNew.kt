@@ -24,7 +24,7 @@ import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionFileNew : Option
+class OptionFileNew(private val viewModel: PaintViewModel) : Option
 {
 	class Dialog(builder: AlertDialog.Builder,
 	             private val image: Image) :
@@ -66,5 +66,5 @@ class OptionFileNew : Option
 		}
 	}
 
-	override fun execute(viewModel: PaintViewModel) = viewModel.showDialog { Dialog(it, viewModel.image) }
+	override fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
 }

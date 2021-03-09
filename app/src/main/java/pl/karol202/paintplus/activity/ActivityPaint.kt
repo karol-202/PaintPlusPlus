@@ -22,13 +22,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.karol202.paintplus.AsyncManager
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
 import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity
@@ -63,7 +63,6 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 
 	private val resultListeners = mutableMapOf<Int, ActivityResultListener>()
 	private val permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
-	val asyncManager = AsyncManager(this)
 
 	private var initUri: Uri? = null
 	private var openFile = false
@@ -171,6 +170,13 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 				else -> {}
 			}
 		}
+		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { request ->
+			val contract = when(request)
+			{
+				is PaintViewModel.ActionRequest.OpenFile -> ActivityResultContracts.OpenDocument()
+			}
+			registerForActivityResult(contract) { request.callback(it) }
+		}
 	}
 
 	private fun showSnackbar(message: Int)
@@ -192,12 +198,12 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 
 	private fun loadImageIfPathIsPresent()
 	{
-		if(initUri != null) OptionFileOpen(this, image, asyncManager, recentViewModel::onFileEdit).openFile(initUri)
+		if(initUri != null) OptionFileOpen(recentViewModel, paintViewModel).executeWithUri(initUri)
 	}
 
 	private fun selectImageToOpenIfNeeded()
 	{
-		if(openFile) OptionFileOpen(this, image, asyncManager, recentViewModel::onFileEdit).executeWithoutAsking()
+		if(openFile) OptionFileOpen(recentViewModel, paintViewModel).executeWithoutAsking()
 	}
 
 	override fun onSaveInstanceState(outState: Bundle)

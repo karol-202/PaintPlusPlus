@@ -22,8 +22,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Size;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.BitmapKt;
 import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
@@ -32,6 +34,9 @@ import pl.karol202.paintplus.file.ImageLoader;
 import pl.karol202.paintplus.file.UriUtils;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.legacy.OptionLegacy;
+import pl.karol202.paintplus.util.BitmapExtKt;
+import pl.karol202.paintplus.util.GraphicsHelper;
+import pl.karol202.paintplus.util.SizeExtKt;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +50,8 @@ import static android.provider.MediaStore.EXTRA_OUTPUT;
 public class OptionFileCapturePhoto extends OptionLegacy implements ActivityResultListener
 {
 	private static final int REQUEST_CAPTURE_PHOTO = 5;
+
+	private final Size maxSize = SizeExtKt.squareSize(GraphicsHelper.getMaxTextureSize());
 
 	private ActivityPaint activity;
 	private File photoFile;
@@ -119,10 +126,16 @@ public class OptionFileCapturePhoto extends OptionLegacy implements ActivityResu
 
 	private void openBitmap(ParcelFileDescriptor fileDescriptor)
 	{
-		Bitmap bitmap = ImageLoader.openBitmapAndScaleIfNecessary(fileDescriptor.getFileDescriptor());
+		Bitmap bitmap = ImageLoader.openBitmap(fileDescriptor.getFileDescriptor());
 		if(bitmap == null) getAppContext().createSnackbar(R.string.message_cannot_open_file, Snackbar.LENGTH_SHORT).show();
 		else
 		{
+			Size bitmapSize = BitmapExtKt.getSize(bitmap);
+			if(SizeExtKt.fitsIn(bitmapSize, maxSize))
+			{
+				Size scaledSize = SizeExtKt.fitInto(bitmapSize, maxSize);
+				bitmap = BitmapKt.scale(bitmap, scaledSize.getWidth(), scaledSize.getHeight(), true);
+			}
 			getImage().openImage(bitmap);
 			getImage().centerView();
 		}

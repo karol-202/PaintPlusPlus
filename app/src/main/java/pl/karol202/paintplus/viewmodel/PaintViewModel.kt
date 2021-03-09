@@ -1,16 +1,22 @@
 package pl.karol202.paintplus.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
 import pl.karol202.paintplus.tool.Tools
+import kotlin.coroutines.suspendCoroutine
 
 private const val DEFAULT_IMAGE_WIDTH = 600
 private const val DEFAULT_IMAGE_HEIGHT = 600
@@ -30,6 +36,12 @@ class PaintViewModel(application: Application,
 
 	data class MessageEvent(@StringRes val text: Int)
 
+	sealed class ActionRequest<R>(val callback: (R) -> Unit)
+	{
+		class OpenFile(callback: (Uri?) -> Unit) : ActionRequest<Uri?>(callback)
+	}
+
+	val context: Context get() = getApplication()
 	val image = Image(application)
 	val tools = Tools(image)
 
@@ -38,6 +50,7 @@ class PaintViewModel(application: Application,
 	private val _dialogFlow = MutableStateFlow<DialogDefinition?>(null)
 	private val _messageEventFlow = MutableSharedFlow<MessageEvent>()
 	private val _imageEventFlow = MutableSharedFlow<ImageEvent>(replay = 16)
+	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(replay = 16)
 
 	val currentTool get() = currentToolFlow.value
 	val currentToolId get() = tools.getToolId(currentTool)
@@ -48,6 +61,7 @@ class PaintViewModel(application: Application,
 	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
 	val messageEventFlow: Flow<MessageEvent> = _messageEventFlow
 	val imageEventFlow: Flow<ImageEvent> = _imageEventFlow
+	val actionRequestEventFlow: Flow<ActionRequest<*>> = _actionRequestEventFlow
 
 	init
 	{
@@ -100,5 +114,15 @@ class PaintViewModel(application: Application,
 	fun showMessage(@StringRes text: Int)
 	{
 		_messageEventFlow.tryEmit(MessageEvent(text))
+	}
+
+	fun <R> makeActionRequest(request: ActionRequest<R>)
+	{
+		_actionRequestEventFlow.tryEmit(request)
+	}
+
+	fun postLongTask(task: () -> Unit)
+	{
+		viewModelScope.launch(Dispatchers.IO) { task() }
 	}
 }

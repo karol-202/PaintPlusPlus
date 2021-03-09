@@ -23,6 +23,11 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 fun interface Option
 {
+	abstract class SimpleDialog(builder: AlertDialog.Builder)
+	{
+		protected val context = builder.context
+	}
+
 	abstract class Dialog<B : ViewBinding>(builder: AlertDialog.Builder,
 	                                       binding: (LayoutInflater) -> B)
 	{
@@ -30,5 +35,5 @@ fun interface Option
 		protected val views = binding(context.layoutInflater)
 	}
 
-	fun execute(viewModel: PaintViewModel)
+	fun execute()
 }
