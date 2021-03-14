@@ -19,9 +19,10 @@ package pl.karol202.paintplus.image;
 import android.content.Context;
 import android.graphics.*;
 import android.net.Uri;
+import android.util.Size;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.file.BitmapSaveFormat;
+import pl.karol202.paintplus.file.SaveFormat;
 import pl.karol202.paintplus.helpers.HelpersManager;
 import pl.karol202.paintplus.history.History;
 import pl.karol202.paintplus.history.OnHistoryUpdateListener;
@@ -96,7 +97,7 @@ public class Image
 	private int viewportHeight;
 	private boolean layersLocked;
 	private Uri lastUri;
-	private BitmapSaveFormat lastFormat;
+	private SaveFormat lastFormat;
 	private boolean changedSinceSave;
 
 	public Image(Context context)
@@ -614,12 +615,12 @@ public class Image
 		this.lastUri = lastUri;
 	}
 
-	public BitmapSaveFormat getLastFormat()
+	public SaveFormat getLastFormat()
 	{
 		return lastFormat;
 	}
 
-	public void setLastFormat(BitmapSaveFormat lastFormat)
+	public void setLastFormat(SaveFormat lastFormat)
 	{
 		this.lastFormat = lastFormat;
 	}
@@ -632,5 +633,10 @@ public class Image
 	public void notifySave()
 	{
 		changedSinceSave = false;
+	}
+
+	public Size getSize()
+	{
+		return new Size(width, height);
 	}
 }

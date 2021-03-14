@@ -21,7 +21,6 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogSetZoomBinding
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageZoom
-import pl.karol202.paintplus.util.layoutInflater
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 import kotlin.math.roundToInt
@@ -30,14 +29,13 @@ class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 {
 	class Dialog(builder: AlertDialog.Builder,
 	             private val image: Image) :
-			Option.Dialog<DialogSetZoomBinding>(builder, DialogSetZoomBinding::inflate)
+			Option.LayoutDialog<DialogSetZoomBinding>(builder, DialogSetZoomBinding::inflate)
 	{
 		private var dontFireEvent = false
 
 		init
 		{
 			builder.setTitle(R.string.dialog_set_zoom)
-			builder.setView(views.root)
 			builder.setPositiveButton(R.string.ok, null)
 
 			views.buttonZoomOut.setOnClickListener { onZoomOut() }
@@ -85,5 +83,5 @@ class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toIntOrNull()?.div(100f)
 	}
 
-	override fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
+	fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
 }

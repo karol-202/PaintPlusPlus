@@ -363,4 +363,5 @@
 		translatable="false">X: %d Y: %d</string>
 	<string name="opacity"
 		translatable="false">%d%%</string>
+	<string name="message_saved">Saved</string>
 </resources>

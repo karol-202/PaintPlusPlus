@@ -17,29 +17,32 @@ package pl.karol202.paintplus.options
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import android.util.Size
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.file.FileDescriptorMode
 import pl.karol202.paintplus.file.ImageLoader
-import pl.karol202.paintplus.file.closeSafely
-import pl.karol202.paintplus.file.openFileDescriptor
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ActionRequest
 
+private const val MIME_FILTER = "image/*"
+
 class OptionOpen(private val viewModel: PaintViewModel,
-                 private val onBitmapLoaded: (OpenResult?) -> Unit) : Option
+                 private val onResult: (OpenResult) -> Unit) : Option
 {
-	data class OpenResult(val uri: Uri,
-	                      val bitmap: Bitmap,
-	                      val exifOrientation: Int?)
+	sealed class OpenResult
+	{
+		data class Success(val uri: Uri,
+		                   val bitmap: Bitmap,
+		                   val exifOrientation: Int?) : OpenResult()
+
+		object Failed : OpenResult()
+	}
 
 	class ScaleDialog(builder: AlertDialog.Builder,
 	                  targetSize: Size,
-	                  onAccept: () -> Unit) : Option.SimpleDialog(builder)
+	                  onAccept: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{
@@ -51,7 +54,7 @@ class OptionOpen(private val viewModel: PaintViewModel,
 	}
 
 	class RotationDialog(builder: AlertDialog.Builder,
-	                     onApply: () -> Unit) : Option.SimpleDialog(builder)
+	                     onApply: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{
@@ -63,27 +66,37 @@ class OptionOpen(private val viewModel: PaintViewModel,
 
 	private val maxSize = squareSize(GraphicsHelper.getMaxTextureSize())
 
-	override fun execute() = viewModel.makeActionRequest(ActionRequest.OpenFile(this::executeWithUri))
+	fun execute() = viewModel.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER), this::onUriSelected))
 
-	fun executeWithUri(uri: Uri?)
+	private fun onUriSelected(uri: Uri?)
 	{
-		val descriptor = uri?.openFileDescriptor(viewModel.context, FileDescriptorMode.READ) ?: return onBitmapLoaded(null)
+		uri?.takePersistablePermission(viewModel.context) ?: return
+		executeWithUri(uri)
+	}
 
-		val bitmapSize = ImageLoader.getBitmapSize(descriptor.fileDescriptor)
+	fun executeWithUri(uri: Uri)
+	{
+		val bitmapSize = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException {
+			ImageLoader.getBitmapSize(it.fileDescriptor)
+		} ?: return onResult(OpenResult.Failed)
+
 		if(bitmapSize fitsIn maxSize)
-			openBitmap(uri, descriptor)
+			openBitmap(uri)
 		else viewModel.showDialog {
 			ScaleDialog(it, bitmapSize.fitInto(maxSize)) {
-				openBitmap(uri, descriptor)
+				openBitmap(uri)
 			}
 		}
 	}
 
-	private fun openBitmap(uri: Uri, fileDescriptor: ParcelFileDescriptor) = viewModel.postLongTask {
-		val bitmap = ImageLoader.openBitmap(fileDescriptor.fileDescriptor)?.fitInto(maxSize)
-		val exifOrientation = ImageLoader.getExifOrientation(fileDescriptor.fileDescriptor)
-		fileDescriptor.closeSafely()
-		onBitmapLoaded(bitmap?.let { OpenResult(uri, it, exifOrientation) })
+	private fun openBitmap(uri: Uri) = viewModel.postLongTask {
+		val result = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException { desc ->
+			val bitmap = ImageLoader.openBitmap(desc.fileDescriptor)?.fitInto(maxSize)
+			val exifOrientation = ImageLoader.getExifOrientation(desc.fileDescriptor)
+
+			bitmap?.let { OpenResult.Success(uri, it, exifOrientation) }
+		}
+		onResult(result ?: OpenResult.Failed)
 	}
 
 	fun askAboutExifRotation(orientation: Int?, onRotationApply: (Int) -> Unit)

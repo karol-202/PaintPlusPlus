@@ -38,6 +38,8 @@ import java.util.HashMap;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 
+// TODO Rewrite this class
+// Current implementation is flawed, because it uses mutable layer list from image, which may change concurrently
 public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
 	private final String DUPLICATE_INDICATOR;
@@ -140,7 +142,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	{
 		int layerIndex = layers.indexOf(layer);
 		String newName = layer.getName() + DUPLICATE_INDICATOR;
-		Layer newLayer = new Layer(layer.getX(), layer.getY(), layer.getWidth(), layer.getHeight(), newName, Color.BLACK);
+		Layer newLayer = new Layer(layer.getX(), layer.getY(), newName, layer.getWidth(), layer.getHeight(), Color.BLACK);
 		Bitmap newBitmap = Bitmap.createBitmap(layer.getBitmap());
 		newLayer.setBitmap(newBitmap);
 		newLayer.setMode(copyLayerMode(layer.getMode()));
@@ -173,9 +175,8 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		resultBitmap = secondLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
 		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
 
-		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top,
-									  resultBounds.width(), resultBounds.height(),
-									  firstLayer.getName(), Color.TRANSPARENT);
+		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top, firstLayer.getName(),
+									  resultBounds.width(), resultBounds.height(), Color.TRANSPARENT);
 		resultLayer.setBitmap(resultBitmap);
 
 		image.deleteLayer(firstLayer);

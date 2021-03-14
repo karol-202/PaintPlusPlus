@@ -15,12 +15,9 @@
  */
 package pl.karol202.paintplus.recent
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -33,18 +30,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.karol202.paintplus.BuildConfig
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.activity.ActivityPaint
-import pl.karol202.paintplus.activity.PermissionRequest
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity
 import pl.karol202.paintplus.databinding.ActivityRecentBinding
-import pl.karol202.paintplus.file.ImageLoader
 import pl.karol202.paintplus.util.BlockableLinearLayoutManager
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.viewBinding
 
-class ActivityRecent : AppCompatActivity(), PermissionGrantingActivity
+class ActivityRecent : AppCompatActivity()
 {
-	private inner class SwipeCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+	private class SwipeCallback(private val onSwipe: (RecentImage) -> Unit) :
+			ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
 	{
 		override fun onMove(recyclerView: RecyclerView,
 		                    viewHolder: RecyclerView.ViewHolder,
@@ -52,8 +46,7 @@ class ActivityRecent : AppCompatActivity(), PermissionGrantingActivity
 
 		override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
 		{
-			val holder = viewHolder as RecentAdapter.ViewHolder
-			holder.image?.uri?.let(recentViewModel::removeRecentImage)
+			(viewHolder as RecentAdapter.ViewHolder).image?.let(onSwipe)
 		}
 	}
 
@@ -61,34 +54,24 @@ class ActivityRecent : AppCompatActivity(), PermissionGrantingActivity
 	private val views by viewBinding(ActivityRecentBinding::inflate)
 
 	private val adapter = RecentAdapter(this) { startEditingWithUri(it.uri) }
-	private val permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
-		initFirebaseIfNotDebug()
 		setContentView(views.root)
-
-		// TODO Get rid of it
-		ImageLoader.setTemporaryFileLocation(getExternalFilesDir(Environment.DIRECTORY_PICTURES))
 
 		setSupportActionBar(views.toolbar.root)
 
 		views.recyclerRecent.layoutManager = BlockableLinearLayoutManager(this)
 		views.recyclerRecent.adapter = adapter
-		ItemTouchHelper(SwipeCallback()).attachToRecyclerView(views.recyclerRecent)
+		ItemTouchHelper(SwipeCallback(this::removeRecentImage)).attachToRecyclerView(views.recyclerRecent)
 
-		views.buttonNewImage.setOnClickListener { startEditingWithUri(null) }
+		views.buttonNewImage.setOnClickListener { startEditing() }
 
 		recentViewModel.recentImages.collectIn(lifecycleScope) {
 			adapter.images = it
 			views.viewNoImages.visibility = if(it.isEmpty()) View.VISIBLE else View.GONE
 		}
-	}
-
-	private fun initFirebaseIfNotDebug()
-	{
-		if(!BuildConfig.DEBUG) FirebaseAnalytics.getInstance(this)
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean
@@ -107,28 +90,12 @@ class ActivityRecent : AppCompatActivity(), PermissionGrantingActivity
 		return true
 	}
 
-	private fun startEditingWithUri(uri: Uri?) =
-			startActivity(Intent(this, ActivityPaint::class.java).apply {
-				if(uri != null) putExtra(ActivityPaint.URI_KEY, uri)
-			})
+	private fun startEditingWithUri(uri: Uri) = startEditing { putExtra(ActivityPaint.ARG_OPEN_URI, uri) }
 
-	private fun startEditingWithPicker() =
-			PermissionRequest(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-				startActivity(Intent(this@ActivityRecent, ActivityPaint::class.java).apply {
-					putExtra(ActivityPaint.OPEN_KEY, true)
-				})
-			}).execute()
+	private fun startEditingWithPicker() = startEditing { putExtra(ActivityPaint.ARG_OPEN_PICKER, true) }
 
-	override fun registerPermissionGrantListener(requestCode: Int, listener: PermissionGrantListener)
-	{
-		if(requestCode in permissionListeners) throw RuntimeException("requestCode is already used: $requestCode")
-		permissionListeners[requestCode] = listener
-	}
+	private fun startEditing(intentBuilder: Intent.() -> Unit = {}) =
+			startActivity(Intent(this, ActivityPaint::class.java).apply(intentBuilder))
 
-	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray)
-	{
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-		if(grantResults[0] == PackageManager.PERMISSION_GRANTED) permissionListeners[requestCode]?.onPermissionGrant()
-		permissionListeners.remove(requestCode)
-	}
+	private fun removeRecentImage(image: RecentImage) = recentViewModel.removeRecentImage(image.uri)
 }

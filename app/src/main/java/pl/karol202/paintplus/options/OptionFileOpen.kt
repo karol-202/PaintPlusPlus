@@ -30,7 +30,7 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
                      private val paintViewModel: PaintViewModel) : Option
 {
 	class UnsavedDialog(builder: AlertDialog.Builder,
-	                    onApply: () -> Unit) : Option.SimpleDialog(builder)
+	                    onApply: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{
@@ -41,25 +41,25 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 		}
 	}
 
-	private val openOption = OptionOpen(paintViewModel, this::onBitmapLoaded)
+	private val openOption = OptionOpen(paintViewModel, this::onResult)
 
-	override fun execute()
+	fun execute()
 	{
-		if(paintViewModel.image.wasModifiedSinceLastSave()) askAboutChanges() else executeWithoutAsking()
+		if(paintViewModel.image.wasModifiedSinceLastSave()) askAboutChanges() else executeWithoutSaving()
 	}
 
 	private fun askAboutChanges() = paintViewModel.showDialog {
 		UnsavedDialog(it) { openOption.execute() }
 	}
 
-	fun executeWithoutAsking() = openOption.execute()
+	fun executeWithoutSaving() = openOption.execute()
 
-	fun executeWithUri(uri: Uri?) = openOption.executeWithUri(uri)
+	fun executeWithUri(uri: Uri) = openOption.executeWithUri(uri)
 
-	private fun onBitmapLoaded(result: OptionOpen.OpenResult?)
+	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{
-		if(result != null) openImageFromBitmap(result.uri, result.bitmap, result.exifOrientation)
-		else paintViewModel.showMessage(R.string.message_cannot_open_file)
+		is OptionOpen.OpenResult.Success -> openImageFromBitmap(result.uri, result.bitmap, result.exifOrientation)
+		is OptionOpen.OpenResult.Failed -> paintViewModel.showMessage(R.string.message_cannot_open_file)
 	}
 
 	private fun openImageFromBitmap(uri: Uri, bitmap: Bitmap, orientation: Int?)

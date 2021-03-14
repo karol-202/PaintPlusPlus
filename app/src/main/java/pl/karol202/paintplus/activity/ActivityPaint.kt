@@ -17,11 +17,11 @@ package pl.karol202.paintplus.activity
 
 import android.annotation.TargetApi
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,42 +30,37 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantListener
-import pl.karol202.paintplus.activity.PermissionRequest.PermissionGrantingActivity
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.legacy.AppContextLegacy
 import pl.karol202.paintplus.options.OptionFileOpen
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
-import pl.karol202.paintplus.util.GraphicsHelper
-import pl.karol202.paintplus.util.NavigationBarUtils
-import pl.karol202.paintplus.util.collectIn
-import pl.karol202.paintplus.util.viewBinding
+import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 import pl.karol202.paintplus.viewmodel.PaintViewModel.TitleOverride
+import java.util.*
 
-class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContextLegacy
+class ActivityPaint : AppCompatActivity(), AppContextLegacy
 {
 	companion object
 	{
-		const val URI_KEY = "path"
-		const val OPEN_KEY = "open"
+		const val ARG_OPEN_URI = "open_uri"
+		const val ARG_OPEN_PICKER = "open_picker"
 	}
 
 	private val recentViewModel by viewModel<RecentViewModel>()
 	private val paintViewModel by viewModel<PaintViewModel>()
 	private val views by viewBinding(ActivityPaintBinding::inflate)
 
-	private lateinit var actions: ActivityPaintActions
-	private lateinit var drawers: ActivityPaintDrawers
-	private lateinit var layers: ActivityPaintLayers
+	private val actions by lazy { ActivityPaintActions(this, recentViewModel, paintViewModel) }
+	private val drawers by lazy { ActivityPaintDrawers(this, views, paintViewModel) }
+	private val layers by lazy { ActivityPaintLayers(this, views, paintViewModel) }
 
 	private val resultListeners = mutableMapOf<Int, ActivityResultListener>()
-	private val permissionListeners = mutableMapOf<Int, PermissionGrantListener>()
 
-	private var initUri: Uri? = null
-	private var openFile = false
+	private val openUri by argument<Uri>(ARG_OPEN_URI)
+	private val openPicker by argumentOr(ARG_OPEN_PICKER, false)
 
 	private var currentDialog: AlertDialog? = null
 
@@ -77,8 +72,6 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
-		readArguments(intent.extras)
-		GraphicsHelper.init(this)
 
 		setContentView(views.root)
 		window.decorView.setOnSystemUiVisibilityChangeListener { initSystemUIVisibility() }
@@ -90,19 +83,8 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 
 		views.paintView.setImage(paintViewModel.image)
 
-		actions = ActivityPaintActions(this, paintViewModel)
-		drawers = ActivityPaintDrawers(this, views, paintViewModel)
-		layers = ActivityPaintLayers(this, views, paintViewModel)
-
 		drawers.initDrawers()
 		layers.initLayers()
-	}
-
-	private fun readArguments(bundle: Bundle?)
-	{
-		if(bundle == null) return
-		initUri = bundle.getParcelable(URI_KEY)
-		openFile = initUri == null && bundle.getBoolean(OPEN_KEY, false)
 	}
 
 	private fun initSystemUIVisibility()
@@ -171,52 +153,47 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 			}
 		}
 		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { request ->
-			val contract = when(request)
+			/*
+			I'm aware that this way of using Activity Result API is not correct,
+			because it does not work when the application process is killed.
+			However, other parts of application also do not support being killed (e.g. bitmaps),
+			so proper implementing it would require much more effort.
+
+			Therefore, not using registerForActivityResult here (and hence ignoring lifecycle) is not a problem.
+			*/
+
+			fun <I, O> registerRequest(contract: ActivityResultContract<I, O>,
+			                           callback: (O) -> Unit) =
+					activityResultRegistry.register(UUID.randomUUID().toString(), contract, callback)
+
+			when(request)
 			{
-				is PaintViewModel.ActionRequest.OpenFile -> ActivityResultContracts.OpenDocument()
+				is PaintViewModel.ActionRequest.OpenFile ->
+					registerRequest(ActivityResultContracts.OpenDocument(), request.callback)
+							.launch(request.mimeFilters.toTypedArray())
+				is PaintViewModel.ActionRequest.SaveFile ->
+					registerRequest(ActivityResultContracts.CreateDocument(), request.callback)
+							.launch(request.suggestedName)
 			}
-			registerForActivityResult(contract) { request.callback(it) }
 		}
 	}
 
-	private fun showSnackbar(message: Int)
-	{
-		val snackbar = Snackbar.make(views.mainContainer, message, Snackbar.LENGTH_SHORT)
-		val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
-		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
-		snackbar.show()
-	}
+	private fun showSnackbar(message: Int) = Snackbar.make(views.mainContainer, message, Snackbar.LENGTH_LONG).show()
 
 	override fun onPostCreate(savedInstanceState: Bundle?)
 	{
 		super.onPostCreate(savedInstanceState)
 		drawers.postInitDrawers()
-		loadImageIfPathIsPresent()
-		selectImageToOpenIfNeeded()
 		observeViewModel()
+
+		if(savedInstanceState == null) openImageIfRequested()
 	}
 
-	private fun loadImageIfPathIsPresent()
+	private fun openImageIfRequested() = when
 	{
-		if(initUri != null) OptionFileOpen(recentViewModel, paintViewModel).executeWithUri(initUri)
-	}
-
-	private fun selectImageToOpenIfNeeded()
-	{
-		if(openFile) OptionFileOpen(recentViewModel, paintViewModel).executeWithoutAsking()
-	}
-
-	override fun onSaveInstanceState(outState: Bundle)
-	{
-		intent.putExtra(URI_KEY, null as String?)
-		intent.putExtra(OPEN_KEY, false)
-		super.onSaveInstanceState(outState)
-	}
-
-	override fun onDestroy()
-	{
-		super.onDestroy()
-		GraphicsHelper.destroy()
+		openUri != null -> OptionFileOpen(recentViewModel, paintViewModel).executeWithUri(openUri!!)
+		openPicker -> OptionFileOpen(recentViewModel, paintViewModel).executeWithoutSaving()
+		else -> {}
 	}
 
 	override fun onWindowFocusChanged(hasFocus: Boolean)
@@ -238,14 +215,9 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 		return super.onPrepareOptionsMenu(menu)
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem): Boolean
-	{
-		return actions.handleAction(item) || super.onOptionsItemSelected(item)
-	}
+	override fun onOptionsItemSelected(item: MenuItem) = actions.handleAction(item) || super.onOptionsItemSelected(item)
 
 	fun showSettingsActivity() = startActivity(Intent(this, ActivitySettings::class.java))
-
-	fun onFileEdit(uri: Uri) = recentViewModel.onFileEdit(uri)
 
 	fun registerActivityResultListener(requestCode: Int, listener: ActivityResultListener)
 	{
@@ -263,19 +235,6 @@ class ActivityPaint : AppCompatActivity(), PermissionGrantingActivity, AppContex
 	{
 		super.onActivityResult(requestCode, resultCode, data)
 		resultListeners[requestCode]?.onActivityResult(resultCode, data)
-	}
-
-	override fun registerPermissionGrantListener(requestCode: Int, listener: PermissionGrantListener)
-	{
-		if(requestCode in permissionListeners) throw RuntimeException("requestCode is already used: $requestCode")
-		permissionListeners[requestCode] = listener
-	}
-
-	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray)
-	{
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-		if(grantResults[0] == PackageManager.PERMISSION_GRANTED) permissionListeners[requestCode]?.onPermissionGrant()
-		permissionListeners.remove(requestCode)
 	}
 
 	fun togglePropertiesDrawer() = drawers.togglePropertiesDrawer()

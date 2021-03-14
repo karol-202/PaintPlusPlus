@@ -16,7 +16,6 @@
 package pl.karol202.paintplus.options
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
@@ -28,14 +27,14 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerOpen(private val viewModel: PaintViewModel) : Option
 {
-	private val openOption = OptionOpen(viewModel, this::onBitmapLoaded)
+	private val openOption = OptionOpen(viewModel, this::onResult)
 
-	override fun execute() = openOption.execute()
+	fun execute() = openOption.execute()
 
-	private fun onBitmapLoaded(result: OptionOpen.OpenResult?)
+	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{
-		if(result != null) addNewLayer(result.uri, result.bitmap, result.exifOrientation)
-		else viewModel.showMessage(R.string.message_cannot_open_file)
+		is OptionOpen.OpenResult.Success -> addNewLayer(result.uri, result.bitmap, result.exifOrientation)
+		is OptionOpen.OpenResult.Failed -> viewModel.showMessage(R.string.message_cannot_open_file)
 	}
 
 	private fun addNewLayer(uri: Uri, bitmap: Bitmap, orientation: Int?)

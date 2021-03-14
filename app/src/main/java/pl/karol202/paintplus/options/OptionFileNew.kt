@@ -15,6 +15,7 @@
  */
 package pl.karol202.paintplus.options
 
+import android.util.Size
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
@@ -27,19 +28,19 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 class OptionFileNew(private val viewModel: PaintViewModel) : Option
 {
 	class Dialog(builder: AlertDialog.Builder,
-	             private val image: Image) :
-			Option.Dialog<DialogNewImageBinding>(builder, DialogNewImageBinding::inflate)
+	             currentSize: Size,
+	             private val onApply: (Size) -> Unit) :
+			Option.LayoutDialog<DialogNewImageBinding>(builder, DialogNewImageBinding::inflate)
 	{
 		init
 		{
 			builder.setTitle(R.string.dialog_new_image)
-			builder.setView(views.root)
 			builder.setPositiveButton(R.string.ok) { _, _ -> onApply() }
 			builder.setNegativeButton(R.string.cancel, null)
 
-			views.editImageX.setText(image.width.toString())
+			views.editImageX.setText(currentSize.width.toString())
 			views.editImageX.addTextChangedListener { onEdit(views.inputLayoutImageX, it?.toString()) }
-			views.editImageY.setText(image.height.toString())
+			views.editImageY.setText(currentSize.height.toString())
 			views.editImageY.addTextChangedListener { onEdit(views.inputLayoutImageY, it?.toString()) }
 		}
 
@@ -52,10 +53,7 @@ class OptionFileNew(private val viewModel: PaintViewModel) : Option
 		{
 			val width = views.editImageX.text.toString().toIntOrNull() ?: 0
 			val height = views.editImageY.text.toString().toIntOrNull() ?: 0
-			if(getValidationError(width) != null || getValidationError(height) != null) return
-
-			image.newImage(width, height)
-			image.centerView()
+			if(getValidationError(width) == null && getValidationError(height) == null) onApply(Size(width, height))
 		}
 
 		private fun getValidationError(value: Int?) = when
@@ -66,5 +64,11 @@ class OptionFileNew(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	override fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
+	fun execute() = viewModel.showDialog { Dialog(it, viewModel.image.size, this::onApply) }
+
+	private fun onApply(size: Size)
+	{
+		viewModel.image.newImage(size.width, size.height)
+		viewModel.image.centerView()
+	}
 }

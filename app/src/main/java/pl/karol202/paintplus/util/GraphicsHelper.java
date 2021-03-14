@@ -54,11 +54,6 @@ public class GraphicsHelper
 		}
 	}
 
-	public static void destroy()
-	{
-		renderScript.destroy();
-	}
-
 	private static void initGL() throws GLException
 	{
 		display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);

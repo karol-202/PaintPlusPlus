@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
+import coil.load
 import pl.karol202.paintplus.databinding.CardRecentBinding
 import pl.karol202.paintplus.util.layoutInflater
 
@@ -42,7 +43,7 @@ class RecentAdapter(private val context: Context,
 			this.image = image
 
 			views.textRecentName.text = image.name
-			views.imageRecentThumbnail.setImageURI(image.uri)
+			views.imageRecentThumbnail.load(image.uri)
 			views.buttonRecentOpen.setOnClickListener { onSelect(image) }
 		}
 	}

@@ -19,21 +19,22 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.viewbinding.ViewBinding
 import pl.karol202.paintplus.util.layoutInflater
-import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-fun interface Option
+interface Option
 {
-	abstract class SimpleDialog(builder: AlertDialog.Builder)
+	abstract class BasicDialog(builder: AlertDialog.Builder)
 	{
 		protected val context = builder.context
 	}
 
-	abstract class Dialog<B : ViewBinding>(builder: AlertDialog.Builder,
-	                                       binding: (LayoutInflater) -> B)
+	abstract class LayoutDialog<B : ViewBinding>(builder: AlertDialog.Builder,
+	                                             binding: (LayoutInflater) -> B) : BasicDialog(builder)
 	{
-		protected val context = builder.context
 		protected val views = binding(context.layoutInflater)
-	}
 
-	fun execute()
+		init
+		{
+			builder.setView(views.root)
+		}
+	}
 }

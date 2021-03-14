@@ -15,7 +15,6 @@
  */
 package pl.karol202.paintplus.activity
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Environment
 import android.view.Menu
@@ -27,11 +26,13 @@ import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.history.ActivityHistoryHelper
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.options.*
+import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 
 class ActivityPaintActions(private val activity: ActivityPaint,
+                           private val recentViewModel: RecentViewModel,
                            private val paintViewModel: PaintViewModel)
 {
 	private val menuInflater = activity.menuInflater
@@ -131,22 +132,17 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_tool ->
 				activity.togglePropertiesDrawer()
 			R.id.action_new_image ->
-				OptionFileNew().execute(paintViewModel)
+				OptionFileNew(paintViewModel).execute()
 			R.id.action_capture_photo ->
 				OptionFileCapturePhoto(activity, image).execute()
 			R.id.action_open_image ->
-				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileOpen(activity, image, activity.asyncManager, activity::onFileEdit).execute()
-				}).execute()
+				OptionFileOpen(recentViewModel, paintViewModel).execute()
 			R.id.action_save_image ->
-				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileSave(activity, image, activity.asyncManager, activity::onFileEdit)
-							.execute(image.lastUri, image.lastFormat)
-				}).execute()
+				if(image.lastFormat != null)
+					OptionFileSave(recentViewModel, paintViewModel).executeWithUriAndFormat(image.lastUri, image.lastFormat)
+				else OptionFileSave(recentViewModel, paintViewModel).executeWithUri(image.lastUri)
 			R.id.action_save_image_as ->
-				PermissionRequest(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, {
-					OptionFileSave(activity, image, activity.asyncManager, activity::onFileEdit).execute()
-				}).execute()
+				OptionFileSave(recentViewModel, paintViewModel).execute()
 			R.id.action_undo ->
 				image.undo()
 			R.id.action_redo ->
@@ -166,7 +162,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_paste ->
 				image.paste()
 			R.id.action_set_zoom ->
-				OptionSetZoom().execute(paintViewModel)
+				OptionSetZoom(paintViewModel).execute()
 			R.id.action_zoom_default ->
 				image.zoom = 1f
 			R.id.action_image_center ->
@@ -196,9 +192,9 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_new_layer ->
 				OptionLayerNew(activity, image).execute()
 			R.id.action_open_layer ->
-				OptionLayerOpen(activity, image, activity.asyncManager).execute()
+				OptionLayerOpen(paintViewModel).execute()
 			R.id.action_save_layer ->
-				OptionLayerSave(activity, image, activity.asyncManager, activity::onFileEdit).execute()
+				OptionLayerSave(recentViewModel, paintViewModel).execute()
 			R.id.action_resize_layer ->
 				OptionLayerResize(activity, image).execute()
 			R.id.action_scale_layer ->

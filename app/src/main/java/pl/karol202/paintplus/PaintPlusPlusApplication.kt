@@ -2,6 +2,7 @@ package pl.karol202.paintplus
 
 import android.app.Application
 import androidx.preference.PreferenceManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -13,6 +14,7 @@ import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.recent.RoomRecentImageRepository
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.settings.SharedPrefsSettingsRepository
+import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class PaintPlusPlusApplication : Application()
@@ -20,10 +22,18 @@ class PaintPlusPlusApplication : Application()
 	override fun onCreate()
 	{
 		super.onCreate()
+		initFirebaseIfNotDebug()
+		GraphicsHelper.init(this)
+
 		startKoin {
 			androidContext(this@PaintPlusPlusApplication)
 			modules(appModule())
 		}
+	}
+
+	private fun initFirebaseIfNotDebug()
+	{
+		if(!BuildConfig.DEBUG) FirebaseAnalytics.getInstance(this)
 	}
 
 	private fun appModule() = module {

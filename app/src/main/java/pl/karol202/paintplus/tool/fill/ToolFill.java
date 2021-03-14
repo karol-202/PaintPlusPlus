@@ -28,7 +28,7 @@ import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
 import pl.karol202.paintplus.tool.fill.ToolFillAsyncTask.OnFillCompleteListener;
 
-public class ToolFill extends StandardTool implements OnFillCompleteListener, AsyncBlocker
+public class ToolFill extends StandardTool implements OnFillCompleteListener
 {
 	private float fillThreshold;
 	private float opacity;
@@ -160,19 +160,6 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener, As
 		canvas.drawBitmap(bitmap, 0, 0, null); // TODO Paint opacity = strength
 		image.updateImage();
 		//if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
-	}
-
-	@Override
-	public void cancel()
-	{
-		asyncTask.cancel(true);
-		//if(!asyncManager.unblock(this)) throw new RuntimeException("Unable to unblock async blocker.");
-	}
-
-	@Override
-	public int getMessage()
-	{
-		return R.string.dialog_fill_message;
 	}
 
 	float getFillThreshold()

@@ -22,7 +22,7 @@ private const val DEFAULT_IMAGE_WIDTH = 600
 private const val DEFAULT_IMAGE_HEIGHT = 600
 
 class PaintViewModel(application: Application,
-                     settingsRepository: SettingsRepository) : AndroidViewModel(application)
+                     settingsRepository: SettingsRepository) : BaseViewModel(application)
 {
 	enum class TitleOverride
 	{
@@ -38,7 +38,11 @@ class PaintViewModel(application: Application,
 
 	sealed class ActionRequest<R>(val callback: (R) -> Unit)
 	{
-		class OpenFile(callback: (Uri?) -> Unit) : ActionRequest<Uri?>(callback)
+		class OpenFile(val mimeFilters: List<String>,
+		               callback: (Uri?) -> Unit) : ActionRequest<Uri?>(callback)
+
+		class SaveFile(val suggestedName: String,
+		               callback: (Uri?) -> Unit) : ActionRequest<Uri?>(callback)
 	}
 
 	val context: Context get() = getApplication()
@@ -48,9 +52,9 @@ class PaintViewModel(application: Application,
 	private val _currentToolFlow = MutableStateFlow(tools.defaultTool)
 	private val _titleOverrideFlow = MutableStateFlow(TitleOverride.NONE)
 	private val _dialogFlow = MutableStateFlow<DialogDefinition?>(null)
-	private val _messageEventFlow = MutableSharedFlow<MessageEvent>()
-	private val _imageEventFlow = MutableSharedFlow<ImageEvent>(replay = 16)
-	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(replay = 16)
+	private val _messageEventFlow = MutableSharedFlow<MessageEvent>(extraBufferCapacity = 16)
+	private val _imageEventFlow = MutableSharedFlow<ImageEvent>(extraBufferCapacity = 16)
+	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(extraBufferCapacity = 16)
 
 	val currentTool get() = currentToolFlow.value
 	val currentToolId get() = tools.getToolId(currentTool)

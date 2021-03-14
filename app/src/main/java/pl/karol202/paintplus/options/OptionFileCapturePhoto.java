@@ -31,12 +31,9 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.activity.ActivityResultListener;
 import pl.karol202.paintplus.file.ImageLoader;
-import pl.karol202.paintplus.file.UriUtils;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.legacy.OptionLegacy;
-import pl.karol202.paintplus.util.BitmapExtKt;
-import pl.karol202.paintplus.util.GraphicsHelper;
-import pl.karol202.paintplus.util.SizeExtKt;
+import pl.karol202.paintplus.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,11 +113,14 @@ public class OptionFileCapturePhoto extends OptionLegacy implements ActivityResu
 		if(resultCode != RESULT_OK) return;
 
 		Uri uri = Uri.fromFile(photoFile);
-		ParcelFileDescriptor fileDescriptor = UriUtils.createFileOpenDescriptor(getContext(), uri);
+		ParcelFileDescriptor fileDescriptor = UriExtKt.openFileDescriptor(uri, getContext(), FileDescriptorMode.READ);
 
-		if(fileDescriptor != null) openBitmap(fileDescriptor);
+		if(fileDescriptor != null)
+		{
+			openBitmap(fileDescriptor);
+			FileDescriptorExtKt.closeSafely(fileDescriptor);
+		}
 
-		UriUtils.closeFileDescriptor(fileDescriptor);
 		photoFile.delete();
 	}
 

@@ -9,5 +9,5 @@ class UriTypeConverters
 	fun uriToString(uri: Uri) = uri.toString()
 
 	@TypeConverter
-	fun stringToUri(string: String) = Uri.parse(string)
+	fun stringToUri(string: String): Uri = Uri.parse(string)
 }
