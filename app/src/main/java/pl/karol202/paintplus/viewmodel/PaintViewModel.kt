@@ -7,11 +7,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
@@ -43,6 +41,9 @@ class PaintViewModel(application: Application,
 
 		class SaveFile(val suggestedName: String,
 		               callback: (Uri?) -> Unit) : ActionRequest<Uri?>(callback)
+
+		class CapturePhoto(val uri: Uri,
+		                   callback: (Boolean) -> Unit) : ActionRequest<Boolean>(callback)
 	}
 
 	val context: Context get() = getApplication()
@@ -61,7 +62,15 @@ class PaintViewModel(application: Application,
 
 	val settingsFlow = settingsRepository.settings
 	val currentToolFlow: StateFlow<Tool> = _currentToolFlow
-	val titleOverrideFlow: StateFlow<TitleOverride> = _titleOverrideFlow
+	val titleFlow = _titleOverrideFlow.combine(_currentToolFlow) { override, tool ->
+		val toolName = context.getString(tool.name)
+		when(override)
+		{
+			TitleOverride.NONE -> toolName
+			TitleOverride.TOOL_SELECTION -> context.getString(R.string.choice_of_tool)
+			TitleOverride.TOOL_PROPERTIES -> context.getString(R.string.properties, toolName)
+		}
+	}
 	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
 	val messageEventFlow: Flow<MessageEvent> = _messageEventFlow
 	val imageEventFlow: Flow<ImageEvent> = _imageEventFlow

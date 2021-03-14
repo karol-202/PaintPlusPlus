@@ -27,9 +27,9 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionFileNew(private val viewModel: PaintViewModel) : Option
 {
-	class Dialog(builder: AlertDialog.Builder,
-	             currentSize: Size,
-	             private val onApply: (Size) -> Unit) :
+	private class Dialog(builder: AlertDialog.Builder,
+	                     currentSize: Size,
+	                     private val onApply: (Size) -> Unit) :
 			Option.LayoutDialog<DialogNewImageBinding>(builder, DialogNewImageBinding::inflate)
 	{
 		init

@@ -10,12 +10,26 @@ import com.ultrasonic.android.image.bitmap.util.AndroidBmpUtil
 import com.waynejo.androidndkgif.GifEncoder
 import pl.karol202.paintplus.R
 import java.io.*
+import java.util.*
 
 sealed class SaveFormat(val type: Type)
 {
 	enum class Type
 	{
-		JPEG, PNG, WEBP, BMP, GIF
+		JPEG, PNG, WEBP, BMP, GIF;
+
+		companion object
+		{
+			fun fromExtension(fileName: String) = when(fileName.split('.').lastOrNull()?.toLowerCase(Locale.ROOT))
+			{
+				"jpg", "jpeg" -> JPEG
+				"png" -> PNG
+				"webp" -> WEBP
+				"bmp" -> BMP
+				"gif" -> GIF
+				else -> null
+			}
+		}
 	}
 
 	abstract class Builtin(type: Type,

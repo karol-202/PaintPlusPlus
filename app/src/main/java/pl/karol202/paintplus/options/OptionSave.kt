@@ -43,10 +43,10 @@ class OptionSave(private val viewModel: PaintViewModel,
 		}
 	}
 
-	abstract class FormatDialog<F : SaveFormat, B : ViewBinding>(builder: AlertDialog.Builder,
-	                                                             viewBinding: (LayoutInflater) -> B,
-	                                                             initialFormat: F,
-	                                                             onAccept: (SaveFormat) -> Unit) :
+	private abstract class FormatDialog<F : SaveFormat, B : ViewBinding>(builder: AlertDialog.Builder,
+	                                                                     viewBinding: (LayoutInflater) -> B,
+	                                                                     initialFormat: F,
+	                                                                     onAccept: (SaveFormat) -> Unit) :
 			Option.LayoutDialog<B>(builder, viewBinding)
 	{
 		protected var format = initialFormat
@@ -58,9 +58,9 @@ class OptionSave(private val viewModel: PaintViewModel,
 		}
 	}
 
-	class JpegFormatDialog(builder: AlertDialog.Builder,
-	                       initialFormat: SaveFormat.Jpeg,
-	                       onAccept: (SaveFormat) -> Unit) :
+	private class JpegFormatDialog(builder: AlertDialog.Builder,
+	                               initialFormat: SaveFormat.Jpeg,
+	                               onAccept: (SaveFormat) -> Unit) :
 			FormatDialog<SaveFormat.Jpeg, DialogFormatJpegBinding>(builder, DialogFormatJpegBinding::inflate,
 			                                                       initialFormat, onAccept)
 	{
@@ -86,9 +86,9 @@ class OptionSave(private val viewModel: PaintViewModel,
 		}
 	}
 
-	class GifFormatDialog(builder: AlertDialog.Builder,
-	                      initialFormat: SaveFormat.Gif,
-	                      onAccept: (SaveFormat) -> Unit) :
+	private class GifFormatDialog(builder: AlertDialog.Builder,
+	                              initialFormat: SaveFormat.Gif,
+	                              onAccept: (SaveFormat) -> Unit) :
 			FormatDialog<SaveFormat.Gif, DialogFormatGifBinding>(builder, DialogFormatGifBinding::inflate, initialFormat, onAccept)
 	{
 		init
@@ -119,7 +119,7 @@ class OptionSave(private val viewModel: PaintViewModel,
 		executeWithUriAndFormatType(uri, formatType)
 	}
 
-	private fun getFileFormatType(uri: Uri) = uri.getDisplayName(viewModel.context)?.let(ImageLoader::getFormatByExtension)
+	private fun getFileFormatType(uri: Uri) = uri.getDisplayName(viewModel.context)?.let(SaveFormat.Type::fromExtension)
 
 	private fun executeWithUriAndFormatType(uri: Uri, formatType: SaveFormat.Type) = when(formatType)
 	{

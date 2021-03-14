@@ -27,8 +27,8 @@ import kotlin.math.roundToInt
 
 class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 {
-	class Dialog(builder: AlertDialog.Builder,
-	             private val image: Image) :
+	private class Dialog(builder: AlertDialog.Builder,
+	                     private val image: Image) :
 			Option.LayoutDialog<DialogSetZoomBinding>(builder, DialogSetZoomBinding::inflate)
 	{
 		private var dontFireEvent = false

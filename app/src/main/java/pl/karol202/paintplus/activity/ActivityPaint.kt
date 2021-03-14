@@ -29,16 +29,15 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.legacy.AppContextLegacy
+import pl.karol202.paintplus.options.OptionFileCapturePhoto
 import pl.karol202.paintplus.options.OptionFileOpen
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
-import pl.karol202.paintplus.viewmodel.PaintViewModel.TitleOverride
 import java.util.*
 
 class ActivityPaint : AppCompatActivity(), AppContextLegacy
@@ -47,6 +46,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	{
 		const val ARG_OPEN_URI = "open_uri"
 		const val ARG_OPEN_PICKER = "open_picker"
+		const val ARG_OPEN_CAMERA = "open_camera"
 	}
 
 	private val recentViewModel by viewModel<RecentViewModel>()
@@ -61,6 +61,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 
 	private val openUri by argument<Uri>(ARG_OPEN_URI)
 	private val openPicker by argumentOr(ARG_OPEN_PICKER, false)
+	private val openCamera by argumentOr(ARG_OPEN_CAMERA, false)
 
 	private var currentDialog: AlertDialog? = null
 
@@ -121,14 +122,8 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		paintViewModel.currentToolFlow.collectIn(lifecycleScope) {
 			views.paintView.setCurrentTool(it)
 		}
-		paintViewModel.titleOverrideFlow.collectIn(lifecycleScope) {
-			val toolName = getString(paintViewModel.currentToolFlow.value.name)
-			views.toolbar.root.title = when(it)
-			{
-				TitleOverride.NONE -> toolName
-				TitleOverride.TOOL_SELECTION -> getString(R.string.choice_of_tool)
-				TitleOverride.TOOL_PROPERTIES -> getString(R.string.properties, toolName)
-			}
+		paintViewModel.titleFlow.collectIn(lifecycleScope) {
+			views.toolbar.root.title = it
 		}
 		paintViewModel.dialogFlow.collectIn(lifecycleScope) { definition ->
 			currentDialog?.dismiss()
@@ -174,6 +169,9 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 				is PaintViewModel.ActionRequest.SaveFile ->
 					registerRequest(ActivityResultContracts.CreateDocument(), request.callback)
 							.launch(request.suggestedName)
+				is PaintViewModel.ActionRequest.CapturePhoto ->
+					registerRequest(ActivityResultContracts.TakePicture(), request.callback)
+							.launch(request.uri)
 			}
 		}
 	}
@@ -193,6 +191,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	{
 		openUri != null -> OptionFileOpen(recentViewModel, paintViewModel).executeWithUri(openUri!!)
 		openPicker -> OptionFileOpen(recentViewModel, paintViewModel).executeWithoutSaving()
+		openCamera -> OptionFileCapturePhoto(paintViewModel).execute()
 		else -> {}
 	}
 
@@ -206,7 +205,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	override fun onCreateOptionsMenu(menu: Menu): Boolean
 	{
 		actions.inflateMenu(menu)
-		return true
+		return super.onCreateOptionsMenu(menu)
 	}
 
 	override fun onPrepareOptionsMenu(menu: Menu): Boolean

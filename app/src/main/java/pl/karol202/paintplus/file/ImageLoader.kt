@@ -25,7 +25,6 @@ import java.util.*
 
 object ImageLoader
 {
-	@JvmStatic
 	fun openBitmap(fileDescriptor: FileDescriptor): Bitmap? = BitmapFactory.decodeFileDescriptor(fileDescriptor)
 
 	fun getBitmapSize(fileDescriptor: FileDescriptor): Size
@@ -48,14 +47,4 @@ object ImageLoader
 				e.printStackTrace()
 				null
 			}
-
-	fun getFormatByExtension(fileName: String) = when(fileName.split('.').lastOrNull()?.toLowerCase(Locale.ROOT))
-	{
-		"jpg", "jpeg" -> SaveFormat.Type.JPEG
-		"png" -> SaveFormat.Type.PNG
-		"webp" -> SaveFormat.Type.WEBP
-		"bmp" -> SaveFormat.Type.BMP
-		"gif" -> SaveFormat.Type.GIF
-		else -> null
-	}
 }

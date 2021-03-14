@@ -134,7 +134,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_new_image ->
 				OptionFileNew(paintViewModel).execute()
 			R.id.action_capture_photo ->
-				OptionFileCapturePhoto(activity, image).execute()
+				OptionFileCapturePhoto(paintViewModel).execute()
 			R.id.action_open_image ->
 				OptionFileOpen(recentViewModel, paintViewModel).execute()
 			R.id.action_save_image ->

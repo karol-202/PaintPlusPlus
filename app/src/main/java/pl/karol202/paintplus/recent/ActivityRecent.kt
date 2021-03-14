@@ -16,6 +16,7 @@
 package pl.karol202.paintplus.recent
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -80,10 +81,18 @@ class ActivityRecent : AppCompatActivity()
 		return super.onCreateOptionsMenu(menu)
 	}
 
+	override fun onPrepareOptionsMenu(menu: Menu?): Boolean
+	{
+		val hasCamera = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+		menu?.findItem(R.id.action_capture_photo)?.isEnabled = hasCamera
+		return super.onPrepareOptionsMenu(menu)
+	}
+
 	override fun onOptionsItemSelected(item: MenuItem): Boolean
 	{
 		when(item.itemId)
 		{
+			R.id.action_capture_photo -> startEditingWithCamera()
 			R.id.action_open_image -> startEditingWithPicker()
 			else -> super.onOptionsItemSelected(item)
 		}
@@ -91,6 +100,8 @@ class ActivityRecent : AppCompatActivity()
 	}
 
 	private fun startEditingWithUri(uri: Uri) = startEditing { putExtra(ActivityPaint.ARG_OPEN_URI, uri) }
+
+	private fun startEditingWithCamera() = startEditing { putExtra(ActivityPaint.ARG_OPEN_CAMERA, true) }
 
 	private fun startEditingWithPicker() = startEditing { putExtra(ActivityPaint.ARG_OPEN_PICKER, true) }
 

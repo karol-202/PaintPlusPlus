@@ -49,7 +49,7 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 	}
 
 	private fun askAboutChanges() = paintViewModel.showDialog {
-		UnsavedDialog(it) { openOption.execute() }
+		UnsavedDialog(it) { executeWithoutSaving() }
 	}
 
 	fun executeWithoutSaving() = openOption.execute()

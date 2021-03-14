@@ -40,9 +40,9 @@ class OptionOpen(private val viewModel: PaintViewModel,
 		object Failed : OpenResult()
 	}
 
-	class ScaleDialog(builder: AlertDialog.Builder,
-	                  targetSize: Size,
-	                  onAccept: () -> Unit) : Option.BasicDialog(builder)
+	private class ScaleDialog(builder: AlertDialog.Builder,
+	                          targetSize: Size,
+	                          onAccept: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{
@@ -53,8 +53,8 @@ class OptionOpen(private val viewModel: PaintViewModel,
 		}
 	}
 
-	class RotationDialog(builder: AlertDialog.Builder,
-	                     onApply: () -> Unit) : Option.BasicDialog(builder)
+	private class RotationDialog(builder: AlertDialog.Builder,
+	                             onApply: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{

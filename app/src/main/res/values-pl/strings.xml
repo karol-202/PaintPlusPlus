@@ -339,4 +339,5 @@
 	<string name="join_round">Zaokrąglone</string>
 	<string name="polygon_join">Połączenie</string>
 	<string name="message_saved">Zapisano</string>
+	<string name="message_cannot_capture_photo">Nie można wykonać zdjęcia</string>
 </resources>
