@@ -30,7 +30,7 @@ import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -543,14 +543,14 @@ public class Image
 
 	public void setZoom(float zoom, float focusX, float focusY)
 	{
-		float focusXInImage = Utils.map(focusX, -viewX * this.zoom, (-viewX + width) * this.zoom, 0, 1);
-		float focusYInImage = Utils.map(focusY, -viewY * this.zoom, (-viewY + height) * this.zoom, 0, 1);
+		float focusXInImage = MathUtils.map(focusX, -viewX * this.zoom, (-viewX + width) * this.zoom, 0, 1);
+		float focusYInImage = MathUtils.map(focusY, -viewY * this.zoom, (-viewY + height) * this.zoom, 0, 1);
 		float offsetXLeft = (viewX * (this.zoom / zoom)) - viewX;
 		float offsetYTop = (viewY * (this.zoom / zoom)) - viewY;
 		float offsetXRight = (((viewX * this.zoom) + ((width * zoom) - (width * this.zoom))) / zoom) - viewX;
 		float offsetYBottom = (((viewY * this.zoom) + ((height * zoom) - (height * this.zoom))) / zoom) - viewY;
-		viewX += Utils.lerp(focusXInImage, offsetXLeft, offsetXRight);
-		viewY += Utils.lerp(focusYInImage, offsetYTop, offsetYBottom);
+		viewX += MathUtils.lerp(focusXInImage, offsetXLeft, offsetXRight);
+		viewY += MathUtils.lerp(focusYInImage, offsetYTop, offsetYBottom);
 
 		this.zoom = zoom;
 		updateMatrix();

@@ -25,10 +25,8 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerDrag;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
 
-public class OptionLayerDrag extends OptionLegacy
+public class OptionLayerDrag extends LegacyOption
 {
 	private EditText editX;
 	private EditText editY;

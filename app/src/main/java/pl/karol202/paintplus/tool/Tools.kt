@@ -44,6 +44,4 @@ class Tools(image: Image)
 	val defaultTool get() = tools.first()
 
 	fun getTool(id: Int) = tools[id]
-
-	fun getToolId(tool: Tool) = tools.indexOf(tool)
 }

@@ -23,7 +23,7 @@ import pl.karol202.paintplus.tool.shape.Join;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 public class ShapePolygon extends Shape
 {
@@ -84,11 +84,11 @@ public class ShapePolygon extends Shape
 
 			float centralAngle = 360f / sides;
 			float halfOfCentral = centralAngle / 2;
-			float angle = (float) Utils.getAngle(center, touchPoint) - this.angle;
+			float angle = (float) MathUtils.getAngle(center, touchPoint) - this.angle;
 			if(angle < 0) angle += 360;
 			float angleMod = angle % centralAngle;
 			float a = Math.abs(angleMod - halfOfCentral);
-			float centerToSide = Utils.map(a, 0, halfOfCentral, radiusOIC, radiusOCC);
+			float centerToSide = MathUtils.map(a, 0, halfOfCentral, radiusOIC, radiusOCC);
 
 			float distanceToCenter = calcDistance(center, x, y);
 			float distanceToSide = Math.abs(distanceToCenter - centerToSide);
@@ -138,7 +138,7 @@ public class ShapePolygon extends Shape
 	{
 		if(draggingStart != null)
 		{
-			double theta = Math.toRadians(Utils.getAngle(center, current));
+			double theta = Math.toRadians(MathUtils.getAngle(center, current));
 			float rCurrent = calcDistance(center, current.x, current.y);
 			float rDraggingStart = calcDistance(center, draggingStart.x, draggingStart.y);
 			float rBeginning = radiusOCCAtBeginning;
@@ -153,7 +153,7 @@ public class ShapePolygon extends Shape
 
 			radiusOCC = calcDistance(center, (int) result.x, (int) result.y);
 
-			angle = (float) Utils.getAngle(center, new Point((int) result.x, (int) result.y)) - 90;
+			angle = (float) MathUtils.getAngle(center, new Point((int) result.x, (int) result.y)) - 90;
 		}
 		else
 		{
@@ -161,7 +161,7 @@ public class ShapePolygon extends Shape
 			getHelpersManager().snapPoint(snapped);
 			radiusOCC = calcDistance(center, (int) snapped.x, (int) snapped.y);
 
-			angle = (float) Utils.getAngle(center, new Point((int) snapped.x, (int) snapped.y)) - 90;
+			angle = (float) MathUtils.getAngle(center, new Point((int) snapped.x, (int) snapped.y)) - 90;
 		}
 
 		createPath();

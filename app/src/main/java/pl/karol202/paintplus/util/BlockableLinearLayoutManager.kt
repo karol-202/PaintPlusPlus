@@ -13,49 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.util
 
-package pl.karol202.paintplus.util;
+import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 
-public class BezierPoint
+class BlockableLinearLayoutManager(context: Context) : LinearLayoutManager(context)
 {
-	private float x;
-	private float y;
-	private float cx;
-	private float cy;
-	
-	public BezierPoint(float x, float y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-	
-	public float getX()
-	{
-		return x;
-	}
-	
-	public float getY()
-	{
-		return y;
-	}
-	
-	public float getCX()
-	{
-		return cx;
-	}
-	
-	public void setCX(float cx)
-	{
-		this.cx = cx;
-	}
-	
-	public float getCY()
-	{
-		return cy;
-	}
-	
-	public void setCY(float cy)
-	{
-		this.cy = cy;
-	}
+	var allowScrolling = true
+
+	override fun canScrollVertically() = allowScrolling
 }

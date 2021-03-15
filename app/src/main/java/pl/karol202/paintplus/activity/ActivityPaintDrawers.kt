@@ -103,7 +103,6 @@ class ActivityPaintDrawers(private val activity: ActivityPaint,
 
 	private val drawerAdapter = DrawerAdapter()
 	private var toolsAdapter = ToolsAdapter(activity, paintViewModel.tools, this::onToolSelect)
-	private val colorsSelect = ColorsSelect()
 
 	fun initDrawers()
 	{
@@ -124,15 +123,11 @@ class ActivityPaintDrawers(private val activity: ActivityPaint,
 	}
 
 	private fun attachPropertiesFragment() = fragments.commit {
-		replace(R.id.properties_fragment, createPropertiesFragment())
-	}
-
-	private fun createPropertiesFragment() = paintViewModel.currentTool.propertiesFragmentClass.newInstance().apply {
-		arguments = bundleOf("tool" to paintViewModel.currentToolId)
+		replace(R.id.properties_fragment, paintViewModel.currentTool.propertiesFragmentClass.newInstance())
 	}
 
 	private fun attachColorsFragment() = fragments.commit {
-		replace(R.id.colors_fragment, colorsSelect)
+		replace(R.id.colors_fragment, ColorsSelect())
 	}
 
 	fun togglePropertiesDrawer()

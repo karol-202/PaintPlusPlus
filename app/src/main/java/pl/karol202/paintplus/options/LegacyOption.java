@@ -1,14 +1,22 @@
-package pl.karol202.paintplus.legacy;
+package pl.karol202.paintplus.options;
 
 import android.content.Context;
+import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.image.Image;
 
-public abstract class OptionLegacy
+public abstract class LegacyOption
 {
+	public interface AppContextLegacy
+	{
+		Context getContext();
+
+		Snackbar createSnackbar(int message, int duration);
+	}
+
 	private AppContextLegacy context;
 	private Image image;
 
-	public OptionLegacy(AppContextLegacy context, Image image)
+	public LegacyOption(AppContextLegacy context, Image image)
 	{
 		this.context = context;
 		this.image = image;

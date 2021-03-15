@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.core.content.ContextCompat;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 public class ColorPickerBar extends View
 {
@@ -70,12 +70,12 @@ public class ColorPickerBar extends View
 		super(context, attrs);
 		checkForEditMode();
 
-		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
-		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
-		RIGHT_MARGIN_PX = Utils.dpToPixels(context, RIGHT_MARGIN_DP);
-		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
-		INDICATOR_LINE_WIDTH_PX = Utils.dpToPixels(context, INDICATOR_LINE_WIDTH_DP);
-		BORDER_WIDTH_PX = Utils.dpToPixels(context, BORDER_WIDTH_DP);
+		LEFT_MARGIN_PX = MathUtils.dpToPixels(context, LEFT_MARGIN_DP);
+		TOP_MARGIN_PX = MathUtils.dpToPixels(context, TOP_MARGIN_DP);
+		RIGHT_MARGIN_PX = MathUtils.dpToPixels(context, RIGHT_MARGIN_DP);
+		BOTTOM_MARGIN_PX = MathUtils.dpToPixels(context, BOTTOM_MARGIN_DP);
+		INDICATOR_LINE_WIDTH_PX = MathUtils.dpToPixels(context, INDICATOR_LINE_WIDTH_DP);
+		BORDER_WIDTH_PX = MathUtils.dpToPixels(context, BORDER_WIDTH_DP);
 		initTriangles(context);
 
 		borderPaint = new Paint();
@@ -166,7 +166,7 @@ public class ColorPickerBar extends View
 
 	private void drawIndicator(Canvas canvas)
 	{
-		float yOffset = Utils.map(channel.getValue(), channel.getMaxValue(), 0, TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX);
+		float yOffset = MathUtils.map(channel.getValue(), channel.getMaxValue(), 0, TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX);
 		if(indicatorOuterPath == null || indicatorInnerPath == null) updateIndicator(yOffset);
 
 		canvas.drawLine(LEFT_MARGIN_PX, yOffset, getWidth(), yOffset, indicatorLinePaint);
@@ -189,8 +189,8 @@ public class ColorPickerBar extends View
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		float value = Utils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channel.getMaxValue(), 0);
-		value = Utils.clamp(value, 0, channel.getMaxValue());
+		float value = MathUtils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channel.getMaxValue(), 0);
+		value = MathUtils.clamp(value, 0, channel.getMaxValue());
 		channel.setValue(Math.round(value));
 		indicatorOuterPath = null;
 		indicatorInnerPath = null;

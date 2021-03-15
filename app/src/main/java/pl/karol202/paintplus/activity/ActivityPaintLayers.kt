@@ -21,7 +21,7 @@ import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.image.layer.LayersAdapter
 import pl.karol202.paintplus.options.OptionLayerNew
 import pl.karol202.paintplus.util.LayersSheetBehavior
-import pl.karol202.paintplus.util.Utils
+import pl.karol202.paintplus.util.MathUtils
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
@@ -36,7 +36,7 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 	private val layersAdapter = LayersAdapter(activity)
 	private val bottomSheetBehaviour = BottomSheetBehavior.from(views.bottomSheet) as LayersSheetBehavior<*>
 
-	private val sheetPanelSizePx = Utils.dpToPixels(activity.resources.displayMetrics, SHEET_PANEL_SIZE_DP).toInt()
+	private val sheetPanelSizePx = MathUtils.dpToPixels(activity, SHEET_PANEL_SIZE_DP).toInt()
 
 	fun initLayers()
 	{
@@ -79,6 +79,6 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 	fun setScrollingBlocked(blocked: Boolean)
 	{
 		views.recyclerLayers.setAllowScrolling(!blocked)
-		bottomSheetBehaviour.setAllowDragging(!blocked)
+		bottomSheetBehaviour.allowDragging = !blocked
 	}
 }

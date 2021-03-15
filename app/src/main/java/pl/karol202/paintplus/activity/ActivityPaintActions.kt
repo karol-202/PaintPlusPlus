@@ -182,13 +182,13 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_scale_image ->
 				OptionImageScale(activity, image).execute()
 			R.id.action_flip_image ->
-				OptionImageFlip(activity, image).execute()
+				OptionImageFlip(paintViewModel).execute()
 			R.id.action_rotate_image ->
-				OptionImageRotate(activity, image).execute()
+				OptionImageRotate(paintViewModel).execute()
 			R.id.action_flatten_image ->
-				OptionImageFlatten(activity, image).execute()
+				OptionImageFlatten(paintViewModel).execute()
 			R.id.action_crop_image_by_selection ->
-				OptionCropImageBySelection(activity, image).execute()
+				OptionCropImageBySelection(paintViewModel).execute()
 			R.id.action_new_layer ->
 				OptionLayerNew(activity, image).execute()
 			R.id.action_open_layer ->
@@ -200,15 +200,15 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_scale_layer ->
 				OptionLayerScale(activity, image).execute()
 			R.id.action_flip_layer ->
-				OptionLayerFlip(activity, image).execute()
+				OptionLayerFlip(paintViewModel).execute()
 			R.id.action_rotate_layer ->
 				OptionLayerRotate(activity, image).execute()
 			R.id.action_drag_layer ->
 				OptionLayerDrag(activity, image).execute()
 			R.id.action_layer_to_image_size ->
-				OptionLayerToImageSize(activity, image).execute()
+				OptionLayerToImageSize(paintViewModel).execute()
 			R.id.action_crop_layer_by_selection ->
-				OptionCropLayerBySelection(activity, image).execute()
+				OptionCropLayerBySelection(paintViewModel).execute()
 			R.id.action_select_all ->
 				image.selectAll()
 			R.id.action_select_nothing ->
@@ -216,7 +216,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 			R.id.action_revert_selection ->
 				image.revertSelection()
 			R.id.action_colors_invert ->
-				OptionColorsInvert(activity, image).execute()
+				OptionColorsInvert(paintViewModel).execute()
 			R.id.action_colors_brightness ->
 				OptionColorsBrightness(activity, image).execute()
 			R.id.action_color_curves_rgb ->

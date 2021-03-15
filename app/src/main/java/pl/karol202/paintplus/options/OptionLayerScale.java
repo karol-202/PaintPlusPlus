@@ -20,7 +20,6 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerScale;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
 
 public class OptionLayerScale extends OptionScale
 {

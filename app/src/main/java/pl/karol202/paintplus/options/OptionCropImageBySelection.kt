@@ -13,12 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.options
 
-package pl.karol202.paintplus.tool;
+import pl.karol202.paintplus.history.action.ActionImageCrop
+import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-public enum ToolCoordinateSpace
+class OptionCropImageBySelection(private val viewModel: PaintViewModel) : Option
 {
-	SCREEN_SPACE,
-	IMAGE_SPACE,
-	LAYER_SPACE
+	fun execute()
+	{
+		val image = viewModel.image
+		val bounds = image.selection.bounds
+		val action = ActionImageCrop(image)
+		action.setDataBeforeResizing(image.width, image.height, bounds.left, bounds.top)
+		image.resize(bounds.left, bounds.top, bounds.width(), bounds.height())
+		image.updateImage()
+		action.applyAction()
+	}
 }

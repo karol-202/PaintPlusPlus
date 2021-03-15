@@ -41,7 +41,7 @@ public class ColorsSet implements Parcelable
 		this.listeners = new ArrayList<>();
 	}
 
-	void revert()
+	void invert()
 	{
 		int first = firstColor;
 		firstColor = secondColor;

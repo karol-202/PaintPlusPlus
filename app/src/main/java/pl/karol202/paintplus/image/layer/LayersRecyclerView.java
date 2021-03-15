@@ -19,8 +19,8 @@ package pl.karol202.paintplus.image.layer;
 import android.content.Context;
 import android.util.AttributeSet;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
-import pl.karol202.paintplus.util.ItemDivider;
 import pl.karol202.paintplus.util.BlockableLinearLayoutManager;
 
 public class LayersRecyclerView extends RecyclerView
@@ -43,7 +43,7 @@ public class LayersRecyclerView extends RecyclerView
 		super(context, attrs, defStyle);
 		manager = new BlockableLinearLayoutManager(context);
 		setLayoutManager(manager);
-		addItemDecoration(new ItemDivider(context));
+		addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
 	}
 
 	@Override

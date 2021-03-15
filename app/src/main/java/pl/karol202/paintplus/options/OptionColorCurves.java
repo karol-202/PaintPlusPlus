@@ -40,15 +40,13 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.HSV;
 import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.RGB;
 
-public class OptionColorCurves extends OptionLegacy implements OnClickListener, AdapterView.OnItemSelectedListener,
+public class OptionColorCurves extends LegacyOption implements OnClickListener, AdapterView.OnItemSelectedListener,
                                                                View.OnTouchListener, View.OnClickListener, OnCurveEditListener
 {
 	private ColorChannelType channelType;

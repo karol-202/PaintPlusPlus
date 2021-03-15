@@ -1,6 +1,9 @@
 package pl.karol202.paintplus.util
 
+import android.view.View
+import android.widget.AdapterView
 import android.widget.SeekBar
+import android.widget.Spinner
 
 fun SeekBar.setOnValueChangeListener(listener: (Int) -> Unit) =
 		setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -10,3 +13,12 @@ fun SeekBar.setOnValueChangeListener(listener: (Int) -> Unit) =
 
 			override fun onStopTrackingTouch(seekBar: SeekBar?) { }
 		})
+
+fun Spinner.setOnItemSelectedListener(listener: (Int) -> Unit)
+{
+	onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+		override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) = listener(position)
+
+		override fun onNothingSelected(parent: AdapterView<*>?) { }
+	}
+}

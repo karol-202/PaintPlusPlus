@@ -13,12 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool.gradient
 
-package pl.karol202.paintplus.activity;
-
-import android.content.Intent;
-
-public interface ActivityResultListener
+internal class GradientShapes(toolGradient: ToolGradient)
 {
-	void onActivityResult(int resultCode, Intent data);
+	val shapes = listOf(GradientShapeLinear(toolGradient),
+	                    GradientShapeBilinear(toolGradient),
+	                    GradientShapeRadial(toolGradient),
+	                    GradientShapeSweep(toolGradient),
+	                    GradientShapeSweepSymmetric(toolGradient))
+
+	fun getShape(id: Int) = shapes[id]
+
+	fun getShapeId(shape: GradientShape) = shapes.indexOf(shape)
 }

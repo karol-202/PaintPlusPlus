@@ -29,13 +29,15 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.karol202.paintplus.color.picker.ColorPickerContract
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
-import pl.karol202.paintplus.legacy.AppContextLegacy
+import pl.karol202.paintplus.options.LegacyOption.AppContextLegacy
 import pl.karol202.paintplus.options.OptionFileCapturePhoto
 import pl.karol202.paintplus.options.OptionFileOpen
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.*
+import pl.karol202.paintplus.viewmodel.DialogDefinition
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 import java.util.*
@@ -57,16 +59,12 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	private val drawers by lazy { ActivityPaintDrawers(this, views, paintViewModel) }
 	private val layers by lazy { ActivityPaintLayers(this, views, paintViewModel) }
 
-	private val resultListeners = mutableMapOf<Int, ActivityResultListener>()
-
 	private val openUri by argument<Uri>(ARG_OPEN_URI)
 	private val openPicker by argumentOr(ARG_OPEN_PICKER, false)
 	private val openCamera by argumentOr(ARG_OPEN_CAMERA, false)
 
 	private var currentDialog: AlertDialog? = null
 
-	val image get() = paintViewModel.image
-	val tools get() = paintViewModel.tools
 	val isAnyDrawerOpen get() = drawers.isAnyDrawerOpen
 	val mainContainer get() = views.mainContainer
 
@@ -75,8 +73,8 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		super.onCreate(savedInstanceState)
 
 		setContentView(views.root)
-		window.decorView.setOnSystemUiVisibilityChangeListener { initSystemUIVisibility() }
-		initSystemUIVisibility()
+		window.decorView.setOnSystemUiVisibilityChangeListener { enterFullscreen() }
+		enterFullscreen()
 
 		setSupportActionBar(views.toolbar.root)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -86,32 +84,6 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 
 		drawers.initDrawers()
 		layers.initLayers()
-	}
-
-	private fun initSystemUIVisibility()
-	{
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) initSystemUIVisibility30() else initSystemUIVisibilityPre30()
-	}
-
-	@TargetApi(Build.VERSION_CODES.R)
-	private fun initSystemUIVisibility30()
-	{
-		window.setDecorFitsSystemWindows(false)
-		window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-		window.insetsController?.hide(WindowInsets.Type.systemBars())
-	}
-
-	// Can be replaced with usage of WindowInsetsControllerCompat as soon as the bug is resolved:
-	// https://issuetracker.google.com/issues/173203649
-	@Suppress("DEPRECATION")
-	private fun initSystemUIVisibilityPre30()
-	{
-		window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-				View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-				View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-				View.SYSTEM_UI_FLAG_FULLSCREEN or
-				View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 	}
 
 	private fun observeViewModel()
@@ -125,58 +97,72 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		paintViewModel.titleFlow.collectIn(lifecycleScope) {
 			views.toolbar.root.title = it
 		}
-		paintViewModel.dialogFlow.collectIn(lifecycleScope) { definition ->
-			currentDialog?.dismiss()
-			currentDialog =
-					if(definition != null) AlertDialog.Builder(this)
-							.apply(definition::init)
-							.setOnDismissListener { paintViewModel.hideDialog() }
-							.show()
-					else null
+		paintViewModel.dialogFlow.collectIn(lifecycleScope) {
+			updateDialog(it)
 		}
 		paintViewModel.messageEventFlow.collectIn(lifecycleScope) {
 			showSnackbar(it.text)
 		}
 		paintViewModel.imageEventFlow.collectIn(lifecycleScope) {
-			when(it)
-			{
-				ImageEvent.IMAGE_CHANGED -> views.paintView.notifyImageChanged()
-				ImageEvent.LAYERS_CHANGED -> views.paintView.notifyLayersChanged()
-				ImageEvent.IMAGE_MATRIX_CHANGED -> views.paintView.notifyImageMatrixChanged()
-				ImageEvent.SELECTION_CHANGED -> views.paintView.notifySelectionChanged()
-				else -> {}
-			}
+			onImageEvent(it)
 		}
-		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { request ->
-			/*
-			I'm aware that this way of using Activity Result API is not correct,
-			because it does not work when the application process is killed.
-			However, other parts of application also do not support being killed (e.g. bitmaps),
-			so proper implementing it would require much more effort.
-
-			Therefore, not using registerForActivityResult here (and hence ignoring lifecycle) is not a problem.
-			*/
-
-			fun <I, O> registerRequest(contract: ActivityResultContract<I, O>,
-			                           callback: (O) -> Unit) =
-					activityResultRegistry.register(UUID.randomUUID().toString(), contract, callback)
-
-			when(request)
-			{
-				is PaintViewModel.ActionRequest.OpenFile ->
-					registerRequest(ActivityResultContracts.OpenDocument(), request.callback)
-							.launch(request.mimeFilters.toTypedArray())
-				is PaintViewModel.ActionRequest.SaveFile ->
-					registerRequest(ActivityResultContracts.CreateDocument(), request.callback)
-							.launch(request.suggestedName)
-				is PaintViewModel.ActionRequest.CapturePhoto ->
-					registerRequest(ActivityResultContracts.TakePicture(), request.callback)
-							.launch(request.uri)
-			}
+		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) {
+			onActionRequest(it)
 		}
 	}
 
+	private fun updateDialog(definition: DialogDefinition?)
+	{
+		currentDialog?.dismiss()
+		currentDialog =
+				if(definition != null) AlertDialog.Builder(this)
+						.apply(definition::init)
+						.setOnDismissListener { paintViewModel.hideDialog() }
+						.show()
+				else null
+	}
+
 	private fun showSnackbar(message: Int) = Snackbar.make(views.mainContainer, message, Snackbar.LENGTH_LONG).show()
+
+	private fun onImageEvent(event: ImageEvent) = when(event)
+	{
+		ImageEvent.IMAGE_CHANGED -> views.paintView.notifyImageChanged()
+		ImageEvent.LAYERS_CHANGED -> views.paintView.notifyLayersChanged()
+		ImageEvent.IMAGE_MATRIX_CHANGED -> views.paintView.notifyImageMatrixChanged()
+		ImageEvent.SELECTION_CHANGED -> views.paintView.notifySelectionChanged()
+		else -> {}
+	}
+
+	/*
+	I'm aware that this way of using Activity Result API is not correct,
+	because it does not work when the application process is killed.
+	However, other parts of application also do not support being killed (e.g. bitmaps),
+	so proper implementing it would require much more effort.
+
+	Therefore, not using registerForActivityResult here (and hence ignoring lifecycle) is not a problem.
+	*/
+	private fun onActionRequest(request: PaintViewModel.ActionRequest<*>)
+	{
+		fun <I, O> registerRequest(contract: ActivityResultContract<I, O>,
+		                           callback: (O) -> Unit) =
+				activityResultRegistry.register(UUID.randomUUID().toString(), contract, callback)
+
+		when(request)
+		{
+			is PaintViewModel.ActionRequest.OpenFile ->
+				registerRequest(ActivityResultContracts.OpenDocument(), request.callback)
+						.launch(request.mimeFilters.toTypedArray())
+			is PaintViewModel.ActionRequest.SaveFile ->
+				registerRequest(ActivityResultContracts.CreateDocument(), request.callback)
+						.launch(request.suggestedName)
+			is PaintViewModel.ActionRequest.CapturePhoto ->
+				registerRequest(ActivityResultContracts.TakePicture(), request.callback)
+						.launch(request.uri)
+			is PaintViewModel.ActionRequest.PickColor ->
+				registerRequest(ColorPickerContract(), request.callback)
+						.launch(request.pickerConfig)
+		}
+	}
 
 	override fun onPostCreate(savedInstanceState: Bundle?)
 	{
@@ -198,7 +184,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	override fun onWindowFocusChanged(hasFocus: Boolean)
 	{
 		super.onWindowFocusChanged(hasFocus)
-		if(hasFocus) initSystemUIVisibility()
+		if(hasFocus) enterFullscreen()
 		layers.updateView()
 	}
 
@@ -217,24 +203,6 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	override fun onOptionsItemSelected(item: MenuItem) = actions.handleAction(item) || super.onOptionsItemSelected(item)
 
 	fun showSettingsActivity() = startActivity(Intent(this, ActivitySettings::class.java))
-
-	fun registerActivityResultListener(requestCode: Int, listener: ActivityResultListener)
-	{
-		if(requestCode in resultListeners) throw RuntimeException("requestCode is already used: $requestCode")
-		resultListeners[requestCode] = listener
-	}
-
-	fun unregisterActivityResultListener(requestCode: Int)
-	{
-		if(requestCode !in resultListeners) throw RuntimeException("requestCode isn't registered yet: $requestCode")
-		resultListeners.remove(requestCode)
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
-	{
-		super.onActivityResult(requestCode, resultCode, data)
-		resultListeners[requestCode]?.onActivityResult(resultCode, data)
-	}
 
 	fun togglePropertiesDrawer() = drawers.togglePropertiesDrawer()
 

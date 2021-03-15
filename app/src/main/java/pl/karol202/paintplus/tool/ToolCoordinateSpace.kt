@@ -13,29 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool
 
-package pl.karol202.paintplus.options;
-
-import pl.karol202.paintplus.history.action.ActionImageFlatten;
-import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
-
-public class OptionImageFlatten extends OptionLegacy
+enum class ToolCoordinateSpace
 {
-	public OptionImageFlatten(AppContextLegacy context, Image image)
-	{
-		super(context, image);
-	}
-
-	@Override
-	public void execute()
-	{
-		ActionImageFlatten action = new ActionImageFlatten(getImage());
-		action.setImageBeforeFlattening(getImage());
-
-		getImage().flattenImage();
-
-		action.applyAction();
-	}
+	SCREEN_SPACE, IMAGE_SPACE, LAYER_SPACE
 }

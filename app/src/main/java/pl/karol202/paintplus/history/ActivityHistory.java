@@ -24,11 +24,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.util.ItemDivider;
 
 public class ActivityHistory extends AppCompatActivity
 {
@@ -68,7 +68,7 @@ public class ActivityHistory extends AppCompatActivity
 		recyclerHistory = findViewById(R.id.recycler_history);
 		recyclerHistory.setLayoutManager(new LinearLayoutManager(this));
 		recyclerHistory.setAdapter(adapter);
-		recyclerHistory.addItemDecoration(new ItemDivider(this));
+		recyclerHistory.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
 	}
 
 	@Override

@@ -31,7 +31,7 @@ import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.mode.LayerMode;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
+import pl.karol202.paintplus.options.LegacyOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 {
 	private final String DUPLICATE_INDICATOR;
 
-	private AppContextLegacy appContext;
+	private LegacyOption.AppContextLegacy appContext;
 	private Image image;
 	private ArrayList<Layer> layers;
 

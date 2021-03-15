@@ -363,6 +363,16 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 		image.updateImage();
 	}
 
+	int getShapeId()
+	{
+		return shapes.getShapeId(shape);
+	}
+
+	void setShapeId(int shapeId)
+	{
+		setShape(shapes.getShape(shapeId));
+	}
+
 	GradientRepeatability getRepeatability()
 	{
 		return repeatability;

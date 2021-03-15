@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package pl.karol202.paintplus
+package pl.karol202.paintplus.util
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.lang.Exception

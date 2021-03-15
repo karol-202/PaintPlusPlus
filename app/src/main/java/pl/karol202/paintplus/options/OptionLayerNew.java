@@ -32,12 +32,10 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.GraphicsHelper;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
-public class OptionLayerNew extends OptionLegacy implements DialogInterface.OnClickListener, TextWatcher
+public class OptionLayerNew extends LegacyOption implements DialogInterface.OnClickListener, TextWatcher
 {
 	public interface OnLayerAddListener
 	{
@@ -192,16 +190,16 @@ public class OptionLayerNew extends OptionLegacy implements DialogInterface.OnCl
 		int max = Math.max(right, bottom);
 		int previewSize = Math.max(preview.getWidth(), preview.getHeight());
 
-		float oldLeft = Utils.map(0, min, max, 0, previewSize);
-		float oldTop = Utils.map(0, min, max, 0, previewSize);
-		float oldRight = Utils.map(imageWidth, min, max, 0, previewSize);
-		float oldBottom = Utils.map(imageHeight, min, max, 0, previewSize);
+		float oldLeft = MathUtils.map(0, min, max, 0, previewSize);
+		float oldTop = MathUtils.map(0, min, max, 0, previewSize);
+		float oldRight = MathUtils.map(imageWidth, min, max, 0, previewSize);
+		float oldBottom = MathUtils.map(imageHeight, min, max, 0, previewSize);
 		RectF oldR = new RectF(oldLeft, oldTop, oldRight, oldBottom);
 
-		float newLeft = Utils.map(offsetX, min, max, 0, previewSize);
-		float newTop = Utils.map(offsetY, min, max, 0, previewSize);
-		float newRight = Utils.map(offsetX + layerWidth, min, max, 0, previewSize);
-		float newBottom = Utils.map(offsetY + layerHeight, min, max, 0, previewSize);
+		float newLeft = MathUtils.map(offsetX, min, max, 0, previewSize);
+		float newTop = MathUtils.map(offsetY, min, max, 0, previewSize);
+		float newRight = MathUtils.map(offsetX + layerWidth, min, max, 0, previewSize);
+		float newBottom = MathUtils.map(offsetY + layerHeight, min, max, 0, previewSize);
 		RectF newR = new RectF(newLeft, newTop, newRight, newBottom);
 
 		Paint paint = new Paint();

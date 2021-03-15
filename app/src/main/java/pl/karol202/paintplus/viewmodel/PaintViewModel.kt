@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import pl.karol202.paintplus.R
+import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
@@ -44,6 +45,9 @@ class PaintViewModel(application: Application,
 
 		class CapturePhoto(val uri: Uri,
 		                   callback: (Boolean) -> Unit) : ActionRequest<Boolean>(callback)
+
+		class PickColor(val pickerConfig: ColorPickerConfig,
+		                callback: (Int?) -> Unit) : ActionRequest<Int?>(callback)
 	}
 
 	val context: Context get() = getApplication()
@@ -58,7 +62,6 @@ class PaintViewModel(application: Application,
 	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(extraBufferCapacity = 16)
 
 	val currentTool get() = currentToolFlow.value
-	val currentToolId get() = tools.getToolId(currentTool)
 
 	val settingsFlow = settingsRepository.settings
 	val currentToolFlow: StateFlow<Tool> = _currentToolFlow

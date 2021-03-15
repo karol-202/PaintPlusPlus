@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.core.content.ContextCompat;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import static pl.karol202.paintplus.color.picker.panel.ColorChannel.ColorChannelType.*;
 
@@ -73,13 +73,13 @@ public class ColorPickerSquarePanel extends View
 		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		checkForEditMode();
 
-		LEFT_MARGIN_PX = Utils.dpToPixels(context, LEFT_MARGIN_DP);
-		TOP_MARGIN_PX = Utils.dpToPixels(context, TOP_MARGIN_DP);
-		RIGHT_MARGIN_PX = Utils.dpToPixels(context, RIGHT_MARGIN_DP);
-		BOTTOM_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_MARGIN_DP);
-		INDICATOR_RING_RADIUS_PX = Utils.dpToPixels(context, INDICATOR_RING_RADIUS_DP);
-		INDICATOR_RING_THICKNESS_PX = Utils.dpToPixels(context, INDICATOR_RING_THICKNESS_DP);
-		BORDER_WIDTH_PX = Utils.dpToPixels(context, BORDER_WIDTH_DP);
+		LEFT_MARGIN_PX = MathUtils.dpToPixels(context, LEFT_MARGIN_DP);
+		TOP_MARGIN_PX = MathUtils.dpToPixels(context, TOP_MARGIN_DP);
+		RIGHT_MARGIN_PX = MathUtils.dpToPixels(context, RIGHT_MARGIN_DP);
+		BOTTOM_MARGIN_PX = MathUtils.dpToPixels(context, BOTTOM_MARGIN_DP);
+		INDICATOR_RING_RADIUS_PX = MathUtils.dpToPixels(context, INDICATOR_RING_RADIUS_DP);
+		INDICATOR_RING_THICKNESS_PX = MathUtils.dpToPixels(context, INDICATOR_RING_THICKNESS_DP);
+		BORDER_WIDTH_PX = MathUtils.dpToPixels(context, BORDER_WIDTH_DP);
 
 		borderPaint = new Paint();
 		borderPaint.setColor(ContextCompat.getColor(context, R.color.border));
@@ -215,8 +215,8 @@ public class ColorPickerSquarePanel extends View
 
 	private void drawIndicator(Canvas canvas)
 	{
-		float x = Utils.map(channelX.getValue(), 0, channelX.getMaxValue(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX);
-		float y = Utils.map(channelY.getValue(), channelY.getMaxValue(), 0, TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX);
+		float x = MathUtils.map(channelX.getValue(), 0, channelX.getMaxValue(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX);
+		float y = MathUtils.map(channelY.getValue(), channelY.getMaxValue(), 0, TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX);
 
 		canvas.drawCircle(x, y, INDICATOR_RING_RADIUS_PX, indicatorPaint);
 	}
@@ -227,10 +227,10 @@ public class ColorPickerSquarePanel extends View
 	{
 		if(event.getAction() == MotionEvent.ACTION_DOWN) getParent().requestDisallowInterceptTouchEvent(true);
 		else if(event.getAction() == MotionEvent.ACTION_UP) getParent().requestDisallowInterceptTouchEvent(false);
-		float x = Utils.map(event.getX(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, 0, channelX.getMaxValue());
-		float y = Utils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channelY.getMaxValue(), 0);
-		x = Utils.clamp(x, 0, channelX.getMaxValue());
-		y = Utils.clamp(y, 0, channelY.getMaxValue());
+		float x = MathUtils.map(event.getX(), LEFT_MARGIN_PX, getWidth() - RIGHT_MARGIN_PX, 0, channelX.getMaxValue());
+		float y = MathUtils.map(event.getY(), TOP_MARGIN_PX, getHeight() - BOTTOM_MARGIN_PX, channelY.getMaxValue(), 0);
+		x = MathUtils.clamp(x, 0, channelX.getMaxValue());
+		y = MathUtils.clamp(y, 0, channelY.getMaxValue());
 		channelX.setValue(Math.round(x));
 		channelY.setValue(Math.round(y));
 		if(listener != null) listener.onChannelsValueChanged();

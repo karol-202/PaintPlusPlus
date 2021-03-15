@@ -21,11 +21,11 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import pl.karol202.paintplus.ErrorHandler;
+import pl.karol202.paintplus.util.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,18 +91,18 @@ public class ColorCurvesView extends View
 	public ColorCurvesView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		LEFT_GRID_MARGIN_PX = Utils.dpToPixels(context, LEFT_GRID_MARGIN_DP);
-		TOP_GRID_MARGIN_PX = Utils.dpToPixels(context, TOP_GRID_MARGIN_DP);
-		RIGHT_GRID_MARGIN_PX = Utils.dpToPixels(context, RIGHT_GRID_MARGIN_DP);
-		BOTTOM_GRID_MARGIN_PX = Utils.dpToPixels(context, BOTTOM_GRID_MARGIN_DP);
-		GRID_LINE_WIDTH_PX = Utils.dpToPixels(context, GRID_LINE_WIDTH_DP);
-		HORIZONTAL_SCALE_HEIGHT_PX = Utils.dpToPixels(context, HORIZONTAL_SCALE_HEIGHT_DP);
-		VERTICAL_SCALE_WIDTH_PX = Utils.dpToPixels(context, VERTICAL_SCALE_WIDTH_DP);
-		POINT_RADIUS_PX = Utils.dpToPixels(context, POINT_RADIUS_DP);
-		POINT_INNER_RADIUS_PX = Utils.dpToPixels(context, POINT_INNER_RADIUS_DP);
-		CURVE_WIDTH_PX = Utils.dpToPixels(context, CURVE_WIDTH_DP);
-		MAX_TOUCH_DISTANCE_PX = Utils.dpToPixels(context, MAX_TOUCH_DISTANCE_DP);
-		REMOVE_LIMIT_PX = Utils.dpToPixels(context, REMOVE_LIMIT_DP);
+		LEFT_GRID_MARGIN_PX = MathUtils.dpToPixels(context, LEFT_GRID_MARGIN_DP);
+		TOP_GRID_MARGIN_PX = MathUtils.dpToPixels(context, TOP_GRID_MARGIN_DP);
+		RIGHT_GRID_MARGIN_PX = MathUtils.dpToPixels(context, RIGHT_GRID_MARGIN_DP);
+		BOTTOM_GRID_MARGIN_PX = MathUtils.dpToPixels(context, BOTTOM_GRID_MARGIN_DP);
+		GRID_LINE_WIDTH_PX = MathUtils.dpToPixels(context, GRID_LINE_WIDTH_DP);
+		HORIZONTAL_SCALE_HEIGHT_PX = MathUtils.dpToPixels(context, HORIZONTAL_SCALE_HEIGHT_DP);
+		VERTICAL_SCALE_WIDTH_PX = MathUtils.dpToPixels(context, VERTICAL_SCALE_WIDTH_DP);
+		POINT_RADIUS_PX = MathUtils.dpToPixels(context, POINT_RADIUS_DP);
+		POINT_INNER_RADIUS_PX = MathUtils.dpToPixels(context, POINT_INNER_RADIUS_DP);
+		CURVE_WIDTH_PX = MathUtils.dpToPixels(context, CURVE_WIDTH_DP);
+		MAX_TOUCH_DISTANCE_PX = MathUtils.dpToPixels(context, MAX_TOUCH_DISTANCE_DP);
+		REMOVE_LIMIT_PX = MathUtils.dpToPixels(context, REMOVE_LIMIT_DP);
 
 		channelType = null;
 		channelIn = null;
@@ -355,7 +355,7 @@ public class ColorCurvesView extends View
 		{
 			RectF rect = points.get(i);
 			Point point = new Point((int) rect.centerX(), (int) rect.centerY());
-			float distance = Utils.distance(point, oldTouchPoint);
+			float distance = MathUtils.distance(point, oldTouchPoint);
 			if((nearest == null || distance < shortestDistance) && distance < MAX_TOUCH_DISTANCE_PX)
 			{
 				nearest = point;
@@ -450,20 +450,20 @@ public class ColorCurvesView extends View
 	private Point curveToScreen(Point point)
 	{
 		Point newPoint = new Point(point);
-		newPoint.x = Math.round(Utils.map(point.x, 0, channelIn.getMaxValue(),
-										  LEFT_GRID_MARGIN_PX, viewSize.x - RIGHT_GRID_MARGIN_PX));
-		newPoint.y = Math.round(Utils.map(point.y, channelOut.getMaxValue(), 0,
-										  TOP_GRID_MARGIN_PX, viewSize.y - BOTTOM_GRID_MARGIN_PX));
+		newPoint.x = Math.round(MathUtils.map(point.x, 0, channelIn.getMaxValue(),
+		                                      LEFT_GRID_MARGIN_PX, viewSize.x - RIGHT_GRID_MARGIN_PX));
+		newPoint.y = Math.round(MathUtils.map(point.y, channelOut.getMaxValue(), 0,
+		                                      TOP_GRID_MARGIN_PX, viewSize.y - BOTTOM_GRID_MARGIN_PX));
 		return newPoint;
 	}
 
 	private Point screenToCurve(Point point)
 	{
 		Point newPoint = new Point(point);
-		newPoint.x = Math.round(Utils.map(point.x, LEFT_GRID_MARGIN_PX, viewSize.x - RIGHT_GRID_MARGIN_PX,
-										  0, channelIn.getMaxValue()));
-		newPoint.y = Math.round(Utils.map(point.y, TOP_GRID_MARGIN_PX, viewSize.y - BOTTOM_GRID_MARGIN_PX,
-									  	  channelOut.getMaxValue(), 0));
+		newPoint.x = Math.round(MathUtils.map(point.x, LEFT_GRID_MARGIN_PX, viewSize.x - RIGHT_GRID_MARGIN_PX,
+		                                      0, channelIn.getMaxValue()));
+		newPoint.y = Math.round(MathUtils.map(point.y, TOP_GRID_MARGIN_PX, viewSize.y - BOTTOM_GRID_MARGIN_PX,
+		                                      channelOut.getMaxValue(), 0));
 		return newPoint;
 	}
 

@@ -13,30 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.options
 
-package pl.karol202.paintplus.util;
+import pl.karol202.paintplus.history.action.ActionImageFlatten
+import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-import android.content.Context;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-public class BlockableLinearLayoutManager extends LinearLayoutManager
+class OptionImageFlatten(private val viewModel: PaintViewModel) : Option
 {
-	private boolean allowScrolling;
-
-	public BlockableLinearLayoutManager(Context context)
+	fun execute()
 	{
-		super(context);
-		allowScrolling = true;
-	}
-
-	@Override
-	public boolean canScrollVertically()
-	{
-		return allowScrolling;
-	}
-
-	public void setAllowScrolling(boolean allowScrolling)
-	{
-		this.allowScrolling = allowScrolling;
+		val action = ActionImageFlatten(viewModel.image)
+		action.setImageBeforeFlattening(viewModel.image)
+		viewModel.image.flattenImage()
+		action.applyAction()
 	}
 }

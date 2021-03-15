@@ -18,16 +18,14 @@ package pl.karol202.paintplus.image.layer;
 
 import android.animation.Animator;
 import android.graphics.PointF;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import pl.karol202.paintplus.activity.ActivityPaint;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 class LayerHandle implements Animator.AnimatorListener
 {
@@ -53,7 +51,7 @@ class LayerHandle implements Animator.AnimatorListener
 		this.adapter = adapter;
 		this.viewHolders = adapter.getViewHolders();
 
-		this.viewHeight = (int) Utils.dpToPixels(activity, LayerViewHolder.HEIGHT_DP);
+		this.viewHeight = (int) MathUtils.dpToPixels(activity, LayerViewHolder.HEIGHT_DP);
 	}
 
 	void onTouchStart(float x, float y)

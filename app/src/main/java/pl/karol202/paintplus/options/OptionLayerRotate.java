@@ -27,11 +27,9 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerRotate;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
-public class OptionLayerRotate extends OptionLegacy implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class OptionLayerRotate extends LegacyOption implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private AlertDialog dialog;
 	private SeekBar seekBarAngle;
@@ -105,11 +103,11 @@ public class OptionLayerRotate extends OptionLegacy implements DialogInterface.O
 
 	private int angleToProgress(float angle)
 	{
-		return (int) Utils.map(angle, -180, 180, 0, seekBarAngle.getMax());
+		return (int) MathUtils.map(angle, -180, 180, 0, seekBarAngle.getMax());
 	}
 
 	private float progressToAngle(int progress)
 	{
-		return Utils.map(progress, 0, seekBarAngle.getMax(), -180, 180);
+		return MathUtils.map(progress, 0, seekBarAngle.getMax(), -180, 180);
 	}
 }

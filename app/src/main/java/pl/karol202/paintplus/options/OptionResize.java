@@ -32,14 +32,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.util.GraphicsHelper;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public abstract class OptionResize extends OptionLegacy implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
+public abstract class OptionResize extends LegacyOption implements DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
 	private class BoundsChangeListener implements TextWatcher
 	{
@@ -281,16 +279,16 @@ public abstract class OptionResize extends OptionLegacy implements DialogInterfa
 		int max = Math.max(right, bottom);
 		int previewSize = Math.max(preview.getWidth(), preview.getHeight());
 
-		float oldLeft = Utils.map(0, min, max, 0, previewSize);
-		float oldTop = Utils.map(0, min, max, 0, previewSize);
-		float oldRight = Utils.map(oldWidth, min, max, 0, previewSize);
-		float oldBottom = Utils.map(oldHeight, min, max, 0, previewSize);
+		float oldLeft = MathUtils.map(0, min, max, 0, previewSize);
+		float oldTop = MathUtils.map(0, min, max, 0, previewSize);
+		float oldRight = MathUtils.map(oldWidth, min, max, 0, previewSize);
+		float oldBottom = MathUtils.map(oldHeight, min, max, 0, previewSize);
 		RectF oldR = new RectF(oldLeft, oldTop, oldRight, oldBottom);
 
-		float newLeft = Utils.map(offsetX, min, max, 0, previewSize);
-		float newTop = Utils.map(offsetY, min, max, 0, previewSize);
-		float newRight = Utils.map(offsetX + newWidth, min, max, 0, previewSize);
-		float newBottom = Utils.map(offsetY + newHeight, min, max, 0, previewSize);
+		float newLeft = MathUtils.map(offsetX, min, max, 0, previewSize);
+		float newTop = MathUtils.map(offsetY, min, max, 0, previewSize);
+		float newRight = MathUtils.map(offsetX + newWidth, min, max, 0, previewSize);
+		float newBottom = MathUtils.map(offsetY + newHeight, min, max, 0, previewSize);
 		RectF newR = new RectF(newLeft, newTop, newRight, newBottom);
 
 		Paint paint = new Paint();

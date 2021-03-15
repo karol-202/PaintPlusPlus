@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.core.content.res.ResourcesCompat;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.util.Utils;
+import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,11 +118,11 @@ public class GradientView extends View
 	public GradientView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		SIDE_MARGIN_PX = Utils.dpToPixels(context, SIDE_MARGIN_DP);
-		TOP_BAR_HEIGHT_PX = Utils.dpToPixels(context, TOP_BAR_HEIGHT_DP);
-		BOTTOM_BAR_HEIGHT_PX = Utils.dpToPixels(context, BOTTOM_BAR_HEIGHT_DP);
-		TRIANGLE_Y_OFFSET_PX = Utils.dpToPixels(context, TRIANGLE_Y_OFFSET_DP) + TOP_MARGIN_PX;
-		HEIGHT_PX = Utils.dpToPixels(context, HEIGHT_DP) + TOP_MARGIN_PX;
+		SIDE_MARGIN_PX = MathUtils.dpToPixels(context, SIDE_MARGIN_DP);
+		TOP_BAR_HEIGHT_PX = MathUtils.dpToPixels(context, TOP_BAR_HEIGHT_DP);
+		BOTTOM_BAR_HEIGHT_PX = MathUtils.dpToPixels(context, BOTTOM_BAR_HEIGHT_DP);
+		TRIANGLE_Y_OFFSET_PX = MathUtils.dpToPixels(context, TRIANGLE_Y_OFFSET_DP) + TOP_MARGIN_PX;
+		HEIGHT_PX = MathUtils.dpToPixels(context, HEIGHT_DP) + TOP_MARGIN_PX;
 		initTriangles(context);
 
 		gradient = null;
@@ -288,7 +288,7 @@ public class GradientView extends View
 
 	private void createTriangleForPoint(GradientPoint point)
 	{
-		float xOffset = Utils.map(point.getPosition(), 0, 1, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX);
+		float xOffset = MathUtils.map(point.getPosition(), 0, 1, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX);
 		Triangle triangle = new Triangle(xOffset, TRIANGLE_Y_OFFSET_PX);
 		triangles.put(point, triangle);
 	}
@@ -359,12 +359,12 @@ public class GradientView extends View
 
 	private float calculateGradientPosition(float viewPosition)
 	{
-		return Utils.map(viewPosition, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX, 0, 1);
+		return MathUtils.map(viewPosition, SIDE_MARGIN_PX, getWidth() - SIDE_MARGIN_PX, 0, 1);
 	}
 
 	private float calculateGradientDistance(float distance)
 	{
-		return Utils.map(distance, 0, getWidth() - (2 * SIDE_MARGIN_PX), 0, 1);
+		return MathUtils.map(distance, 0, getWidth() - (2 * SIDE_MARGIN_PX), 0, 1);
 	}
 
 	private void onTouchUp(float x)

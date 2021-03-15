@@ -33,13 +33,11 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.Image;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.legacy.AppContextLegacy;
-import pl.karol202.paintplus.legacy.OptionLegacy;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Locale;
 
-public class OptionColorsBrightness extends OptionLegacy implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener,
+public class OptionColorsBrightness extends LegacyOption implements DialogInterface.OnClickListener, SeekBar.OnSeekBarChangeListener,
                                                                     View.OnTouchListener
 {
 	private ColorsBrightness manipulator;
