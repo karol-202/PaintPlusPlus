@@ -21,16 +21,18 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceView
+import androidx.core.graphics.withClip
+import androidx.core.graphics.withMatrix
+import androidx.core.graphics.withTranslation
 import pl.karol202.paintplus.helpers.HelpersManager
 import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.image.Image.OnImageChangeListener
-import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.image.layer.mode.LayerModeType
+import pl.karol202.paintplus.image.layer.mode.LayerMode
 import pl.karol202.paintplus.settings.Settings
 import pl.karol202.paintplus.tool.Tool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
 import pl.karol202.paintplus.tool.selection.Selection
-import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener
+import pl.karol202.paintplus.util.*
+import kotlin.properties.Delegates.notNull
 
 private val PAINT_DASH = floatArrayOf(5f, 5f)
 private const val CHECKERBOARD_OFFSET = 8f
@@ -38,79 +40,80 @@ private const val CHECKERBOARD_OFFSET = 8f
 class PaintView(context: Context,
                 attrs: AttributeSet?) : SurfaceView(context, attrs)
 {
-	private var image: Image? = null
-	private var selection: Selection? = null
-	private var helpersManager: HelpersManager? = null
+	private var image by notNull<Image>()
+	private var selection by notNull<Selection>()
+	private var helpersManager by notNull<HelpersManager>()
 
-	private var currentTool: Tool? = null
+	private var currentTool by notNull<Tool>()
 
-	private val selectionPaint = createSelectionPaint()
-	private val layerBoundsPaint = createLayerBoundsPaint()
-	private val checkerboardShader = createCheckerboardShader()
-	private val checkerboardPaint = createCheckerboardPaint()
+	private var filtering: Boolean = false
 
-	private val checkerboardMatrix = Matrix()
-	private val layerMatrix = Matrix()
-	private var boundsPath = Path()
+	private val checkerboardShader =
+			BitmapShader(BitmapFactory.decodeResource(context.resources, R.drawable.checkerboard),
+			             Shader.TileMode.REPEAT,
+			             Shader.TileMode.REPEAT)
 
-	private var rawLimitedSelectionPath: Path? = null
-	private var limitedSelectionPath: Path? = null
-	private var rawSelectionPath: Path? = null
-	private var selectionPath: Path? = null
-
-	private val screenRect
-		get() = RectF(image!!.viewX - 2, image!!.viewY - 2,
-		              image!!.viewX + width / image!!.zoom + 2, image!!.viewY + height / image!!.zoom + 2)
-
-	private fun createSelectionPaint() = Paint().apply {
+	private val selectionPaint = Paint().apply {
 		style = Paint.Style.STROKE
 		strokeWidth = 2f
 		pathEffect = DashPathEffect(PAINT_DASH, 0f)
 	}
 
-	private fun createLayerBoundsPaint() = Paint().apply {
+	private val layerBoundsPaint = Paint().apply {
 		style = Paint.Style.STROKE
 		color = Color.GRAY
 		strokeWidth = 2f
 		pathEffect = DashPathEffect(PAINT_DASH, 0f)
 	}
 
-	private fun createCheckerboardShader(): BitmapShader
-	{
-		val checkerboard = BitmapFactory.decodeResource(context.resources, R.drawable.checkerboard)
-		return BitmapShader(checkerboard, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-	}
-
-	private fun createCheckerboardPaint() = Paint().apply {
+	private val checkerboardPaint = Paint().apply {
 		shader = checkerboardShader
 		isFilterBitmap = false
+	}
+
+	private val layerPaint by cache({filtering}) { filtering ->
+		Paint().apply {
+			isFilterBitmap = filtering
+		}
+	}
+
+	private val checkerboardMatrix by cache({image.viewX}, {image.viewY}, {image.zoom}) { viewX, viewY, zoom ->
+		Matrix().apply {
+			preTranslate(-viewX * zoom + CHECKERBOARD_OFFSET, -viewY * zoom + CHECKERBOARD_OFFSET)
+		}
+	}
+
+	private val layerBoundsPath by cache({image.selectedLayer?.bounds}, {screenRect}) { bounds, screenRect ->
+		Path().apply {
+			if(bounds == null) return@apply
+			addRect(bounds intersectionWith screenRect, Path.Direction.CW)
+			close()
+			transform(image.imageMatrix)
+		}
+	}
+
+	private val selectionPath by cache({selection.region}, {screenRect}, {image.imageMatrix}) {
+		selectionRegion, screenRect, imageMatrix ->
+		(selectionRegion intersectionWith screenRect.rounded()).boundaryPath.transformedBy(imageMatrix)
+	}
+
+	private val screenRect by cache({image.viewX}, {image.viewY}, {image.zoom}, {width}, {height}) {
+		viewX, viewY, zoom, width, height ->
+		RectF(viewX - 2, viewY - 2, viewX + width / zoom + 2, viewY + height / zoom + 2)
 	}
 
 	override fun draw(canvas: Canvas)
 	{
 		super.draw(canvas)
 		if(isInEditMode) return
-		val image = image ?: return
-		val currentTool = currentTool ?: return
 
-		setClipping(canvas, image)
-		drawCheckerboard(canvas)
-		removeClipping(canvas)
-		drawImage(canvas, image, currentTool)
-		drawLayerBounds(canvas, image)
+		canvas.withClip(image.imageRect) {
+			drawCheckerboard(canvas)
+		}
+		drawImage(canvas)
+		drawLayerBounds(canvas)
 		drawSelection(canvas)
-		helpersManager?.onScreenDraw(canvas)
-	}
-
-	private fun setClipping(canvas: Canvas, image: Image)
-	{
-		canvas.save()
-		canvas.clipRect(image.imageRect)
-	}
-
-	private fun removeClipping(canvas: Canvas)
-	{
-		canvas.restore()
+		helpersManager.onScreenDraw(canvas)
 	}
 
 	private fun drawCheckerboard(canvas: Canvas)
@@ -119,195 +122,88 @@ class PaintView(context: Context,
 		canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), checkerboardPaint)
 	}
 
-	private fun drawImage(canvas: Canvas, image: Image, currentTool: Tool)
+	private fun drawImage(canvas: Canvas)
 	{
 		var screenBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 		var screenCanvas = Canvas(screenBitmap)
 
-		for(layer in image.layers.reversed())
+		for(layer in image.layers.asReversed())
 		{
 			val drawLayer = layer.isVisible && !layer.isTemporaryHidden
-			val drawTool = image.isLayerSelected(layer) && currentTool.doesOnLayerDraw(layer.isVisible)
-			layer.mode.startDrawing(screenBitmap, screenCanvas)
-			if(drawLayer)
-			{
-				layerMatrix.set(image.imageMatrix)
-				layerMatrix.preTranslate(layer.x.toFloat(), layer.y.toFloat())
-				layer.mode.setRectClipping(image.imageRect)
-				layer.mode.addLayer(layerMatrix)
-				layer.mode.resetClipping()
+			val drawToolOnLayer = image.isLayerSelected(layer) && currentTool.doesOnLayerDraw(layer.isVisible)
+
+			val layerMode: LayerMode = null
+			val (resultBitmap, resultCanvas) = layerMode.apply(screenBitmap, screenCanvas) {
+				if(drawLayer)
+					withClip(image.imageRect) {
+						val layerMatrix = image.imageMatrix.preTranslated(layer.x.toFloat(), layer.y.toFloat())
+						drawBitmap(layer.bitmap, layerMatrix, layerPaint)
+					}
+				if(drawToolOnLayer)
+					withToolSpace(currentTool.onLayerDrawingCoordinateSpace) {
+						currentTool.onLayerDraw(this)
+					}
 			}
-			if(drawTool) layer.mode.addTool(createOnLayerToolBitmap(currentTool, layer, image))
-			screenBitmap = layer.mode.apply()
-			if(layer.mode.replacesBitmap()) screenCanvas = Canvas(screenBitmap)
+			screenBitmap = resultBitmap
+			screenCanvas = resultCanvas
 		}
 
-		val toolBitmap = createOnTopToolBitmap(currentTool, image)
-		if(toolBitmap != null) screenCanvas.drawBitmap(toolBitmap, 0f, 0f, null)
+		if(currentTool.doesOnTopDraw())
+			screenCanvas.withToolSpace(currentTool.onTopDrawingCoordinateSpace) {
+				currentTool.onTopDraw(this)
+			}
 
 		canvas.drawBitmap(screenBitmap, 0f, 0f, null)
 	}
 
-	private fun createOnLayerToolBitmap(tool: Tool, layer: Layer, image: Image): Bitmap?
-	{
-		if(!tool.doesOnLayerDraw(layer.isVisible)) return null
-		val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-		val canvas = Canvas(bitmap)
-		transformToolCanvas(canvas, image, tool.onLayerDrawingCoordinateSpace)
-		tool.onLayerDraw(canvas)
-		return bitmap
-	}
-
-	private fun createOnTopToolBitmap(tool: Tool, image: Image): Bitmap?
-	{
-		if(!tool.doesOnTopDraw()) return null
-		val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-		val canvas = Canvas(bitmap)
-		transformToolCanvas(canvas, image, tool.onTopDrawingCoordinateSpace)
-		tool.onTopDraw(canvas)
-		return bitmap
-	}
-
-	private fun transformToolCanvas(canvas: Canvas, image: Image, space: ToolCoordinateSpace)
-	{
-		when(space)
-		{
-			ToolCoordinateSpace.SCREEN_SPACE -> {}
-			ToolCoordinateSpace.IMAGE_SPACE ->
-			{
-				canvas.scale(image.zoom, image.zoom)
-				canvas.translate(-image.viewX, -image.viewY)
+	private fun Canvas.withToolSpace(space: ToolCoordinateSpace, block: Canvas.() -> Unit) =
+			if(space == ToolCoordinateSpace.SCREEN_SPACE) block()
+			else withMatrix(image.imageMatrix) {
+				if(space == ToolCoordinateSpace.IMAGE_SPACE) block()
+				else withTranslation(image.selectedLayerX.toFloat(), image.selectedLayerY.toFloat(), block)
 			}
-			ToolCoordinateSpace.LAYER_SPACE ->
-			{
-				canvas.scale(image.zoom, image.zoom)
-				canvas.translate(-image.viewX + image.selectedLayerX, -image.viewY + image.selectedLayerY)
-			}
-		}
-	}
 
-	private fun drawLayerBounds(canvas: Canvas, image: Image)
-	{
-		if(image.selectedLayer == null) return
-		canvas.drawPath(boundsPath, layerBoundsPaint)
-	}
+	private fun drawLayerBounds(canvas: Canvas) = canvas.drawPath(layerBoundsPath, layerBoundsPaint)
 
-	private fun drawSelection(canvas: Canvas)
-	{
-		canvas.drawPath(limitedSelectionPath!!, selectionPaint)
-	}
+	private fun drawSelection(canvas: Canvas) = canvas.drawPath(selectionPath, selectionPaint)
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onTouchEvent(event: MotionEvent): Boolean
 	{
-		val image = image ?: return false
-		val currentTool = currentTool ?: return false
-
 		if(image.selectedLayer == null)
 		{
 			if(event.action != MotionEvent.ACTION_DOWN) currentTool.onTouch(event, context)
 			return false
 		}
-		val result = currentTool.onTouch(event, context)
-		if(!result) return false
-		invalidate()
-		return true
-	}
-
-	fun notifyImageChanged()
-	{
-		if(image == null) return
-		updateLayerBounds()
-		invalidate()
-	}
-
-	fun notifyLayersChanged()
-	{
-		if(image == null) return
-		updateLayerBounds()
-	}
-
-	fun notifyImageMatrixChanged()
-	{
-		if(image == null) return
-		updateCheckerboardMatrix()
-		updateLayerBounds()
-		updateSelectionPath()
-		invalidate()
-	}
-
-	fun notifySelectionChanged()
-	{
-		if(image == null) return
-		createSelectionPath()
-	}
-
-	private fun createSelectionPath()
-	{
-		val selection = selection ?: return
-
-		val screen = Rect()
-		screenRect.round(screen)
-		val region = Region(selection.region)
-		region.op(screen, Region.Op.INTERSECT)
-		rawLimitedSelectionPath = region.boundaryPath
-		rawSelectionPath = selection.path
-		limitedSelectionPath = Path()
-		selectionPath = Path()
-		updateSelectionPath()
-	}
-
-	private fun updateCheckerboardMatrix()
-	{
-		checkerboardMatrix.reset()
-		checkerboardMatrix.preTranslate(-image!!.viewX * image!!.zoom + CHECKERBOARD_OFFSET, -image!!.viewY * image!!.zoom + CHECKERBOARD_OFFSET)
-	}
-
-	private fun updateLayerBounds()
-	{
-		val selected = image?.selectedLayer ?: return
-		val bounds = RectF(selected.bounds)
-		bounds.intersect(screenRect)
-		boundsPath.reset()
-		boundsPath.addRect(bounds, Path.Direction.CW)
-		boundsPath.close()
-		boundsPath.transform(image!!.imageMatrix)
-	}
-
-	private fun updateSelectionPath()
-	{
-		if(rawLimitedSelectionPath == null || rawSelectionPath == null) return
-		rawLimitedSelectionPath!!.transform(image!!.imageMatrix, limitedSelectionPath)
-		rawSelectionPath!!.transform(image!!.imageMatrix, selectionPath)
+		return currentTool.onTouch(event, context).also {
+			if(it) invalidate()
+		}
 	}
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int)
 	{
-		image?.viewportWidth = width
-		image?.viewportHeight = height
-		image?.centerView()
+		image.viewportWidth = width
+		image.viewportHeight = height
+		image.centerView()
 	}
 
-	fun setImage(image: Image)
+	fun setImageTemp(image: Image)
 	{
-		if(this.image != null) throw IllegalStateException("Image already set")
 		this.image = image
 		selection = image.selection
 		helpersManager = image.helpersManager
 
-		notifySelectionChanged()
-		notifyImageChanged()
-		notifyLayersChanged()
+		invalidate()
 	}
 
-	fun setCurrentTool(tool: Tool)
+	fun setCurrentToolTemp(tool: Tool)
 	{
 		currentTool = tool
-		notifyImageChanged()
+		invalidate()
 	}
 
 	fun setSettings(settings: Settings)
 	{
-		LayerModeType.setAntialiasing(settings.smoothView)
+		filtering = settings.smoothView
 	}
 }

@@ -30,7 +30,6 @@ import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
 import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.options.LegacyOption;
 
 import java.util.ArrayList;
@@ -192,7 +191,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		action.applyAction();
 	}
 
-	private LayerMode copyLayerMode(LayerMode mode)
+	private LegacyLayerMode copyLayerMode(LegacyLayerMode mode)
 	{
 		try
 		{

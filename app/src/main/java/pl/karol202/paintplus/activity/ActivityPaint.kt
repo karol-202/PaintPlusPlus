@@ -15,10 +15,8 @@
  */
 package pl.karol202.paintplus.activity
 
-import android.annotation.TargetApi
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContract
@@ -80,7 +78,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		supportActionBar?.setHomeButtonEnabled(true)
 
-		views.paintView.setImage(paintViewModel.image)
+		views.paintView.setImageTemp(paintViewModel.image)
 
 		drawers.initDrawers()
 		layers.initLayers()
@@ -92,7 +90,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 			views.paintView.setSettings(it)
 		}
 		paintViewModel.currentToolFlow.collectIn(lifecycleScope) {
-			views.paintView.setCurrentTool(it)
+			views.paintView.setCurrentToolTemp(it)
 		}
 		paintViewModel.titleFlow.collectIn(lifecycleScope) {
 			views.toolbar.root.title = it

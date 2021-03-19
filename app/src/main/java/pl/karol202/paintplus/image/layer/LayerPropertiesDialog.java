@@ -29,7 +29,6 @@ import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerPropertiesChange;
 import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.layer.mode.LayerMode;
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 
@@ -42,7 +41,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	private Layer layer;
 	private LayerModeAdapter adapter;
 
-	private LayerMode layerMode;
+	private LegacyLayerMode layerMode;
 	private float opacity;
 
 	private AlertDialog dialog;
@@ -91,7 +90,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 		dialog = builder.create();
 	}
 
-	private int indexOf(LayerMode mode)
+	private int indexOf(LegacyLayerMode mode)
 	{
 		return LayerModeType.getIndexOfMode(mode);
 	}

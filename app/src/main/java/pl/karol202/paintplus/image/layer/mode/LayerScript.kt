@@ -13,30 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.image.layer.mode
 
-package pl.karol202.paintplus.image.layer.mode;
+import android.renderscript.Allocation
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.RectF;
-import pl.karol202.paintplus.image.layer.Layer;
-
-public interface LayerMode
+interface LayerScript
 {
-	void startDrawing(Bitmap bitmapDst, Canvas canvasDst);
-	
-	void addLayer(Matrix matrixLayer);
-	
-	void addTool(Bitmap bitmapTool);
-	
-	void setRectClipping(RectF clipRect);
-	
-	void resetClipping();
-	
-	Bitmap apply();
-	
-	void setLayer(Layer layer);
-	
-	boolean replacesBitmap();
+	fun setDstAllocation(dst: Allocation)
+
+	fun setOpacity(opacity: Float)
+
+	fun run(src: Allocation, out: Allocation)
 }

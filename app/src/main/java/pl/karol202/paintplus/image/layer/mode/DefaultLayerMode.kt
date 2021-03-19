@@ -13,27 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.image.layer.mode
 
-package pl.karol202.paintplus.image.layer.mode;
+import android.graphics.PorterDuff
+import pl.karol202.paintplus.image.layer.mode.SimpleLayerMode
 
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptC;
-
-public abstract class LayerScript<S extends ScriptC>
-{
-	S script;
-
-	LayerScript(RenderScript renderScript)
-	{
-		script = getNewScript(renderScript);
-	}
-
-	protected abstract S getNewScript(RenderScript renderScript);
-
-	protected abstract void setDstAllocation(Allocation dst);
-
-	protected abstract void setOpacity(float opacity);
-
-	protected abstract void run(Allocation src, Allocation out);
-}
+object DefaultLayerMode : SimpleLayerMode(LayerModeType.MODE_STANDARD, PorterDuff.Mode.SRC_OVER)

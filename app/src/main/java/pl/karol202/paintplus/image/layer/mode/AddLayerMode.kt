@@ -13,27 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.image.layer.mode
 
-package pl.karol202.paintplus.image.layer.mode;
+import android.renderscript.Allocation
+import android.renderscript.RenderScript
 
-import android.graphics.PorterDuff;
-import pl.karol202.paintplus.image.layer.Layer;
-
-public class LayerModeDefault extends LayerModeSimple
+class AddLayerMode(renderScript: RenderScript) :
+		RenderscriptLayerMode(LayerModeType.MODE_ADD, renderScript, ScriptAdd(renderScript))
 {
-	public LayerModeDefault()
+	private class ScriptAdd(renderScript: RenderScript) : LayerScript
 	{
-		super();
-	}
-	
-	public LayerModeDefault(Layer layer)
-	{
-		super(layer);
-	}
-	
-	@Override
-	protected PorterDuff.Mode getMode()
-	{
-		return PorterDuff.Mode.SRC_OVER;
+		private val script = ScriptC_lm_add(renderScript)
+
+		override fun setDstAllocation(dst: Allocation) = script.set_dstAlloc(dst)
+
+		override fun setOpacity(opacity: Float) = script.set_opacity(opacity)
+
+		override fun run(src: Allocation, out: Allocation) = script.forEach_sum(src, out)
 	}
 }

@@ -29,7 +29,7 @@ class LayerInformationDialog
 {
 	private Context context;
 	private Layer layer;
-	
+
 	LayerInformationDialog(Context context, Layer layer)
 	{
 		this.context = context;
@@ -45,32 +45,32 @@ class LayerInformationDialog
 		builder.setTitle(R.string.dialog_layer_info);
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, null);
-		
+
 		TextView textName = view.findViewById(R.id.text_layer_info_name_value);
 		textName.setText(String.valueOf(layer.getName()));
-		
+
 		TextView textWidth = view.findViewById(R.id.text_layer_info_width_value);
 		textWidth.setText(String.valueOf(layer.getWidth()));
-		
+
 		TextView textHeight = view.findViewById(R.id.text_layer_info_height_value);
 		textHeight.setText(String.valueOf(layer.getHeight()));
-		
+
 		TextView textX = view.findViewById(R.id.text_layer_info_x_value);
 		textX.setText(String.valueOf(layer.getX()));
-		
+
 		TextView textY = view.findViewById(R.id.text_layer_info_y_value);
 		textY.setText(String.valueOf(layer.getY()));
-		
+
 		TextView textOpacity = view.findViewById(R.id.text_layer_info_opacity_value);
 		textOpacity.setText(context.getString(R.string.opacity, (int) (layer.getOpacity() * 100)));
-		
+
 		TextView textMode = view.findViewById(R.id.text_layer_info_mode_value);
 		LayerModeType type = LayerModeType.getTypeOfMode(layer.getMode());
-		if(type != null) textMode.setText(type.getName());
-		
+		if(type != null) textMode.setText(type.getDisplayName());
+
 		TextView textVisibility = view.findViewById(R.id.text_layer_info_visibility_value);
 		textVisibility.setText(layer.isVisible() ? R.string.yes : R.string.no);
-		
+
 		builder.show();
 	}
 }

@@ -19,8 +19,7 @@ package pl.karol202.paintplus.image.layer;
 import android.graphics.*;
 import pl.karol202.paintplus.image.Image.FlipDirection;
 import pl.karol202.paintplus.image.Image.OnImageChangeListener;
-import pl.karol202.paintplus.image.layer.mode.LayerMode;
-import pl.karol202.paintplus.image.layer.mode.LayerModeDefault;
+import pl.karol202.paintplus.image.layer.mode.DefaultLayerMode;
 
 public class Layer
 {
@@ -33,7 +32,7 @@ public class Layer
 	private boolean temporaryHidden;
 	private int x;
 	private int y;
-	private LayerMode mode;
+	private LegacyLayerMode mode;
 	private float opacity;
 
 	public Layer(int x, int y, String name, int width, int height, int color)
@@ -52,7 +51,7 @@ public class Layer
 		this.temporaryHidden = false;
 		this.x = x;
 		this.y = y;
-		this.mode = new LayerModeDefault(this);
+		this.mode = new DefaultLayerMode(this);
 		this.opacity = 1f;
 	}
 
@@ -215,12 +214,12 @@ public class Layer
 		if(listener != null) listener.onImageChanged();
 	}
 
-	public LayerMode getMode()
+	public LegacyLayerMode getMode()
 	{
 		return mode;
 	}
 
-	public void setMode(LayerMode mode)
+	public void setMode(LegacyLayerMode mode)
 	{
 		this.mode = mode;
 		mode.setLayer(this);

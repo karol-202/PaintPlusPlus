@@ -16,13 +16,7 @@
 
 package pl.karol202.paintplus.image.layer.mode;
 
-import android.graphics.PorterDuff;
+import android.graphics.PorterDuff
+import pl.karol202.paintplus.image.layer.mode.SimpleLayerMode
 
-public class LayerModeScreen extends LayerModeSimple
-{
-	@Override
-	protected PorterDuff.Mode getMode()
-	{
-		return PorterDuff.Mode.SCREEN;
-	}
-}
+object OverlayLayerMode : SimpleLayerMode(LayerModeType.MODE_OVERLAY, PorterDuff.Mode.OVERLAY)
