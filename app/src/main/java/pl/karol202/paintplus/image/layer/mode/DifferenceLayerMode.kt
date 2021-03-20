@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
+import pl.karol202.paintplus.R
 
-class DifferenceLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_DIFFERENCE, renderScript, ScriptDifference(renderScript))
+class DifferenceLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_difference,
+                                                                              category = 2,
+                                                                              renderScript = renderScript,
+                                                                              layerScript = ScriptDifference(renderScript))
 {
 	private class ScriptDifference(renderScript: RenderScript) : LayerScript
 	{

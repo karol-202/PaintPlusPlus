@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
+import pl.karol202.paintplus.R
 
-class SubtractionLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_SUBTRACTION, renderScript, ScriptSubtraction(renderScript))
+class SubtractionLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_subtraction,
+                                                                               category = 2,
+                                                                               renderScript = renderScript,
+                                                                               layerScript = ScriptSubtraction(renderScript))
 {
 	private class ScriptSubtraction(renderScript: RenderScript) : LayerScript
 	{

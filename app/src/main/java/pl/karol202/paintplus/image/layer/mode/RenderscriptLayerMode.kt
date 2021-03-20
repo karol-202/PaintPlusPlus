@@ -6,7 +6,8 @@ import android.renderscript.Allocation
 import android.renderscript.RenderScript
 import pl.karol202.paintplus.util.BitmapWithCanvas
 
-abstract class RenderscriptLayerMode(override val type: LayerModeType,
+abstract class RenderscriptLayerMode(override val name: Int,
+                                     override val category: Int,
                                      private val renderScript: RenderScript,
                                      private val layerScript: LayerScript) : LayerMode
 {

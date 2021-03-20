@@ -23,7 +23,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerDrag;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class OptionLayerDrag extends LegacyOption
@@ -33,7 +33,7 @@ public class OptionLayerDrag extends LegacyOption
 
 	private Layer layer;
 
-	public OptionLayerDrag(AppContextLegacy context, Image image)
+	public OptionLayerDrag(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 		layer = getImage().getSelectedLayer();

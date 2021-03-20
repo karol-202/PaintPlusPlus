@@ -16,6 +16,9 @@
 package pl.karol202.paintplus.image.layer.mode
 
 import android.graphics.PorterDuff
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.image.layer.mode.SimpleLayerMode
 
-object ScreenLayerMode : SimpleLayerMode(LayerModeType.MODE_SCREEN, PorterDuff.Mode.SCREEN)
+object ScreenLayerMode : SimpleLayerMode(name = R.string.layer_mode_screen,
+                                         category = 1,
+                                         porterDuffMode = PorterDuff.Mode.SCREEN)

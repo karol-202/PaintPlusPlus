@@ -21,7 +21,6 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogNewImageBinding
-import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
@@ -59,7 +58,7 @@ class OptionFileNew(private val viewModel: PaintViewModel) : Option
 		private fun getValidationError(value: Int?) = when
 		{
 			value == null || value <= 0 -> context.getString(R.string.message_image_invalid_size)
-			value > GraphicsHelper.getMaxTextureSize() -> context.getString(R.string.message_image_size_too_big)
+			value > GraphicsHelper.maxTextureSize -> context.getString(R.string.message_image_size_too_big)
 			else -> null
 		}
 	}

@@ -19,7 +19,7 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public class ActionImageResize extends Action
 {
@@ -27,21 +27,21 @@ public class ActionImageResize extends Action
 	private int height;
 	private int resizingDeltaX;
 	private int resizingDeltaY;
-	
-	public ActionImageResize(Image image)
+
+	public ActionImageResize(LegacyImage image)
 	{
 		super(image);
 		width = -1;
 		height = -1;
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
 	}
-	
-	private RectF transformImageRect(Image image)
+
+	private RectF transformImageRect(LegacyImage image)
 	{
 		float max = Math.max(image.getWidth(), image.getHeight());
 		float ratio = getPreviewRect().width() / max;
@@ -49,9 +49,9 @@ public class ActionImageResize extends Action
 		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		int newWidth = image.getWidth();
@@ -61,9 +61,9 @@ public class ActionImageResize extends Action
 		height = newHeight;
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		int oldWidth = image.getWidth();
@@ -73,14 +73,14 @@ public class ActionImageResize extends Action
 		height = oldHeight;
 		return true;
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return width != -1 && height != -1 && (width != getImage().getWidth() || height != getImage().getHeight() ||
 											   resizingDeltaX != 0 || resizingDeltaY != 0);
 	}
-	
+
 	@Override
 	public int getActionName()
 	{

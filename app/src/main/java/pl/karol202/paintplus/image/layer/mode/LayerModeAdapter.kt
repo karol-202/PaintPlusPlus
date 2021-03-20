@@ -27,8 +27,9 @@ import pl.karol202.paintplus.databinding.SpinnerItemGradientRepeatabilityBinding
 import pl.karol202.paintplus.databinding.SpinnerItemLayerModeBinding
 import pl.karol202.paintplus.util.layoutInflater
 
-class LayerModeAdapter(context: Context) :
-		ArrayAdapter<LayerModeType?>(context, R.layout.spinner_item_layer_mode, LayerModeType.values())
+class LayerModeAdapter(context: Context,
+                       modes: List<LayerMode>) :
+		ArrayAdapter<LayerMode>(context, R.layout.spinner_item_layer_mode, modes)
 {
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup) =
 			getItemView(position, convertView, parent, false)
@@ -45,12 +46,12 @@ class LayerModeAdapter(context: Context) :
 		val backgroundColor = ResourcesCompat.getColor(context.resources, R.color.layer_mode_item_background, null)
 		if(dropdown) views.root.setBackgroundColor(backgroundColor)
 
-		views.textLayerModeName.setText(mode.displayName)
+		views.textLayerModeName.setText(mode.name)
 		views.dividerLayerMode.visibility = if(dropdown && doesShowDivider(position, mode)) View.VISIBLE else View.GONE
 
 		return views.root
 	}
 
-	private fun doesShowDivider(position: Int, mode: LayerModeType) =
+	private fun doesShowDivider(position: Int, mode: LayerMode) =
 			position != count - 1 && getItem(position + 1)?.category != mode.category
 }

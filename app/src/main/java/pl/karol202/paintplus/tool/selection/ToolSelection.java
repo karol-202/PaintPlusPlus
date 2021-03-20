@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.selection;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -56,7 +56,7 @@ public class ToolSelection extends StandardTool
 	private Rect rectAtBeginning;
 	private Point movingStart;
 
-	public ToolSelection(Image image)
+	public ToolSelection(LegacyImage image)
 	{
 		super(image);
 		MAX_DISTANCE_PX = (int) (MAX_DISTANCE_DP * image.SCREEN_DENSITY);

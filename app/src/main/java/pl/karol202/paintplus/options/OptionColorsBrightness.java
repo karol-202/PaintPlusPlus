@@ -31,7 +31,7 @@ import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 
@@ -51,7 +51,7 @@ public class OptionColorsBrightness extends LegacyOption implements DialogInterf
 	private TextView textContrast;
 	private Button buttonPreview;
 
-	public OptionColorsBrightness(AppContextLegacy context, Image image)
+	public OptionColorsBrightness(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 		this.manipulator = new ColorsBrightness();

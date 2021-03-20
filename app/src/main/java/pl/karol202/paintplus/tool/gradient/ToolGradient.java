@@ -19,7 +19,7 @@ package pl.karol202.paintplus.tool.gradient;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;
 import pl.karol202.paintplus.tool.StandardTool;
@@ -62,7 +62,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	private PointF draggingStart;
 	private PointF previousPositionOfDraggedPoint;
 
-	public ToolGradient(Image image)
+	public ToolGradient(LegacyImage image)
 	{
 		super(image);
 		POINT_OUTER_RADIUS_PX = POINT_OUTER_RADIUS_DP * image.SCREEN_DENSITY;

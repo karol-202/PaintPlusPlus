@@ -20,7 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 import java.util.ArrayList;
@@ -33,50 +33,50 @@ public class ActionImageScale extends Action
 		private Bitmap bitmap;
 		private int x;
 		private int y;
-		
+
 		SavedLayer(Bitmap bitmap, int x, int y)
 		{
 			this.bitmap = bitmap;
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		public Bitmap getBitmap()
 		{
 			return bitmap;
 		}
-		
+
 		public void setBitmap(Bitmap bitmap)
 		{
 			this.bitmap = bitmap;
 		}
-		
+
 		public int getX()
 		{
 			return x;
 		}
-		
+
 		public void setX(int x)
 		{
 			this.x = x;
 		}
-		
+
 		public int getY()
 		{
 			return y;
 		}
-		
+
 		public void setY(int y)
 		{
 			this.y = y;
 		}
 	}
-	
+
 	private int width;
 	private int height;
 	private List<SavedLayer> layers;
-	
-	public ActionImageScale(Image image)
+
+	public ActionImageScale(LegacyImage image)
 	{
 		super(image);
 		width = image.getWidth();
@@ -84,21 +84,21 @@ public class ActionImageScale extends Action
 		saveLayers(image);
 		updateBitmap(image);
 	}
-	
-	private void saveLayers(Image image)
+
+	private void saveLayers(LegacyImage image)
 	{
 		layers = new ArrayList<>();
 		for(Layer layer : image.getLayers())
 			layers.add(new SavedLayer(layer.getBitmap(), layer.getX(), layer.getY()));
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
 	}
-	
-	private RectF transformImageRect(Image image)
+
+	private RectF transformImageRect(LegacyImage image)
 	{
 		float max = Math.max(image.getWidth(), image.getHeight());
 		float ratio = getPreviewRect().width() / max;
@@ -106,57 +106,57 @@ public class ActionImageScale extends Action
 		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
 		restore(image);
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
 		restore(image);
 		return true;
 	}
-	
-	private void restore(Image image)
+
+	private void restore(LegacyImage image)
 	{
 		int newWidth = image.getWidth();
 		int newHeight = image.getHeight();
 		image.resize(0, 0, width, height);
 		width = newWidth;
 		height = newHeight;
-		
+
 		for(int i = 0; i < image.getLayers().size(); i++)
 		{
 			Layer layer = image.getLayerAtIndex(i);
 			SavedLayer saved = layers.get(i);
-			
+
 			Bitmap bitmap = layer.getBitmap();
 			int x = layer.getX();
 			int y = layer.getY();
-			
+
 			layer.setBitmap(saved.getBitmap());
 			layer.setPosition(saved.getX(), saved.getY());
-			
+
 			saved.setBitmap(bitmap);
 			saved.setX(x);
 			saved.setY(y);
 		}
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return width != getImage().getWidth() || height != getImage().getHeight();
 	}
-	
+
 	@Override
 	public int getActionName()
 	{

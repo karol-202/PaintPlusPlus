@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
-public class Image
+public class LegacyImage
 {
 	public interface OnImageChangeListener
 	{
@@ -100,7 +100,7 @@ public class Image
 	private SaveFormat lastFormat;
 	private boolean changedSinceSave;
 
-	public Image(Context context)
+	public LegacyImage(Context context)
 	{
 		this.DEFAULT_LAYER_NAME = context.getString(R.string.new_layer_name);
 		this.FLATTENED_LAYER_NAME = context.getString(R.string.flattened);

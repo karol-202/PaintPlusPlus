@@ -64,7 +64,7 @@ class OptionOpen(private val viewModel: PaintViewModel,
 		}
 	}
 
-	private val maxSize = squareSize(GraphicsHelper.getMaxTextureSize())
+	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
 
 	fun execute() = viewModel.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER), this::onUriSelected))
 

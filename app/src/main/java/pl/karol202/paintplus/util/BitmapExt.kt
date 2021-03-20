@@ -1,6 +1,7 @@
 package pl.karol202.paintplus.util
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.util.Size
 import androidx.core.graphics.scale
 
@@ -12,3 +13,6 @@ fun Bitmap.fitInto(maxSize: Size): Bitmap
 	val targetSize = size.fitInto(maxSize)
 	return scale(targetSize.width, targetSize.height)
 }
+
+fun Bitmap.transformedWith(matrix: Matrix, bilinear: Boolean = false) =
+		Bitmap.createBitmap(this, 0, 0, width, height, matrix, bilinear)

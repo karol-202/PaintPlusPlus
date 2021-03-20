@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.shape.star;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.shape.Join;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
@@ -194,7 +194,7 @@ public class ShapeStar extends Shape
 
 	private Dragging dragging;
 
-	public ShapeStar(Image image, OnShapeEditListener shapeEditListener)
+	public ShapeStar(LegacyImage image, OnShapeEditListener shapeEditListener)
 	{
 		super(image, shapeEditListener);
 		this.corners = 5;

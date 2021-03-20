@@ -19,58 +19,58 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.FlipDirection;
+import pl.karol202.paintplus.image.LegacyImage;
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class ActionLayerFlip extends Action
 {
 	private int layerId;
 	private FlipDirection direction;
-	
-	public ActionLayerFlip(Image image)
+
+	public ActionLayerFlip(LegacyImage image)
 	{
 		super(image);
 		this.layerId = -1;
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
 		flip(image);
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
 		flip(image);
 		return true;
 	}
-	
-	private void flip(Image image)
+
+	private void flip(LegacyImage image)
 	{
 		Layer layer = image.getLayerAtIndex(layerId);
 		layer.flip(direction);
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return layerId != -1;
 	}
-	
+
 	@Override
 	public int getActionName()
 	{

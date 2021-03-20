@@ -5,7 +5,8 @@ import androidx.core.graphics.applyCanvas
 import pl.karol202.paintplus.util.BitmapWithCanvas
 import pl.karol202.paintplus.util.memoize
 
-abstract class SimpleLayerMode(override val type: LayerModeType,
+abstract class SimpleLayerMode(override val name: Int,
+                               override val category: Int,
                                private val porterDuffMode: PorterDuff.Mode) : LayerMode
 {
 	private val paint = Paint().apply {

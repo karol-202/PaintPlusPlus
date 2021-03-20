@@ -20,7 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public class Grid
 {
@@ -29,7 +29,7 @@ public class Grid
 	private static final int LINE_OFFSET_BASE = 20;
 	private static final int SNAP_DISTANCE_DP = 15;
 
-	private Image image;
+	private LegacyImage image;
 	private float density;
 	private boolean enabled;
 	private boolean snapToGrid;
@@ -41,7 +41,7 @@ public class Grid
 	private float lastX;
 	private float lastY;
 
-	Grid(Image image, Resources resources)
+	Grid(LegacyImage image, Resources resources)
 	{
 		this.image = image;
 		this.density = resources.getDisplayMetrics().density;

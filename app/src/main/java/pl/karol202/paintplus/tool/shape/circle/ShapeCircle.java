@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.shape.circle;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
 import pl.karol202.paintplus.tool.shape.ShapeProperties;
@@ -38,7 +38,7 @@ public class ShapeCircle extends Shape
 	private Point centerAtBeginning;
 	private float radiusAtBeginning;
 
-	public ShapeCircle(Image image, OnShapeEditListener shapeEditListener)
+	public ShapeCircle(LegacyImage image, OnShapeEditListener shapeEditListener)
 	{
 		super(image, shapeEditListener);
 		this.fill = false;

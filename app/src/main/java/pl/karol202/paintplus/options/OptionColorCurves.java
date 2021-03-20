@@ -38,7 +38,7 @@ import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator;
 import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.selection.Selection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
@@ -64,7 +64,7 @@ public class OptionColorCurves extends LegacyOption implements OnClickListener, 
 	private Button buttonPreview;
 	private Button buttonRestore;
 
-	public OptionColorCurves(AppContextLegacy context, Image image, ColorChannelType type)
+	public OptionColorCurves(AppContextLegacy context, LegacyImage image, ColorChannelType type)
 	{
 		super(context, image);
 		this.channelType = type;

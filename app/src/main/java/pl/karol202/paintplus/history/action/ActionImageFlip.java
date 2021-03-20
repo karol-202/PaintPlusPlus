@@ -19,25 +19,25 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
-import pl.karol202.paintplus.image.Image.FlipDirection;
+import pl.karol202.paintplus.image.LegacyImage;
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
 
 public class ActionImageFlip extends Action
 {
 	private FlipDirection direction;
-	
-	public ActionImageFlip(Image image)
+
+	public ActionImageFlip(LegacyImage image)
 	{
 		super(image);
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
 	}
-	
-	private RectF transformImageRect(Image image)
+
+	private RectF transformImageRect(LegacyImage image)
 	{
 		float max = Math.max(image.getWidth(), image.getHeight());
 		float ratio = getPreviewRect().width() / max;
@@ -45,37 +45,37 @@ public class ActionImageFlip extends Action
 		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
 		image.flip(direction);
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
 		image.flip(direction);
 		return true;
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return direction != null;
 	}
-	
+
 	@Override
 	public int getActionName()
 	{
 		return R.string.history_action_image_flip;
 	}
-	
+
 	public void setDirectionBeforeFlip(FlipDirection direction)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");

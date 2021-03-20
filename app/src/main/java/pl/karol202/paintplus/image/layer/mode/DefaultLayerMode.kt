@@ -16,6 +16,9 @@
 package pl.karol202.paintplus.image.layer.mode
 
 import android.graphics.PorterDuff
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.image.layer.mode.SimpleLayerMode
 
-object DefaultLayerMode : SimpleLayerMode(LayerModeType.MODE_STANDARD, PorterDuff.Mode.SRC_OVER)
+object DefaultLayerMode : SimpleLayerMode(name = R.string.layer_mode_standard,
+                                          category = 0,
+                                          porterDuffMode = PorterDuff.Mode.SRC_OVER)

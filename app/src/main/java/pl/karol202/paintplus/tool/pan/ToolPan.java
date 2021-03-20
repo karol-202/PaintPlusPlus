@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import androidx.core.view.GestureDetectorCompat;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.Tool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -98,7 +98,7 @@ public class ToolPan implements Tool
 		}
 	}
 
-	private Image image;
+	private LegacyImage image;
 	private Context context;
 	private OnZoomChangeListener zoomListener;
 
@@ -108,7 +108,7 @@ public class ToolPan implements Tool
 	private GestureDetectorCompat gestureDetector;
 	private ScaleGestureDetector scaleGestureDetector;
 
-	public ToolPan(Image image)
+	public ToolPan(LegacyImage image)
 	{
 		this.image = image;
 	}

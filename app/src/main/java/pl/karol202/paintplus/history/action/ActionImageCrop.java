@@ -17,15 +17,15 @@
 package pl.karol202.paintplus.history.action;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public class ActionImageCrop extends ActionImageResize
 {
-	public ActionImageCrop(Image image)
+	public ActionImageCrop(LegacyImage image)
 	{
 		super(image);
 	}
-	
+
 	@Override
 	public int getActionName()
 	{

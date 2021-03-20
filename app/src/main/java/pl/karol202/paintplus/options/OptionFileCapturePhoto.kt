@@ -25,12 +25,10 @@ import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 class OptionFileCapturePhoto(private val viewModel: PaintViewModel) : Option
 {
-	private val maxSize = squareSize(GraphicsHelper.getMaxTextureSize())
+	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
 
 	fun execute()
 	{

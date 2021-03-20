@@ -18,14 +18,14 @@ package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerResize;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class OptionLayerResize extends OptionResize
 {
 	private Layer layer;
 
-	public OptionLayerResize(AppContextLegacy context, Image image)
+	public OptionLayerResize(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 		this.layer = image.getSelectedLayer();

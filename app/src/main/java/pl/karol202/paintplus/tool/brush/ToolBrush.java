@@ -20,7 +20,7 @@ import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -30,10 +30,10 @@ public class ToolBrush extends StandardTool
 	private float size;
 	private float shapeOffset;
 	private float opacity;
-	
+
 	private Canvas canvas;
 	private ColorsSet colors;
-	
+
 	private Shader radialShader;
 	private Matrix shaderMatrix;
 	private Paint paint;
@@ -46,55 +46,55 @@ public class ToolBrush extends StandardTool
 	private Rect historyDirtyRect;
 	private ActionLayerChange historyAction;
 
-	public ToolBrush(Image image)
+	public ToolBrush(LegacyImage image)
 	{
 		super(image);
 		this.size = 25;
 		this.shapeOffset = 7;
 		this.opacity = 1;
-		
+
 		this.colors = image.getColorsSet();
-		
+
 		this.shaderMatrix = new Matrix();
 		this.paint = new Paint();
 		this.oval = new RectF();
-		
+
 		this.lastX = -1;
 		this.lastY = -1;
-		
+
 		this.path = new Path();
 	}
-	
+
 	@Override
 	public int getName()
 	{
 		return R.string.tool_brush;
 	}
-	
+
 	@Override
 	public int getIcon()
 	{
 		return R.drawable.ic_tool_brush_black_24dp;
 	}
-	
+
 	@Override
 	public Class<? extends ToolProperties> getPropertiesFragmentClass()
 	{
 		return BrushProperties.class;
 	}
-	
+
 	@Override
 	public ToolCoordinateSpace getCoordinateSpace()
 	{
 		return ToolCoordinateSpace.LAYER_SPACE;
 	}
-	
+
 	@Override
 	public boolean isUsingSnapping()
 	{
 		return true;
 	}
-	
+
 	@Override
 	public boolean onTouchStart(float x, float y)
 	{
@@ -102,28 +102,28 @@ public class ToolBrush extends StandardTool
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
 		layer = image.getSelectedLayer();
-		
+
 		historyAction = new ActionLayerChange(image, R.string.tool_brush);
 		historyAction.setLayerChange(image.getSelectedLayerIndex(), layer.getBitmap());
-		
+
 		resetClipping(canvas);
 		doLayerAndSelectionClipping(canvas);
-		
+
 		paint.setAlpha((int) (opacity * 255));
 		paint.setStrokeWidth(size);
 		updateShader();
-		
+
 		path.reset();
 		path.moveTo(x, y);
-		
+
 		lastX = -1;
 		lastY = -1;
-		
+
 		viewDirtyRect = new Rect();
 		historyDirtyRect = new Rect();
 		return true;
 	}
-	
+
 	private void updateShader()
 	{
 		int color = colors.getFirstColor();
@@ -132,7 +132,7 @@ public class ToolBrush extends StandardTool
 		radialShader = new RadialGradient(0, 0, size / 2, center, edge, Shader.TileMode.CLAMP);
 		paint.setShader(radialShader);
 	}
-	
+
 	@Override
 	public boolean onTouchMove(float x, float y)
 	{
@@ -150,30 +150,30 @@ public class ToolBrush extends StandardTool
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean onTouchStop(float x, float y)
 	{
 		if(lastX != -1 && lastY != -1) path.quadTo(lastX, lastY, x, y);
 		else path.lineTo(x, y);
-		
+
 		drawPointsOnPath();
 		drawPoint(x, y);
-		
+
 		path.reset();
 		lastX = -1;
 		lastY = -1;
 		pathDistance = 0;
-		
+
 		historyAction.setDirtyRect(historyDirtyRect);
 		historyAction.applyAction();
-		
+
 		viewDirtyRect = null;
 		historyDirtyRect = null;
 		image.unlockLayers();
 		return true;
 	}
-	
+
 	private void drawPointsOnPath()
 	{
 		PathMeasure pathMeasure = new PathMeasure(path, false);
@@ -185,23 +185,23 @@ public class ToolBrush extends StandardTool
 			pathDistance += shapeOffset;
 		}
 	}
-	
+
 	private void drawPoint(float x, float y)
 	{
 		shaderMatrix.reset();
 		shaderMatrix.preTranslate(x, y);
 		radialShader.setLocalMatrix(shaderMatrix);
-		
+
 		oval.left = x - size / 2;
 		oval.top = y - size / 2;
 		oval.right = x + size / 2;
 		oval.bottom = y + size / 2;
 		canvas.drawOval(oval, paint);
-		
+
 		expandDirtyRectByPoint(viewDirtyRect, oval);
 		expandDirtyRectByPoint(historyDirtyRect, oval);
 	}
-	
+
 	private void expandDirtyRectByPoint(Rect dirtyRect, RectF point)
 	{
 		if(dirtyRect == null) return;
@@ -214,55 +214,55 @@ public class ToolBrush extends StandardTool
 			dirtyRect.bottom = (int) Math.max(dirtyRect.bottom, point.bottom);
 		}
 	}
-	
+
 	@Override
 	public boolean providesDirtyRegion()
 	{
 		return true;
 	}
-	
+
 	@Override
 	public Rect getDirtyRegion()
 	{
 		return viewDirtyRect;
 	}
-	
+
 	@Override
 	public void resetDirtyRegion()
 	{
 		if(viewDirtyRect != null) viewDirtyRect.setEmpty();
 	}
-	
+
 	@Override
 	public boolean doesOnLayerDraw(boolean layerVisible)
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean doesOnTopDraw()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public ToolCoordinateSpace getOnLayerDrawingCoordinateSpace()
 	{
 		return null;
 	}
-	
+
 	@Override
 	public ToolCoordinateSpace getOnTopDrawingCoordinateSpace()
 	{
 		return null;
 	}
-	
+
 	@Override
 	public void onLayerDraw(Canvas canvas) { }
-	
+
 	@Override
 	public void onTopDraw(Canvas canvas) { }
-	
+
 	float getSize()
 	{
 		return size;
@@ -282,12 +282,12 @@ public class ToolBrush extends StandardTool
 	{
 		this.shapeOffset = shapeOffset;
 	}
-	
+
 	float getOpacity()
 	{
 		return opacity;
 	}
-	
+
 	void setOpacity(float opacity)
 	{
 		this.opacity = opacity;

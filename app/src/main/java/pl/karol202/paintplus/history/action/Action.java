@@ -21,36 +21,36 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import pl.karol202.paintplus.history.HistoryActionViewHolder;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public abstract class Action
 {
 	private boolean done;
-	
+
 	private boolean applied;
-	private Image temporaryImage;
-	
+	private LegacyImage temporaryImage;
+
 	private Bitmap previewBitmap;
 	private Canvas previewCanvas;
 	private Rect previewRect;
-	
-	Action(Image image)
+
+	Action(LegacyImage image)
 	{
 		done = true;
-		
+
 		applied = false;
 		temporaryImage = image;
 		createBitmap(image);
 	}
-	
-	private void createBitmap(Image image)
+
+	private void createBitmap(LegacyImage image)
 	{
 		int bitmapSize = (int) Math.floor(HistoryActionViewHolder.PREVIEW_SIZE_DP * image.SCREEN_DENSITY);
 		previewBitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
 		previewCanvas = new Canvas(previewBitmap);
 		previewRect = new Rect(0, 0, bitmapSize, bitmapSize);
 	}
-	
+
 	RectF transformLayerRect(Bitmap layerBitmap)
 	{
 		float max = Math.max(layerBitmap.getWidth(), layerBitmap.getHeight());
@@ -59,21 +59,21 @@ public abstract class Action
 		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
-	
-	public boolean undo(Image image)
+
+	public boolean undo(LegacyImage image)
 	{
 		if(!done || !applied) return false;
 		done = false;
 		return true;
 	}
-	
-	public boolean redo(Image image)
+
+	public boolean redo(LegacyImage image)
 	{
 		if(done || !applied) return false;
 		done = true;
 		return true;
 	}
-	
+
 	public void applyAction()
 	{
 		if(!canApplyAction()) return;
@@ -81,38 +81,38 @@ public abstract class Action
 		applied = true;
 		temporaryImage = null;
 	}
-	
+
 	abstract boolean canApplyAction();
-	
+
 	public Bitmap getActionPreview()
 	{
 		return previewBitmap;
 	}
-	
+
 	boolean isApplied()
 	{
 		return applied;
 	}
-	
-	Image getImage()
+
+	LegacyImage getImage()
 	{
 		return temporaryImage;
 	}
-	
+
 	Bitmap getPreviewBitmap()
 	{
 		return previewBitmap;
 	}
-	
+
 	Canvas getPreviewCanvas()
 	{
 		return previewCanvas;
 	}
-	
+
 	Rect getPreviewRect()
 	{
 		return previewRect;
 	}
-	
+
 	public abstract int getActionName();
 }

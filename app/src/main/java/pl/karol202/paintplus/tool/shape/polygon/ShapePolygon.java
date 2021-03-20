@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.shape.polygon;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.shape.Join;
 import pl.karol202.paintplus.tool.shape.OnShapeEditListener;
 import pl.karol202.paintplus.tool.shape.Shape;
@@ -43,7 +43,7 @@ public class ShapePolygon extends Shape
 	private Point centerAtBeginning;
 	private float radiusOCCAtBeginning;
 
-	public ShapePolygon(Image image, OnShapeEditListener shapeEditListener)
+	public ShapePolygon(LegacyImage image, OnShapeEditListener shapeEditListener)
 	{
 		super(image, shapeEditListener);
 		this.sides = 4;

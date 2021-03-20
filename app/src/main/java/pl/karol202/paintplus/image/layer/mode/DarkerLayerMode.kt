@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.RenderScript
 import android.renderscript.Allocation
+import pl.karol202.paintplus.R
 
-class DarkerLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_DARKER, renderScript, ScriptDarker(renderScript))
+class DarkerLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_darker,
+                                                                          category = 3,
+                                                                          renderScript = renderScript,
+                                                                          layerScript = ScriptDarker(renderScript))
 {
 	private class ScriptDarker(renderScript: RenderScript) : LayerScript
 	{

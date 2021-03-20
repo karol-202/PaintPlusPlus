@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.history.action;
 
 import android.graphics.*;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class ActionLayerChange extends Action
@@ -26,24 +26,24 @@ public class ActionLayerChange extends Action
 	private int layerId;
 	private Rect dirtyRect;
 	private Bitmap bitmap;
-	
+
 	private Paint bitmapPaint;
-	
-	public ActionLayerChange(Image image, int name)
+
+	public ActionLayerChange(LegacyImage image, int name)
 	{
 		super(image);
 		this.name = name;
 		this.layerId = -1;
 		createPaint();
 	}
-	
+
 	private void createPaint()
 	{
 		bitmapPaint = new Paint();
 		bitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		if(bitmap == null) return;
 		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
@@ -51,51 +51,51 @@ public class ActionLayerChange extends Action
 		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 		getPreviewCanvas().drawBitmap(bitmap, null, transformDirtyRect(layerBitmap), bitmapPaint);
 	}
-	
+
 	private RectF transformDirtyRect(Bitmap layerBitmap)
 	{
 		RectF layerRect = transformLayerRect(layerBitmap);
 		Matrix matrix = new Matrix();
 		matrix.postScale(layerRect.width() / layerBitmap.getWidth(), layerRect.height() / layerBitmap.getHeight());
 		matrix.postTranslate(layerRect.left, layerRect.top);
-		
+
 		RectF transformed = new RectF(dirtyRect);
 		matrix.mapRect(transformed);
 		return transformed;
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image) || bitmap == null) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
 		Bitmap newBitmap = Bitmap.createBitmap(layer.getBitmap(), dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		layer.getEditCanvas().drawBitmap(bitmap, dirtyRect.left, dirtyRect.top, bitmapPaint);
 		bitmap = newBitmap;
-		
+
 		updateBitmap(image);
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image) || bitmap == null) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
 		Bitmap oldBitmap = Bitmap.createBitmap(layer.getBitmap(), dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		layer.getEditCanvas().drawBitmap(bitmap, dirtyRect.left, dirtyRect.top, bitmapPaint);
 		bitmap = oldBitmap;
-		
+
 		updateBitmap(image);
 		return true;
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return layerId != -1 && bitmap != null && checkIfBitmapChanged();
 	}
-	
+
 	private boolean checkIfBitmapChanged()
 	{
 		if(bitmap == null) return false;
@@ -103,18 +103,18 @@ public class ActionLayerChange extends Action
 		Bitmap oldBitmap = Bitmap.createBitmap(layer.getBitmap(), dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		return !bitmap.sameAs(oldBitmap);
 	}
-	
+
 	@Override
 	public int getActionName()
 	{
 		return name;
 	}
-	
+
 	public void setLayerChange(int layerId, Bitmap bitmapBeforeChange)
 	{
 		setLayerChange(layerId, bitmapBeforeChange, new Rect(0, 0, bitmapBeforeChange.getWidth(), bitmapBeforeChange.getHeight()));
 	}
-	
+
 	public void setLayerChange(int layerId, Bitmap bitmapBeforeChange, Rect dirtyRect)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
@@ -123,7 +123,7 @@ public class ActionLayerChange extends Action
 		setDirtyRect(dirtyRect);
 		updateBitmap(getImage());
 	}
-	
+
 	public void setDirtyRect(Rect dirtyRect)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
@@ -133,7 +133,7 @@ public class ActionLayerChange extends Action
 			bitmap = Bitmap.createBitmap(bitmap, dirtyRect.left, dirtyRect.top, dirtyRect.width(), dirtyRect.height());
 		else bitmap = null;
 	}
-	
+
 	private Rect clipRect(Layer layer, Rect rect)
 	{
 		rect.left = Math.min(Math.max(rect.left, 0), layer.getWidth() - 1);
@@ -142,7 +142,7 @@ public class ActionLayerChange extends Action
 		rect.bottom = Math.min(Math.max(rect.bottom, 0), layer.getHeight() - 1);
 		return rect;
 	}
-	
+
 	private boolean isRectApplicableForThisAction(Rect dirtyRect)
 	{
 		return dirtyRect.width() > 0 && dirtyRect.height() > 0;

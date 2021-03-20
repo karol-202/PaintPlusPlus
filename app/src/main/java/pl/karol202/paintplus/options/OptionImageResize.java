@@ -18,11 +18,11 @@ package pl.karol202.paintplus.options;
 
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionImageResize;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public class OptionImageResize extends OptionResize
 {
-	public OptionImageResize(AppContextLegacy context, Image image)
+	public OptionImageResize(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 	}

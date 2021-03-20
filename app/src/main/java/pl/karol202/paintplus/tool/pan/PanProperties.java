@@ -27,7 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.ToolProperties;
 
 import java.util.Locale;
@@ -108,8 +108,8 @@ public class PanProperties extends ToolProperties implements View.OnClickListene
 	{
 		dontFireEvent = true;
 
-		if(zoom < Image.MIN_ZOOM) updateZoom(Image.MIN_ZOOM, true);
-		else if(zoom > Image.MAX_ZOOM) updateZoom(Image.MAX_ZOOM, true);
+		if(zoom < LegacyImage.MIN_ZOOM) updateZoom(LegacyImage.MIN_ZOOM, true);
+		else if(zoom > LegacyImage.MAX_ZOOM) updateZoom(LegacyImage.MAX_ZOOM, true);
 		else
 		{
 			this.zoom = zoom;

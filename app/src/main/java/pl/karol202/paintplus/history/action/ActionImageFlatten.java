@@ -19,7 +19,7 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 import java.util.ArrayList;
@@ -28,19 +28,19 @@ import java.util.List;
 public class ActionImageFlatten extends Action
 {
 	private List<Layer> layers;
-	
-	public ActionImageFlatten(Image image)
+
+	public ActionImageFlatten(LegacyImage image)
 	{
 		super(image);
 	}
-	
-	private void updateBitmap(Image image)
+
+	private void updateBitmap(LegacyImage image)
 	{
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
 	}
-	
-	private RectF transformImageRect(Image image)
+
+	private RectF transformImageRect(LegacyImage image)
 	{
 		float max = Math.max(image.getWidth(), image.getHeight());
 		float ratio = getPreviewRect().width() / max;
@@ -48,9 +48,9 @@ public class ActionImageFlatten extends Action
 		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
 		return rect;
 	}
-	
+
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
@@ -58,29 +58,29 @@ public class ActionImageFlatten extends Action
 		for(int i = 0; i < layers.size(); i++) image.addLayer(layers.get(i), i);
 		return true;
 	}
-	
+
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
 		image.flattenImage();
 		return true;
 	}
-	
+
 	@Override
 	boolean canApplyAction()
 	{
 		return layers != null;
 	}
-	
+
 	@Override
 	public int getActionName()
 	{
 		return R.string.history_action_image_flatten;
 	}
-	
-	public void setImageBeforeFlattening(Image image)
+
+	public void setImageBeforeFlattening(LegacyImage image)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.layers = new ArrayList<>(image.getLayers());

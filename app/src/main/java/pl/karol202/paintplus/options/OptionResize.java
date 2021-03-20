@@ -31,7 +31,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.MathUtils;
 
@@ -131,7 +131,7 @@ public abstract class OptionResize extends LegacyOption implements DialogInterfa
 	private float ratio;
 	private boolean dontFireEvent;
 
-	OptionResize(AppContextLegacy context, Image image)
+	OptionResize(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 	}

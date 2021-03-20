@@ -25,7 +25,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerRotate;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.MathUtils;
 
@@ -37,7 +37,7 @@ public class OptionLayerRotate extends LegacyOption implements DialogInterface.O
 
 	private Layer layer;
 
-	public OptionLayerRotate(AppContextLegacy context, Image image)
+	public OptionLayerRotate(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 		layer = image.getSelectedLayer();

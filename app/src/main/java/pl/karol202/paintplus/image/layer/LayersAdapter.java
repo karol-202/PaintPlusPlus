@@ -29,7 +29,7 @@ import pl.karol202.paintplus.activity.ActivityPaint;
 import pl.karol202.paintplus.history.action.ActionLayerDuplicate;
 import pl.karol202.paintplus.history.action.ActionLayerJoin;
 import pl.karol202.paintplus.history.action.ActionLayerOrderMove;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.options.LegacyOption;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 	private final String DUPLICATE_INDICATOR;
 
 	private LegacyOption.AppContextLegacy appContext;
-	private Image image;
+	private LegacyImage image;
 	private ArrayList<Layer> layers;
 
 	private HashMap<Integer, LayerViewHolder> viewHolders;
@@ -85,12 +85,12 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		return appContext.getContext();
 	}
 
-	Image getImage()
+	LegacyImage getImage()
 	{
 		return image;
 	}
 
-	public void setImage(Image image)
+	public void setImage(LegacyImage image)
 	{
 		this.image = image;
 		this.layers = image.getLayers();
@@ -175,7 +175,7 @@ public class LayersAdapter extends RecyclerView.Adapter<LayerViewHolder>
 		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix);
 
 		Layer resultLayer = new Layer(resultBounds.left, resultBounds.top, firstLayer.getName(),
-									  resultBounds.width(), resultBounds.height(), Color.TRANSPARENT);
+		                              resultBounds.width(), resultBounds.height(), Color.TRANSPARENT);
 		resultLayer.setBitmap(resultBitmap);
 
 		image.deleteLayer(firstLayer);

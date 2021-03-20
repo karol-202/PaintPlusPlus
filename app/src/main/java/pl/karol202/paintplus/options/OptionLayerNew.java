@@ -30,7 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerAdd;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.GraphicsHelper;
 import pl.karol202.paintplus.util.MathUtils;
@@ -59,12 +59,12 @@ public class OptionLayerNew extends LegacyOption implements DialogInterface.OnCl
 	private EditText editY;
 	private ImageView imagePreview;
 
-	public OptionLayerNew(AppContextLegacy context, Image image)
+	public OptionLayerNew(AppContextLegacy context, LegacyImage image)
 	{
 		this(context, image, null);
 	}
 
-	public OptionLayerNew(AppContextLegacy context, Image image, OnLayerAddListener listener)
+	public OptionLayerNew(AppContextLegacy context, LegacyImage image, OnLayerAddListener listener)
 	{
 		super(context, image);
 		this.listener = listener;

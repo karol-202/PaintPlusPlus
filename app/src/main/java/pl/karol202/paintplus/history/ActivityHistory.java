@@ -28,11 +28,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public class ActivityHistory extends AppCompatActivity
 {
-	private Image image;
+	private LegacyImage image;
 	private ActionBar actionBar;
 	private HistoryAdapter adapter;
 

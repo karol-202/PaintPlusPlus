@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
+import pl.karol202.paintplus.R
 
-class AddLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_ADD, renderScript, ScriptAdd(renderScript))
+class AddLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_add,
+                                                                       category = 2,
+                                                                       renderScript = renderScript,
+                                                                       layerScript = ScriptAdd(renderScript))
 {
 	private class ScriptAdd(renderScript: RenderScript) : LayerScript
 	{

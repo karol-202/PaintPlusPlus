@@ -23,7 +23,7 @@ import android.os.AsyncTask;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.selection.Selection;
 
 import java.util.Stack;
@@ -38,7 +38,7 @@ public class ToolFillAsyncTask extends AsyncTask<FillParams, Void, Bitmap>
 	private static final float COLOR_COMPARISON_CONST = (float) Math.sqrt(3 * Math.pow(255, 2));
 
 	private OnFillCompleteListener listener;
-	private Image image;
+	private LegacyImage image;
 	private Bitmap bitmap;
 	private Selection selection;
 

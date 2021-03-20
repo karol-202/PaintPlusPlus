@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.RenderScript
 import android.renderscript.Allocation
+import pl.karol202.paintplus.R
 
-class LighterLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_LIGHTER, renderScript, ScriptLighter(renderScript))
+class LighterLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_lighter,
+                                                                           category = 3,
+                                                                           renderScript = renderScript,
+                                                                           layerScript = ScriptLighter(renderScript))
 {
 	private class ScriptLighter(renderScript: RenderScript) : LayerScript
 	{

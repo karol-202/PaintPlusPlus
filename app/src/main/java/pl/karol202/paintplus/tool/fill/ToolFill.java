@@ -21,7 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
@@ -36,7 +36,7 @@ public class ToolFill extends StandardTool implements OnFillCompleteListener
 	private Canvas canvas;
 	private AsyncTask asyncTask;
 
-	public ToolFill(Image image)
+	public ToolFill(LegacyImage image)
 	{
 		super(image);
 		this.fillThreshold = 0;

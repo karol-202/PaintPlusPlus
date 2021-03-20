@@ -19,7 +19,7 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
 public class ActionLayerPropertiesChange extends Action
@@ -28,13 +28,13 @@ public class ActionLayerPropertiesChange extends Action
 	private LegacyLayerMode mode;
 	private float opacity;
 
-	public ActionLayerPropertiesChange(Image image)
+	public ActionLayerPropertiesChange(LegacyImage image)
 	{
 		super(image);
 		this.layerId = -1;
 	}
 
-	private void updateBitmap(Image image)
+	private void updateBitmap(LegacyImage image)
 	{
 		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
@@ -42,7 +42,7 @@ public class ActionLayerPropertiesChange extends Action
 	}
 
 	@Override
-	public boolean undo(Image image)
+	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
@@ -60,7 +60,7 @@ public class ActionLayerPropertiesChange extends Action
 	}
 
 	@Override
-	public boolean redo(Image image)
+	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);

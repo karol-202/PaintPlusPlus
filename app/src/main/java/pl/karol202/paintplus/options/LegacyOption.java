@@ -2,7 +2,7 @@ package pl.karol202.paintplus.options;
 
 import android.content.Context;
 import com.google.android.material.snackbar.Snackbar;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 
 public abstract class LegacyOption
 {
@@ -14,9 +14,9 @@ public abstract class LegacyOption
 	}
 
 	private AppContextLegacy context;
-	private Image image;
+	private LegacyImage image;
 
-	public LegacyOption(AppContextLegacy context, Image image)
+	public LegacyOption(AppContextLegacy context, LegacyImage image)
 	{
 		this.context = context;
 		this.image = image;
@@ -34,7 +34,7 @@ public abstract class LegacyOption
 		return context.getContext();
 	}
 
-	public Image getImage()
+	public LegacyImage getImage()
 	{
 		return image;
 	}

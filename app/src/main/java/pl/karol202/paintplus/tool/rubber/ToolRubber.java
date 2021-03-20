@@ -19,7 +19,7 @@ package pl.karol202.paintplus.tool.rubber;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;
 import pl.karol202.paintplus.tool.ToolProperties;
@@ -42,7 +42,7 @@ public class ToolRubber extends StandardTool
 	private Rect viewDirtyRect;
 	private Rect historyDirtyRect;
 
-	public ToolRubber(Image image)
+	public ToolRubber(LegacyImage image)
 	{
 		super(image);
 		this.size = 25;

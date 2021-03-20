@@ -17,9 +17,12 @@ package pl.karol202.paintplus.image.layer.mode
 
 import android.renderscript.Allocation
 import android.renderscript.RenderScript
+import pl.karol202.paintplus.R
 
-class MultiplyLayerMode(renderScript: RenderScript) :
-		RenderscriptLayerMode(LayerModeType.MODE_MULTIPLY, renderScript, ScriptMultiply(renderScript))
+class MultiplyLayerMode(renderScript: RenderScript) : RenderscriptLayerMode(name = R.string.layer_mode_multiply,
+                                                                            category = 2,
+                                                                            renderScript = renderScript,
+                                                                            layerScript = ScriptMultiply(renderScript))
 {
 	private class ScriptMultiply(renderScript: RenderScript) : LayerScript
 	{

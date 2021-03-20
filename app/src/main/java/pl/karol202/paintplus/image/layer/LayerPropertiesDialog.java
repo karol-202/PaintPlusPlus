@@ -28,7 +28,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.history.action.ActionLayerPropertiesChange;
-import pl.karol202.paintplus.image.Image;
+import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter;
 import pl.karol202.paintplus.image.layer.mode.LayerModeType;
 
@@ -37,7 +37,7 @@ import java.util.Locale;
 class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener, DialogInterface.OnClickListener
 {
 	private Context context;
-	private Image image;
+	private LegacyImage image;
 	private Layer layer;
 	private LayerModeAdapter adapter;
 
@@ -49,7 +49,7 @@ class LayerPropertiesDialog implements AdapterView.OnItemSelectedListener, SeekB
 	private SeekBar seekBarOpacity;
 	private TextView textOpacity;
 
-	LayerPropertiesDialog(Context context, Image image, Layer layer)
+	LayerPropertiesDialog(Context context, LegacyImage image, Layer layer)
 	{
 		this.context = context;
 		this.image = image;
