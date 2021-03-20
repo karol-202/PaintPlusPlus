@@ -135,7 +135,7 @@
 	<string name="layer_properties">Properties</string>
 	<string name="layer_change_name">Change name</string>
 	<string name="layer_duplicate">Duplicate</string>
-	<string name="layer_join">Join to below</string>
+	<string name="layer_merge">Merge down</string>
 	<string name="layer_delete">Delete</string>
 
 	<string name="layer_mode_standard">Standard</string>

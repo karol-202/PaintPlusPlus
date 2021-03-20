@@ -19,7 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogRotateImageBinding
 import pl.karol202.paintplus.history.action.ActionImageRotate
-import pl.karol202.paintplus.image.Image.RotationAmount
+import pl.karol202.paintplus.image.LegacyImage.RotationAmount
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionImageRotate(private val viewModel: PaintViewModel) : Option

@@ -16,7 +16,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	
+
 	<item android:id="@+id/action_layer_info"
 		android:title="@string/layer_info"/>
 	<item android:id="@+id/action_layer_properties"
@@ -25,8 +25,8 @@
 		android:title="@string/layer_change_name" />
 	<item android:id="@+id/action_layer_duplicate"
 		android:title="@string/layer_duplicate" />
-	<item android:id="@+id/action_join"
-		android:title="@string/layer_join" />
+	<item android:id="@+id/action_merge"
+		android:title="@string/layer_merge" />
 	<item android:id="@+id/action_layer_delete"
 		android:title="@string/layer_delete" />
 </menu>

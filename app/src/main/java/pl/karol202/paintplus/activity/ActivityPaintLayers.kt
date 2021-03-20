@@ -18,6 +18,9 @@ package pl.karol202.paintplus.activity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
+import pl.karol202.paintplus.image.layer.Layer
+import pl.karol202.paintplus.image.layer.LayerInformationDialog
+import pl.karol202.paintplus.image.layer.LayerPropertiesDialog
 import pl.karol202.paintplus.image.layer.LayersAdapter
 import pl.karol202.paintplus.options.OptionLayerNew
 import pl.karol202.paintplus.util.LayersSheetBehavior
@@ -32,16 +35,22 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
                           private val views: ActivityPaintBinding,
                           private val paintViewModel: PaintViewModel)
 {
-
-	private val layersAdapter = LayersAdapter(activity)
+	private val layersAdapter = LayersAdapter(activity = activity,
+	                                          onInfoShow
+			                                          onPropertiesEdit
+			                                          onNameChange
+			                                          onSelect
+			                                          onVisibilityToggle
+			                                          onMove
+			                                          onDuplicate
+			                                          onMerge
+			                                          onDelete)
 	private val bottomSheetBehaviour = BottomSheetBehavior.from(views.bottomSheet) as LayersSheetBehavior<*>
 
 	private val sheetPanelSizePx = MathUtils.dpToPixels(activity, SHEET_PANEL_SIZE_DP).toInt()
 
 	fun initLayers()
 	{
-		layersAdapter.setImage(paintViewModel.image)
-
 		bottomSheetBehaviour.skipCollapsed = true
 		bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -50,12 +59,8 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 			OptionLayerNew(activity, paintViewModel.image) { layersAdapter.notifyDataSetChanged() }.execute()
 		}
 
-		paintViewModel.imageEventFlow.collectIn(activity.lifecycleScope) {
-			if(it == PaintViewModel.ImageEvent.LAYERS_CHANGED) updateData()
-		}
+		paintViewModel.imageFlow.collectIn(activity.lifecycleScope) { layersAdapter.image = it }
 	}
-
-	private fun updateData() = layersAdapter.notifyDataSetChanged()
 
 	fun updateView()
 	{
@@ -81,4 +86,10 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 		views.recyclerLayers.setAllowScrolling(!blocked)
 		bottomSheetBehaviour.allowDragging = !blocked
 	}
+
+	fun showLayerInfoDialog(layer: Layer) = LayerInformationDialog(activity, layer).show()
+
+	fun showLayerPropertiesDialog(layer: Layer) = LayerPropertiesDialog(activity, paintViewModel.layerModes, layer) {
+
+	}.show()
 }

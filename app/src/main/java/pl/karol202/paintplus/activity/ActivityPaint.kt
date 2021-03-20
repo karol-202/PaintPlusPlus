@@ -78,35 +78,19 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		supportActionBar?.setHomeButtonEnabled(true)
 
-		views.paintView.setImageTemp(paintViewModel.image)
-
 		drawers.initDrawers()
 		layers.initLayers()
 	}
 
 	private fun observeViewModel()
 	{
-		paintViewModel.settingsFlow.collectIn(lifecycleScope) {
-			views.paintView.setSettings(it)
-		}
-		paintViewModel.currentToolFlow.collectIn(lifecycleScope) {
-			views.paintView.setCurrentToolTemp(it)
-		}
-		paintViewModel.titleFlow.collectIn(lifecycleScope) {
-			views.toolbar.root.title = it
-		}
-		paintViewModel.dialogFlow.collectIn(lifecycleScope) {
-			updateDialog(it)
-		}
-		paintViewModel.messageEventFlow.collectIn(lifecycleScope) {
-			showSnackbar(it.text)
-		}
-		paintViewModel.imageEventFlow.collectIn(lifecycleScope) {
-			onImageEvent(it)
-		}
-		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) {
-			onActionRequest(it)
-		}
+		paintViewModel.imageFlow.collectIn(lifecycleScope) { views.paintView.image = it }
+		paintViewModel.currentToolFlow.collectIn(lifecycleScope) { views.paintView.currentTool = it }
+		paintViewModel.settingsFlow.collectIn(lifecycleScope) { views.paintView.filtering = it.smoothView }
+		paintViewModel.titleFlow.collectIn(lifecycleScope) { views.toolbar.root.title = it }
+		paintViewModel.dialogFlow.collectIn(lifecycleScope) { updateDialog(it) }
+		paintViewModel.messageEventFlow.collectIn(lifecycleScope) { showSnackbar(it.text) }
+		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { onActionRequest(it) }
 	}
 
 	private fun updateDialog(definition: DialogDefinition?)
@@ -121,15 +105,6 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	}
 
 	private fun showSnackbar(message: Int) = Snackbar.make(views.mainContainer, message, Snackbar.LENGTH_LONG).show()
-
-	private fun onImageEvent(event: ImageEvent) = when(event)
-	{
-		ImageEvent.IMAGE_CHANGED -> views.paintView.notifyImageChanged()
-		ImageEvent.LAYERS_CHANGED -> views.paintView.notifyLayersChanged()
-		ImageEvent.IMAGE_MATRIX_CHANGED -> views.paintView.notifyImageMatrixChanged()
-		ImageEvent.SELECTION_CHANGED -> views.paintView.notifySelectionChanged()
-		else -> {}
-	}
 
 	/*
 	I'm aware that this way of using Activity Result API is not correct,

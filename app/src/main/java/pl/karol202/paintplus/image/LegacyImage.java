@@ -47,28 +47,6 @@ public class LegacyImage
 		void onImageMatrixChanged();
 	}
 
-	public enum FlipDirection
-	{
-		HORIZONTALLY, VERTICALLY
-	}
-
-	public enum RotationAmount
-	{
-		ANGLE_90(90), ANGLE_180(180), ANGLE_270(270);
-
-		private float angle;
-
-		RotationAmount(float angle)
-		{
-			this.angle = angle;
-		}
-
-		float getAngle()
-		{
-			return angle;
-		}
-	}
-
 	public static final int MAX_LAYERS = 8;
 	public static final float MIN_ZOOM = 0.009f;
 	public static final float MAX_ZOOM = 16f;

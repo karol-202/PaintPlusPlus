@@ -16,3 +16,9 @@ fun Bitmap.fitInto(maxSize: Size): Bitmap
 
 fun Bitmap.transformedWith(matrix: Matrix, bilinear: Boolean = false) =
 		Bitmap.createBitmap(this, 0, 0, width, height, matrix, bilinear)
+
+fun Bitmap.ensureMutable() = takeIf { isMutable } ?: copy(config, true)
+
+fun Bitmap.withAlpha(enabled: Boolean) = apply {
+	setHasAlpha(enabled)
+}

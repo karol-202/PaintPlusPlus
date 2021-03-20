@@ -24,7 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.history.ActivityHistoryHelper
-import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.LegacyImage
 import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.util.collectIn
@@ -108,7 +108,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 		menu.findItem(R.id.action_cut).isEnabled = !selection.isEmpty
 		menu.findItem(R.id.action_copy).isEnabled = !selection.isEmpty
 		val clipboard = image.clipboard
-		menu.findItem(R.id.action_paste).isEnabled = !clipboard.isEmpty && image.layersAmount < Image.MAX_LAYERS
+		menu.findItem(R.id.action_paste).isEnabled = !clipboard.isEmpty && image.layersAmount < LegacyImage.MAX_LAYERS
 	}
 
 	private fun prepareSnapOptions(menu: Menu)

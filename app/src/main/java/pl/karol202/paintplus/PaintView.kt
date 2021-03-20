@@ -19,20 +19,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Size
 import android.view.MotionEvent
 import android.view.SurfaceView
-import androidx.core.graphics.withClip
-import androidx.core.graphics.withMatrix
-import androidx.core.graphics.withTranslation
-import pl.karol202.paintplus.helpers.HelpersManager
+import androidx.core.graphics.*
 import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.image.layer.mode.LayerMode
-import pl.karol202.paintplus.settings.Settings
+import pl.karol202.paintplus.image.ViewPosition
+import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.Tool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
-import pl.karol202.paintplus.tool.selection.Selection
 import pl.karol202.paintplus.util.*
-import kotlin.properties.Delegates.notNull
 
 private val PAINT_DASH = floatArrayOf(5f, 5f)
 private const val CHECKERBOARD_OFFSET = 8f
@@ -40,13 +36,11 @@ private const val CHECKERBOARD_OFFSET = 8f
 class PaintView(context: Context,
                 attrs: AttributeSet?) : SurfaceView(context, attrs)
 {
-	private var image by notNull<Image>()
-	private var selection by notNull<Selection>()
-	private var helpersManager by notNull<HelpersManager>()
-
-	private var currentTool by notNull<Tool>()
-
-	private var filtering: Boolean = false
+	var image by invalidating(null as Image?).require()
+	var viewPosition by invalidating(ViewPosition())
+	var currentTool by invalidating(null as Tool?).require()
+	var filtering: Boolean = false
+	var onViewportSizeChange: ((Size) -> Unit)? = null
 
 	private val checkerboardShader =
 			BitmapShader(BitmapFactory.decodeResource(context.resources, R.drawable.checkerboard),
@@ -77,29 +71,24 @@ class PaintView(context: Context,
 		}
 	}
 
-	private val checkerboardMatrix by cache({image.viewX}, {image.viewY}, {image.zoom}) { viewX, viewY, zoom ->
+	private val checkerboardMatrix by cache({viewPosition}) { viewPosition ->
 		Matrix().apply {
-			preTranslate(-viewX * zoom + CHECKERBOARD_OFFSET, -viewY * zoom + CHECKERBOARD_OFFSET)
+			preTranslate(-viewPosition.x * viewPosition.zoom + CHECKERBOARD_OFFSET,
+			             -viewPosition.y * viewPosition.zoom + CHECKERBOARD_OFFSET)
 		}
 	}
 
-	private val layerBoundsPath by cache({image.selectedLayer?.bounds}, {screenRect}) { bounds, screenRect ->
+	private val layerBoundsPath by cache({image.selectedLayer?.bounds}, {viewPosition.imageMatrix}) { bounds, imageMatrix ->
 		Path().apply {
 			if(bounds == null) return@apply
-			addRect(bounds intersectionWith screenRect, Path.Direction.CW)
+			addRect(bounds.toRectF(), Path.Direction.CW)
 			close()
-			transform(image.imageMatrix)
+			transform(imageMatrix)
 		}
 	}
 
-	private val selectionPath by cache({selection.region}, {screenRect}, {image.imageMatrix}) {
-		selectionRegion, screenRect, imageMatrix ->
-		(selectionRegion intersectionWith screenRect.rounded()).boundaryPath.transformedBy(imageMatrix)
-	}
-
-	private val screenRect by cache({image.viewX}, {image.viewY}, {image.zoom}, {width}, {height}) {
-		viewX, viewY, zoom, width, height ->
-		RectF(viewX - 2, viewY - 2, viewX + width / zoom + 2, viewY + height / zoom + 2)
+	private val selectionPath by cache({selection.region}, {viewPosition.imageMatrix}) { selectionRegion, imageMatrix ->
+		selectionRegion.boundaryPath.transformedBy(imageMatrix)
 	}
 
 	override fun draw(canvas: Canvas)
@@ -107,7 +96,7 @@ class PaintView(context: Context,
 		super.draw(canvas)
 		if(isInEditMode) return
 
-		canvas.withClip(image.imageRect) {
+		canvas.withClip(viewPosition.getImageRect(image)) {
 			drawCheckerboard(canvas)
 		}
 		drawImage(canvas)
@@ -124,43 +113,37 @@ class PaintView(context: Context,
 
 	private fun drawImage(canvas: Canvas)
 	{
-		var screenBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-		var screenCanvas = Canvas(screenBitmap)
+		val initialBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+		val resultBitmap = image.layers.fold(BitmapWithCanvas.create(initialBitmap)) { (bitmap, canvas), layer ->
+			drawLayer(bitmap, canvas, layer)
+		}.bitmap
 
-		for(layer in image.layers.asReversed())
-		{
-			val drawLayer = layer.isVisible && !layer.isTemporaryHidden
-			val drawToolOnLayer = image.isLayerSelected(layer) && currentTool.doesOnLayerDraw(layer.isVisible)
+		canvas.drawBitmap(resultBitmap, 0f, 0f, null)
 
-			val layerMode: LayerMode = null
-			val (resultBitmap, resultCanvas) = layerMode.apply(screenBitmap, screenCanvas) {
-				if(drawLayer)
-					withClip(image.imageRect) {
-						val layerMatrix = image.imageMatrix.preTranslated(layer.x.toFloat(), layer.y.toFloat())
-						drawBitmap(layer.bitmap, layerMatrix, layerPaint)
+		if(currentTool.doesOnTopDraw())
+			canvas.withToolSpace(currentTool.onTopDrawingCoordinateSpace) {
+				currentTool.onTopDraw(this)
+			}
+	}
+
+	private fun drawLayer(bitmap: Bitmap, canvas: Canvas, layer: Layer) =
+			layer.mode.apply(bitmap, canvas) {
+				if(layer.visible)
+					withClip(viewPosition.getImageRect(image)) {
+						drawBitmap(layer.bitmap, viewPosition.imageMatrix * layer.matrix, layerPaint)
 					}
-				if(drawToolOnLayer)
+				if(image.isLayerSelected(layer) && currentTool.doesOnLayerDraw(layer.visible))
 					withToolSpace(currentTool.onLayerDrawingCoordinateSpace) {
 						currentTool.onLayerDraw(this)
 					}
 			}
-			screenBitmap = resultBitmap
-			screenCanvas = resultCanvas
-		}
-
-		if(currentTool.doesOnTopDraw())
-			screenCanvas.withToolSpace(currentTool.onTopDrawingCoordinateSpace) {
-				currentTool.onTopDraw(this)
-			}
-
-		canvas.drawBitmap(screenBitmap, 0f, 0f, null)
-	}
 
 	private fun Canvas.withToolSpace(space: ToolCoordinateSpace, block: Canvas.() -> Unit) =
 			if(space == ToolCoordinateSpace.SCREEN_SPACE) block()
-			else withMatrix(image.imageMatrix) {
-				if(space == ToolCoordinateSpace.IMAGE_SPACE) block()
-				else withTranslation(image.selectedLayerX.toFloat(), image.selectedLayerY.toFloat(), block)
+			else withMatrix(viewPosition.imageMatrix) {
+				val selectedLayer = image.selectedLayer
+				if(space == ToolCoordinateSpace.IMAGE_SPACE || selectedLayer == null) block()
+				else withTranslation(selectedLayer.x.toFloat(), selectedLayer.y.toFloat(), block)
 			}
 
 	private fun drawLayerBounds(canvas: Canvas) = canvas.drawPath(layerBoundsPath, layerBoundsPaint)
@@ -182,28 +165,11 @@ class PaintView(context: Context,
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int)
 	{
-		image.viewportWidth = width
+		onViewportSizeChange?.invoke(Size(w, h))
+	}
+
+	// TODO
+	/*image.viewportWidth = width
 		image.viewportHeight = height
-		image.centerView()
-	}
-
-	fun setImageTemp(image: Image)
-	{
-		this.image = image
-		selection = image.selection
-		helpersManager = image.helpersManager
-
-		invalidate()
-	}
-
-	fun setCurrentToolTemp(tool: Tool)
-	{
-		currentTool = tool
-		invalidate()
-	}
-
-	fun setSettings(settings: Settings)
-	{
-		filtering = settings.smoothView
-	}
+		image.centerView()*/
 }

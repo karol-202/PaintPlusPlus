@@ -19,16 +19,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogSetZoomBinding
-import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.LegacyImage
 import pl.karol202.paintplus.image.ImageZoom
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
-import kotlin.math.roundToInt
 
 class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
-	                     private val image: Image) :
+	                     private val image: LegacyImage) :
 			Option.LayoutDialog<DialogSetZoomBinding>(builder, DialogSetZoomBinding::inflate)
 	{
 		private var dontFireEvent = false
@@ -67,7 +66,7 @@ class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 					views.editZoom.setSelection(views.editZoom.text.length - 1)
 				}
 				text != "%" -> {
-					val zoom = parseZoom(text)?.coerceIn(Image.MIN_ZOOM, Image.MAX_ZOOM)
+					val zoom = parseZoom(text)?.coerceIn(LegacyImage.MIN_ZOOM, LegacyImage.MAX_ZOOM)
 					if(zoom != null) image.zoom = zoom
 				}
 			}

@@ -15,7 +15,10 @@
  */
 package pl.karol202.paintplus.tool
 
-import pl.karol202.paintplus.image.Image
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.LegacyImage
 import pl.karol202.paintplus.tool.pan.ToolPan
 import pl.karol202.paintplus.tool.marker.ToolMarker
 import pl.karol202.paintplus.tool.brush.ToolBrush
@@ -26,9 +29,8 @@ import pl.karol202.paintplus.tool.pickcolor.ToolColorPick
 import pl.karol202.paintplus.tool.drag.ToolDrag
 import pl.karol202.paintplus.tool.rubber.ToolRubber
 import pl.karol202.paintplus.tool.gradient.ToolGradient
-import java.util.ArrayList
 
-class Tools(image: Image)
+class ToolsService(imageService: ImageService)
 {
 	val tools = listOf(ToolPan(image),
 	                   ToolMarker(image),
@@ -39,9 +41,16 @@ class Tools(image: Image)
 	                   ToolColorPick(image),
 	                   ToolDrag(image),
 	                   ToolRubber(image),
-	                   ToolGradient(image)
-	)
-	val defaultTool get() = tools.first()
+	                   ToolGradient(image))
+
+	private val _currentToolFlow = MutableStateFlow(tools.first())
+
+	val currentToolFlow: StateFlow<Tool> = _currentToolFlow
+
+	fun setCurrentTool(tool: Tool)
+	{
+		_currentToolFlow.value = tool
+	}
 
 	fun getTool(id: Int) = tools[id]
 }

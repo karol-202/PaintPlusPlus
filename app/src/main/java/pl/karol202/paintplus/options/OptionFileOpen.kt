@@ -20,9 +20,9 @@ import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.image.Image.FlipDirection
-import pl.karol202.paintplus.image.Image.RotationAmount
+import pl.karol202.paintplus.image.LegacyImage
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection
+import pl.karol202.paintplus.image.LegacyImage.RotationAmount
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
@@ -71,7 +71,7 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 		openOption.askAboutExifRotation(orientation) { rotateImage(paintViewModel.image, it) }
 	}
 
-	private fun rotateImage(image: Image, exifOrientation: Int) = when(exifOrientation)
+	private fun rotateImage(image: LegacyImage, exifOrientation: Int) = when(exifOrientation)
 	{
 		ExifInterface.ORIENTATION_ROTATE_90 -> image.rotate(RotationAmount.ANGLE_90)
 		ExifInterface.ORIENTATION_ROTATE_180 -> image.rotate(RotationAmount.ANGLE_180)

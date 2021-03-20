@@ -17,16 +17,12 @@ package pl.karol202.paintplus.tool
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import pl.karol202.paintplus.R
 import android.view.ViewGroup
-import android.view.LayoutInflater
-import android.view.View
 import pl.karol202.paintplus.databinding.ItemToolBinding
 import pl.karol202.paintplus.util.layoutInflater
-import java.util.ArrayList
 
 class ToolsAdapter(private val context: Context,
-                   private val tools: Tools,
+                   private val tools: ToolsService,
                    private val listener: (Tool) -> Unit) : RecyclerView.Adapter<ToolsAdapter.ViewHolder>()
 {
 	inner class ViewHolder(private val views: ItemToolBinding) : RecyclerView.ViewHolder(views.root)

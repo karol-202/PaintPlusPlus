@@ -18,56 +18,32 @@ package pl.karol202.paintplus.color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.databinding.ColorsBinding
+import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.viewBinding
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class ColorsSelect : Fragment(R.layout.colors)
 {
-	private enum class PickTarget(val get: ColorsSet.() -> Int,
-	                              val set: ColorsSet.(Int) -> Unit)
-	{
-		FIRST({ firstColor }, { firstColor = it }),
-		SECOND({ secondColor }, { secondColor = it })
-	}
-
 	private val viewModel by sharedViewModel<PaintViewModel>()
 	private val views by viewBinding(ColorsBinding::bind)
 
-	private val colors: ColorsSet by lazy { viewModel.image.colorsSet }
-
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
-		colors.addListener { updateColorViews() }
+		views.viewColorFirst.setOnClickListener { pickColor() }
 
-		views.viewColorFirst.setOnClickListener { pickColor(PickTarget.FIRST) }
-		views.viewColorSecond.setOnClickListener { pickColor(PickTarget.SECOND) }
-		views.buttonColorsSwap.setOnClickListener { invertColors() }
-		updateColorViews()
+		viewModel.currentColorFlow.collectIn(lifecycleScope) { views.viewColorFirst.setBackgroundColor(it) }
 	}
 
-	private fun pickColor(target: PickTarget)
+	private fun pickColor()
 	{
-		val pickerConfig = ColorPickerConfig(initialColor = target.get(colors), useAlpha = false)
+		val pickerConfig = ColorPickerConfig(initialColor = viewModel.currentColor, useAlpha = false)
 		viewModel.makeActionRequest(PaintViewModel.ActionRequest.PickColor(pickerConfig) { color ->
-			color?.toLong()?.or(0xFF000000)?.toInt()?.let { target.set(colors, it) }
-			updateColorViews()
+			color?.toLong()?.or(0xFF000000)?.toInt()?.let { viewModel.setCurrentColor(it) }
 		})
-	}
-
-	private fun invertColors()
-	{
-		colors.invert()
-		updateColorViews()
-	}
-
-	private fun updateColorViews()
-	{
-		views.viewColorFirst.setBackgroundColor(colors.firstColor)
-		views.viewColorSecond.setBackgroundColor(colors.secondColor)
-		viewModel.image.updateImage()
 	}
 }

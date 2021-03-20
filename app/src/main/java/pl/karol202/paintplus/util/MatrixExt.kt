@@ -13,3 +13,15 @@ fun Matrix.preRotated(degrees: Float) = Matrix(this).apply {
 fun Matrix.preScaled(sx: Float, sy: Float) = Matrix(this).apply {
 	preScale(sx, sy)
 }
+
+fun Matrix.postTranslated(dx: Float, dy: Float) = Matrix(this).apply {
+	postTranslate(dx, dy)
+}
+
+fun Matrix.postRotated(degrees: Float) = Matrix(this).apply {
+	postRotate(degrees)
+}
+
+fun Matrix.postScaled(sx: Float, sy: Float) = Matrix(this).apply {
+	postScale(sx, sy)
+}

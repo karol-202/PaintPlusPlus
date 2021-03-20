@@ -19,7 +19,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogFlipBinding
-import pl.karol202.paintplus.image.Image.FlipDirection
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionFlip(private val viewModel: PaintViewModel,
