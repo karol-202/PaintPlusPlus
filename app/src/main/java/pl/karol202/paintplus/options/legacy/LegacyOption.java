@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.options.legacy;
 
 import android.content.Context;
 import com.google.android.material.snackbar.Snackbar;

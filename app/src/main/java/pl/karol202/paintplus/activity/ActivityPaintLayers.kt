@@ -22,7 +22,7 @@ import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.LayerInformationDialog
 import pl.karol202.paintplus.image.layer.LayerPropertiesDialog
 import pl.karol202.paintplus.image.layer.LayersAdapter
-import pl.karol202.paintplus.options.OptionLayerNew
+import pl.karol202.paintplus.options.legacy.OptionLayerNew
 import pl.karol202.paintplus.util.LayersSheetBehavior
 import pl.karol202.paintplus.util.MathUtils
 import pl.karol202.paintplus.util.collectIn
@@ -56,7 +56,8 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 
 		views.recyclerLayers.adapter = layersAdapter
 		views.buttonAddLayer.setOnClickListener {
-			OptionLayerNew(activity, paintViewModel.image) { layersAdapter.notifyDataSetChanged() }.execute()
+			OptionLayerNew(activity, paintViewModel.image) { layersAdapter.notifyDataSetChanged() }
+					.execute()
 		}
 
 		paintViewModel.imageFlow.collectIn(activity.lifecycleScope) { layersAdapter.image = it }

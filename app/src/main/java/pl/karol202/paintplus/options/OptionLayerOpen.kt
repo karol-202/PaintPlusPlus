@@ -20,16 +20,15 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.action.ActionLayerAdd
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection
+import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.getDisplayName
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerOpen(private val viewModel: PaintViewModel) : Option
+class OptionLayerOpen(private val viewModel: PaintViewModel,
+                      private val openOption: OptionOpen) : Option
 {
-	private val openOption = OptionOpen(viewModel, this::onResult)
-
-	fun execute() = openOption.execute()
+	fun execute() = openOption.execute(this::onResult)
 
 	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{

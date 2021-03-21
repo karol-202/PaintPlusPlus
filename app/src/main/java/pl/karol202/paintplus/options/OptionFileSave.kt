@@ -23,13 +23,12 @@ import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionFileSave(private val recentViewModel: RecentViewModel,
-                     private val paintViewModel: PaintViewModel) : Option
+                     private val paintViewModel: PaintViewModel,
+                     private val optionSave: OptionSave) : Option
 {
-	private val optionSave = OptionSave(paintViewModel, paintViewModel.image.fullImage, this::onResult)
+	fun execute() = optionSave.execute(paintViewModel.image.fullImage, this::onResult)
 
-	fun execute() = optionSave.execute()
-
-	fun executeWithUri(uri: Uri) = optionSave.executeWithUri(uri)
+	fun executeWithUri(uri: Uri) = optionSave.executeWithUri(paintViewModel.image.fullImage, this::onResult, uri)
 
 	fun executeWithUriAndFormat(uri: Uri, format: SaveFormat) = optionSave.executeWithUriAndFormat(uri, format)
 

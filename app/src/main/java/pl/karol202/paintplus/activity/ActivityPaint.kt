@@ -29,15 +29,13 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.karol202.paintplus.color.picker.ColorPickerContract
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
-import pl.karol202.paintplus.options.LegacyOption.AppContextLegacy
-import pl.karol202.paintplus.options.OptionFileCapturePhoto
-import pl.karol202.paintplus.options.OptionFileOpen
+import pl.karol202.paintplus.history.ActivityHistory
+import pl.karol202.paintplus.options.legacy.LegacyOption.AppContextLegacy
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.DialogDefinition
 import pl.karol202.paintplus.viewmodel.PaintViewModel
-import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 import java.util.*
 
 class ActivityPaint : AppCompatActivity(), AppContextLegacy
@@ -148,9 +146,9 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 
 	private fun openImageIfRequested() = when
 	{
-		openUri != null -> OptionFileOpen(recentViewModel, paintViewModel).executeWithUri(openUri!!)
-		openPicker -> OptionFileOpen(recentViewModel, paintViewModel).executeWithoutSaving()
-		openCamera -> OptionFileCapturePhoto(paintViewModel).execute()
+		openUri != null -> paintViewModel.openImage(openUri!!)
+		openPicker -> paintViewModel.openImageWithoutSaving()
+		openCamera -> paintViewModel.openImageFromCamera()
 		else -> {}
 	}
 
@@ -174,6 +172,8 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem) = actions.handleAction(item) || super.onOptionsItemSelected(item)
+
+	fun showHistoryActivity() = startActivity(Intent(this, ActivityHistory::class.java))
 
 	fun showSettingsActivity() = startActivity(Intent(this, ActivitySettings::class.java))
 

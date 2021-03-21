@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.options.legacy;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

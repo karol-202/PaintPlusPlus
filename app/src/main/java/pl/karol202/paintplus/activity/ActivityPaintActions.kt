@@ -20,50 +20,47 @@ import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.forEach
-import androidx.lifecycle.lifecycleScope
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
-import pl.karol202.paintplus.history.ActivityHistoryHelper
 import pl.karol202.paintplus.image.LegacyImage
 import pl.karol202.paintplus.options.*
+import pl.karol202.paintplus.options.legacy.*
 import pl.karol202.paintplus.recent.RecentViewModel
-import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.viewmodel.PaintViewModel
-import pl.karol202.paintplus.viewmodel.PaintViewModel.ImageEvent
 
 class ActivityPaintActions(private val activity: ActivityPaint,
-                           private val recentViewModel: RecentViewModel,
                            private val paintViewModel: PaintViewModel)
 {
 	private val menuInflater = activity.menuInflater
 	private val packageManager = activity.packageManager
 
-	private val image = paintViewModel.image
+	//private val image = paintViewModel.image
 
 	fun inflateMenu(menu: Menu?)
 	{
 		menuInflater.inflate(R.menu.menu_paint, menu)
 
-		paintViewModel.imageEventFlow.collectIn(activity.lifecycleScope) {
+		// TODO
+		/*paintViewModel.imageEventFlow.collectIn(activity.lifecycleScope) {
 			when(it)
 			{
 				ImageEvent.SELECTION_CHANGED -> activity.invalidateOptionsMenu()
 				ImageEvent.HISTORY_CHANGED -> activity.invalidateOptionsMenu()
 				else -> {}
 			}
-		}
+		}*/
 	}
 
 	fun prepareMenu(menu: Menu)
 	{
 		val anyDrawerOpen = activity.isAnyDrawerOpen
 		setItemsVisibility(menu, !anyDrawerOpen)
-		preparePhotoCaptureOption(menu)
+		/*preparePhotoCaptureOption(menu)
 		prepareFileOpenOption(menu)
 		prepareFileSaveOption(menu)
 		prepareHistoryOptions(menu)
 		prepareClipboardOptions(menu)
-		prepareSnapOptions(menu)
+		prepareSnapOptions(menu)*/
 	}
 
 	private fun setItemsVisibility(menu: Menu, visible: Boolean)
@@ -71,7 +68,7 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 		menu.forEach { it.isVisible = visible }
 	}
 
-	private fun preparePhotoCaptureOption(menu: Menu)
+	/*private fun preparePhotoCaptureOption(menu: Menu)
 	{
 		val hasCamera = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
 		menu.findItem(R.id.action_capture_photo).isEnabled = hasCamera
@@ -121,110 +118,54 @@ class ActivityPaintActions(private val activity: ActivityPaint,
 		val snapToGridItem = menu.findItem(R.id.action_snap_to_grid)
 		snapToGridItem.isChecked = grid && snapToGrid
 		snapToGridItem.isEnabled = grid
-	}
+	}*/
 
 	fun handleAction(item: MenuItem): Boolean
 	{
 		when(item.itemId)
 		{
-			R.id.action_layers ->
-				activity.toggleLayersSheet()
-			R.id.action_tool ->
-				activity.togglePropertiesDrawer()
-			R.id.action_new_image ->
-				OptionFileNew(paintViewModel).execute()
-			R.id.action_capture_photo ->
-				OptionFileCapturePhoto(paintViewModel).execute()
-			R.id.action_open_image ->
-				OptionFileOpen(recentViewModel, paintViewModel).execute()
-			R.id.action_save_image ->
-				if(image.lastFormat != null)
-					OptionFileSave(recentViewModel, paintViewModel).executeWithUriAndFormat(image.lastUri, image.lastFormat)
-				else OptionFileSave(recentViewModel, paintViewModel).executeWithUri(image.lastUri)
-			R.id.action_save_image_as ->
-				OptionFileSave(recentViewModel, paintViewModel).execute()
-			R.id.action_undo ->
-				image.undo()
-			R.id.action_redo ->
-				image.redo()
-			R.id.action_history ->
-				ActivityHistoryHelper(image, activity).startActivity()
-			R.id.action_cut ->
-			{
-				image.cut()
-				activity.invalidateOptionsMenu()
-			}
-			R.id.action_copy ->
-			{
-				image.copy()
-				activity.invalidateOptionsMenu()
-			}
-			R.id.action_paste ->
-				image.paste()
-			R.id.action_set_zoom ->
-				OptionSetZoom(paintViewModel).execute()
-			R.id.action_zoom_default ->
-				image.zoom = 1f
-			R.id.action_image_center ->
-				image.centerView()
-			R.id.action_grid ->
-			{
-				item.isChecked = !item.isChecked
-				image.helpersManager.grid.isEnabled = item.isChecked
-			}
-			R.id.action_snap_to_grid ->
-			{
-				item.isChecked = !item.isChecked
-				image.helpersManager.grid.isSnapToGrid = item.isChecked
-			}
-			R.id.action_resize_image ->
-				OptionImageResize(activity, image).execute()
-			R.id.action_scale_image ->
-				OptionImageScale(activity, image).execute()
-			R.id.action_flip_image ->
-				OptionImageFlip(paintViewModel).execute()
-			R.id.action_rotate_image ->
-				OptionImageRotate(paintViewModel).execute()
-			R.id.action_flatten_image ->
-				OptionImageFlatten(paintViewModel).execute()
-			R.id.action_crop_image_by_selection ->
-				OptionCropImageBySelection(paintViewModel).execute()
-			R.id.action_new_layer ->
-				OptionLayerNew(activity, image).execute()
-			R.id.action_open_layer ->
-				OptionLayerOpen(paintViewModel).execute()
-			R.id.action_save_layer ->
-				OptionLayerSave(recentViewModel, paintViewModel).execute()
-			R.id.action_resize_layer ->
-				OptionLayerResize(activity, image).execute()
-			R.id.action_scale_layer ->
-				OptionLayerScale(activity, image).execute()
-			R.id.action_flip_layer ->
-				OptionLayerFlip(paintViewModel).execute()
-			R.id.action_rotate_layer ->
-				OptionLayerRotate(activity, image).execute()
-			R.id.action_drag_layer ->
-				OptionLayerDrag(activity, image).execute()
-			R.id.action_layer_to_image_size ->
-				OptionLayerToImageSize(paintViewModel).execute()
-			R.id.action_crop_layer_by_selection ->
-				OptionCropLayerBySelection(paintViewModel).execute()
-			R.id.action_select_all ->
-				image.selectAll()
-			R.id.action_select_nothing ->
-				image.selectNothing()
-			R.id.action_revert_selection ->
-				image.revertSelection()
-			R.id.action_colors_invert ->
-				OptionColorsInvert(paintViewModel).execute()
-			R.id.action_colors_brightness ->
-				OptionColorsBrightness(activity, image).execute()
-			R.id.action_color_curves_rgb ->
-				OptionColorCurves(activity, image, ColorChannel.ColorChannelType.RGB).execute()
-			R.id.action_color_curves_hsv ->
-				OptionColorCurves(activity, image, ColorChannel.ColorChannelType.HSV).execute()
-			R.id.action_settings ->
-				activity.showSettingsActivity()
+			R.id.action_layers -> activity.toggleLayersSheet()
+			R.id.action_tool -> activity.togglePropertiesDrawer()
+			R.id.action_new_image -> paintViewModel.newImage()
+			R.id.action_capture_photo -> paintViewModel.openImageFromCamera()
+			R.id.action_open_image -> paintViewModel.openImage()
+			R.id.action_save_image -> paintViewModel.saveImage()
+			R.id.action_save_image_as -> paintViewModel.saveImageAs()
+			R.id.action_undo -> paintViewModel.undo()
+			R.id.action_redo -> paintViewModel.redo()
+			R.id.action_history -> activity.showHistoryActivity()
+			R.id.action_cut -> paintViewModel.cut()
+			R.id.action_copy -> paintViewModel.copy()
+			R.id.action_paste -> paintViewModel.paste()
+			R.id.action_set_zoom -> paintViewModel.changeZoom()
+			R.id.action_zoom_default -> paintViewModel.changeZoomToDefault()
+			R.id.action_image_center -> paintViewModel.centerImage()
+			R.id.action_grid -> paintViewModel.toggleGrid()
+			R.id.action_snap_to_grid -> paintViewModel.toggleSnapToGrid()
+			R.id.action_resize_image -> paintViewModel.resizeImage()
+			R.id.action_scale_image -> paintViewModel.scaleImage()
+			R.id.action_flip_image -> paintViewModel.flipImage()
+			R.id.action_rotate_image -> paintViewModel.rotateImage()
+			R.id.action_flatten_image -> paintViewModel.flattenImage()
+			R.id.action_crop_image_by_selection -> paintViewModel.cropImageBySelection()
+			R.id.action_new_layer -> paintViewModel.newLayer()
+			R.id.action_open_layer -> paintViewModel.openLayer()
+			R.id.action_save_layer -> paintViewModel.saveLayer()
+			R.id.action_resize_layer -> paintViewModel.resizeLayer()
+			R.id.action_scale_layer -> paintViewModel.scaleLayer()
+			R.id.action_flip_layer -> paintViewModel.flipLayer()
+			R.id.action_rotate_layer -> paintViewModel.rotateLayer()
+			R.id.action_drag_layer -> paintViewModel.dragLayer()
+			R.id.action_layer_to_image_size -> paintViewModel.fitLayerToImage()
+			R.id.action_crop_layer_by_selection -> paintViewModel.cropLayerBySelection()
+			R.id.action_select_all -> paintViewModel.selectAll()
+			R.id.action_select_nothing -> paintViewModel.selectNothing()
+			R.id.action_revert_selection -> paintViewModel.invertSelection()
+			R.id.action_colors_invert -> paintViewModel.invertColors()
+			R.id.action_colors_brightness -> paintViewModel.changeBrightness()
+			R.id.action_color_curves_rgb -> paintViewModel.changeColorCurves(ColorChannel.ColorChannelType.RGB)
+			R.id.action_color_curves_hsv -> paintViewModel.changeColorCurves(ColorChannel.ColorChannelType.HSV)
+			R.id.action_settings -> activity.showSettingsActivity()
 			else -> return false
 		}
 		return true

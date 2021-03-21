@@ -28,8 +28,7 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel.ActionRequest
 
 private const val MIME_FILTER = "image/*"
 
-class OptionOpen(private val viewModel: PaintViewModel,
-                 private val onResult: (OpenResult) -> Unit) : Option
+class OptionOpen(private val viewModel: PaintViewModel) : Option
 {
 	sealed class OpenResult
 	{
@@ -66,30 +65,31 @@ class OptionOpen(private val viewModel: PaintViewModel,
 
 	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
 
-	fun execute() = viewModel.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER), this::onUriSelected))
+	fun execute(onResult: (OpenResult) -> Unit) =
+			viewModel.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER)) { onUriSelected(onResult, it) })
 
-	private fun onUriSelected(uri: Uri?)
+	private fun onUriSelected(onResult: (OpenResult) -> Unit, uri: Uri?)
 	{
 		uri?.takePersistablePermission(viewModel.context) ?: return
-		executeWithUri(uri)
+		executeWithUri(onResult, uri)
 	}
 
-	fun executeWithUri(uri: Uri)
+	fun executeWithUri(onResult: (OpenResult) -> Unit, uri: Uri)
 	{
 		val bitmapSize = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException {
 			ImageLoader.getBitmapSize(it.fileDescriptor)
 		} ?: return onResult(OpenResult.Failed)
 
 		if(bitmapSize fitsIn maxSize)
-			openBitmap(uri)
+			openBitmap(onResult, uri)
 		else viewModel.showDialog {
 			ScaleDialog(it, bitmapSize.fitInto(maxSize)) {
-				openBitmap(uri)
+				openBitmap(onResult, uri)
 			}
 		}
 	}
 
-	private fun openBitmap(uri: Uri) = viewModel.postLongTask {
+	private fun openBitmap(onResult: (OpenResult) -> Unit, uri: Uri) = viewModel.postLongTask {
 		val result = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException { desc ->
 			val bitmap = ImageLoader.openBitmap(desc.fileDescriptor)?.fitInto(maxSize)
 			val exifOrientation = ImageLoader.getExifOrientation(desc.fileDescriptor)

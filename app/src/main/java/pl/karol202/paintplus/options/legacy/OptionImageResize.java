@@ -14,51 +14,47 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.options.legacy;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerResize;
+import pl.karol202.paintplus.history.action.ActionImageResize;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.layer.Layer;
 
-public class OptionLayerResize extends OptionResize
+public class OptionImageResize extends OptionResize
 {
-	private Layer layer;
-
-	public OptionLayerResize(AppContextLegacy context, LegacyImage image)
+	public OptionImageResize(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
-		this.layer = image.getSelectedLayer();
 	}
 
 	@Override
 	protected int getTitle()
 	{
-		return R.string.dialog_resize_layer;
+		return R.string.dialog_resize_image;
 	}
 
 	@Override
 	protected int getObjectWidth()
 	{
-		return layer.getWidth();
+		return getImage().getWidth();
 	}
 
 	@Override
 	protected int getObjectHeight()
 	{
-		return layer.getHeight();
+		return getImage().getHeight();
 	}
 
 	@Override
 	protected int getOldObjectWidth()
 	{
-		return layer.getWidth();
+		return getImage().getWidth();
 	}
 
 	@Override
 	protected int getOldObjectHeight()
 	{
-		return layer.getHeight();
+		return getImage().getHeight();
 	}
 
 	@Override
@@ -76,10 +72,10 @@ public class OptionLayerResize extends OptionResize
 	@Override
 	protected void applySize(int x, int y, int width, int height)
 	{
-		ActionLayerResize action = new ActionLayerResize(getImage());
-		action.setLayerBeforeResize(layer);
+		ActionImageResize action = new ActionImageResize(getImage());
+		action.setDataBeforeResizing(getImage().getWidth(), getImage().getHeight(), x, y);
 
-		layer.resize(x, y, width, height);
+		getImage().resize(x, y, width, height);
 
 		action.applyAction();
 	}

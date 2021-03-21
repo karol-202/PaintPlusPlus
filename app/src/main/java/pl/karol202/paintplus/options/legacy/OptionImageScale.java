@@ -14,15 +14,15 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.options;
+package pl.karol202.paintplus.options.legacy;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionImageResize;
+import pl.karol202.paintplus.history.action.ActionImageScale;
 import pl.karol202.paintplus.image.LegacyImage;
 
-public class OptionImageResize extends OptionResize
+public class OptionImageScale extends OptionScale
 {
-	public OptionImageResize(AppContextLegacy context, LegacyImage image)
+	public OptionImageScale(AppContextLegacy context, LegacyImage image)
 	{
 		super(context, image);
 	}
@@ -30,7 +30,7 @@ public class OptionImageResize extends OptionResize
 	@Override
 	protected int getTitle()
 	{
-		return R.string.dialog_resize_image;
+		return R.string.dialog_scale_image;
 	}
 
 	@Override
@@ -46,36 +46,11 @@ public class OptionImageResize extends OptionResize
 	}
 
 	@Override
-	protected int getOldObjectWidth()
+	protected void applySize(int width, int height, boolean smooth)
 	{
-		return getImage().getWidth();
-	}
+		ActionImageScale action = new ActionImageScale(getImage());
 
-	@Override
-	protected int getOldObjectHeight()
-	{
-		return getImage().getHeight();
-	}
-
-	@Override
-	protected int getObjectX()
-	{
-		return 0;
-	}
-
-	@Override
-	protected int getObjectY()
-	{
-		return 0;
-	}
-
-	@Override
-	protected void applySize(int x, int y, int width, int height)
-	{
-		ActionImageResize action = new ActionImageResize(getImage());
-		action.setDataBeforeResizing(getImage().getWidth(), getImage().getHeight(), x, y);
-
-		getImage().resize(x, y, width, height);
+		getImage().scale(width, height, smooth);
 
 		action.applyAction();
 	}

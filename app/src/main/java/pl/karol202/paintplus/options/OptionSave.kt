@@ -27,9 +27,7 @@ import pl.karol202.paintplus.file.*
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionSave(private val viewModel: PaintViewModel,
-                 private val bitmap: Bitmap,
-                 private val onResult: (SaveResult) -> Unit) : Option
+class OptionSave(private val viewModel: PaintViewModel) : Option
 {
 	sealed class SaveResult
 	{
@@ -102,51 +100,54 @@ class OptionSave(private val viewModel: PaintViewModel,
 		}
 	}
 
-	fun execute() =
-			viewModel.makeActionRequest(PaintViewModel.ActionRequest.SaveFile(getSuggestedName(), this::onUriSelected))
+	fun execute(bitmap: Bitmap, onResult: (SaveResult) -> Unit) =
+			viewModel.makeActionRequest(PaintViewModel.ActionRequest.SaveFile(getSuggestedName()) {
+				onUriSelected(bitmap, onResult, it)
+			})
 
 	private fun getSuggestedName() = viewModel.image.lastUri?.getDisplayName(viewModel.context) ?: ""
 
-	private fun onUriSelected(uri: Uri?)
+	private fun onUriSelected(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri?)
 	{
 		uri?.takePersistablePermission(viewModel.context) ?: return
-		executeWithUri(uri)
+		executeWithUri(bitmap, onResult, uri)
 	}
 
-	fun executeWithUri(uri: Uri)
+	fun executeWithUri(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri)
 	{
-		val formatType = getFileFormatType(uri) ?: return onError(uri, SaveResult.Failed.UnsupportedFormat)
-		executeWithUriAndFormatType(uri, formatType)
+		val formatType = getFileFormatType(uri) ?: return onError(onResult, uri, SaveResult.Failed.UnsupportedFormat)
+		executeWithUriAndFormatType(bitmap, onResult, uri, formatType)
 	}
 
 	private fun getFileFormatType(uri: Uri) = uri.getDisplayName(viewModel.context)?.let(SaveFormat.Type::fromExtension)
 
-	private fun executeWithUriAndFormatType(uri: Uri, formatType: SaveFormat.Type) = when(formatType)
+	private fun executeWithUriAndFormatType(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri,
+	                                        formatType: SaveFormat.Type) = when(formatType)
 	{
 		SaveFormat.Type.JPEG -> viewModel.showDialog {
 			JpegFormatDialog(it, SaveFormat.Jpeg()) { format ->
-				executeWithUriAndFormat(uri, format)
+				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
 		}
-		SaveFormat.Type.PNG -> executeWithUriAndFormat(uri, SaveFormat.Png)
-		SaveFormat.Type.WEBP -> executeWithUriAndFormat(uri, SaveFormat.Webp())
-		SaveFormat.Type.BMP -> executeWithUriAndFormat(uri, SaveFormat.Bmp)
+		SaveFormat.Type.PNG -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Png)
+		SaveFormat.Type.WEBP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Webp())
+		SaveFormat.Type.BMP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Bmp)
 		SaveFormat.Type.GIF -> viewModel.showDialog {
 			GifFormatDialog(it, SaveFormat.Gif()) { format ->
-				executeWithUriAndFormat(uri, format)
+				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
 		}
 	}
 
-	fun executeWithUriAndFormat(uri: Uri, format: SaveFormat) = viewModel.postLongTask {
+	fun executeWithUriAndFormat(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri, format: SaveFormat) = viewModel.postLongTask {
 		uri.openFileDescriptor(viewModel.context, FileDescriptorMode.WRITE)?.useSuppressingIOException { desc ->
 			val result = format.save(viewModel.context, desc.fileDescriptor.toFileOutputStream(), bitmap)
 			if(result) Unit else null
-		} ?: return@postLongTask onError(uri, SaveResult.Failed.CannotSave)
+		} ?: return@postLongTask onError(onResult, uri, SaveResult.Failed.CannotSave)
 		onResult(SaveResult.Success(uri, format))
 	}
 
-	private fun onError(uriToDelete: Uri?, error: SaveResult.Failed)
+	private fun onError(onResult: (SaveResult) -> Unit, uriToDelete: Uri?, error: SaveResult.Failed)
 	{
 		uriToDelete?.delete(viewModel.context)
 		onResult(error)

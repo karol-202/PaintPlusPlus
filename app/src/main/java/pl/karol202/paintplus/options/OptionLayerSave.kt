@@ -23,11 +23,10 @@ import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerSave(private val recentViewModel: RecentViewModel,
-                      private val paintViewModel: PaintViewModel) : Option
+                      private val paintViewModel: PaintViewModel,
+                      private val optionSave: OptionSave) : Option
 {
-	private val optionSave = OptionSave(paintViewModel, paintViewModel.image.selectedLayer.bitmap, this::onResult)
-
-	fun execute() = optionSave.execute()
+	fun execute() = optionSave.execute(paintViewModel.image.selectedLayer.bitmap, this::onResult)
 
 	private fun onResult(result: OptionSave.SaveResult) = when(result)
 	{

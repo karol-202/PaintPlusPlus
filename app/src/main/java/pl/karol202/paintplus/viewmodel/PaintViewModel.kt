@@ -10,24 +10,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import pl.karol202.paintplus.R
+import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.image.ColorsService
 import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.LegacyImage
 import pl.karol202.paintplus.image.layer.mode.LayerModesService
+import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
 import pl.karol202.paintplus.tool.ToolsService
-
-private const val DEFAULT_IMAGE_WIDTH = 600
-private const val DEFAULT_IMAGE_HEIGHT = 600
 
 class PaintViewModel(application: Application,
                      settingsRepository: SettingsRepository,
                      imageService: ImageService,
                      private val toolsService: ToolsService,
                      private val colorService: ColorsService,
-                     private val layerModesService: LayerModesService) : BaseViewModel(application)
+                     private val layerModesService: LayerModesService,
+                     private val optionColorsInvert: OptionColorsInvert,
+                     private val optionCropImageBySelection: OptionCropImageBySelection,
+                     private val optionCropLayerBySelection: OptionCropLayerBySelection,
+                     private val optionFileCapturePhoto: OptionFileCapturePhoto,
+                     private val optionFileNew: OptionFileNew,
+                     private val optionFileOpen: OptionFileOpen,
+                     private val optionFileSave: OptionFileSave,
+                     private val optionImageFlatten: OptionImageFlatten,
+                     private val optionImageFlip: OptionImageFlip,
+                     private val optionImageRotate: OptionImageRotate,
+                     private val optionLayerFlip: OptionLayerFlip,
+                     private val optionLayerOpen: OptionLayerOpen,
+                     private val optionLayerSave: OptionLayerSave,
+                     private val optionLayerToImageSize: OptionLayerToImageSize,
+                     private val optionSetZoom: OptionSetZoom) : BaseViewModel(application)
 {
 	enum class TitleOverride
 	{
@@ -81,6 +94,87 @@ class PaintViewModel(application: Application,
 			TitleOverride.TOOL_PROPERTIES -> context.getString(R.string.properties, toolName)
 		}
 	}
+
+	fun newImage() = optionFileNew.execute()
+
+	fun openImage() = optionFileOpen.execute()
+
+	fun openImage(uri: Uri) = optionFileOpen.executeWithUri(uri)
+
+	fun openImageWithoutSaving() = optionFileOpen.executeWithoutSaving()
+
+	fun openImageFromCamera() = optionFileCapturePhoto.execute()
+
+	// TODO Check for last format: executeWithUriAndFormat(image.lastUri, image.lastFormat) / executeWithUri(image.lastUri)
+	fun saveImage() = optionFileSave.execute()
+
+	fun saveImageAs() = optionFileSave.execute()
+
+	fun resizeImage() = optionTodo()
+
+	fun scaleImage() = optionTodo()
+
+	fun flipImage() = optionImageFlip.execute()
+
+	fun rotateImage() = optionImageRotate.execute()
+
+	fun flattenImage() = optionImageFlatten.execute()
+
+	fun cropImageBySelection() = optionCropImageBySelection.execute()
+
+	fun newLayer() = optionTodo()
+
+	fun openLayer() = optionLayerOpen.execute()
+
+	fun saveLayer() = optionLayerSave.execute()
+
+	fun dragLayer() = optionTodo()
+
+	fun resizeLayer() = optionTodo()
+
+	fun scaleLayer() = optionTodo()
+
+	fun flipLayer() = optionLayerFlip.execute()
+
+	fun rotateLayer() = optionTodo()
+
+	fun fitLayerToImage() = optionLayerToImageSize.execute()
+
+	fun cropLayerBySelection() = optionCropLayerBySelection.execute()
+
+	fun undo() = optionTodo()
+
+	fun redo() = optionTodo()
+
+	fun cut() = optionTodo()
+
+	fun copy() = optionTodo()
+
+	fun paste() = optionTodo()
+
+	fun changeZoom() = optionSetZoom.execute()
+
+	fun changeZoomToDefault() = optionTodo()
+
+	fun centerImage() = optionTodo()
+
+	fun toggleGrid() = optionTodo()
+
+	fun toggleSnapToGrid() = optionTodo()
+
+	fun selectAll() = optionTodo()
+
+	fun selectNothing() = optionTodo()
+
+	fun invertSelection() = optionTodo()
+
+	fun invertColors() = optionColorsInvert.execute()
+
+	fun changeBrightness() = optionTodo()
+
+	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionTodo()
+
+	private fun optionTodo(): Unit = TODO()
 
 	fun setCurrentTool(tool: Tool) = toolsService.setCurrentTool(tool)
 

@@ -20,14 +20,15 @@ import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
+import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.image.LegacyImage
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection
-import pl.karol202.paintplus.image.LegacyImage.RotationAmount
+import pl.karol202.paintplus.image.RotationAmount
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionFileOpen(private val recentViewModel: RecentViewModel,
-                     private val paintViewModel: PaintViewModel) : Option
+                     private val paintViewModel: PaintViewModel,
+                     private val openOption: OptionOpen) : Option
 {
 	class UnsavedDialog(builder: AlertDialog.Builder,
 	                    onApply: () -> Unit) : Option.BasicDialog(builder)
@@ -41,8 +42,6 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 		}
 	}
 
-	private val openOption = OptionOpen(paintViewModel, this::onResult)
-
 	fun execute()
 	{
 		if(paintViewModel.image.wasModifiedSinceLastSave()) askAboutChanges() else executeWithoutSaving()
@@ -52,9 +51,9 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 		UnsavedDialog(it) { executeWithoutSaving() }
 	}
 
-	fun executeWithoutSaving() = openOption.execute()
+	fun executeWithoutSaving() = openOption.execute(this::onResult)
 
-	fun executeWithUri(uri: Uri) = openOption.executeWithUri(uri)
+	fun executeWithUri(uri: Uri) = openOption.executeWithUri(this::onResult, uri)
 
 	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{

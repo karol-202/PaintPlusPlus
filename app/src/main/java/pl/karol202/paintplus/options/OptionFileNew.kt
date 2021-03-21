@@ -24,6 +24,7 @@ import pl.karol202.paintplus.databinding.DialogNewImageBinding
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
+// TODO Change File to Image in all names
 class OptionFileNew(private val viewModel: PaintViewModel) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
