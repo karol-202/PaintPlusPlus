@@ -33,7 +33,7 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.image.LegacySelection;
 
 import java.util.Locale;
 
@@ -125,7 +125,7 @@ public class OptionColorsBrightness extends LegacyOption implements DialogInterf
 		ActionLayerChange action = new ActionLayerChange(getImage(), R.string.history_action_brightness);
 		action.setLayerChange(getImage().getLayerIndex(layer), layer.getBitmap());
 
-		Selection selection = getImage().getSelection();
+		LegacySelection selection = getImage().getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 
 		BrightnessParams params = new BrightnessParams(manipulatorSelection);

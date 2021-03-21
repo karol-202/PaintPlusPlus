@@ -40,7 +40,7 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.image.LegacySelection;
 import pl.karol202.paintplus.util.SeekBarTouchListener;
 
 import static pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType.HSV;
@@ -131,7 +131,7 @@ public class OptionColorCurves extends LegacyOption implements OnClickListener, 
 		ActionLayerChange action = new ActionLayerChange(getImage(), R.string.history_action_color_curves);
 		action.setLayerChange(getImage().getLayerIndex(layer), layer.getBitmap());
 
-		Selection selection = getImage().getSelection();
+		LegacySelection selection = getImage().getSelection();
 		ManipulatorSelection manipulatorSelection = ManipulatorSelection.fromSelection(selection, layer.getBounds());
 
 		CurveManipulatorParams params = new CurveManipulatorParams(manipulatorSelection, channelType);

@@ -2,6 +2,7 @@ package pl.karol202.paintplus.image
 
 import android.util.Size
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import pl.karol202.paintplus.util.MathUtils.lerp
 import pl.karol202.paintplus.util.MathUtils.map
 import pl.karol202.paintplus.util.rectF
@@ -11,9 +12,14 @@ class ViewService(private val imageService: ImageService)
 	private val _viewPositionFlow = MutableStateFlow(ViewPosition())
 	private val _viewportSizeFlow = MutableStateFlow(Size(0, 0))
 
-	private val viewX get() = _viewPositionFlow.value.x
-	private val viewY get() = _viewPositionFlow.value.y
-	private val zoom get() = _viewPositionFlow.value.zoom
+	val viewPositionFlow: StateFlow<ViewPosition> = _viewPositionFlow
+
+	val viewPosition get() = _viewPositionFlow.value
+	val viewportSize get() = _viewportSizeFlow.value
+	val viewX get() = viewPosition.x
+	val viewY get() = viewPosition.y
+	val zoom get() = viewPosition.zoom
+
 	private val viewportWidth get() = _viewportSizeFlow.value.width
 	private val viewportHeight get() = _viewportSizeFlow.value.height
 	private val imageWidth get() = imageService.imageWidth
@@ -25,6 +31,8 @@ class ViewService(private val imageService: ImageService)
 				x = (imageWidth - viewportWidth / zoom) / 2f,
 				y = (imageHeight - viewportHeight / zoom) / 2f)
 	}
+
+	fun setDefaultZoom() = setZoom(1f, 0.5f, 0.5f)
 
 	fun setZoom(zoom: Float, focusX: Float, focusY: Float)
 	{
@@ -39,5 +47,10 @@ class ViewService(private val imageService: ImageService)
 				y = viewY + lerp(focusYInImage, offsetYTop, offsetYBottom),
 				zoom = zoom
 		)
+	}
+
+	fun setViewportSize(size: Size)
+	{
+		_viewportSizeFlow.value = size
 	}
 }

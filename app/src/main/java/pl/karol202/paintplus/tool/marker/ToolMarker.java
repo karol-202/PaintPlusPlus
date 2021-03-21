@@ -19,7 +19,6 @@ package pl.karol202.paintplus.tool.marker;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.history.action.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;

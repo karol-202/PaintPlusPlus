@@ -15,11 +15,14 @@
  */
 package pl.karol202.paintplus.options
 
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.action.ActionImageFlatten
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionImageFlatten(private val viewModel: PaintViewModel) : Option
 {
+	private val flattenedLayerName = context.getString(R.string.flattened)
+
 	fun execute()
 	{
 		val action = ActionImageFlatten(viewModel.image)

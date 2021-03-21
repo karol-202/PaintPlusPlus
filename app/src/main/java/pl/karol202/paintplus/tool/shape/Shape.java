@@ -20,8 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import pl.karol202.paintplus.color.ColorsSet;
-import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.helpers.HelpersService;
 import pl.karol202.paintplus.image.LegacyImage;
 
 public abstract class Shape
@@ -38,7 +37,7 @@ public abstract class Shape
 	private boolean editMode;
 	private Paint paint;
 	private ColorsSet colors;
-	private HelpersManager helpersManager;
+	private HelpersService helpersManager;
 
 	public Shape(LegacyImage image, OnShapeEditListener shapeEditListener)
 	{
@@ -127,7 +126,7 @@ public abstract class Shape
 		return paint;
 	}
 
-	protected HelpersManager getHelpersManager()
+	protected HelpersService getHelpersManager()
 	{
 		return helpersManager;
 	}

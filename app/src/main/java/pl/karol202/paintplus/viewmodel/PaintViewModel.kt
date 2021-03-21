@@ -3,6 +3,7 @@ package pl.karol202.paintplus.viewmodel
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import android.util.Size
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
@@ -12,8 +13,8 @@ import kotlinx.coroutines.launch
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
-import pl.karol202.paintplus.image.ColorsService
-import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.helpers.HelpersService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.mode.LayerModesService
 import pl.karol202.paintplus.options.*
@@ -24,12 +25,18 @@ import pl.karol202.paintplus.tool.ToolsService
 class PaintViewModel(application: Application,
                      settingsRepository: SettingsRepository,
                      imageService: ImageService,
+                     private val viewService: ViewService,
                      private val toolsService: ToolsService,
                      private val colorService: ColorsService,
+                     private val selectionService: SelectionService,
+                     private val historyService: HistoryService,
+                     private val helpersService: HelpersService,
                      private val layerModesService: LayerModesService,
                      private val optionColorsInvert: OptionColorsInvert,
+                     private val optionCopy: OptionCopy,
                      private val optionCropImageBySelection: OptionCropImageBySelection,
                      private val optionCropLayerBySelection: OptionCropLayerBySelection,
+                     private val optionCut: OptionCut,
                      private val optionFileCapturePhoto: OptionFileCapturePhoto,
                      private val optionFileNew: OptionFileNew,
                      private val optionFileOpen: OptionFileOpen,
@@ -37,6 +44,7 @@ class PaintViewModel(application: Application,
                      private val optionImageFlatten: OptionImageFlatten,
                      private val optionImageFlip: OptionImageFlip,
                      private val optionImageRotate: OptionImageRotate,
+                     private val optionInvertSelection: OptionInvertSelection,
                      private val optionLayerChangeOrder: OptionLayerChangeOrder,
                      private val optionLayerDelete: OptionLayerDelete,
                      private val optionLayerDuplicate: OptionLayerDuplicate,
@@ -50,6 +58,9 @@ class PaintViewModel(application: Application,
                      private val optionLayerSelect: OptionLayerSelect,
                      private val optionLayerToImageSize: OptionLayerToImageSize,
                      private val optionLayerVisibilityToggle: OptionLayerVisibilityToggle,
+                     private val optionPaste: OptionPaste,
+                     private val optionSelectAll: OptionSelectAll,
+                     private val optionSelectNothing: OptionSelectNothing,
                      private val optionSetZoom: OptionSetZoom) : BaseViewModel(application)
 {
 	enum class TitleOverride
@@ -82,8 +93,10 @@ class PaintViewModel(application: Application,
 	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(extraBufferCapacity = 16)
 
 	val imageFlow = imageService.imageFlow
+	val viewPositionFlow = viewService.viewPositionFlow
 	val currentToolFlow = toolsService.currentToolFlow
 	val currentColorFlow = colorService.currentColorFlow
+	val selectionFlow = selectionService.selectionFlow
 	val settingsFlow = settingsRepository.settings
 	val titleFlow = _titleOverrideFlow.combine(currentToolFlow) { override, tool -> createTitle(override, tool) }
 	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
@@ -169,31 +182,31 @@ class PaintViewModel(application: Application,
 
 	fun deleteLayer(layer: Layer) = optionLayerDelete.execute(layer)
 
-	fun undo() = optionTodo()
+	fun undo() = historyService.undo()
 
-	fun redo() = optionTodo()
+	fun redo() = historyService.redo()
 
-	fun cut() = optionTodo()
+	fun cut() = optionCut.execute()
 
-	fun copy() = optionTodo()
+	fun copy() = optionCopy.execute()
 
-	fun paste() = optionTodo()
+	fun paste() = optionPaste.execute()
 
 	fun changeZoom() = optionSetZoom.execute()
 
-	fun changeZoomToDefault() = optionTodo()
+	fun changeZoomToDefault() = viewService.setDefaultZoom()
 
-	fun centerImage() = optionTodo()
+	fun centerImage() = viewService.centerView()
 
-	fun toggleGrid() = optionTodo()
+	fun toggleGrid() = helpersService.grid.toggleGrid()
 
-	fun toggleSnapToGrid() = optionTodo()
+	fun toggleSnapToGrid() = helpersService.grid.toggleSnapping()
 
-	fun selectAll() = optionTodo()
+	fun selectAll() = optionSelectAll.execute()
 
-	fun selectNothing() = optionTodo()
+	fun selectNothing() = optionSelectNothing.execute()
 
-	fun invertSelection() = optionTodo()
+	fun invertSelection() = optionInvertSelection.execute()
 
 	fun invertColors() = optionColorsInvert.execute()
 
@@ -202,6 +215,8 @@ class PaintViewModel(application: Application,
 	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionTodo()
 
 	private fun optionTodo(): Unit = TODO()
+
+	fun setViewportSize(size: Size) = viewService.setViewportSize(size)
 
 	fun setCurrentTool(tool: Tool) = toolsService.setCurrentTool(tool)
 

@@ -21,15 +21,13 @@ import android.graphics.*;
 import android.net.Uri;
 import android.util.Size;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.color.ColorsSet;
 import pl.karol202.paintplus.file.SaveFormat;
-import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.helpers.HelpersService;
 import pl.karol202.paintplus.history.History;
 import pl.karol202.paintplus.history.OnHistoryUpdateListener;
 import pl.karol202.paintplus.history.action.Action;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.selection.Selection;
-import pl.karol202.paintplus.tool.selection.Selection.OnSelectionChangeListener;
+import pl.karol202.paintplus.image.LegacySelection.OnSelectionChangeListener;
 import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.ArrayList;
@@ -62,9 +60,9 @@ public class LegacyImage
 
 	private OnImageChangeListener listener;
 	private ColorsSet colorsSet;
-	private Selection selection;
+	private LegacySelection selection;
 	private Clipboard clipboard;
-	private HelpersManager helpersManager;
+	private HelpersService helpersManager;
 	private History history;
 
 	private float viewX;
@@ -86,9 +84,9 @@ public class LegacyImage
 
 		this.layers = new ArrayList<>();
 		this.colorsSet = ColorsSet.getDefault();
-		this.selection = new Selection(this);
+		this.selection = new LegacySelection(this);
 		this.clipboard = new Clipboard(this, context.getString(R.string.pasted_layer));
-		this.helpersManager = new HelpersManager(this, context.getResources());
+		this.helpersManager = new HelpersService(this, context.getResources());
 		this.history = new History();
 
 		this.zoom = 1;
@@ -467,7 +465,7 @@ public class LegacyImage
 		return colorsSet;
 	}
 
-	public Selection getSelection()
+	public LegacySelection getSelection()
 	{
 		return selection;
 	}
@@ -477,7 +475,7 @@ public class LegacyImage
 		return clipboard;
 	}
 
-	public HelpersManager getHelpersManager()
+	public HelpersService getHelpersManager()
 	{
 		return helpersManager;
 	}

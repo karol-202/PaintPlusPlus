@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.color.manipulators.params;
 
 import android.graphics.Rect;
-import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.image.LegacySelection;
 
 public class ManipulatorSelection
 {
@@ -32,7 +32,7 @@ public class ManipulatorSelection
 
 	// Creates array of bytes corresponding to pixels of selection in given bounds.
 	// 0 - false, 1 - true
-	public static ManipulatorSelection fromSelection(Selection selection, Rect layerBounds)
+	public static ManipulatorSelection fromSelection(LegacySelection selection, Rect layerBounds)
 	{
 		Rect bounds = selection.getBounds();
 		if(bounds.isEmpty() || !bounds.intersect(layerBounds)) return null;

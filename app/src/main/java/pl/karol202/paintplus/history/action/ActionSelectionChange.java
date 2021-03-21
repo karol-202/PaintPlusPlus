@@ -19,7 +19,7 @@ package pl.karol202.paintplus.history.action;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.image.LegacySelection;
 
 public class ActionSelectionChange extends Action
 {
@@ -75,7 +75,7 @@ public class ActionSelectionChange extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image) || region == null) return false;
-		Selection selection = image.getSelection();
+		LegacySelection selection = image.getSelection();
 		Region newRegion = selection.getRegion();
 		selection.setRegion(region);
 		region = newRegion;
@@ -88,7 +88,7 @@ public class ActionSelectionChange extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image) || region == null) return false;
-		Selection selection = image.getSelection();
+		LegacySelection selection = image.getSelection();
 		Region oldRegion = selection.getRegion();
 		selection.setRegion(region);
 		region = oldRegion;

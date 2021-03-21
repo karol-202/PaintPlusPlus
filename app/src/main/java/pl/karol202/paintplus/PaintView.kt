@@ -23,7 +23,9 @@ import android.util.Size
 import android.view.MotionEvent
 import android.view.SurfaceView
 import androidx.core.graphics.*
+import pl.karol202.paintplus.helpers.Helper
 import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.Selection
 import pl.karol202.paintplus.image.ViewPosition
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.Tool
@@ -39,7 +41,9 @@ class PaintView(context: Context,
 	var image by invalidating(null as Image?).require()
 	var viewPosition by invalidating(ViewPosition())
 	var currentTool by invalidating(null as Tool?).require()
-	var filtering: Boolean = false
+	var selection by invalidating(Selection.empty)
+	var helpers by invalidating(emptyList<Helper>())
+	var filtering by invalidating(false)
 	var onViewportSizeChangeListener: ((Size) -> Unit)? = null
 
 	private val checkerboardShader =
@@ -102,7 +106,7 @@ class PaintView(context: Context,
 		drawImage(canvas)
 		drawLayerBounds(canvas)
 		drawSelection(canvas)
-		helpersManager.onScreenDraw(canvas)
+		helpers.forEach { it.onScreenDraw(canvas) }
 	}
 
 	private fun drawCheckerboard(canvas: Canvas)

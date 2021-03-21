@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.selection;
+package pl.karol202.paintplus.image;
 
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import static android.graphics.Path.Direction.CW;
 
-public class Selection
+public class LegacySelection
 {
 	public interface OnSelectionChangeListener
 	{
@@ -42,7 +42,7 @@ public class Selection
 	private Path path;
 	private boolean empty;
 
-	public Selection(LegacyImage image)
+	public LegacySelection(LegacyImage image)
 	{
 		this.listeners = new ArrayList<>();
 		this.image = image;
@@ -77,7 +77,7 @@ public class Selection
 		commitSelectionRectangle(imageRect, Op.XOR);
 	}
 
-	void commitSelectionRectangle(Rect rect, Op op)
+	public void commitSelectionRectangle(Rect rect, Op op)
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
 		action.setOldRegion();
@@ -88,7 +88,7 @@ public class Selection
 		action.applyAction();
 	}
 
-	void commitSelectionOval(Rect rect, Op op)
+	public void commitSelectionOval(Rect rect, Op op)
 	{
 		ActionSelectionChange action = new ActionSelectionChange(image);
 		action.setOldRegion();

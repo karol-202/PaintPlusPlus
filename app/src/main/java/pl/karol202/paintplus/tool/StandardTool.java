@@ -21,16 +21,16 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.view.MotionEvent;
-import pl.karol202.paintplus.helpers.HelpersManager;
+import pl.karol202.paintplus.helpers.HelpersService;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.tool.selection.Selection;
+import pl.karol202.paintplus.image.LegacySelection;
 
 public abstract class StandardTool implements Tool
 {
 	protected LegacyImage image;
-	protected Selection selection;
-	protected HelpersManager helpersManager;
+	protected LegacySelection selection;
+	protected HelpersService helpersManager;
 
 	private Path selectionPath;
 	protected Layer layer;
