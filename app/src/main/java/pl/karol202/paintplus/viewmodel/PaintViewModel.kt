@@ -14,6 +14,7 @@ import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.image.ColorsService
 import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.mode.LayerModesService
 import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.settings.SettingsRepository
@@ -36,10 +37,19 @@ class PaintViewModel(application: Application,
                      private val optionImageFlatten: OptionImageFlatten,
                      private val optionImageFlip: OptionImageFlip,
                      private val optionImageRotate: OptionImageRotate,
+                     private val optionLayerChangeOrder: OptionLayerChangeOrder,
+                     private val optionLayerDelete: OptionLayerDelete,
+                     private val optionLayerDuplicate: OptionLayerDuplicate,
                      private val optionLayerFlip: OptionLayerFlip,
+                     private val optionLayerInfoShow: OptionLayerInfoShow,
+                     private val optionLayerMergeDown: OptionLayerMergeDown,
+                     private val optionLayerNameChange: OptionLayerNameChange,
                      private val optionLayerOpen: OptionLayerOpen,
+                     private val optionLayerPropertiesEdit: OptionLayerPropertiesEdit,
                      private val optionLayerSave: OptionLayerSave,
+                     private val optionLayerSelect: OptionLayerSelect,
                      private val optionLayerToImageSize: OptionLayerToImageSize,
+                     private val optionLayerVisibilityToggle: OptionLayerVisibilityToggle,
                      private val optionSetZoom: OptionSetZoom) : BaseViewModel(application)
 {
 	enum class TitleOverride
@@ -82,7 +92,6 @@ class PaintViewModel(application: Application,
 
 	val currentTool get() = currentToolFlow.value
 	val currentColor get() = currentColorFlow.value
-	val layerModes get() = layerModesService.layerModes
 
 	private fun createTitle(override: TitleOverride, tool: Tool): String
 	{
@@ -141,6 +150,24 @@ class PaintViewModel(application: Application,
 	fun fitLayerToImage() = optionLayerToImageSize.execute()
 
 	fun cropLayerBySelection() = optionCropLayerBySelection.execute()
+
+	fun changeLayerOrder(layerIndex: Int, target: Int) = optionLayerChangeOrder.execute(layerIndex, target)
+
+	fun showLayerInfo(layer: Layer) = optionLayerInfoShow.execute(layer)
+
+	fun editLayerProperties(layer: Layer) = optionLayerPropertiesEdit.execute(layer)
+
+	fun selectLayer(layer: Layer) = optionLayerSelect.execute(layer)
+
+	fun toggleLayerVisibility(layer: Layer) = optionLayerVisibilityToggle.execute(layer)
+
+	fun changeLayerName(layer: Layer) = optionLayerNameChange.execute(layer)
+
+	fun duplicateLayer(layer: Layer) = optionLayerDuplicate.execute(layer)
+
+	fun mergeLayerDown(layer: Layer) = optionLayerMergeDown.execute(layer)
+
+	fun deleteLayer(layer: Layer) = optionLayerDelete.execute(layer)
 
 	fun undo() = optionTodo()
 
@@ -205,6 +232,7 @@ class PaintViewModel(application: Application,
 		_actionRequestEventFlow.tryEmit(request)
 	}
 
+	// TODO Split task into two parts: asynchronous operation and result callback (executed in UI thread)
 	fun postLongTask(task: () -> Unit)
 	{
 		viewModelScope.launch(Dispatchers.IO) { task() }

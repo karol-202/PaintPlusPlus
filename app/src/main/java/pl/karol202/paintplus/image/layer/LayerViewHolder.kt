@@ -131,14 +131,6 @@ class LayerViewHolder(private val views: ItemLayerBinding,
 		rippleDrawable = drawable as RippleDrawable?
 	}
 
-	// TODO Select
-	/*{
-		if(adapter.isLayerSelected(layer) || adapter.areLayersLocked()) return
-		adapter.notifyItemChanged(adapter.image.selectedLayerIndex)
-		adapter.image.selectLayer(layer)
-		bind(layer)
-	}*/
-
 	private fun showRipple(x: Float, y: Float)
 	{
 		rippleDrawable?.setHotspot(x, y)
@@ -168,23 +160,10 @@ class LayerViewHolder(private val views: ItemLayerBinding,
 				return false
 			}
 			if(event.action == MotionEvent.ACTION_MOVE) layerHandle.onTouchMove(x, y)
-			else if(event.action == MotionEvent.ACTION_UP) layerHandle.onTouchStop(x, y)
+			else if(event.action == MotionEvent.ACTION_UP) layerHandle.onTouchStop(y)
 		}
 		return true
 	}
-
-	/*private fun toggleVisibility()
-	{
-		val action = ActionLayerVisibilityChange(adapter.image)
-		action.setLayerBeforeChange(layer)
-		layer.setVisibility(!layer!!.visible)
-		if(adapter.isLayerSelected(layer))
-			views.buttonLayerVisibility.setImageResource(if(layer!!.visible) R.drawable.ic_visible_white_24dp
-			                                             else R.drawable.ic_invisible_white_24dp)
-		else views.buttonLayerVisibility.setImageResource(if(layer!!.visible) R.drawable.ic_visible_black_24dp
-		                                            else R.drawable.ic_invisible_black_24dp)
-		action.applyAction()
-	}*/
 
 	private fun showMenu() = PopupMenu(context, views.buttonLayerMenu).run {
 		setOnMenuItemClickListener(this@LayerViewHolder::onMenuItemClick)
@@ -198,53 +177,16 @@ class LayerViewHolder(private val views: ItemLayerBinding,
 	{
 		when(item.itemId)
 		{
-			R.id.action_layer_info -> onInfoShow(layer) //
-			R.id.action_layer_properties -> onPropertiesEdit(layer) //
-			R.id.action_layer_change_name -> onNameChange(layer) // showNameDialog()
-			R.id.action_layer_duplicate -> onDuplicate(layer) // adapter.duplicateLayer(layer)
-			R.id.action_merge -> onMerge(layer) // adapter.joinWithNextLayer(layer)
-			R.id.action_layer_delete -> onDelete(layer) // delete()
+			R.id.action_layer_info -> onInfoShow(layer)
+			R.id.action_layer_properties -> onPropertiesEdit(layer)
+			R.id.action_layer_change_name -> onNameChange(layer)
+			R.id.action_layer_duplicate -> onDuplicate(layer)
+			R.id.action_merge -> onMerge(layer)
+			R.id.action_layer_delete -> onDelete(layer)
 			else -> return false
 		}
 		return true
 	}
-
-	/*@SuppressLint("InflateParams")
-	private fun showNameDialog()
-	{
-		val inflater = LayoutInflater.from(context)
-		val dialogView = inflater.inflate(R.layout.dialog_layer_name, null, false)
-		val builder = AlertDialog.Builder(context)
-		builder.setView(dialogView)
-		builder.setTitle(R.string.dialog_layer_name)
-		val editTextName = dialogView.findViewById<EditText>(R.id.edit_layer_name)
-		editTextName.setText(layer!!.name)
-		builder.setPositiveButton(R.string.ok) { _, _ ->
-			val action = ActionLayerNameChange(adapter.image)
-			action.setLayer(layer)
-			layer.setName(editTextName.text.toString())
-			adapter.notifyDataSetChanged()
-			action.applyAction()
-		}
-		builder.setNegativeButton(R.string.cancel, null)
-		builder.show()
-	}
-
-	private fun delete()
-	{
-		val message = context.getString(R.string.dialog_layer_delete, layer!!.name)
-		val builder = AlertDialog.Builder(context)
-		builder.setMessage(message)
-		builder.setPositiveButton(R.string.layer_delete) { _, _ ->
-			val action = ActionLayerDelete(adapter.image)
-			action.setLayerBeforeDeleting(layer)
-			adapter.image.deleteLayer(layer)
-			adapter.notifyDataSetChanged()
-			action.applyAction()
-		}
-		builder.setNegativeButton(R.string.cancel, null)
-		builder.show()
-	}*/
 
 	fun hide()
 	{

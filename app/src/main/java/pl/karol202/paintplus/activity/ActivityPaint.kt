@@ -47,11 +47,10 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		const val ARG_OPEN_CAMERA = "open_camera"
 	}
 
-	private val recentViewModel by viewModel<RecentViewModel>()
 	private val paintViewModel by viewModel<PaintViewModel>()
 	private val views by viewBinding(ActivityPaintBinding::inflate)
 
-	private val actions by lazy { ActivityPaintActions(this, recentViewModel, paintViewModel) }
+	private val actions by lazy { ActivityPaintActions(this, paintViewModel) }
 	private val drawers by lazy { ActivityPaintDrawers(this, views, paintViewModel) }
 	private val layers by lazy { ActivityPaintLayers(this, views, paintViewModel) }
 
@@ -62,7 +61,6 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	private var currentDialog: AlertDialog? = null
 
 	val isAnyDrawerOpen get() = drawers.isAnyDrawerOpen
-	val mainContainer get() = views.mainContainer
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -78,6 +76,9 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 
 		drawers.initDrawers()
 		layers.initLayers()
+
+		// TODO
+		views.paintView.onViewportSizeChangeListener = { }
 	}
 
 	private fun observeViewModel()
@@ -182,8 +183,6 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	fun toggleLayersSheet() = layers.toggleLayersSheet()
 
 	fun closeLayersSheet() = layers.closeLayersSheet()
-
-	fun setScrollingBlocked(blocked: Boolean) = layers.setScrollingBlocked(blocked)
 
 	// LEGACY
 

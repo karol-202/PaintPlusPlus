@@ -40,7 +40,7 @@ class PaintView(context: Context,
 	var viewPosition by invalidating(ViewPosition())
 	var currentTool by invalidating(null as Tool?).require()
 	var filtering: Boolean = false
-	var onViewportSizeChange: ((Size) -> Unit)? = null
+	var onViewportSizeChangeListener: ((Size) -> Unit)? = null
 
 	private val checkerboardShader =
 			BitmapShader(BitmapFactory.decodeResource(context.resources, R.drawable.checkerboard),
@@ -165,7 +165,7 @@ class PaintView(context: Context,
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int)
 	{
-		onViewportSizeChange?.invoke(Size(w, h))
+		onViewportSizeChangeListener?.invoke(Size(w, h))
 	}
 
 	// TODO

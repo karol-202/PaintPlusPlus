@@ -13,6 +13,7 @@ class RecentViewModel(application: Application,
 {
 	val recentImages = recentImageRepository.allRecentImages
 
+	// TODO Consider moving it somewhere else
 	fun onFileEdit(uri: Uri) = launch {
 		val name = uri.getDisplayName(getApplication()) ?: uri.lastPathSegment ?: return@launch
 		val image = RecentImage(uri = uri, name = name, date = System.currentTimeMillis())

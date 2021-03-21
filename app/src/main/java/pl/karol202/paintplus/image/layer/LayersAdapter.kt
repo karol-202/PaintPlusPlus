@@ -15,27 +15,28 @@
  */
 package pl.karol202.paintplus.image.layer
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pl.karol202.paintplus.activity.ActivityPaint
 import pl.karol202.paintplus.databinding.ItemLayerBinding
 import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.util.layoutInflater
 
-class LayersAdapter(private val activity: ActivityPaint,
+class LayersAdapter(private val context: Context,
+                    mainContainer: ViewGroup,
+                    onScrollBlock: (Boolean) -> Unit,
                     private val onInfoShow: (Layer) -> Unit,
                     private val onPropertiesEdit: (Layer) -> Unit,
                     private val onNameChange: (Layer) -> Unit,
                     private val onSelect: (Layer) -> Unit,
                     private val onVisibilityToggle: (Layer) -> Unit,
-                    private val onMove: (layerIndex: Int, target: Int) -> Unit,
+                    onMove: (layerIndex: Int, target: Int) -> Unit,
                     private val onDuplicate: (Layer) -> Unit,
                     private val onMerge: (Layer) -> Unit,
                     private val onDelete: (Layer) -> Unit) : RecyclerView.Adapter<LayerViewHolder>()
 {
-	//private val DUPLICATE_INDICATOR = context.getString(R.string.duplicate)
-
 	private val viewHolders = mutableMapOf<Int, LayerViewHolder>()
-	private val layerHandle = LayerHandle(activity, viewHolders, onMove)
+	private val layerHandle = LayerHandle(context, mainContainer, viewHolders, onMove, onScrollBlock)
 
 	var image: Image? = null
 		set(value)
@@ -46,7 +47,7 @@ class LayersAdapter(private val activity: ActivityPaint,
 	private val layers get() = image?.layers ?: emptyList()
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-			LayerViewHolder(views = ItemLayerBinding.inflate(activity.layoutInflater, parent, false),
+			LayerViewHolder(views = ItemLayerBinding.inflate(context.layoutInflater, parent, false),
 			                layerHandle = layerHandle,
 			                onInfoShow = onInfoShow,
 			                onPropertiesEdit = onPropertiesEdit,
@@ -69,64 +70,4 @@ class LayersAdapter(private val activity: ActivityPaint,
 	}
 
 	override fun getItemCount() = layers.size
-
-	fun moveLayer(layerIndex: Int, target: Int) = onMove(layerIndex, target)
-	/*{
-		val selected = image!!.selectedLayer
-		val layer = layers!!.removeAt(layerIndex)
-		layers!!.add(target, layer)
-		image!!.selectLayer(layers!!.indexOf(selected))
-		image!!.updateImage()
-		val action = ActionLayerOrderMove(image)
-		action.setSourceAndDestinationLayerPos(layerIndex, target)
-		action.applyAction()
-	}*/
-
-	/*fun duplicateLayer(layer: Layer)
-	{
-		val layerIndex = layers!!.indexOf(layer)
-		val newName = layer.name + DUPLICATE_INDICATOR
-		val newLayer = Layer(layer.x, layer.y, newName, layer.width, layer.height, Color.BLACK)
-		val newBitmap = Bitmap.createBitmap(layer.bitmap)
-		newLayer.setBitmap(newBitmap)
-		newLayer.setMode(copyLayerMode(layer.mode))
-		newLayer.setOpacity(layer.opacity)
-		if(!image!!.addLayer(newLayer, layerIndex)) appContext.createSnackbar(R.string.too_many_layers, Toast.LENGTH_SHORT)
-				.show()
-		else createDuplicateHistoryAction(newLayer)
-	}
-
-	private fun createDuplicateHistoryAction(newLayer: Layer)
-	{
-		val action = ActionLayerDuplicate(image)
-		action.setLayerAfterAdding(newLayer)
-		action.applyAction()
-	}
-
-	fun joinWithNextLayer(firstLayer: Layer)
-	{
-		val firstIndex = layers!!.indexOf(firstLayer)
-		val secondLayer = layers!![firstIndex + 1]
-		val resultBounds = firstLayer.bounds
-		resultBounds.union(secondLayer.bounds)
-		val matrix = Matrix()
-		matrix.preTranslate(-resultBounds.left.toFloat(), -resultBounds.top.toFloat())
-		var resultBitmap = Bitmap.createBitmap(resultBounds.width(), resultBounds.height(), Bitmap.Config.ARGB_8888)
-		val resultCanvas = Canvas(resultBitmap!!)
-		resultBitmap = secondLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix)
-		resultBitmap = firstLayer.drawLayerAndReturnBitmap(resultBitmap, resultCanvas, null, matrix)
-		val resultLayer = Layer(resultBounds.left, resultBounds.top, firstLayer.name, resultBounds.width(), resultBounds.height(), Color.TRANSPARENT)
-		resultLayer.setBitmap(resultBitmap)
-		image!!.deleteLayer(firstLayer)
-		image!!.deleteLayer(secondLayer)
-		image!!.addLayer(resultLayer, firstIndex)
-		createJoinHistoryAction(firstLayer, secondLayer, firstIndex)
-	}
-
-	private fun createJoinHistoryAction(firstLayer: Layer, secondLayer: Layer, resultLayerId: Int)
-	{
-		val action = ActionLayerJoin(image)
-		action.setLayers(firstLayer, secondLayer, resultLayerId)
-		action.applyAction()
-	}*/
 }

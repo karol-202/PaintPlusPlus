@@ -19,10 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.image.layer.LayerInformationDialog
-import pl.karol202.paintplus.image.layer.LayerPropertiesDialog
 import pl.karol202.paintplus.image.layer.LayersAdapter
-import pl.karol202.paintplus.options.legacy.OptionLayerNew
 import pl.karol202.paintplus.util.LayersSheetBehavior
 import pl.karol202.paintplus.util.MathUtils
 import pl.karol202.paintplus.util.collectIn
@@ -35,16 +32,18 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
                           private val views: ActivityPaintBinding,
                           private val paintViewModel: PaintViewModel)
 {
-	private val layersAdapter = LayersAdapter(activity = activity,
-	                                          onInfoShow
-			                                          onPropertiesEdit
-			                                          onNameChange
-			                                          onSelect
-			                                          onVisibilityToggle
-			                                          onMove
-			                                          onDuplicate
-			                                          onMerge
-			                                          onDelete)
+	private val layersAdapter = LayersAdapter(context = activity,
+	                                          mainContainer = views.mainContainer,
+	                                          onScrollBlock = this::setScrollingBlocked,
+	                                          onInfoShow = paintViewModel::showLayerInfo,
+	                                          onPropertiesEdit = paintViewModel::editLayerProperties,
+	                                          onNameChange = paintViewModel::changeLayerName,
+	                                          onSelect = paintViewModel::selectLayer,
+	                                          onVisibilityToggle = paintViewModel::toggleLayerVisibility,
+	                                          onMove = paintViewModel::changeLayerOrder,
+	                                          onDuplicate = paintViewModel::duplicateLayer,
+	                                          onMerge = paintViewModel::mergeLayerDown,
+	                                          onDelete = paintViewModel::deleteLayer)
 	private val bottomSheetBehaviour = BottomSheetBehavior.from(views.bottomSheet) as LayersSheetBehavior<*>
 
 	private val sheetPanelSizePx = MathUtils.dpToPixels(activity, SHEET_PANEL_SIZE_DP).toInt()
@@ -55,10 +54,7 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 		bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
 
 		views.recyclerLayers.adapter = layersAdapter
-		views.buttonAddLayer.setOnClickListener {
-			OptionLayerNew(activity, paintViewModel.image) { layersAdapter.notifyDataSetChanged() }
-					.execute()
-		}
+		views.buttonAddLayer.setOnClickListener { paintViewModel.newLayer() }
 
 		paintViewModel.imageFlow.collectIn(activity.lifecycleScope) { layersAdapter.image = it }
 	}
@@ -82,15 +78,9 @@ class ActivityPaintLayers(private val activity: ActivityPaint,
 		bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
 	}
 
-	fun setScrollingBlocked(blocked: Boolean)
+	private fun setScrollingBlocked(blocked: Boolean)
 	{
 		views.recyclerLayers.setAllowScrolling(!blocked)
 		bottomSheetBehaviour.allowDragging = !blocked
 	}
-
-	fun showLayerInfoDialog(layer: Layer) = LayerInformationDialog(activity, layer).show()
-
-	fun showLayerPropertiesDialog(layer: Layer) = LayerPropertiesDialog(activity, paintViewModel.layerModes, layer) {
-
-	}.show()
 }

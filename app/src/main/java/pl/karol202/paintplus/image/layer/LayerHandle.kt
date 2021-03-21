@@ -15,20 +15,21 @@
  */
 package pl.karol202.paintplus.image.layer
 
+import android.content.Context
 import android.graphics.PointF
 import android.view.View
 import android.view.ViewGroup
-import pl.karol202.paintplus.activity.ActivityPaint
 import pl.karol202.paintplus.util.MathUtils.dpToPixels
 import pl.karol202.paintplus.util.translated
 import kotlin.math.roundToInt
 
-class LayerHandle(private val activity: ActivityPaint,
+class LayerHandle(context: Context,
+                  private val mainContainer: ViewGroup,
                   private val viewHolders: Map<Int, LayerViewHolder>,
-                  private val onMove: (layerIndex: Int, target: Int) -> Unit)
+                  private val onMove: (layerIndex: Int, target: Int) -> Unit,
+                  private val onScrollBlock: (Boolean) -> Unit)
 {
-	private val viewHeight = dpToPixels(activity, LayerViewHolder.HEIGHT_DP).toInt()
-	private val mainContainer = activity.mainContainer
+	private val viewHeight = dpToPixels(context, LayerViewHolder.HEIGHT_DP).toInt()
 
 	private var layer: Layer? = null
 	private var layerId = 0
@@ -50,7 +51,7 @@ class LayerHandle(private val activity: ActivityPaint,
 		viewHolder.setGhost()
 		viewHolder.setViewOffset(originalViewPos.x, originalViewPos.y)
 		mainContainer.addView(view)
-		activity.setScrollingBlocked(true)
+		onScrollBlock(true)
 		oldOffsetX = originalViewPos.x
 		oldOffsetY = originalViewPos.y
 		oldTouchX = x
@@ -73,7 +74,7 @@ class LayerHandle(private val activity: ActivityPaint,
 		moveOtherLayers(getCurrentPosition(y))
 	}
 
-	fun onTouchStop(x: Float, y: Float)
+	fun onTouchStop(y: Float)
 	{
 		val viewHolder = viewHolder ?: return
 
@@ -81,7 +82,7 @@ class LayerHandle(private val activity: ActivityPaint,
 		val targetGhostPos = oldOffsetY + (currentPos - layerId) * viewHeight
 		viewHolder.setViewOffsetWithAnimation(0f, targetGhostPos, this::dropLayer)
 		moveOtherLayers(currentPos)
-		activity.setScrollingBlocked(false)
+		onScrollBlock(false)
 	}
 
 	fun onTouchCancel()
@@ -89,7 +90,7 @@ class LayerHandle(private val activity: ActivityPaint,
 		val viewHolder = viewHolder ?: return
 
 		viewHolder.setViewOffsetWithAnimation(0f, oldOffsetY, this::dropLayer)
-		activity.setScrollingBlocked(false)
+		onScrollBlock(false)
 	}
 
 	private fun getCurrentPosition(y: Float): Int
