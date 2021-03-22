@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 
-public class ActionLayerCrop extends ActionLayerResize
+public class ActionPaste extends ActionLayerAdd
 {
-	public ActionLayerCrop(LegacyImage image)
+	public ActionPaste(LegacyImage image)
 	{
 		super(image);
 	}
@@ -29,6 +29,6 @@ public class ActionLayerCrop extends ActionLayerResize
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_crop;
+		return R.string.history_action_paste;
 	}
 }

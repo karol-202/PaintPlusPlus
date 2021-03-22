@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,7 +22,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerJoin extends Action
+public class ActionLayerJoin extends LegacyAction
 {
 	private interface ActionState
 	{

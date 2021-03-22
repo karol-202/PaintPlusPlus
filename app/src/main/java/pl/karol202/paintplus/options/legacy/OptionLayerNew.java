@@ -29,7 +29,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerAdd;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerAdd;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.GraphicsHelper;

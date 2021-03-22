@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.brush;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerChange;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;

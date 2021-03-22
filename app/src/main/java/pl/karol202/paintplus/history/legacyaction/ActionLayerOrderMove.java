@@ -14,25 +14,24 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
+import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionImageResize extends Action
+public class ActionLayerOrderMove extends LegacyAction
 {
-	private int width;
-	private int height;
-	private int resizingDeltaX;
-	private int resizingDeltaY;
+	private int sourceLayerPos;
+	private int destinationLayerPos;
 
-	public ActionImageResize(LegacyImage image)
+	public ActionLayerOrderMove(LegacyImage image)
 	{
 		super(image);
-		width = -1;
-		height = -1;
+		this.sourceLayerPos = -1;
+		this.destinationLayerPos = -1;
 	}
 
 	private void updateBitmap(LegacyImage image)
@@ -54,11 +53,10 @@ public class ActionImageResize extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		int newWidth = image.getWidth();
-		int newHeight = image.getHeight();
-		image.resize(-resizingDeltaX, -resizingDeltaY, width, height);
-		width = newWidth;
-		height = newHeight;
+		Layer layer = image.getLayerAtIndex(destinationLayerPos);
+		image.deleteLayer(layer);
+
+		image.addLayer(layer, sourceLayerPos);
 		return true;
 	}
 
@@ -66,34 +64,30 @@ public class ActionImageResize extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		int oldWidth = image.getWidth();
-		int oldHeight = image.getHeight();
-		image.resize(resizingDeltaX, resizingDeltaY, width, height);
-		width = oldWidth;
-		height = oldHeight;
+		Layer layer = image.getLayerAtIndex(sourceLayerPos);
+		image.deleteLayer(layer);
+
+		image.addLayer(layer, destinationLayerPos);
 		return true;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return width != -1 && height != -1 && (width != getImage().getWidth() || height != getImage().getHeight() ||
-											   resizingDeltaX != 0 || resizingDeltaY != 0);
+		return sourceLayerPos != -1 && destinationLayerPos != -1 && sourceLayerPos != destinationLayerPos;
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_image_resize;
+		return R.string.history_action_layer_order_move;
 	}
 
-	public void setDataBeforeResizing(int oldWidth, int oldHeight, int resizingDeltaX, int resizingDeltaY)
+	public void setSourceAndDestinationLayerPos(int sourcePos, int destinationPos)
 	{
-		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.width = oldWidth;
-		this.height = oldHeight;
-		this.resizingDeltaX = resizingDeltaX;
-		this.resizingDeltaY = resizingDeltaY;
+		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
+		this.sourceLayerPos = sourcePos;
+		this.destinationLayerPos = destinationPos;
 		updateBitmap(getImage());
 	}
 }

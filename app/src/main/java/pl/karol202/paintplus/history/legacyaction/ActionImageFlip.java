@@ -14,22 +14,19 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ActionImageFlatten extends Action
+public class ActionImageFlip extends LegacyAction
 {
-	private List<Layer> layers;
+	private FlipDirection direction;
 
-	public ActionImageFlatten(LegacyImage image)
+	public ActionImageFlip(LegacyImage image)
 	{
 		super(image);
 	}
@@ -54,8 +51,7 @@ public class ActionImageFlatten extends Action
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
-		image.deleteAllLayers();
-		for(int i = 0; i < layers.size(); i++) image.addLayer(layers.get(i), i);
+		image.flip(direction);
 		return true;
 	}
 
@@ -64,26 +60,26 @@ public class ActionImageFlatten extends Action
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
-		image.flattenImage();
+		image.flip(direction);
 		return true;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return layers != null;
+		return direction != null;
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_image_flatten;
+		return R.string.history_action_image_flip;
 	}
 
-	public void setImageBeforeFlattening(LegacyImage image)
+	public void setDirectionBeforeFlip(FlipDirection direction)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.layers = new ArrayList<>(image.getLayers());
+		this.direction = direction;
 		updateBitmap(getImage());
 	}
 }

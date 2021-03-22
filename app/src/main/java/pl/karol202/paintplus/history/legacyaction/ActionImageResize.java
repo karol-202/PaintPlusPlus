@@ -14,21 +14,25 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Color;
 import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
 
-public class ActionImageFlip extends Action
+public class ActionImageResize extends LegacyAction
 {
-	private FlipDirection direction;
+	private int width;
+	private int height;
+	private int resizingDeltaX;
+	private int resizingDeltaY;
 
-	public ActionImageFlip(LegacyImage image)
+	public ActionImageResize(LegacyImage image)
 	{
 		super(image);
+		width = -1;
+		height = -1;
 	}
 
 	private void updateBitmap(LegacyImage image)
@@ -50,8 +54,11 @@ public class ActionImageFlip extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		updateBitmap(image);
-		image.flip(direction);
+		int newWidth = image.getWidth();
+		int newHeight = image.getHeight();
+		image.resize(-resizingDeltaX, -resizingDeltaY, width, height);
+		width = newWidth;
+		height = newHeight;
 		return true;
 	}
 
@@ -59,27 +66,34 @@ public class ActionImageFlip extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		updateBitmap(image);
-		image.flip(direction);
+		int oldWidth = image.getWidth();
+		int oldHeight = image.getHeight();
+		image.resize(resizingDeltaX, resizingDeltaY, width, height);
+		width = oldWidth;
+		height = oldHeight;
 		return true;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return direction != null;
+		return width != -1 && height != -1 && (width != getImage().getWidth() || height != getImage().getHeight() ||
+											   resizingDeltaX != 0 || resizingDeltaY != 0);
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_image_flip;
+		return R.string.history_action_image_resize;
 	}
 
-	public void setDirectionBeforeFlip(FlipDirection direction)
+	public void setDataBeforeResizing(int oldWidth, int oldHeight, int resizingDeltaX, int resizingDeltaY)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.direction = direction;
+		this.width = oldWidth;
+		this.height = oldHeight;
+		this.resizingDeltaX = resizingDeltaX;
+		this.resizingDeltaY = resizingDeltaY;
 		updateBitmap(getImage());
 	}
 }

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,12 +22,13 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerNameChange extends Action
+public class ActionLayerPropertiesChange extends LegacyAction
 {
 	private int layerId;
-	private String name;
+	private LegacyLayerMode mode;
+	private float opacity;
 
-	public ActionLayerNameChange(LegacyImage image)
+	public ActionLayerPropertiesChange(LegacyImage image)
 	{
 		super(image);
 		this.layerId = -1;
@@ -46,9 +47,15 @@ public class ActionLayerNameChange extends Action
 		if(!super.undo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
 
-		String newName = layer.getName();
-		layer.setName(name);
-		name = newName;
+		LegacyLayerMode newMode = layer.getMode();
+		float newOpacity = layer.getOpacity();
+
+		layer.setMode(mode);
+		layer.setOpacity(opacity);
+
+		mode = newMode;
+		opacity = newOpacity;
+
 		return true;
 	}
 
@@ -58,9 +65,15 @@ public class ActionLayerNameChange extends Action
 		if(!super.redo(image)) return false;
 		Layer layer = image.getLayerAtIndex(layerId);
 
-		String oldName = layer.getName();
-		layer.setName(name);
-		name = oldName;
+		LegacyLayerMode oldMode = layer.getMode();
+		float oldOpacity = layer.getOpacity();
+
+		layer.setMode(mode);
+		layer.setOpacity(opacity);
+
+		mode = oldMode;
+		opacity = oldOpacity;
+
 		return true;
 	}
 
@@ -68,20 +81,21 @@ public class ActionLayerNameChange extends Action
 	boolean canApplyAction()
 	{
 		Layer layer = getImage().getLayerAtIndex(layerId);
-		return layerId != -1 && !name.equals(layer.getName());
+		return layerId != -1 && (mode != layer.getMode() || opacity != layer.getOpacity());
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_name_change;
+		return R.string.history_action_layer_properties_change;
 	}
 
-	public void setLayer(Layer layer)
+	public void setLayerBeforeChange(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
 		this.layerId = getImage().getLayerIndex(layer);
-		this.name = layer.getName();
+		this.mode = layer.getMode();
+		this.opacity = layer.getOpacity();
 		updateBitmap(getImage());
 	}
 }

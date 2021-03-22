@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,19 +22,20 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerDelete extends Action
+public class ActionLayerVisibilityChange extends LegacyAction
 {
-	private Layer layer;
-	private int layerPosition;
+	private int layerId;
+	private boolean hideLayer;//True, if action caused hide of the layer and undo will show the layer again.
 
-	public ActionLayerDelete(LegacyImage image)
+	public ActionLayerVisibilityChange(LegacyImage image)
 	{
 		super(image);
+		this.layerId = -1;
 	}
 
-	private void updateBitmap()
+	private void updateBitmap(LegacyImage image)
 	{
-		Bitmap layerBitmap = layer.getBitmap();
+		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
@@ -43,7 +44,8 @@ public class ActionLayerDelete extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		image.addLayer(layer, layerPosition);
+		Layer layer = image.getLayerAtIndex(layerId);
+		layer.setVisibility(hideLayer);
 		return true;
 	}
 
@@ -51,27 +53,29 @@ public class ActionLayerDelete extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		image.deleteLayer(layer);
+		Layer layer = image.getLayerAtIndex(layerId);
+		layer.setVisibility(!hideLayer);
 		return true;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return layer != null;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && hideLayer != layer.isVisible();
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_delete;
+		return hideLayer ? R.string.history_action_layer_hide : R.string.history_action_layer_show;
 	}
 
-	public void setLayerBeforeDeleting(Layer layer)
+	public void setLayerBeforeChange(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.layer = layer;
-		this.layerPosition = getImage().getLayerIndex(layer);
-		updateBitmap();
+		this.layerId = getImage().getLayerIndex(layer);
+		this.hideLayer = layer.isVisible();
+		updateBitmap(getImage());
 	}
 }

@@ -19,7 +19,7 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.manipulators.ColorsInvert
 import pl.karol202.paintplus.color.manipulators.params.InvertParams
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
-import pl.karol202.paintplus.history.action.ActionLayerChange
+import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionColorsInvert(private val viewModel: PaintViewModel) : Option

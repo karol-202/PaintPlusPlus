@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.LegacySelection;
 
-public class ActionSelectionChange extends Action
+public class ActionSelectionChange extends LegacyAction
 {
 	private static final float SELECTION_LINE_WIDTH = 2f;
 

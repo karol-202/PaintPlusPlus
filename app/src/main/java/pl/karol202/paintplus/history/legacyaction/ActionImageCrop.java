@@ -14,9 +14,21 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history;
+package pl.karol202.paintplus.history.legacyaction;
 
-public interface OnHistoryUpdateListener
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.LegacyImage;
+
+public class ActionImageCrop extends ActionImageResize
 {
-	void onHistoryUpdated();
+	public ActionImageCrop(LegacyImage image)
+	{
+		super(image);
+	}
+
+	@Override
+	public int getActionName()
+	{
+		return R.string.history_action_image_crop;
+	}
 }

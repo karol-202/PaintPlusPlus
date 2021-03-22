@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.options.legacy;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionImageResize;
+import pl.karol202.paintplus.history.legacyaction.ActionImageResize;
 import pl.karol202.paintplus.image.LegacyImage;
 
 public class OptionImageResize extends OptionResize

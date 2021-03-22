@@ -30,7 +30,7 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.manipulators.ColorsBrightness;
 import pl.karol202.paintplus.color.manipulators.params.BrightnessParams;
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
-import pl.karol202.paintplus.history.action.ActionLayerChange;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.image.LegacySelection;

@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.options
 
-import pl.karol202.paintplus.history.action.ActionLayerOrderMove
+import pl.karol202.paintplus.history.legacyaction.ActionLayerOrderMove
 
 class OptionLayerChangeOrder : Option
 {

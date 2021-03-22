@@ -14,13 +14,13 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.*;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerChange extends Action
+public class ActionLayerChange extends LegacyAction
 {
 	private int name;
 	private int layerId;

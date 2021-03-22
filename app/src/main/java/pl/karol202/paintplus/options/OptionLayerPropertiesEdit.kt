@@ -2,9 +2,8 @@ package pl.karol202.paintplus.options
 
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.databinding.DialogLayerInfoBinding
 import pl.karol202.paintplus.databinding.DialogLayerPropertiesBinding
-import pl.karol202.paintplus.history.action.ActionLayerPropertiesChange
+import pl.karol202.paintplus.history.legacyaction.ActionLayerPropertiesChange
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.mode.LayerMode
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter

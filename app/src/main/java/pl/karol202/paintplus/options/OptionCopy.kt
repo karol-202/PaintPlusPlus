@@ -1,7 +1,6 @@
 package pl.karol202.paintplus.options
 
 import android.graphics.*
-import pl.karol202.paintplus.history.action.ActionLayerChange
 
 class OptionCopy : Option
 {

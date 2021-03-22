@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.options
 
-import pl.karol202.paintplus.history.action.ActionLayerVisibilityChange
+import pl.karol202.paintplus.history.legacyaction.ActionLayerVisibilityChange
 import pl.karol202.paintplus.image.layer.Layer
 
 class OptionLayerVisibilityToggle : Option

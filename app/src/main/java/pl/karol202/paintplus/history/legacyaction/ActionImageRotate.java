@@ -14,32 +14,36 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.layer.Layer;
+import pl.karol202.paintplus.image.LegacyImage.RotationAmount;
 
-public class ActionLayerResize extends Action
+public class ActionImageRotate extends LegacyAction
 {
-	private int layerId;
-	private Bitmap bitmap;
-	private int x;
-	private int y;
+	private RotationAmount rotationAmount;
 
-	public ActionLayerResize(LegacyImage image)
+	public ActionImageRotate(LegacyImage image)
 	{
 		super(image);
-		this.layerId = -1;
 	}
 
 	private void updateBitmap(LegacyImage image)
 	{
-		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
-		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
+		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
+	}
+
+	private RectF transformImageRect(LegacyImage image)
+	{
+		float max = Math.max(image.getWidth(), image.getHeight());
+		float ratio = getPreviewRect().width() / max;
+		RectF rect = new RectF(0, 0, image.getWidth() * ratio, image.getHeight() * ratio);
+		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
+		return rect;
 	}
 
 	@Override
@@ -47,7 +51,11 @@ public class ActionLayerResize extends Action
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
-		resize(image);
+		RotationAmount amount = null;
+		if(rotationAmount == RotationAmount.ANGLE_90) amount = RotationAmount.ANGLE_270;
+		else if(rotationAmount == RotationAmount.ANGLE_180) amount = RotationAmount.ANGLE_180;
+		else if(rotationAmount == RotationAmount.ANGLE_270) amount = RotationAmount.ANGLE_90;
+		if(amount != null) image.rotate(amount);
 		return true;
 	}
 
@@ -56,47 +64,26 @@ public class ActionLayerResize extends Action
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
-		resize(image);
+		image.rotate(rotationAmount);
 		return true;
-	}
-
-	private void resize(LegacyImage image)
-	{
-		Layer layer = image.getLayerAtIndex(layerId);
-
-		Bitmap oldBitmap = layer.getBitmap();
-		int oldX = layer.getX();
-		int oldY = layer.getY();
-
-		layer.setBitmap(bitmap);
-		layer.setPosition(x, y);
-
-		bitmap = oldBitmap;
-		x = oldX;
-		y = oldY;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		Layer layer = getImage().getLayerAtIndex(layerId);
-		return layerId != -1 && bitmap != null && (bitmap.getWidth() != layer.getWidth() ||
-				bitmap.getHeight() != layer.getHeight() || x != layer.getX() || y != layer.getY());
+		return rotationAmount != null;
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_resize;
+		return R.string.history_action_image_rotate;
 	}
 
-	public void setLayerBeforeResize(Layer layer)
+	public void setRotationAmount(RotationAmount rotationAmount)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.layerId = getImage().getLayerIndex(layer);
-		this.bitmap = layer.getBitmap();
-		this.x = layer.getX();
-		this.y = layer.getY();
+		this.rotationAmount = rotationAmount;
 		updateBitmap(getImage());
 	}
 }

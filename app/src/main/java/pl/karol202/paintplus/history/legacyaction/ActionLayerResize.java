@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,19 +22,22 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerAdd extends Action
+public class ActionLayerResize extends LegacyAction
 {
-	private Layer layer;
-	private int layerPosition;
+	private int layerId;
+	private Bitmap bitmap;
+	private int x;
+	private int y;
 
-	public ActionLayerAdd(LegacyImage image)
+	public ActionLayerResize(LegacyImage image)
 	{
 		super(image);
+		this.layerId = -1;
 	}
 
-	private void updateBitmap()
+	private void updateBitmap(LegacyImage image)
 	{
-		Bitmap layerBitmap = layer.getBitmap();
+		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
@@ -43,7 +46,8 @@ public class ActionLayerAdd extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		image.deleteLayer(layer);
+		updateBitmap(image);
+		resize(image);
 		return true;
 	}
 
@@ -51,27 +55,48 @@ public class ActionLayerAdd extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		image.addLayer(layer, layerPosition);
+		updateBitmap(image);
+		resize(image);
 		return true;
+	}
+
+	private void resize(LegacyImage image)
+	{
+		Layer layer = image.getLayerAtIndex(layerId);
+
+		Bitmap oldBitmap = layer.getBitmap();
+		int oldX = layer.getX();
+		int oldY = layer.getY();
+
+		layer.setBitmap(bitmap);
+		layer.setPosition(x, y);
+
+		bitmap = oldBitmap;
+		x = oldX;
+		y = oldY;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return layer != null;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && bitmap != null && (bitmap.getWidth() != layer.getWidth() ||
+				bitmap.getHeight() != layer.getHeight() || x != layer.getX() || y != layer.getY());
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_add;
+		return R.string.history_action_layer_resize;
 	}
 
-	public void setLayerAfterAdding(Layer layer)
+	public void setLayerBeforeResize(Layer layer)
 	{
-		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.layer = layer;
-		this.layerPosition = getImage().getLayerIndex(layer);
-		updateBitmap();
+		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
+		this.layerId = getImage().getLayerIndex(layer);
+		this.bitmap = layer.getBitmap();
+		this.x = layer.getX();
+		this.y = layer.getY();
+		updateBitmap(getImage());
 	}
 }

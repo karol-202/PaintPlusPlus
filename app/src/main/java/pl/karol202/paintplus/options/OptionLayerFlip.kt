@@ -16,7 +16,7 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.ActionLayerFlip
+import pl.karol202.paintplus.history.legacyaction.ActionLayerFlip
 import pl.karol202.paintplus.image.LegacyImage.FlipDirection
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 

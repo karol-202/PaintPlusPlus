@@ -14,18 +14,21 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history;
+package pl.karol202.paintplus.history.legacyaction;
 
-import android.view.View;
-import androidx.recyclerview.widget.RecyclerView;
-import pl.karol202.paintplus.history.action.Action;
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.LegacyImage;
 
-abstract class HistoryViewHolder extends RecyclerView.ViewHolder
+public class ActionLayerDuplicate extends ActionLayerAdd
 {
-	HistoryViewHolder(View itemView)
+	public ActionLayerDuplicate(LegacyImage image)
 	{
-		super(itemView);
+		super(image);
 	}
 
-	void bind(History history, Action action) { }
+	@Override
+	public int getActionName()
+	{
+		return R.string.history_action_layer_duplicate;
+	}
 }

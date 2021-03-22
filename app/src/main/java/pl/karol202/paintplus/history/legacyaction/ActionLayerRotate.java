@@ -14,14 +14,27 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history;
+package pl.karol202.paintplus.history.legacyaction;
 
-import android.view.View;
+import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.image.LegacyImage;
+import pl.karol202.paintplus.image.layer.Layer;
 
-class HistoryCurrentPositionViewHolder extends HistoryViewHolder
+public class ActionLayerRotate extends ActionLayerResize
 {
-	HistoryCurrentPositionViewHolder(View view)
+	public ActionLayerRotate(LegacyImage image)
 	{
-		super(view);
+		super(image);
+	}
+
+	@Override
+	public int getActionName()
+	{
+		return R.string.history_action_layer_rotate;
+	}
+
+	public void setLayerBeforeRotation(Layer layer)
+	{
+		setLayerBeforeResize(layer);
 	}
 }

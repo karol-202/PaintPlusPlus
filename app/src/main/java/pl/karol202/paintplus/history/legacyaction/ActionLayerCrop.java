@@ -14,15 +14,14 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerRotate extends ActionLayerResize
+public class ActionLayerCrop extends ActionLayerResize
 {
-	public ActionLayerRotate(LegacyImage image)
+	public ActionLayerCrop(LegacyImage image)
 	{
 		super(image);
 	}
@@ -30,11 +29,6 @@ public class ActionLayerRotate extends ActionLayerResize
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_rotate;
-	}
-
-	public void setLayerBeforeRotation(Layer layer)
-	{
-		setLayerBeforeResize(layer);
+		return R.string.history_action_layer_crop;
 	}
 }

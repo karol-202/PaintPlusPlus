@@ -2,7 +2,7 @@ package pl.karol202.paintplus.options
 
 import android.graphics.*
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.ActionLayerChange
+import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
 
 class OptionCut(private val optionCopy: OptionCopy) : Option
 {

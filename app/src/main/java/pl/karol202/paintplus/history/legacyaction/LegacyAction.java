@@ -14,16 +14,15 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import pl.karol202.paintplus.history.HistoryActionViewHolder;
 import pl.karol202.paintplus.image.LegacyImage;
 
-public abstract class Action
+public abstract class LegacyAction
 {
 	private boolean done;
 
@@ -34,7 +33,7 @@ public abstract class Action
 	private Canvas previewCanvas;
 	private Rect previewRect;
 
-	Action(LegacyImage image)
+	LegacyAction(LegacyImage image)
 	{
 		done = true;
 

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,13 +22,12 @@ import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerPropertiesChange extends Action
+public class ActionLayerScale extends LegacyAction
 {
 	private int layerId;
-	private LegacyLayerMode mode;
-	private float opacity;
+	private Bitmap bitmap;
 
-	public ActionLayerPropertiesChange(LegacyImage image)
+	public ActionLayerScale(LegacyImage image)
 	{
 		super(image);
 		this.layerId = -1;
@@ -45,17 +44,8 @@ public class ActionLayerPropertiesChange extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		Layer layer = image.getLayerAtIndex(layerId);
-
-		LegacyLayerMode newMode = layer.getMode();
-		float newOpacity = layer.getOpacity();
-
-		layer.setMode(mode);
-		layer.setOpacity(opacity);
-
-		mode = newMode;
-		opacity = newOpacity;
-
+		updateBitmap(image);
+		scale(image);
 		return true;
 	}
 
@@ -63,39 +53,38 @@ public class ActionLayerPropertiesChange extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		Layer layer = image.getLayerAtIndex(layerId);
-
-		LegacyLayerMode oldMode = layer.getMode();
-		float oldOpacity = layer.getOpacity();
-
-		layer.setMode(mode);
-		layer.setOpacity(opacity);
-
-		mode = oldMode;
-		opacity = oldOpacity;
-
+		updateBitmap(image);
+		scale(image);
 		return true;
+	}
+
+	private void scale(LegacyImage image)
+	{
+		Layer layer = image.getLayerAtIndex(layerId);
+		Bitmap oldBitmap = layer.getBitmap();
+		layer.setBitmap(bitmap);
+		bitmap = oldBitmap;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
 		Layer layer = getImage().getLayerAtIndex(layerId);
-		return layerId != -1 && (mode != layer.getMode() || opacity != layer.getOpacity());
+		return layerId != -1 && bitmap != null && (bitmap.getWidth() != layer.getWidth() ||
+												   bitmap.getHeight() != layer.getHeight());
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_properties_change;
+		return R.string.history_action_layer_scale;
 	}
 
-	public void setLayerBeforeChange(Layer layer)
+	public void setLayerBeforeScaling(Layer layer)
 	{
-		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
+		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
 		this.layerId = getImage().getLayerIndex(layer);
-		this.mode = layer.getMode();
-		this.opacity = layer.getOpacity();
+		this.bitmap = layer.getBitmap();
 		updateBitmap(getImage());
 	}
 }

@@ -14,49 +14,41 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerOrderMove extends Action
+public class ActionLayerNameChange extends LegacyAction
 {
-	private int sourceLayerPos;
-	private int destinationLayerPos;
+	private int layerId;
+	private String name;
 
-	public ActionLayerOrderMove(LegacyImage image)
+	public ActionLayerNameChange(LegacyImage image)
 	{
 		super(image);
-		this.sourceLayerPos = -1;
-		this.destinationLayerPos = -1;
+		this.layerId = -1;
 	}
 
 	private void updateBitmap(LegacyImage image)
 	{
+		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
-		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
-	}
-
-	private RectF transformImageRect(LegacyImage image)
-	{
-		float max = Math.max(image.getWidth(), image.getHeight());
-		float ratio = getPreviewRect().width() / max;
-		RectF rect = new RectF(0, 0, image.getWidth() * ratio, image.getHeight() * ratio);
-		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
-		return rect;
+		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
 
 	@Override
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		Layer layer = image.getLayerAtIndex(destinationLayerPos);
-		image.deleteLayer(layer);
+		Layer layer = image.getLayerAtIndex(layerId);
 
-		image.addLayer(layer, sourceLayerPos);
+		String newName = layer.getName();
+		layer.setName(name);
+		name = newName;
 		return true;
 	}
 
@@ -64,30 +56,32 @@ public class ActionLayerOrderMove extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		Layer layer = image.getLayerAtIndex(sourceLayerPos);
-		image.deleteLayer(layer);
+		Layer layer = image.getLayerAtIndex(layerId);
 
-		image.addLayer(layer, destinationLayerPos);
+		String oldName = layer.getName();
+		layer.setName(name);
+		name = oldName;
 		return true;
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return sourceLayerPos != -1 && destinationLayerPos != -1 && sourceLayerPos != destinationLayerPos;
+		Layer layer = getImage().getLayerAtIndex(layerId);
+		return layerId != -1 && !name.equals(layer.getName());
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_order_move;
+		return R.string.history_action_layer_name_change;
 	}
 
-	public void setSourceAndDestinationLayerPos(int sourcePos, int destinationPos)
+	public void setLayer(Layer layer)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
-		this.sourceLayerPos = sourcePos;
-		this.destinationLayerPos = destinationPos;
+		this.layerId = getImage().getLayerIndex(layer);
+		this.name = layer.getName();
 		updateBitmap(getImage());
 	}
 }

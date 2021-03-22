@@ -14,36 +14,31 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.RectF;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.LegacyImage.RotationAmount;
+import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
+import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionImageRotate extends Action
+public class ActionLayerFlip extends LegacyAction
 {
-	private RotationAmount rotationAmount;
+	private int layerId;
+	private FlipDirection direction;
 
-	public ActionImageRotate(LegacyImage image)
+	public ActionLayerFlip(LegacyImage image)
 	{
 		super(image);
+		this.layerId = -1;
 	}
 
 	private void updateBitmap(LegacyImage image)
 	{
+		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
-		getPreviewCanvas().drawBitmap(image.getFullImage(), null, transformImageRect(image), null);
-	}
-
-	private RectF transformImageRect(LegacyImage image)
-	{
-		float max = Math.max(image.getWidth(), image.getHeight());
-		float ratio = getPreviewRect().width() / max;
-		RectF rect = new RectF(0, 0, image.getWidth() * ratio, image.getHeight() * ratio);
-		rect.offset(getPreviewRect().centerX() - rect.centerX(), getPreviewRect().centerY() - rect.centerY());
-		return rect;
+		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
 
 	@Override
@@ -51,11 +46,7 @@ public class ActionImageRotate extends Action
 	{
 		if(!super.undo(image)) return false;
 		updateBitmap(image);
-		RotationAmount amount = null;
-		if(rotationAmount == RotationAmount.ANGLE_90) amount = RotationAmount.ANGLE_270;
-		else if(rotationAmount == RotationAmount.ANGLE_180) amount = RotationAmount.ANGLE_180;
-		else if(rotationAmount == RotationAmount.ANGLE_270) amount = RotationAmount.ANGLE_90;
-		if(amount != null) image.rotate(amount);
+		flip(image);
 		return true;
 	}
 
@@ -64,26 +55,33 @@ public class ActionImageRotate extends Action
 	{
 		if(!super.redo(image)) return false;
 		updateBitmap(image);
-		image.rotate(rotationAmount);
+		flip(image);
 		return true;
+	}
+
+	private void flip(LegacyImage image)
+	{
+		Layer layer = image.getLayerAtIndex(layerId);
+		layer.flip(direction);
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return rotationAmount != null;
+		return layerId != -1;
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_image_rotate;
+		return R.string.history_action_layer_flip;
 	}
 
-	public void setRotationAmount(RotationAmount rotationAmount)
+	public void setLayerAndFlipDirection(int layerId, FlipDirection direction)
 	{
 		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.rotationAmount = rotationAmount;
+		this.layerId = layerId;
+		this.direction = direction;
 		updateBitmap(getImage());
 	}
 }

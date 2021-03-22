@@ -17,7 +17,7 @@
 package pl.karol202.paintplus.options.legacy;
 
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerScale;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerScale;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 

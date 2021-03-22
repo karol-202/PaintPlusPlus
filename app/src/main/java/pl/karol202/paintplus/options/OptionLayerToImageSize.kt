@@ -15,7 +15,7 @@
  */
 package pl.karol202.paintplus.options
 
-import pl.karol202.paintplus.history.action.ActionLayerResize
+import pl.karol202.paintplus.history.legacyaction.ActionLayerResize
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerToImageSize(private val viewModel: PaintViewModel) : Option

@@ -18,7 +18,7 @@ package pl.karol202.paintplus.tool.gradient;
 
 import android.graphics.*;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerChange;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.tool.OnToolChangeListener;

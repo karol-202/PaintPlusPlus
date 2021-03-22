@@ -18,7 +18,7 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogRotateImageBinding
-import pl.karol202.paintplus.history.action.ActionImageRotate
+import pl.karol202.paintplus.history.legacyaction.ActionImageRotate
 import pl.karol202.paintplus.image.LegacyImage.RotationAmount
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 

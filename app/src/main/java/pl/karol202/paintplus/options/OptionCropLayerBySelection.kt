@@ -15,7 +15,7 @@
  */
 package pl.karol202.paintplus.options
 
-import pl.karol202.paintplus.history.action.ActionLayerCrop
+import pl.karol202.paintplus.history.legacyaction.ActionLayerCrop
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionCropLayerBySelection(private val viewModel: PaintViewModel) : Option

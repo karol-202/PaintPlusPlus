@@ -21,8 +21,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Region.Op;
-import pl.karol202.paintplus.history.action.ActionSelectionChange;
-import pl.karol202.paintplus.image.LegacyImage;
+import pl.karol202.paintplus.history.legacyaction.ActionSelectionChange;
 
 import java.util.ArrayList;
 

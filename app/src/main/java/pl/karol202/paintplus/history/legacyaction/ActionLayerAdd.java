@@ -14,29 +14,27 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.history.action;
+package pl.karol202.paintplus.history.legacyaction;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection;
 import pl.karol202.paintplus.image.layer.Layer;
 
-public class ActionLayerFlip extends Action
+public class ActionLayerAdd extends LegacyAction
 {
-	private int layerId;
-	private FlipDirection direction;
+	private Layer layer;
+	private int layerPosition;
 
-	public ActionLayerFlip(LegacyImage image)
+	public ActionLayerAdd(LegacyImage image)
 	{
 		super(image);
-		this.layerId = -1;
 	}
 
-	private void updateBitmap(LegacyImage image)
+	private void updateBitmap()
 	{
-		Bitmap layerBitmap = image.getLayerAtIndex(layerId).getBitmap();
+		Bitmap layerBitmap = layer.getBitmap();
 		getPreviewBitmap().eraseColor(Color.TRANSPARENT);
 		getPreviewCanvas().drawBitmap(layerBitmap, null, transformLayerRect(layerBitmap), null);
 	}
@@ -45,8 +43,7 @@ public class ActionLayerFlip extends Action
 	public boolean undo(LegacyImage image)
 	{
 		if(!super.undo(image)) return false;
-		updateBitmap(image);
-		flip(image);
+		image.deleteLayer(layer);
 		return true;
 	}
 
@@ -54,34 +51,27 @@ public class ActionLayerFlip extends Action
 	public boolean redo(LegacyImage image)
 	{
 		if(!super.redo(image)) return false;
-		updateBitmap(image);
-		flip(image);
+		image.addLayer(layer, layerPosition);
 		return true;
-	}
-
-	private void flip(LegacyImage image)
-	{
-		Layer layer = image.getLayerAtIndex(layerId);
-		layer.flip(direction);
 	}
 
 	@Override
 	boolean canApplyAction()
 	{
-		return layerId != -1;
+		return layer != null;
 	}
 
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_flip;
+		return R.string.history_action_layer_add;
 	}
 
-	public void setLayerAndFlipDirection(int layerId, FlipDirection direction)
+	public void setLayerAfterAdding(Layer layer)
 	{
-		if(isApplied()) throw new IllegalStateException("Cannot alter history!");
-		this.layerId = layerId;
-		this.direction = direction;
-		updateBitmap(getImage());
+		if(isApplied()) throw new IllegalStateException("Cannot alter history.");
+		this.layer = layer;
+		this.layerPosition = getImage().getLayerIndex(layer);
+		updateBitmap();
 	}
 }

@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerDrag;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerDrag;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 

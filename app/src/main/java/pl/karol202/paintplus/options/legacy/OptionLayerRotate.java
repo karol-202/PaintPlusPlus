@@ -24,7 +24,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.action.ActionLayerRotate;
+import pl.karol202.paintplus.history.legacyaction.ActionLayerRotate;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
 import pl.karol202.paintplus.util.MathUtils;

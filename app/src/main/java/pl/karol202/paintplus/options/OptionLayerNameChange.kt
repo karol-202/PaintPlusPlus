@@ -3,7 +3,7 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerNameBinding
-import pl.karol202.paintplus.history.action.ActionLayerNameChange
+import pl.karol202.paintplus.history.legacyaction.ActionLayerNameChange
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
