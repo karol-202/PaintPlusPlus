@@ -1,9 +1,9 @@
 package pl.karol202.paintplus.image
 
-import pl.karol202.paintplus.history.action.HistoryAction
+import pl.karol202.paintplus.history.action.Action
 
-data class HistoryState(val precedingActions: List<HistoryAction> = emptyList(),
-                        val followingActions: List<HistoryAction> = emptyList())
+data class HistoryState(val precedingActions: List<Action.ToRevert> = emptyList(),
+                        val followingActions: List<Action.ToCommit> = emptyList())
 {
 	val canUndo = precedingActions.isNotEmpty()
 	val canRedo = followingActions.isNotEmpty()
@@ -11,22 +11,21 @@ data class HistoryState(val precedingActions: List<HistoryAction> = emptyList(),
 	val precedingSize = precedingActions.size
 	val followingSize = followingActions.size
 
-	fun undoing(): Pair<HistoryState, HistoryAction>?
+	fun poppingPreceding(): Pair<HistoryState, Action.ToRevert>?
 	{
 		val action = precedingActions.lastOrNull() ?: return null
-		val newState = copy(precedingActions = precedingActions.dropLast(1),
-		                    followingActions = followingActions + action)
+		val newState = copy(precedingActions = precedingActions.dropLast(1))
 		return newState to action
 	}
 
-	fun redoing(): Pair<HistoryState, HistoryAction>?
+	fun poppingFollowing(): Pair<HistoryState, Action.ToCommit>?
 	{
 		val action = followingActions.lastOrNull() ?: return null
-		val newState = copy(precedingActions = precedingActions + action,
-		                    followingActions = followingActions.dropLast(1))
+		val newState = copy(followingActions = followingActions.dropLast(1))
 		return newState to action
 	}
 
-	fun withNewAction(action: HistoryAction) = copy(precedingActions = precedingActions + action,
-	                                                followingActions = emptyList())
+	fun withPrecedingAction(action: Action.ToRevert) = copy(precedingActions = precedingActions + action)
+
+	fun withFollowingAction(action: Action.ToCommit) = copy(followingActions = followingActions + action)
 }

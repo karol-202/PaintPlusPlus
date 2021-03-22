@@ -2,7 +2,7 @@ package pl.karol202.paintplus.image
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import pl.karol202.paintplus.history.action.HistoryAction
+import pl.karol202.paintplus.history.action.Action
 
 class HistoryService
 {
@@ -14,20 +14,21 @@ class HistoryService
 
 	fun undo()
 	{
-		val (newState, action) = state.undoing() ?: return
-		// TODO Execute action
-		_stateFlow.value = newState
+		val (newState, action) = state.poppingPreceding() ?: return
+		val toCommit = action.revert()
+		_stateFlow.value = newState.withFollowingAction(toCommit)
 	}
 
 	fun redo()
 	{
-		val (newState, action) = state.redoing() ?: return
-		// TODO Execute action
-		_stateFlow.value = newState
+		val (newState, action) = state.poppingFollowing() ?: return
+		val toRevert = action.commit()
+		_stateFlow.value = newState.withPrecedingAction(toRevert)
 	}
 
-	fun recordAction(action: HistoryAction)
+	fun commitAction(action: Action.ToCommit)
 	{
-		_stateFlow.value = state.withNewAction(action)
+		val toRevert = action.commit()
+		_stateFlow.value = state.withPrecedingAction(toRevert)
 	}
 }

@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.karol202.paintplus.databinding.ItemHistoryActionBinding
 import pl.karol202.paintplus.databinding.ItemHistoryCurrentPositionBinding
-import pl.karol202.paintplus.history.action.HistoryAction
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.image.HistoryState
 import pl.karol202.paintplus.util.layoutInflater
 
@@ -31,12 +31,12 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.ViewHolder>()
 {
 	abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 	{
-		abstract fun bind(action: HistoryAction)
+		abstract fun bind(action: Action)
 	}
 
 	class ActionViewHolder(private val views: ItemHistoryActionBinding) : ViewHolder(views.root)
 	{
-		override fun bind(action: HistoryAction)
+		override fun bind(action: Action)
 		{
 			// TODO Image
 			views.textHistoryAction.setText(action.name)
@@ -45,7 +45,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.ViewHolder>()
 
 	class CursorViewHolder(views: ItemHistoryCurrentPositionBinding) : ViewHolder(views.root)
 	{
-		override fun bind(action: HistoryAction) { }
+		override fun bind(action: Action) { }
 	}
 
 	var historyState = HistoryState()

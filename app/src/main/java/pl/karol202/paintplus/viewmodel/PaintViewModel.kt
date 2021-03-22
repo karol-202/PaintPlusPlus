@@ -28,7 +28,6 @@ class PaintViewModel(application: Application,
                      private val viewService: ViewService,
                      private val toolsService: ToolsService,
                      private val colorService: ColorsService,
-                     private val selectionService: SelectionService,
                      private val historyService: HistoryService,
                      private val helpersService: HelpersService,
                      private val layerModesService: LayerModesService,
@@ -93,10 +92,10 @@ class PaintViewModel(application: Application,
 	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(extraBufferCapacity = 16)
 
 	val imageFlow = imageService.imageFlow
+	val selectionFlow = imageService.selectionFlow
 	val viewPositionFlow = viewService.viewPositionFlow
 	val currentToolFlow = toolsService.currentToolFlow
 	val currentColorFlow = colorService.currentColorFlow
-	val selectionFlow = selectionService.selectionFlow
 	val settingsFlow = settingsRepository.settings
 	val titleFlow = _titleOverrideFlow.combine(currentToolFlow) { override, tool -> createTitle(override, tool) }
 	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow

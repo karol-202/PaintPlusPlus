@@ -17,8 +17,10 @@ class ImageService(context: Context)
 	                                                    height = DEFAULT_IMAGE_SIZE,
 	                                                    layerName = defaultLayerName,
 	                                                    color = DEFAULT_IMAGE_BACKGROUND))
+	private val _selectionFlow = MutableStateFlow(Selection.empty)
 
 	val imageFlow: StateFlow<Image> = _imageFlow
+	val selectionFlow: StateFlow<Selection> = _selectionFlow
 
 	val imageWidth get() = _imageFlow.value.width
 	val imageHeight get() = _imageFlow.value.height

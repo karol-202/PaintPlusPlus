@@ -59,8 +59,7 @@ class PaintPlusPlusApplication : Application()
 		single { ClipboardService() }
 		single { ColorsService() }
 		single { HistoryService() }
-		single { SelectionService() }
-		single { HelpersService() }
+		single { HelpersService(get(), get()) }
 		single { ViewService(get()) }
 		single { LayerModesService(get()) }
 	}
@@ -102,7 +101,10 @@ class PaintPlusPlusApplication : Application()
 	}
 
 	private fun viewModelModule() = module {
-		viewModel { RecentViewModel(androidApplication(), get()) }
-		viewModel { PaintViewModel(androidApplication(), get(), get(), get(), get(), get()) }
+		viewModel { RecentViewModel(get(), get()) }
+		viewModel { PaintViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
+		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
+		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
+		                           get()) }
 	}
 }
