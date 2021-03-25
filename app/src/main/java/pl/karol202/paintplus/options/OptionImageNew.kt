@@ -21,11 +21,17 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogNewImageBinding
+import pl.karol202.paintplus.image.FileService
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-// TODO Change File to Image in all names
-class OptionFileNew(private val viewModel: PaintViewModel) : Option
+class OptionImageNew(private val viewModel: PaintViewModel,
+                     private val imageService: ImageService,
+                     private val viewService: ViewService,
+                     private val fileService: FileService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     currentSize: Size,
@@ -64,11 +70,12 @@ class OptionFileNew(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute() = viewModel.showDialog { Dialog(it, viewModel.image.size, this::onApply) }
+	fun execute() = viewModel.showDialog { Dialog(it, imageService.image.size, this::onApply) }
 
 	private fun onApply(size: Size)
 	{
-		viewModel.image.newImage(size.width, size.height)
-		viewModel.image.centerView()
+		imageService.newImage(size.width, size.height)
+		viewService.centerView()
+		fileService.onFileReset()
 	}
 }

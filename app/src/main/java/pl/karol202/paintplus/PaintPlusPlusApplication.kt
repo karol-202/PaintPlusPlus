@@ -4,7 +4,6 @@ import android.app.Application
 import android.renderscript.RenderScript
 import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -19,6 +18,7 @@ import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.recent.RoomRecentImageRepository
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.settings.SharedPrefsSettingsRepository
+import pl.karol202.paintplus.tool.ToolsService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class PaintPlusPlusApplication : Application()
@@ -61,7 +61,9 @@ class PaintPlusPlusApplication : Application()
 		single { HistoryService() }
 		single { HelpersService(get(), get()) }
 		single { ViewService(get()) }
+		single { ToolsService(get()) }
 		single { LayerModesService(get()) }
+		single { FileService(get(), get()) }
 	}
 
 	private fun optionModule() = module {
@@ -70,10 +72,10 @@ class PaintPlusPlusApplication : Application()
 		single { OptionCropImageBySelection(get()) }
 		single { OptionCropLayerBySelection(get()) }
 		single { OptionCut(get()) }
-		single { OptionFileCapturePhoto(get()) }
-		single { OptionFileNew(get()) }
-		single { OptionFileOpen(get(), get(), get()) }
-		single { OptionFileSave(get(), get(), get()) }
+		single { OptionImageCapturePhoto(get()) }
+		single { OptionImageNew(get()) }
+		single { OptionImageOpen(get(), get(), get()) }
+		single { OptionImageSave(get(), get(), get()) }
 		single { OptionFlip(get()) }
 		single { OptionImageFlatten(get()) }
 		single { OptionImageFlip(get()) }

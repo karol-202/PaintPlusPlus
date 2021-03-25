@@ -15,40 +15,48 @@
  */
 package pl.karol202.paintplus.options
 
+import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import androidx.core.content.FileProvider
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.ImageLoader
+import pl.karol202.paintplus.image.FileService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.io.File
 import java.io.IOException
 
-class OptionFileCapturePhoto(private val viewModel: PaintViewModel) : Option
+class OptionImageCapturePhoto(private val context: Context,
+                              private val imageService: ImageService,
+                              private val viewService: ViewService,
+                              private val viewModel: PaintViewModel,
+                              private val fileService: FileService) : Option
 {
 	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
 
 	fun execute()
 	{
-		if(viewModel.image.wasModifiedSinceLastSave()) askAboutChanges() else capturePhoto()
+		if(fileService.wasModifiedSinceSave) askAboutChanges() else capturePhoto()
 	}
 
 	private fun askAboutChanges() = viewModel.showDialog {
-		OptionFileOpen.UnsavedDialog(it) { capturePhoto() }
+		OptionImageOpen.UnsavedDialog(it) { capturePhoto() }
 	}
 
 	private fun capturePhoto()
 	{
 		val photoFile = createPhotoFile() ?: return onError()
-		val photoUri = FileProvider.getUriForFile(viewModel.context, viewModel.context.packageName, photoFile)
+		val photoUri = FileProvider.getUriForFile(context, context.packageName, photoFile)
 		viewModel.makeActionRequest(PaintViewModel.ActionRequest.CapturePhoto(photoUri) { onCaptureResult(photoUri, it) })
 	}
 
 	private fun createPhotoFile() = try
 	{
-		val directory = viewModel.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+		val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 		File.createTempFile("captured", ".jpeg", directory)
 	}
 	catch(e: IOException)
@@ -60,18 +68,19 @@ class OptionFileCapturePhoto(private val viewModel: PaintViewModel) : Option
 	private fun onCaptureResult(photoUri: Uri, captureResult: Boolean)
 	{
 		val result = photoUri.takeIf { captureResult }
-				?.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)
+				?.openFileDescriptor(context, FileDescriptorMode.READ)
 				?.useSuppressingIOException { openBitmap(it) }
 				?: false
-		photoUri.delete(viewModel.context)
+		photoUri.delete(context)
 		if(!result) onError()
 	}
 
 	private fun openBitmap(fileDescriptor: ParcelFileDescriptor): Boolean
 	{
 		val bitmap = ImageLoader.openBitmap(fileDescriptor.fileDescriptor)?.fitInto(maxSize) ?: return false
-		viewModel.image.openImage(bitmap)
-		viewModel.image.centerView()
+		imageService.openImage(bitmap)
+		viewService.centerView()
+		fileService.onFileReset()
 		return true
 	}
 

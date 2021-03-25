@@ -31,10 +31,8 @@ import pl.karol202.paintplus.color.picker.ColorPickerContract
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.history.ActivityHistory
 import pl.karol202.paintplus.options.legacy.LegacyOption.AppContextLegacy
-import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.*
-import pl.karol202.paintplus.viewmodel.DialogDefinition
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 
@@ -93,7 +91,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { onActionRequest(it) }
 	}
 
-	private fun updateDialog(definition: DialogDefinition?)
+	private fun updateDialog(definition: PaintViewModel.DialogDefinition?)
 	{
 		currentDialog?.dismiss()
 		currentDialog =

@@ -15,19 +15,37 @@
  */
 package pl.karol202.paintplus.options
 
+import pl.karol202.paintplus.R
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.history.legacyaction.ActionImageCrop
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionCropImageBySelection(private val viewModel: PaintViewModel) : Option
+class OptionCropImageBySelection(private val imageService: ImageService,
+                                 private val viewService: ViewService,
+                                 private val historyService: HistoryService,
+                                 private val clipboardService: ClipboardService) : Option
 {
-	fun execute()
-	{
-		val image = viewModel.image
-		val bounds = image.selection.bounds
-		val action = ActionImageCrop(image)
-		action.setDataBeforeResizing(image.width, image.height, bounds.left, bounds.top)
-		image.resize(bounds.left, bounds.top, bounds.width(), bounds.height())
-		image.updateImage()
-		action.applyAction()
+	private val actionPreset = Action.Preset(R.string.history_action_image_crop) { imageService.image.getFlattenedBitmap() }
+
+	fun execute() = historyService.commitAction(this::commit)
+
+	// TODO Consider creating action that won't expand the size of the layer
+	private fun commit(): Action.ToRevert = actionPreset.commit {
+		val oldImage = imageService.image
+		val bounds = imageService.selection.bounds
+		imageService.editImage { resized(bounds.left, bounds.top, bounds.width(), bounds.height()) }
+		imageService.editSelection { translated(-bounds.left, -bounds.top) }
+		clipboardService.offsetClipboard(-bounds.left, -bounds.top)
+		viewService.offsetView(-bounds.left, -bounds.top)
+		toRevert { revert(oldImage, bounds.left, bounds.top) }
+	}
+
+	private fun revert(oldImage: Image, xOffset: Int, yOffset: Int): Action.ToCommit = actionPreset.revert {
+		imageService.editImage { oldImage }
+		imageService.editSelection { translated(xOffset, yOffset) }
+		clipboardService.offsetClipboard(xOffset, yOffset)
+		viewService.offsetView(xOffset, yOffset)
+		toCommit { commit() }
 	}
 }

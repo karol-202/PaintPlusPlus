@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Size
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -36,10 +37,10 @@ class PaintViewModel(application: Application,
                      private val optionCropImageBySelection: OptionCropImageBySelection,
                      private val optionCropLayerBySelection: OptionCropLayerBySelection,
                      private val optionCut: OptionCut,
-                     private val optionFileCapturePhoto: OptionFileCapturePhoto,
-                     private val optionFileNew: OptionFileNew,
-                     private val optionFileOpen: OptionFileOpen,
-                     private val optionFileSave: OptionFileSave,
+                     private val optionImageCapturePhoto: OptionImageCapturePhoto,
+                     private val optionImageNew: OptionImageNew,
+                     private val optionImageOpen: OptionImageOpen,
+                     private val optionImageSave: OptionImageSave,
                      private val optionImageFlatten: OptionImageFlatten,
                      private val optionImageFlip: OptionImageFlip,
                      private val optionImageRotate: OptionImageRotate,
@@ -67,6 +68,11 @@ class PaintViewModel(application: Application,
 		NONE, TOOL_SELECTION, TOOL_PROPERTIES
 	}
 
+	fun interface DialogDefinition
+	{
+		fun init(builder: AlertDialog.Builder)
+	}
+
 	data class MessageEvent(@StringRes val text: Int)
 
 	sealed class ActionRequest<R>(val callback: (R) -> Unit)
@@ -84,7 +90,7 @@ class PaintViewModel(application: Application,
 		                callback: (Int?) -> Unit) : ActionRequest<Int?>(callback)
 	}
 
-	val context: Context get() = getApplication()
+	private val context: Context get() = getApplication()
 
 	private val _titleOverrideFlow = MutableStateFlow(TitleOverride.NONE)
 	private val _dialogFlow = MutableStateFlow<DialogDefinition?>(null)
@@ -116,20 +122,20 @@ class PaintViewModel(application: Application,
 		}
 	}
 
-	fun newImage() = optionFileNew.execute()
+	fun newImage() = optionImageNew.execute()
 
-	fun openImage() = optionFileOpen.execute()
+	fun openImage() = optionImageOpen.execute()
 
-	fun openImage(uri: Uri) = optionFileOpen.executeWithUri(uri)
+	fun openImage(uri: Uri) = optionImageOpen.executeWithUri(uri)
 
-	fun openImageWithoutSaving() = optionFileOpen.executeWithoutSaving()
+	fun openImageWithoutSaving() = optionImageOpen.executeWithoutSaving()
 
-	fun openImageFromCamera() = optionFileCapturePhoto.execute()
+	fun openImageFromCamera() = optionImageCapturePhoto.execute()
 
 	// TODO Check for last format: executeWithUriAndFormat(image.lastUri, image.lastFormat) / executeWithUri(image.lastUri)
-	fun saveImage() = optionFileSave.execute()
+	fun saveImage() = optionImageSave.execute()
 
-	fun saveImageAs() = optionFileSave.execute()
+	fun saveImageAs() = optionImageSave.execute()
 
 	fun resizeImage() = optionTodo()
 

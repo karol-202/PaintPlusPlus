@@ -25,12 +25,14 @@ class ViewService(private val imageService: ImageService)
 	private val imageWidth get() = imageService.imageWidth
 	private val imageHeight get() = imageService.imageHeight
 
-	fun centerView()
-	{
-		_viewPositionFlow.value = _viewPositionFlow.value.copy(
-				x = (imageWidth - viewportWidth / zoom) / 2f,
-				y = (imageHeight - viewportHeight / zoom) / 2f)
-	}
+	fun centerView() = setViewPosition(viewPosition.copy(
+			x = (imageWidth - viewportWidth / zoom) / 2f,
+			y = (imageHeight - viewportHeight / zoom) / 2f))
+
+	fun offsetView(x: Int, y: Int) = setViewPosition(viewPosition.copy(
+			x = viewX + x,
+			y = viewY + y
+	))
 
 	fun setDefaultZoom() = setZoom(1f, 0.5f, 0.5f)
 
@@ -42,11 +44,15 @@ class ViewService(private val imageService: ImageService)
 		val offsetYTop = viewY * (this.zoom / zoom) - viewY
 		val offsetXRight = (viewX * this.zoom + (imageWidth * zoom - imageWidth * this.zoom)) / zoom - viewX
 		val offsetYBottom = (viewY * this.zoom + (imageHeight * zoom - imageHeight * this.zoom)) / zoom - viewY
-		_viewPositionFlow.value = ViewPosition(
+		setViewPosition(ViewPosition(
 				x = viewX + lerp(focusXInImage, offsetXLeft, offsetXRight),
 				y = viewY + lerp(focusYInImage, offsetYTop, offsetYBottom),
-				zoom = zoom
-		)
+				zoom = zoom))
+	}
+
+	private fun setViewPosition(viewPosition: ViewPosition)
+	{
+		_viewPositionFlow.value = viewPosition
 	}
 
 	fun setViewportSize(size: Size)

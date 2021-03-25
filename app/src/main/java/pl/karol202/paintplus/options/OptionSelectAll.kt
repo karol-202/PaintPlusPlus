@@ -1,6 +1,8 @@
 package pl.karol202.paintplus.options
 
-class OptionSelectAll(private val selectionService: SelectionService) : Option
+import pl.karol202.paintplus.image.ImageService
+
+class OptionSelectAll(private val imageService: ImageService) : Option
 {
 	fun execute()
 	{

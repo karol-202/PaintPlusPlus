@@ -15,6 +15,7 @@
  */
 package pl.karol202.paintplus.options
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.LayoutInflater
@@ -24,10 +25,13 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogFormatGifBinding
 import pl.karol202.paintplus.databinding.DialogFormatJpegBinding
 import pl.karol202.paintplus.file.*
+import pl.karol202.paintplus.image.FileService
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionSave(private val viewModel: PaintViewModel) : Option
+class OptionSave(private val context: Context,
+                 private val viewModel: PaintViewModel,
+                 private val fileService: FileService) : Option
 {
 	sealed class SaveResult
 	{
@@ -105,11 +109,11 @@ class OptionSave(private val viewModel: PaintViewModel) : Option
 				onUriSelected(bitmap, onResult, it)
 			})
 
-	private fun getSuggestedName() = viewModel.image.lastUri?.getDisplayName(viewModel.context) ?: ""
+	private fun getSuggestedName() = fileService.lastUri?.getDisplayName(context) ?: ""
 
 	private fun onUriSelected(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri?)
 	{
-		uri?.takePersistablePermission(viewModel.context) ?: return
+		uri?.takePersistablePermission(context) ?: return
 		executeWithUri(bitmap, onResult, uri)
 	}
 
@@ -119,7 +123,7 @@ class OptionSave(private val viewModel: PaintViewModel) : Option
 		executeWithUriAndFormatType(bitmap, onResult, uri, formatType)
 	}
 
-	private fun getFileFormatType(uri: Uri) = uri.getDisplayName(viewModel.context)?.let(SaveFormat.Type::fromExtension)
+	private fun getFileFormatType(uri: Uri) = uri.getDisplayName(context)?.let(SaveFormat.Type::fromExtension)
 
 	private fun executeWithUriAndFormatType(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri,
 	                                        formatType: SaveFormat.Type) = when(formatType)
@@ -140,8 +144,8 @@ class OptionSave(private val viewModel: PaintViewModel) : Option
 	}
 
 	fun executeWithUriAndFormat(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri, format: SaveFormat) = viewModel.postLongTask {
-		uri.openFileDescriptor(viewModel.context, FileDescriptorMode.WRITE)?.useSuppressingIOException { desc ->
-			val result = format.save(viewModel.context, desc.fileDescriptor.toFileOutputStream(), bitmap)
+		uri.openFileDescriptor(context, FileDescriptorMode.WRITE)?.useSuppressingIOException { desc ->
+			val result = format.save(context, desc.fileDescriptor.toFileOutputStream(), bitmap)
 			if(result) Unit else null
 		} ?: return@postLongTask onError(onResult, uri, SaveResult.Failed.CannotSave)
 		onResult(SaveResult.Success(uri, format))
@@ -149,7 +153,7 @@ class OptionSave(private val viewModel: PaintViewModel) : Option
 
 	private fun onError(onResult: (SaveResult) -> Unit, uriToDelete: Uri?, error: SaveResult.Failed)
 	{
-		uriToDelete?.delete(viewModel.context)
+		uriToDelete?.delete(context)
 		onResult(error)
 	}
 }

@@ -14,7 +14,7 @@ fun Bitmap.fitInto(maxSize: Size): Bitmap
 	return scale(targetSize.width, targetSize.height)
 }
 
-fun Bitmap.transformedWith(matrix: Matrix, bilinear: Boolean = false) =
+fun Bitmap.transformedWith(matrix: Matrix, bilinear: Boolean = false): Bitmap =
 		Bitmap.createBitmap(this, 0, 0, width, height, matrix, bilinear)
 
 fun Bitmap.ensureMutable() = takeIf { isMutable } ?: copy(config, true)

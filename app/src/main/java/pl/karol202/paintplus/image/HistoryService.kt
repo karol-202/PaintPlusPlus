@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import pl.karol202.paintplus.history.action.Action
 
-class HistoryService
+class HistoryService(private val fileService: FileService)
 {
 	private val _stateFlow = MutableStateFlow(HistoryState())
 
@@ -26,9 +26,16 @@ class HistoryService
 		_stateFlow.value = newState.withPrecedingAction(toRevert)
 	}
 
-	fun commitAction(action: Action.ToCommit)
+	fun commitAction(commit: () -> Action.ToRevert)
 	{
-		val toRevert = action.commit()
-		_stateFlow.value = state.withPrecedingAction(toRevert)
+		val toRevert = commit()
+		_stateFlow.value = state.withPrecedingAction(toRevert).withNoFollowingActions()
+
+		fileService.onFileChange()
+	}
+
+	fun clearHistory()
+	{
+		_stateFlow.value = HistoryState()
 	}
 }

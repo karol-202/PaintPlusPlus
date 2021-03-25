@@ -44,6 +44,7 @@ class Layer(val x: Int,
 
 	val editCanvas = Canvas(bitmap)
 
+	val topLeft = Point(x, y)
 	val width = bitmap.width
 	val height = bitmap.height
 	val bounds = Rect(x, y, x + width, y + height)
@@ -52,9 +53,9 @@ class Layer(val x: Int,
 	fun translated(x: Int, y: Int) =
 			withPosition(this.x + x, this.y + y)
 
-	fun cropped(x: Int, y: Int, width: Int, height: Int) =
-			withBitmap(width, height).translated(x, y).apply {
-				editCanvas.drawBitmap(this@Layer.bitmap, -x.toFloat(), -y.toFloat(), null)
+	fun resized(x: Int, y: Int, width: Int, height: Int) =
+			withEmptyBitmap(width, height).translated(x - this.x, y - this.y).apply {
+				editCanvas.drawBitmap(this@Layer.bitmap, (this@Layer.x - x).toFloat(), (this@Layer.y - y).toFloat(), null)
 			}
 
 	fun scaled(width: Int, height: Int, bilinear: Boolean) =
@@ -84,10 +85,10 @@ class Layer(val x: Int,
 
 	fun withMode(mode: LayerMode) = copy(mode = mode)
 
-	private fun withBitmap(bitmap: Bitmap) =
-			copy(bitmap = bitmap)
+	fun withBitmap(bitmap: Bitmap) =
+			copy(bitmap = bitmap.ensureMutable().withAlpha(true))
 
-	private fun withBitmap(width: Int, height: Int) =
+	private fun withEmptyBitmap(width: Int, height: Int) =
 			withBitmap(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888))
 
 	private fun copy(x: Int = this.x, y: Int = this.x, name: String = this.name, bitmap: Bitmap = this.bitmap,

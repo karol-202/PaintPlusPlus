@@ -38,7 +38,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.ViewHolder>()
 	{
 		override fun bind(action: Action)
 		{
-			// TODO Image
+			views.imageHistoryActionPreview.setImageBitmap(action.thumbnailBitmap)
 			views.textHistoryAction.setText(action.name)
 		}
 	}

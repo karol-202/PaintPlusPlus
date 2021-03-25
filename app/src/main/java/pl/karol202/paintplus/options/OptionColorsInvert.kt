@@ -19,23 +19,37 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.manipulators.ColorsInvert
 import pl.karol202.paintplus.color.manipulators.params.InvertParams
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
-import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
-import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.ImageService
 
-class OptionColorsInvert(private val viewModel: PaintViewModel) : Option
+class OptionColorsInvert(private val imageService: ImageService,
+                         private val historyService: HistoryService) : Option
 {
+	private val actionPreset = Action.Preset(R.string.history_action_colors_invert) { imageService.image.requireSelectedLayer.bitmap }
+
 	fun execute()
 	{
-		val image = viewModel.image
-		val layer = image.selectedLayer
-		val bitmapIn = layer.bitmap
-		val selection = image.selection
-		val action = ActionLayerChange(image, R.string.history_action_colors_invert)
-		action.setLayerChange(image.getLayerIndex(layer), layer.bitmap)
-		val invert = ColorsInvert()
-		val params = InvertParams(ManipulatorSelection.fromSelection(selection, layer.bounds))
-		val bitmapOut = invert.run(bitmapIn, params)
-		layer.bitmap = bitmapOut
-		action.applyAction()
+		if(imageService.image.selectedLayer == null) return
+		historyService.commitAction(this::commit)
+	}
+
+	private fun commit(): Action.ToRevert = actionPreset.commit {
+		invertColors()
+		toRevert { revert() }
+	}
+
+	private fun revert(): Action.ToCommit = actionPreset.revert {
+		invertColors()
+		toCommit { commit() }
+	}
+
+	private fun invertColors()
+	{
+		val layer = imageService.image.requireSelectedLayer
+		val params = InvertParams(ManipulatorSelection.fromSelection(imageService.selection, layer.bounds))
+		val newBitmap = ColorsInvert().run(layer.bitmap, params)
+		imageService.editImage { withSelectedLayerUpdated(layer.withBitmap(newBitmap)) }
 	}
 }

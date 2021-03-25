@@ -28,4 +28,6 @@ data class HistoryState(val precedingActions: List<Action.ToRevert> = emptyList(
 	fun withPrecedingAction(action: Action.ToRevert) = copy(precedingActions = precedingActions + action)
 
 	fun withFollowingAction(action: Action.ToCommit) = copy(followingActions = followingActions + action)
+
+	fun withNoFollowingActions() = copy(followingActions = emptyList())
 }

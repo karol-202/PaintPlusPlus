@@ -19,18 +19,26 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.SaveFormat
-import pl.karol202.paintplus.recent.RecentViewModel
+import pl.karol202.paintplus.image.FileService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionFileSave(private val recentViewModel: RecentViewModel,
-                     private val paintViewModel: PaintViewModel,
-                     private val optionSave: OptionSave) : Option
+class OptionImageSave(private val paintViewModel: PaintViewModel,
+                      private val imageService: ImageService,
+                      private val fileService: FileService,
+                      private val optionSave: OptionSave) : Option
 {
-	fun execute() = optionSave.execute(paintViewModel.image.fullImage, this::onResult)
+	private val bitmapToSave get() = imageService.image.getFlattenedBitmap()
 
-	fun executeWithUri(uri: Uri) = optionSave.executeWithUri(paintViewModel.image.fullImage, this::onResult, uri)
+	fun execute() =
+			optionSave.execute(bitmapToSave, this::onResult)
 
-	fun executeWithUriAndFormat(uri: Uri, format: SaveFormat) = optionSave.executeWithUriAndFormat(uri, format)
+	fun executeWithUri(uri: Uri) =
+			optionSave.executeWithUri(bitmapToSave, this::onResult, uri)
+
+	fun executeWithUriAndFormat(uri: Uri, format: SaveFormat) =
+			optionSave.executeWithUriAndFormat(bitmapToSave, this::onResult, uri, format)
 
 	private fun onResult(result: OptionSave.SaveResult) = when(result)
 	{
@@ -41,10 +49,7 @@ class OptionFileSave(private val recentViewModel: RecentViewModel,
 
 	private fun onSaved(uri: Uri, format: SaveFormat)
 	{
-		recentViewModel.onFileEdit(uri)
-		paintViewModel.image.lastUri = uri
-		paintViewModel.image.lastFormat = format
-		paintViewModel.image.notifySave()
+		fileService.onFileSave(uri, format)
 		paintViewModel.showMessage(R.string.message_saved)
 	}
 

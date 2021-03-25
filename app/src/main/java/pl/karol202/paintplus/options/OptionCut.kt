@@ -1,30 +1,47 @@
 package pl.karol202.paintplus.options
 
 import android.graphics.*
+import androidx.core.graphics.withClip
 import pl.karol202.paintplus.R
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
+import pl.karol202.paintplus.image.ClipboardContent
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.util.minus
 
-class OptionCut(private val optionCopy: OptionCopy) : Option
+class OptionCut(private val imageService: ImageService,
+                private val historyService: HistoryService,
+                private val optionCopy: OptionCopy) : Option
 {
+	private val clearPaint = Paint().apply {
+		xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+	}
+
+	private val actionPreset = Action.Preset(R.string.history_action_cut) { imageService.image.requireSelectedLayer.bitmap }
+
 	fun execute()
 	{
+		if(imageService.image.selectedLayer == null) return
 		optionCopy.execute()
-		//copy(selectedLayer)
+		historyService.commitAction(this::commit)
+	}
 
-		val action = ActionLayerChange(image, R.string.history_action_cut)
-		action.setLayerChange(image.getLayerIndex(selectedLayer), selectedLayer.bitmap, selection.getBounds())
+	private fun commit(): Action.ToRevert = actionPreset.commit {
+		val selectedLayer = imageService.image.requireSelectedLayer
+		val selection = imageService.selection
+		val clipboardContent = optionCopy.createClipboardContent()
 
-		val paint = Paint()
-		paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+		selectedLayer.editCanvas.withClip(selection.path - selectedLayer.topLeft) {
+			drawRect(0f, 0f, selectedLayer.width.toFloat(), selectedLayer.height.toFloat(), clearPaint)
+		}
 
-		val path = Path(selection.getPath())
-		path.offset(-selectedLayer.x.toFloat(), -selectedLayer.y.toFloat())
+		toRevert { revert(clipboardContent) }
+	}
 
-		val canvas: Canvas = selectedLayer.editCanvas
-		if(canvas.saveCount > 0) canvas.restoreToCount(1)
-		canvas.clipPath(path)
-		canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), paint)
-
-		action.applyAction()
+	private fun revert(clipboardContent: ClipboardContent): Action.ToCommit = actionPreset.revert {
+		val canvas = imageService.image.requireSelectedLayer.editCanvas
+		canvas.drawBitmap(clipboardContent.bitmap, clipboardContent.left.toFloat(), clipboardContent.top.toFloat(), null)
+		toCommit { commit() }
 	}
 }

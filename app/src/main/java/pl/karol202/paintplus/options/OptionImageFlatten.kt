@@ -15,19 +15,31 @@
  */
 package pl.karol202.paintplus.options
 
+import android.content.Context
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.legacyaction.ActionImageFlatten
-import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.ImageService
 
-class OptionImageFlatten(private val viewModel: PaintViewModel) : Option
+class OptionImageFlatten(context: Context,
+                         private val imageService: ImageService,
+                         private val historyService: HistoryService) : Option
 {
 	private val flattenedLayerName = context.getString(R.string.flattened)
 
-	fun execute()
-	{
-		val action = ActionImageFlatten(viewModel.image)
-		action.setImageBeforeFlattening(viewModel.image)
-		viewModel.image.flattenImage()
-		action.applyAction()
+	private val actionPreset = Action.Preset(R.string.history_action_image_flatten) { imageService.image.getFlattenedBitmap() }
+
+	fun execute() = historyService.commitAction(this::commit)
+
+	private fun commit(): Action.ToRevert = actionPreset.commit {
+		val oldImage = imageService.image
+		imageService.editImage { flattened(flattenedLayerName) }
+		toRevert { revert(oldImage) }
+	}
+
+	private fun revert(image: Image): Action.ToCommit = actionPreset.revert {
+		imageService.editImage { image }
+		toCommit { commit() }
 	}
 }

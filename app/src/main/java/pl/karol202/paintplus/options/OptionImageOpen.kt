@@ -20,15 +20,14 @@ import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.image.FlipDirection
-import pl.karol202.paintplus.image.LegacyImage
-import pl.karol202.paintplus.image.RotationAmount
-import pl.karol202.paintplus.recent.RecentViewModel
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionFileOpen(private val recentViewModel: RecentViewModel,
-                     private val paintViewModel: PaintViewModel,
-                     private val openOption: OptionOpen) : Option
+class OptionImageOpen(private val paintViewModel: PaintViewModel,
+                      private val imageService: ImageService,
+                      private val viewService: ViewService,
+                      private val fileService: FileService,
+                      private val openOption: OptionOpen) : Option
 {
 	class UnsavedDialog(builder: AlertDialog.Builder,
 	                    onApply: () -> Unit) : Option.BasicDialog(builder)
@@ -44,7 +43,7 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 
 	fun execute()
 	{
-		if(paintViewModel.image.wasModifiedSinceLastSave()) askAboutChanges() else executeWithoutSaving()
+		if(fileService.wasModifiedSinceSave) askAboutChanges() else executeWithoutSaving()
 	}
 
 	private fun askAboutChanges() = paintViewModel.showDialog {
@@ -63,30 +62,24 @@ class OptionFileOpen(private val recentViewModel: RecentViewModel,
 
 	private fun openImageFromBitmap(uri: Uri, bitmap: Bitmap, orientation: Int?)
 	{
-		paintViewModel.image.openImage(bitmap)
-		paintViewModel.image.lastUri = uri
-		paintViewModel.image.centerView()
-		recentViewModel.onFileEdit(uri)
-		openOption.askAboutExifRotation(orientation) { rotateImage(paintViewModel.image, it) }
+		imageService.openImage(bitmap)
+		viewService.centerView()
+		fileService.onFileOpen(uri)
+
+		openOption.askAboutExifRotation(orientation) {
+			imageService.editImage { rotatedByExif(it) }
+		}
 	}
 
-	private fun rotateImage(image: LegacyImage, exifOrientation: Int) = when(exifOrientation)
+	private fun Image.rotatedByExif(exifOrientation: Int) = when(exifOrientation)
 	{
-		ExifInterface.ORIENTATION_ROTATE_90 -> image.rotate(RotationAmount.ANGLE_90)
-		ExifInterface.ORIENTATION_ROTATE_180 -> image.rotate(RotationAmount.ANGLE_180)
-		ExifInterface.ORIENTATION_ROTATE_270 -> image.rotate(RotationAmount.ANGLE_270)
-		ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> image.flip(FlipDirection.HORIZONTALLY)
-		ExifInterface.ORIENTATION_FLIP_VERTICAL -> image.flip(FlipDirection.VERTICALLY)
-		ExifInterface.ORIENTATION_TRANSPOSE ->
-		{
-			image.rotate(RotationAmount.ANGLE_90)
-			image.flip(FlipDirection.HORIZONTALLY)
-		}
-		ExifInterface.ORIENTATION_TRANSVERSE ->
-		{
-			image.rotate(RotationAmount.ANGLE_270)
-			image.flip(FlipDirection.HORIZONTALLY)
-		}
-		else -> {}
+		ExifInterface.ORIENTATION_ROTATE_90 -> rotated(RotationAmount.ANGLE_90)
+		ExifInterface.ORIENTATION_ROTATE_180 -> rotated(RotationAmount.ANGLE_180)
+		ExifInterface.ORIENTATION_ROTATE_270 -> rotated(RotationAmount.ANGLE_270)
+		ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipped(FlipDirection.HORIZONTALLY)
+		ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipped(FlipDirection.VERTICALLY)
+		ExifInterface.ORIENTATION_TRANSPOSE -> rotated(RotationAmount.ANGLE_90).flipped(FlipDirection.HORIZONTALLY)
+		ExifInterface.ORIENTATION_TRANSVERSE -> rotated(RotationAmount.ANGLE_270).flipped(FlipDirection.HORIZONTALLY)
+		else -> this
 	}
 }

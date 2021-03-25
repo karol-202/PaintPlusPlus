@@ -16,22 +16,31 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.legacyaction.ActionImageFlip
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection
+import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.image.FlipDirection
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionImageFlip(private val viewModel: PaintViewModel) : Option
+class OptionImageFlip(private val imageService: ImageService,
+                      private val historyService: HistoryService,
+                      private val optionFlip: OptionFlip) : Option
 {
-	private val optionFlip = OptionFlip(viewModel, R.string.dialog_flip_image, this::flip)
+	private val actionPreset = Action.Preset(R.string.history_action_image_flip) { imageService.image.getFlattenedBitmap() }
 
-	fun execute() = optionFlip.execute()
+	fun execute() = optionFlip.execute(R.string.dialog_flip_image, this::onDirectionSelected)
 
-	private fun flip(direction: FlipDirection)
-	{
-		val action = ActionImageFlip(viewModel.image)
-		action.setDirectionBeforeFlip(direction)
-		viewModel.image.flip(direction)
-		action.applyAction()
-		viewModel.image.updateImage()
+	private fun onDirectionSelected(direction: FlipDirection) = historyService.commitAction { commit(direction) }
+
+	private fun commit(direction: FlipDirection): Action.ToRevert = actionPreset.commit {
+		flip(direction)
+		toRevert { revert(direction) }
 	}
+
+	private fun revert(direction: FlipDirection): Action.ToCommit = actionPreset.revert {
+		flip(direction)
+		toCommit { commit(direction) }
+	}
+
+	private fun flip(direction: FlipDirection) = imageService.editImage { flipped(direction) }
 }

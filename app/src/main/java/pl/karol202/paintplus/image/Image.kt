@@ -3,11 +3,13 @@ package pl.karol202.paintplus.image
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.util.Size
 import androidx.annotation.ColorInt
 import androidx.core.graphics.times
 import pl.karol202.paintplus.image.FlipDirection.*
 import pl.karol202.paintplus.image.RotationAmount.*
 import pl.karol202.paintplus.image.layer.Layer
+import pl.karol202.paintplus.util.changed
 import pl.karol202.paintplus.util.preTranslated
 import pl.karol202.paintplus.util.union
 import kotlin.math.roundToInt
@@ -31,14 +33,25 @@ class Image private constructor(val width: Int,
 						height = height,
 						color = color)),
 				selectedLayerIndex = 0)
+
+		fun fromBitmap(bitmap: Bitmap, layerName: String) = Image(
+				width = bitmap.width,
+				height = bitmap.height,
+				layers = listOf(Layer.create(
+						name = layerName,
+						bitmap = bitmap)),
+				selectedLayerIndex = 0)
 	}
 
+	private val requireSelectedLayerIndex get() = selectedLayerIndex ?: throw IllegalStateException("No selected layer")
+
 	val selectedLayer get() = selectedLayerIndex?.let(layers::get)
+	val requireSelectedLayer get() = layers[requireSelectedLayerIndex]
+
+	val size = Size(width, height)
 
 	fun isLayerSelected(layer: Layer) = layer == selectedLayer
 
-	// TODO viewX -= x; viewY -= y
-	// TODO Offset selection
 	fun resized(x: Int, y: Int, width: Int, height: Int) =
 			copy(width = width,
 			     height = height,
@@ -62,7 +75,6 @@ class Image private constructor(val width: Int,
 				                                y = if(direction == VERTICALLY) height - it.y - it.height else it.y)
 			})
 
-	// TODO Correct viewX and viewY
 	fun rotated(angle: RotationAmount) =
 			copy(width = if(angle == ANGLE_90 || angle == ANGLE_270) height else width,
 			     height = if(angle == ANGLE_90 || angle == ANGLE_270) width else height,
@@ -78,10 +90,10 @@ class Image private constructor(val width: Int,
 				     }.rotate(angle.angle, offset = false)
 			     })
 
-	fun withFlattenedLayers(newLayerName: String): Image
+	fun flattened(newLayerName: String): Image
 	{
 		val bounds = layers.map { it.bounds }.union()
-		val bitmap = flattenRect(bounds.left, bounds.top, bounds.width(), bounds.height())
+		val bitmap = getFlattenedBitmap(bounds.left, bounds.top, bounds.width(), bounds.height())
 		return copy(layers = listOf(Layer.create(x = bounds.left,
 		                                         y = bounds.top,
 		                                         name = newLayerName,
@@ -89,9 +101,7 @@ class Image private constructor(val width: Int,
 		            selectedLayerIndex = 0)
 	}
 
-	fun getFlattenedBitmap() = flattenRect(0, 0, width, height)
-
-	private fun flattenRect(x: Int, y: Int, width: Int, height: Int): Bitmap
+	fun getFlattenedBitmap(x: Int = 0, y: Int = 0, width: Int = this.width, height: Int = this.height): Bitmap
 	{
 		val initialBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 		val imageMatrix = Matrix().preTranslated(-x.toFloat(), -y.toFloat())
@@ -107,6 +117,9 @@ class Image private constructor(val width: Int,
 			if(layers.size >= MAX_LAYERS) null
 			else copy(layers = layers + layer,
 			          selectedLayerIndex = if(autoSelect) layers.size else selectedLayerIndex)
+
+	fun withSelectedLayerUpdated(layer: Layer) =
+			copy(layers = layers.changed(requireSelectedLayerIndex, layer))
 
 	private fun copy(width: Int = this.width, height: Int = this.height, layers: List<Layer> = this.layers,
 	                 selectedLayerIndex: Int? = this.selectedLayerIndex, layersLocked: Boolean = this.layersLocked) =

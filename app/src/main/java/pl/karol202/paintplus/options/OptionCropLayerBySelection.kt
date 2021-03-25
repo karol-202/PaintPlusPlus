@@ -15,20 +15,33 @@
  */
 package pl.karol202.paintplus.options
 
+import pl.karol202.paintplus.R
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.history.legacyaction.ActionLayerCrop
-import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.layer.Layer
 
-class OptionCropLayerBySelection(private val viewModel: PaintViewModel) : Option
+class OptionCropLayerBySelection(private val imageService: ImageService,
+                                 private val historyService: HistoryService) : Option
 {
-	fun execute()
-	{
-		val image = viewModel.image
-		val layer = image.selectedLayer
-		val bounds = image.selection.bounds
-		val action = ActionLayerCrop(image)
-		action.setLayerBeforeResize(layer)
-		layer.resize(bounds.left, bounds.top, bounds.width(), bounds.height())
-		image.updateImage()
-		action.applyAction()
+	private val actionPreset = Action.Preset(R.string.history_action_layer_crop) {
+		imageService.image.requireSelectedLayer.bitmap
+	}
+
+	fun execute() = historyService.commitAction(this::commit)
+
+	private fun commit(): Action.ToRevert = actionPreset.commit {
+		val oldLayer = imageService.image.requireSelectedLayer
+		val bounds = imageService.selection.bounds
+		imageService.editImage {
+			withSelectedLayerUpdated(oldLayer.resized(bounds.left, bounds.top, bounds.width(), bounds.height()))
+		}
+		toRevert { revert(oldLayer) }
+	}
+
+	private fun revert(oldLayer: Layer): Action.ToCommit = actionPreset.revert {
+		imageService.editImage { withSelectedLayerUpdated(oldLayer) }
+		toCommit { commit() }
 	}
 }

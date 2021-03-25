@@ -1,5 +1,6 @@
 package pl.karol202.paintplus.util
 
+import android.graphics.Rect
 import android.util.Size
 import kotlin.math.floor
 import kotlin.math.max
@@ -20,3 +21,5 @@ fun Size.fitInto(maxSize: Size): Size
 	val newHeight = floor(height / higherRatio).toInt()
 	return Size(newWidth, newHeight)
 }
+
+fun Size.toRect() = Rect(0, 0, width, height)

@@ -18,11 +18,17 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogRotateImageBinding
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.history.legacyaction.ActionImageRotate
-import pl.karol202.paintplus.image.LegacyImage.RotationAmount
+import pl.karol202.paintplus.image.FlipDirection
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.RotationAmount
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionImageRotate(private val viewModel: PaintViewModel) : Option
+class OptionImageRotate(private val viewModel: PaintViewModel,
+                        private val imageService: ImageService,
+                        private val historyService: HistoryService,) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     private val onApply: (RotationAmount) -> Unit) :
@@ -49,13 +55,21 @@ class OptionImageRotate(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute() = viewModel.showDialog { Dialog(it, this::rotate) }
+	private val actionPreset = Action.Preset(R.string.history_action_image_rotate) { imageService.image.getFlattenedBitmap() }
 
-	private fun rotate(rotationAmount: RotationAmount)
-	{
-		val action = ActionImageRotate(viewModel.image)
-		action.setRotationAmount(rotationAmount)
-		viewModel.image.rotate(rotationAmount)
-		action.applyAction()
+	fun execute() = viewModel.showDialog { Dialog(it, this::onAmountSelected) }
+
+	private fun onAmountSelected(rotationAmount: RotationAmount) = historyService.commitAction { commit(rotationAmount) }
+
+	private fun commit(rotationAmount: RotationAmount): Action.ToRevert = actionPreset.commit {
+		rotate(rotationAmount)
+		toRevert { revert(rotationAmount) }
 	}
+
+	private fun revert(rotationAmount: RotationAmount): Action.ToCommit = actionPreset.revert {
+		rotate(rotationAmount.getOpposite())
+		toCommit { commit(rotationAmount) }
+	}
+
+	private fun rotate(rotationAmount: RotationAmount) = imageService.editImage { rotated(rotationAmount) }
 }

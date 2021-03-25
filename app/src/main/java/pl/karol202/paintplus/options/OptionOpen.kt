@@ -15,6 +15,7 @@
  */
 package pl.karol202.paintplus.options
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Size
@@ -22,13 +23,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.ImageLoader
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ActionRequest
 
 private const val MIME_FILTER = "image/*"
 
-class OptionOpen(private val viewModel: PaintViewModel) : Option
+class OptionOpen(private val context: Context,
+                 private val viewModel: PaintViewModel) : Option
 {
 	sealed class OpenResult
 	{
@@ -70,13 +75,13 @@ class OptionOpen(private val viewModel: PaintViewModel) : Option
 
 	private fun onUriSelected(onResult: (OpenResult) -> Unit, uri: Uri?)
 	{
-		uri?.takePersistablePermission(viewModel.context) ?: return
+		uri?.takePersistablePermission(context) ?: return
 		executeWithUri(onResult, uri)
 	}
 
 	fun executeWithUri(onResult: (OpenResult) -> Unit, uri: Uri)
 	{
-		val bitmapSize = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException {
+		val bitmapSize = uri.openFileDescriptor(context, FileDescriptorMode.READ)?.useSuppressingIOException {
 			ImageLoader.getBitmapSize(it.fileDescriptor)
 		} ?: return onResult(OpenResult.Failed)
 
@@ -90,7 +95,7 @@ class OptionOpen(private val viewModel: PaintViewModel) : Option
 	}
 
 	private fun openBitmap(onResult: (OpenResult) -> Unit, uri: Uri) = viewModel.postLongTask {
-		val result = uri.openFileDescriptor(viewModel.context, FileDescriptorMode.READ)?.useSuppressingIOException { desc ->
+		val result = uri.openFileDescriptor(context, FileDescriptorMode.READ)?.useSuppressingIOException { desc ->
 			val bitmap = ImageLoader.openBitmap(desc.fileDescriptor)?.fitInto(maxSize)
 			val exifOrientation = ImageLoader.getExifOrientation(desc.fileDescriptor)
 
