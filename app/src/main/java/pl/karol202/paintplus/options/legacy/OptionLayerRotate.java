@@ -84,7 +84,7 @@ public class OptionLayerRotate extends LegacyOption implements DialogInterface.O
 		ActionLayerRotate action = new ActionLayerRotate(getImage());
 		action.setLayerBeforeRotation(layer);
 
-		layer.rotate(angle);
+		layer.rotated(angle);
 
 		action.applyAction();
 	}

@@ -3,11 +3,15 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerNameBinding
-import pl.karol202.paintplus.history.legacyaction.ActionLayerNameChange
+import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerNameChange(private val viewModel: PaintViewModel) : Option
+class OptionLayerNameChange(private val viewModel: PaintViewModel,
+                            private val imageService: ImageService,
+                            private val historyService: HistoryService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     layer: Layer,
@@ -24,14 +28,26 @@ class OptionLayerNameChange(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute(layer: Layer) = viewModel.showDialog { Dialog(it, layer, this::apply) }
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_name_change)
 
-	private fun apply(name: String)
+	fun execute(layer: Layer)
 	{
-		val action = ActionLayerNameChange(adapter.image)
-		action.setLayer(layer)
-		layer.setName(name)
-		adapter.notifyDataSetChanged()
-		action.applyAction()
+		if(!imageService.image.hasLayer(layer)) return
+		viewModel.showDialog { Dialog(it, layer) { name -> onApply(layer, name) } }
+	}
+
+	private fun onApply(layer: Layer, newName: String) = historyService.commitAction { commit(layer, newName) }
+
+	private fun commit(oldLayer: Layer, newName: String): Action.ToRevert
+	{
+		val newLayer = oldLayer.withName(newName)
+		imageService.editImage { withLayerUpdated(newLayer) }
+		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newLayer) }
+	}
+
+	private fun revert(oldLayer: Layer, newLayer: Layer): Action.ToCommit
+	{
+		imageService.editImage { withLayerUpdated(oldLayer) }
+		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer, newLayer.name) }
 	}
 }

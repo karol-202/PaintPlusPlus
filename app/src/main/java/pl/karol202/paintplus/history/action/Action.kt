@@ -15,8 +15,19 @@ sealed class Action
 	               override val thumbnailBitmap: Bitmap,
 	               val revert: () -> ToCommit) : Action()
 
-	data class Preset(@StringRes val name: Int,
-	                  val previewProvider: () -> Bitmap)
+	data class NamePreset(@StringRes private val name: Int)
+	{
+		fun toCommit(thumbnailBitmap: Bitmap, commit: () -> ToRevert) =
+				ToCommit(name, ensureThumbnailSmallEnough(thumbnailBitmap), commit)
+
+		fun toRevert(thumbnailBitmap: Bitmap, revert: () -> ToCommit) =
+				ToRevert(name, ensureThumbnailSmallEnough(thumbnailBitmap), revert)
+
+		fun withPreview(previewProvider: () -> Bitmap) = NameAndPreviewPreset(this, previewProvider)
+	}
+
+	data class NameAndPreviewPreset(private val namePreset: NamePreset,
+	                                private val previewProvider: () -> Bitmap)
 	{
 		object Scope
 		{
@@ -28,26 +39,26 @@ sealed class Action
 		fun commit(action: Scope.() -> () -> ToCommit): ToRevert
 		{
 			val thumbnail = createThumbnailBitmap(previewProvider())
-			return toRevert(thumbnail, Scope.action())
+			return namePreset.toRevert(thumbnail, Scope.action())
 		}
 
 		fun revert(action: Scope.() -> () -> ToRevert): ToCommit
 		{
 			val thumbnail = createThumbnailBitmap(previewProvider())
-			return toCommit(thumbnail, Scope.action())
+			return namePreset.toCommit(thumbnail, Scope.action())
 		}
-
-		fun toCommit(thumbnailBitmap: Bitmap, revert: () -> ToRevert) =
-				ToCommit(name, thumbnailBitmap, revert)
-
-		fun toRevert(thumbnailBitmap: Bitmap, commit: () -> ToCommit) =
-				ToRevert(name, thumbnailBitmap, commit)
 	}
 
 	companion object
 	{
-		private val maxPreviewSize = squareSize(width = 60)
+		val maxPreviewSize = squareSize(width = 60)
 		private val maxPreviewRect = maxPreviewSize.toRect()
+
+		fun namePreset(@StringRes name: Int) = NamePreset(name)
+
+		fun ensureThumbnailSmallEnough(bitmap: Bitmap) =
+				if(bitmap.size fitsIn maxPreviewSize) bitmap
+				else createThumbnailBitmap(bitmap)
 
 		fun createThumbnailBitmap(bitmap: Bitmap): Bitmap
 		{

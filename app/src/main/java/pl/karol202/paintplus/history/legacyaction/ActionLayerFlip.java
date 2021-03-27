@@ -62,7 +62,7 @@ public class ActionLayerFlip extends LegacyAction
 	private void flip(LegacyImage image)
 	{
 		Layer layer = image.getLayerAtIndex(layerId);
-		layer.flip(direction);
+		layer.flipped(direction);
 	}
 
 	@Override

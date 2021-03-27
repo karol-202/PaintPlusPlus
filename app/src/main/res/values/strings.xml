@@ -282,15 +282,14 @@
 	<string name="history_action_bitmap_change">Layer change</string>
 	<string name="history_action_cut">Cutting</string>
 	<string name="history_action_layer_name_change">Layer name change</string>
-	<string name="history_action_layer_hide">Layer hiding</string>
-	<string name="history_action_layer_show">Layer showing</string>
+	<string name="history_action_layer_visibility_change">Layer visibility change</string>
 	<string name="history_action_layer_properties_change">Layer properties change</string>
 	<string name="history_action_layer_add">Layer adding</string>
 	<string name="history_action_paste">Pasting</string>
 	<string name="history_action_layer_duplicate">Layer duplication</string>
 	<string name="history_action_layer_delete">Layer deleting</string>
 	<string name="history_action_layer_order_move">Layer order change</string>
-	<string name="history_action_layer_join">Layer joining</string>
+	<string name="history_action_layer_merge">Layer joining</string>
 	<string name="history_action_layer_drag">Layer drag</string>
 	<string name="history_action_image_flip">Image flip</string>
 	<string name="history_action_image_resize">Image resize</string>

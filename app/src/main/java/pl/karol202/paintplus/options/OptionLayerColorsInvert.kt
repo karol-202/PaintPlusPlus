@@ -21,35 +21,38 @@ import pl.karol202.paintplus.color.manipulators.params.InvertParams
 import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
 import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.layer.Layer
 
-class OptionColorsInvert(private val imageService: ImageService,
-                         private val historyService: HistoryService) : Option
+class OptionLayerColorsInvert(private val imageService: ImageService,
+                              private val historyService: HistoryService) : Option
 {
-	private val actionPreset = Action.Preset(R.string.history_action_colors_invert) { imageService.image.requireSelectedLayer.bitmap }
+	private val actionPreset = Action.namePreset(R.string.history_action_colors_invert)
 
 	fun execute()
 	{
 		if(imageService.image.selectedLayer == null) return
-		historyService.commitAction(this::commit)
+		historyService.commitAction { commit(imageService.image.requireSelectedLayer) }
 	}
 
-	private fun commit(): Action.ToRevert = actionPreset.commit {
-		invertColors()
-		toRevert { revert() }
-	}
-
-	private fun revert(): Action.ToCommit = actionPreset.revert {
-		invertColors()
-		toCommit { commit() }
-	}
-
-	private fun invertColors()
+	private fun commit(oldLayer: Layer): Action.ToRevert
 	{
-		val layer = imageService.image.requireSelectedLayer
-		val params = InvertParams(ManipulatorSelection.fromSelection(imageService.selection, layer.bounds))
-		val newBitmap = ColorsInvert().run(layer.bitmap, params)
-		imageService.editImage { withSelectedLayerUpdated(layer.withBitmap(newBitmap)) }
+		val newLayer = invertColors(oldLayer)
+		return actionPreset.toRevert(oldLayer.bitmap) { revert(newLayer) }
+	}
+
+	private fun revert(newLayer: Layer): Action.ToCommit
+	{
+		val oldLayer = invertColors(newLayer)
+		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer) }
+	}
+
+	private fun invertColors(sourceLayer: Layer): Layer
+	{
+		val params = InvertParams(ManipulatorSelection.fromSelection(imageService.selection, sourceLayer.bounds))
+		val newBitmap = ColorsInvert().run(sourceLayer.bitmap, params)
+		val newLayer = sourceLayer.withBitmap(newBitmap)
+		imageService.editImage { withLayerUpdated(newLayer) }
+		return newLayer
 	}
 }

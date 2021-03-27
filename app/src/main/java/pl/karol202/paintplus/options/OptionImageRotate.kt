@@ -19,8 +19,6 @@ import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogRotateImageBinding
 import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionImageRotate
-import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.RotationAmount
@@ -28,7 +26,7 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionImageRotate(private val viewModel: PaintViewModel,
                         private val imageService: ImageService,
-                        private val historyService: HistoryService,) : Option
+                        private val historyService: HistoryService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     private val onApply: (RotationAmount) -> Unit) :
@@ -55,7 +53,9 @@ class OptionImageRotate(private val viewModel: PaintViewModel,
 		}
 	}
 
-	private val actionPreset = Action.Preset(R.string.history_action_image_rotate) { imageService.image.getFlattenedBitmap() }
+	private val actionPreset = Action.namePreset(R.string.history_action_image_rotate).withPreview {
+		imageService.image.getFlattenedBitmap()
+	}
 
 	fun execute() = viewModel.showDialog { Dialog(it, this::onAmountSelected) }
 

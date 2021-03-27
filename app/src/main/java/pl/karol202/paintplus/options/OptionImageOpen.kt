@@ -66,9 +66,9 @@ class OptionImageOpen(private val paintViewModel: PaintViewModel,
 		viewService.centerView()
 		fileService.onFileOpen(uri)
 
-		openOption.askAboutExifRotation(orientation) {
+		openOption.askAboutExifRotation(orientation, onRotationApply = {
 			imageService.editImage { rotatedByExif(it) }
-		}
+		})
 	}
 
 	private fun Image.rotatedByExif(exifOrientation: Int) = when(exifOrientation)

@@ -16,30 +16,34 @@
 package pl.karol202.paintplus.image.layer
 
 import android.graphics.*
+import androidx.core.graphics.plus
 import pl.karol202.paintplus.image.FlipDirection
-import kotlin.jvm.JvmOverloads
 import pl.karol202.paintplus.image.layer.mode.DefaultLayerMode
 import pl.karol202.paintplus.image.layer.mode.LayerMode
 import pl.karol202.paintplus.util.*
+import java.util.*
 import kotlin.math.roundToInt
 
-class Layer(val x: Int,
-            val y: Int,
-            val name: String,
-            val bitmap: Bitmap,
-            val mode: LayerMode = DefaultLayerMode,
-            val visible: Boolean = true,
-            val opacity: Float = 1f)
+class Layer private constructor(val id: String,
+                                val x: Int,
+                                val y: Int,
+                                val name: String,
+                                val bitmap: Bitmap,
+                                val mode: LayerMode = DefaultLayerMode,
+                                val visible: Boolean = true,
+                                val opacity: Float = 1f)
 {
 	companion object
 	{
 		fun create(x: Int = 0, y: Int = 0, name: String, bitmap: Bitmap) =
-				Layer(x, y, name, bitmap.ensureMutable().withAlpha(true))
+				Layer(createRandomId(), x, y, name, bitmap.ensureMutable().withAlpha(true))
 
 		fun create(x: Int = 0, y: Int = 0, name: String, width: Int, height: Int, color: Int) =
 				create(x, y, name, Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)).apply {
 					bitmap.eraseColor(color)
 				}
+
+		private fun createRandomId() = UUID.randomUUID().toString()
 	}
 
 	val editCanvas = Canvas(bitmap)
@@ -65,25 +69,22 @@ class Layer(val x: Int,
 	fun scaled(scaleX: Float, scaleY: Float, bilinear: Boolean) =
 			scaled((bitmap.width * scaleX).roundToInt(), (bitmap.height * scaleY).roundToInt(), bilinear)
 
-	fun flip(direction: FlipDirection) =
+	fun flipped(direction: FlipDirection) =
 			scaled(if(direction == FlipDirection.HORIZONTALLY) -1f else 1f,
 			       if(direction == FlipDirection.VERTICALLY) -1f else 1f, bilinear = false)
 
-	@JvmOverloads
-	fun rotate(angle: Float, offset: Boolean = true): Layer
+	fun rotated(angle: Float, offset: Boolean = true): Layer
 	{
 		val newBitmap = bitmap.transformedWith(Matrix().preRotated(angle), bilinear = true)
 		return withBitmap(newBitmap).translated(if(offset) (newBitmap.width - width) / 2 else 0,
 		                                        if(offset) (newBitmap.height - height) / 2 else 0)
 	}
 
+	fun duplicated() = copy(id = createRandomId(), bitmap = bitmap.duplicated())
+
 	fun withPosition(x: Int, y: Int) = copy(x = x, y = y)
 
-	fun withOpacity(opacity: Float) = copy(opacity = opacity)
-
-	fun withVisibility(visible: Boolean) = copy(visible = visible)
-
-	fun withMode(mode: LayerMode) = copy(mode = mode)
+	fun withName(name: String) = copy(name = name)
 
 	fun withBitmap(bitmap: Bitmap) =
 			copy(bitmap = bitmap.ensureMutable().withAlpha(true))
@@ -91,7 +92,14 @@ class Layer(val x: Int,
 	private fun withEmptyBitmap(width: Int, height: Int) =
 			withBitmap(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888))
 
-	private fun copy(x: Int = this.x, y: Int = this.x, name: String = this.name, bitmap: Bitmap = this.bitmap,
-	                 mode: LayerMode = this.mode, visible: Boolean = this.visible, opacity: Float = this.opacity) =
-			Layer(x, y, name, bitmap, mode, visible, opacity)
+	fun withMode(mode: LayerMode) = copy(mode = mode)
+
+	fun withVisibility(visible: Boolean) = copy(visible = visible)
+
+	fun withOpacity(opacity: Float) = copy(opacity = opacity)
+
+	private fun copy(id: String = this.id, x: Int = this.x, y: Int = this.x, name: String = this.name,
+	                 bitmap: Bitmap = this.bitmap, mode: LayerMode = this.mode, visible: Boolean = this.visible,
+	                 opacity: Float = this.opacity) =
+			Layer(id, x, y, name, bitmap, mode, visible, opacity)
 }

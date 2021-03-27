@@ -169,7 +169,7 @@ public class ActionLayerJoin extends LegacyAction
 	@Override
 	public int getActionName()
 	{
-		return R.string.history_action_layer_join;
+		return R.string.history_action_layer_merge;
 	}
 
 	public void setLayers(Layer topLayer, Layer bottomLayer, int resultLayerId)

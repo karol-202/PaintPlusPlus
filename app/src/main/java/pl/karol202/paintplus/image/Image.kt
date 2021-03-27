@@ -9,9 +9,7 @@ import androidx.core.graphics.times
 import pl.karol202.paintplus.image.FlipDirection.*
 import pl.karol202.paintplus.image.RotationAmount.*
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.util.changed
-import pl.karol202.paintplus.util.preTranslated
-import pl.karol202.paintplus.util.union
+import pl.karol202.paintplus.util.*
 import kotlin.math.roundToInt
 
 private const val MAX_LAYERS = 8
@@ -20,7 +18,7 @@ class Image private constructor(val width: Int,
                                 val height: Int,
                                 val layers: List<Layer>, // In order of drawing
                                 val selectedLayerIndex: Int?,
-                                val layersLocked: Boolean = false)
+                                val layersLocked: Boolean = false) // TODO Check if needed
 {
 	companion object
 	{
@@ -43,14 +41,25 @@ class Image private constructor(val width: Int,
 				selectedLayerIndex = 0)
 	}
 
-	private val requireSelectedLayerIndex get() = selectedLayerIndex ?: throw IllegalStateException("No selected layer")
+	private val requireSelectedLayerIndex get() = selectedLayerIndex ?: error("No selected layer")
 
 	val selectedLayer get() = selectedLayerIndex?.let(layers::get)
 	val requireSelectedLayer get() = layers[requireSelectedLayerIndex]
 
 	val size = Size(width, height)
 
-	fun isLayerSelected(layer: Layer) = layer == selectedLayer
+	val canAddMoreLayers get() = layers.size < MAX_LAYERS
+
+	fun isLayerSelected(layer: Layer) = layer.id == selectedLayer?.id
+
+	fun hasLayer(layer: Layer) = layers.any { it.id == layer.id }
+
+	fun hasLayerIndex(index: Int) = index < layers.size
+
+	fun getLayerIndex(layer: Layer) =
+			layers.indexOfFirst { it.id == layer.id }.takeUnless { it == -1 } ?: error("Layer not found")
+
+	fun canMergeLayerDown(layer: Layer) = getLayerIndex(layer) != 0
 
 	fun resized(x: Int, y: Int, width: Int, height: Int) =
 			copy(width = width,
@@ -71,8 +80,8 @@ class Image private constructor(val width: Int,
 
 	fun flipped(direction: FlipDirection) =
 			copy(layers = layers.map {
-				it.flip(direction).withPosition(x = if(direction == HORIZONTALLY) width - it.x - it.width else it.x,
-				                                y = if(direction == VERTICALLY) height - it.y - it.height else it.y)
+				it.flipped(direction).withPosition(x = if(direction == HORIZONTALLY) width - it.x - it.width else it.x,
+				                                   y = if(direction == VERTICALLY) height - it.y - it.height else it.y)
 			})
 
 	fun rotated(angle: RotationAmount) =
@@ -87,7 +96,7 @@ class Image private constructor(val width: Int,
 					                                  y = height - it.y - it.height)
 					     ANGLE_270 -> it.withPosition(x = it.y,
 					                                  y = width - it.x - it.width)
-				     }.rotate(angle.angle, offset = false)
+				     }.rotated(angle.angle, offset = false)
 			     })
 
 	fun flattened(newLayerName: String): Image
@@ -113,13 +122,44 @@ class Image private constructor(val width: Int,
 		}
 	}
 
-	fun withLayer(layer: Layer, autoSelect: Boolean = false) =
-			if(layers.size >= MAX_LAYERS) null
-			else copy(layers = layers + layer,
-			          selectedLayerIndex = if(autoSelect) layers.size else selectedLayerIndex)
+	fun withLayerMergedDown(topLayer: Layer): Image
+	{
+		val topLayerIndex = getLayerIndex(topLayer)
+		val bottomLayerIndex = topLayerIndex - 1
+		if(bottomLayerIndex < 0) error("Cannot merge down")
+		val bottomLayer = layers[bottomLayerIndex]
 
-	fun withSelectedLayerUpdated(layer: Layer) =
-			copy(layers = layers.changed(requireSelectedLayerIndex, layer))
+		val newLayer = withLayersModified(listOf(bottomLayer, topLayer)).flattened(topLayer.name).requireSelectedLayer
+
+		return withLayerDeleted(topLayer)
+				.withLayerDeleted(bottomLayer)
+				.withLayerAdded(newLayer, index = bottomLayerIndex, autoSelect = true)
+	}
+
+	fun withLayerAdded(layer: Layer, index: Int = layers.size, autoSelect: Boolean = false) =
+			if(!canAddMoreLayers) error("Cannot add more layers")
+			else withLayersModified(layers.inserted(index, layer)).let {
+				if(autoSelect) withLayerSelected(layer) else it
+			}
+
+	fun withLayerUpdated(layer: Layer) =
+			withLayersModified(layers.map { if(it.id == layer.id) layer else it })
+
+	fun withLayerMoved(layerIndex: Int, targetIndex: Int) =
+			withLayersModified(layers.removed(layerIndex).inserted(targetIndex, layers[layerIndex]))
+
+	fun withLayerSelected(layer: Layer) =
+			copy(selectedLayerIndex = getLayerIndex(layer))
+
+	fun withLayerDeleted(layer: Layer) =
+			withLayersModified(layers.filterNot { it.id == layer.id })
+
+	private fun withLayersModified(layers: List<Layer>) =
+			copy(layers = layers,
+			     selectedLayerIndex = selectedLayer?.let { selected ->
+				     layers.indexOfFirst { it.id == selected.id }.takeUnless { it == -1 }
+						     ?: if(layers.isNotEmpty()) 0 else null
+			     })
 
 	private fun copy(width: Int = this.width, height: Int = this.height, layers: List<Layer> = this.layers,
 	                 selectedLayerIndex: Int? = this.selectedLayerIndex, layersLocked: Boolean = this.layersLocked) =

@@ -15,61 +15,73 @@
  */
 package pl.karol202.paintplus.options
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.legacyaction.ActionLayerAdd
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.image.FlipDirection
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.getDisplayName
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerOpen(private val viewModel: PaintViewModel,
+class OptionLayerOpen(private val context: Context,
+                      private val viewModel: PaintViewModel,
+                      private val imageService: ImageService,
+                      private val historyService: HistoryService,
                       private val openOption: OptionOpen) : Option
 {
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_add)
+
 	fun execute() = openOption.execute(this::onResult)
 
 	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{
-		is OptionOpen.OpenResult.Success -> addNewLayer(result.uri, result.bitmap, result.exifOrientation)
+		is OptionOpen.OpenResult.Success -> onUriSelected(result.uri, result.bitmap, result.exifOrientation)
 		is OptionOpen.OpenResult.Failed -> viewModel.showMessage(R.string.message_cannot_open_file)
 	}
 
-	private fun addNewLayer(uri: Uri, bitmap: Bitmap, orientation: Int?)
+	private fun onUriSelected(uri: Uri, bitmap: Bitmap, orientation: Int?) =
+			openOption.askAboutExifRotation(orientation = orientation,
+			                                onRotationApply = { onUriAndRotationSelected(uri, bitmap, it) },
+			                                onNoRotation = { onUriAndRotationSelected(uri, bitmap, null) })
+
+	private fun onUriAndRotationSelected(uri: Uri, bitmap: Bitmap, orientation: Int?)
 	{
-		val layer = Layer(0, 0, createName(uri), bitmap)
-		if(!viewModel.image.addLayer(layer, 0)) return viewModel.showMessage(R.string.too_many_layers)
-		addHistoryAction(layer)
-		openOption.askAboutExifRotation(orientation) { rotateLayer(layer, it) }
+		if(!imageService.image.canAddMoreLayers) return
+		historyService.commitAction { commit(uri, bitmap, orientation) }
+	}
+
+	private fun commit(uri: Uri, bitmap: Bitmap, orientation: Int?): Action.ToRevert
+	{
+		val oldImage = imageService.image
+		val layer = Layer.create(0, 0, createName(uri), bitmap).rotatedByExif(orientation)
+		imageService.editImage { withLayerAdded(layer, autoSelect = true) }
+		return actionPreset.toRevert(layer.bitmap) { revert(uri, bitmap, orientation, layer, oldImage) }
+	}
+
+	private fun revert(uri: Uri, bitmap: Bitmap, orientation: Int?, newLayer: Layer, oldImage: Image): Action.ToCommit
+	{
+		imageService.setImage(oldImage)
+		return actionPreset.toCommit(newLayer.bitmap) { commit(uri, bitmap, orientation) }
 	}
 
 	private fun createName(uri: Uri) =
-			uri.getDisplayName(viewModel.context) ?: viewModel.context.getString(R.string.opened_layer_name)
+			uri.getDisplayName(context) ?: context.getString(R.string.opened_layer_name)
 
-	private fun addHistoryAction(layer: Layer) =
-			ActionLayerAdd(viewModel.image).apply {
-				setLayerAfterAdding(layer)
-				applyAction()
-			}
-
-	private fun rotateLayer(layer: Layer, exifOrientation: Int) = when(exifOrientation)
+	private fun Layer.rotatedByExif(exifOrientation: Int?) = when(exifOrientation)
 	{
-		ExifInterface.ORIENTATION_ROTATE_90 -> layer.rotate(90f)
-		ExifInterface.ORIENTATION_ROTATE_180 -> layer.rotate(180f)
-		ExifInterface.ORIENTATION_ROTATE_270 -> layer.rotate(270f)
-		ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> layer.flip(FlipDirection.HORIZONTALLY)
-		ExifInterface.ORIENTATION_FLIP_VERTICAL -> layer.flip(FlipDirection.VERTICALLY)
-		ExifInterface.ORIENTATION_TRANSPOSE ->
-		{
-			layer.rotate(90f)
-			layer.flip(FlipDirection.HORIZONTALLY)
-		}
-		ExifInterface.ORIENTATION_TRANSVERSE ->
-		{
-			layer.rotate(-90f)
-			layer.flip(FlipDirection.HORIZONTALLY)
-		}
-		else -> {}
+		ExifInterface.ORIENTATION_ROTATE_90 -> rotated(90f)
+		ExifInterface.ORIENTATION_ROTATE_180 -> rotated(180f)
+		ExifInterface.ORIENTATION_ROTATE_270 -> rotated(270f)
+		ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipped(FlipDirection.HORIZONTALLY)
+		ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipped(FlipDirection.VERTICALLY)
+		ExifInterface.ORIENTATION_TRANSPOSE -> rotated(90f).flipped(FlipDirection.HORIZONTALLY)
+		ExifInterface.ORIENTATION_TRANSVERSE -> rotated(-90f).flipped(FlipDirection.HORIZONTALLY)
+		else -> this
 	}
 }

@@ -24,7 +24,6 @@ import android.view.MotionEvent;
 import pl.karol202.paintplus.helpers.HelpersService;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.image.LegacySelection;
 
 public abstract class StandardTool implements Tool
 {

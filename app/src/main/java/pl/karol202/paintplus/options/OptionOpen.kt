@@ -58,13 +58,15 @@ class OptionOpen(private val context: Context,
 	}
 
 	private class RotationDialog(builder: AlertDialog.Builder,
-	                             onApply: () -> Unit) : Option.BasicDialog(builder)
+	                             onApply: () -> Unit,
+	                             onDismiss: () -> Unit) : Option.BasicDialog(builder)
 	{
 		init
 		{
 			builder.setTitle(R.string.dialog_exif_rotation)
 			builder.setPositiveButton(R.string.rotate) { _, _ -> onApply() }
-			builder.setNegativeButton(R.string.no, null)
+			builder.setNegativeButton(R.string.no) { _, _ -> onDismiss() }
+			builder.setOnDismissListener { onDismiss() }
 		}
 	}
 
@@ -104,11 +106,13 @@ class OptionOpen(private val context: Context,
 		onResult(result ?: OpenResult.Failed)
 	}
 
-	fun askAboutExifRotation(orientation: Int?, onRotationApply: (Int) -> Unit)
+	fun askAboutExifRotation(orientation: Int?, onRotationApply: (Int) -> Unit, onNoRotation: () -> Unit = {})
 	{
 		if(orientation != null && orientation != ExifInterface.ORIENTATION_NORMAL)
-			showExifDialog { onRotationApply(orientation) }
+			showExifDialog({ onRotationApply(orientation) }, onNoRotation)
+		else onNoRotation()
 	}
 
-	private fun showExifDialog(onApply: () -> Unit) = viewModel.showDialog { RotationDialog(it, onApply) }
+	private fun showExifDialog(onApply: () -> Unit, onNoRotation: () -> Unit) =
+			viewModel.showDialog { RotationDialog(it, onApply, onNoRotation) }
 }

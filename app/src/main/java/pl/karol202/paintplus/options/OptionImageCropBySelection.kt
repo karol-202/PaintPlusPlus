@@ -17,16 +17,16 @@ package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionImageCrop
 import pl.karol202.paintplus.image.*
-import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionCropImageBySelection(private val imageService: ImageService,
+class OptionImageCropBySelection(private val imageService: ImageService,
                                  private val viewService: ViewService,
                                  private val historyService: HistoryService,
                                  private val clipboardService: ClipboardService) : Option
 {
-	private val actionPreset = Action.Preset(R.string.history_action_image_crop) { imageService.image.getFlattenedBitmap() }
+	private val actionPreset = Action.namePreset(R.string.history_action_image_crop).withPreview {
+		imageService.image.getFlattenedBitmap()
+	}
 
 	fun execute() = historyService.commitAction(this::commit)
 
@@ -42,7 +42,7 @@ class OptionCropImageBySelection(private val imageService: ImageService,
 	}
 
 	private fun revert(oldImage: Image, xOffset: Int, yOffset: Int): Action.ToCommit = actionPreset.revert {
-		imageService.editImage { oldImage }
+		imageService.setImage(oldImage)
 		imageService.editSelection { translated(xOffset, yOffset) }
 		clipboardService.offsetClipboard(xOffset, yOffset)
 		viewService.offsetView(xOffset, yOffset)

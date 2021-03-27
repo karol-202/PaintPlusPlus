@@ -4,10 +4,10 @@ import android.graphics.*
 import androidx.core.graphics.withClip
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
 import pl.karol202.paintplus.image.ClipboardContent
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.minus
 
 class OptionCut(private val imageService: ImageService,
@@ -18,30 +18,33 @@ class OptionCut(private val imageService: ImageService,
 		xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 	}
 
-	private val actionPreset = Action.Preset(R.string.history_action_cut) { imageService.image.requireSelectedLayer.bitmap }
+	private val actionPreset = Action.namePreset(R.string.history_action_cut)
 
 	fun execute()
 	{
 		if(imageService.image.selectedLayer == null) return
 		optionCopy.execute()
-		historyService.commitAction(this::commit)
+		historyService.commitAction { commit(imageService.image.requireSelectedLayer) }
 	}
 
-	private fun commit(): Action.ToRevert = actionPreset.commit {
-		val selectedLayer = imageService.image.requireSelectedLayer
+	private fun commit(layer: Layer): Action.ToRevert
+	{
+		val previewBitmap = Action.createThumbnailBitmap(layer.bitmap)
 		val selection = imageService.selection
-		val clipboardContent = optionCopy.createClipboardContent()
+		val clipboardContent = optionCopy.createClipboardContent(layer)
 
-		selectedLayer.editCanvas.withClip(selection.path - selectedLayer.topLeft) {
-			drawRect(0f, 0f, selectedLayer.width.toFloat(), selectedLayer.height.toFloat(), clearPaint)
+		layer.editCanvas.withClip(selection.path - layer.topLeft) {
+			drawRect(0f, 0f, layer.width.toFloat(), layer.height.toFloat(), clearPaint)
 		}
 
-		toRevert { revert(clipboardContent) }
+		return actionPreset.toRevert(previewBitmap) { revert(layer, clipboardContent) }
 	}
 
-	private fun revert(clipboardContent: ClipboardContent): Action.ToCommit = actionPreset.revert {
-		val canvas = imageService.image.requireSelectedLayer.editCanvas
-		canvas.drawBitmap(clipboardContent.bitmap, clipboardContent.left.toFloat(), clipboardContent.top.toFloat(), null)
-		toCommit { commit() }
+	private fun revert(layer: Layer, clipboardContent: ClipboardContent): Action.ToCommit
+	{
+		val previewBitmap = Action.createThumbnailBitmap(layer.bitmap)
+		layer.editCanvas.drawBitmap(clipboardContent.bitmap,
+		                            clipboardContent.left.toFloat(), clipboardContent.top.toFloat(), null)
+		return actionPreset.toCommit(previewBitmap) { commit(layer) }
 	}
 }

@@ -5,7 +5,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import pl.karol202.paintplus.util.MathUtils.lerp
 import pl.karol202.paintplus.util.MathUtils.map
-import pl.karol202.paintplus.util.rectF
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
+
+private val ZOOM_RANGE = 0.009f..16f
 
 class ViewService(private val imageService: ImageService)
 {
@@ -25,6 +30,8 @@ class ViewService(private val imageService: ImageService)
 	private val imageWidth get() = imageService.imageWidth
 	private val imageHeight get() = imageService.imageHeight
 
+	private val zoomSteps = (-12 until 8).map { calculateZoomRatio(it) }
+
 	fun centerView() = setViewPosition(viewPosition.copy(
 			x = (imageWidth - viewportWidth / zoom) / 2f,
 			y = (imageHeight - viewportHeight / zoom) / 2f))
@@ -34,10 +41,16 @@ class ViewService(private val imageService: ImageService)
 			y = viewY + y
 	))
 
-	fun setDefaultZoom() = setZoom(1f, 0.5f, 0.5f)
+	fun setDefaultZoom() = setZoom(1f)
 
-	fun setZoom(zoom: Float, focusX: Float, focusY: Float)
+	fun setLowerZoomStep() = zoomSteps.lastOrNull { it < zoom }?.let(this::setZoom)
+
+	fun setGreaterZoomStep() = zoomSteps.firstOrNull { it > zoom }?.let(this::setZoom)
+
+	fun setZoom(zoom: Float, focusX: Float = 0.5f, focusY: Float = 0.5f)
 	{
+		if(zoom !in ZOOM_RANGE) return setZoom(zoom.coerceIn(ZOOM_RANGE), focusX, focusY)
+
 		val focusXInImage = map(focusX, -viewX * this.zoom, (-viewX + imageWidth) * this.zoom, 0f, 1f)
 		val focusYInImage = map(focusY, -viewY * this.zoom, (-viewY + imageHeight) * this.zoom, 0f, 1f)
 		val offsetXLeft = viewX * (this.zoom / zoom) - viewX
@@ -48,6 +61,13 @@ class ViewService(private val imageService: ImageService)
 				x = viewX + lerp(focusXInImage, offsetXLeft, offsetXRight),
 				y = viewY + lerp(focusYInImage, offsetYTop, offsetYBottom),
 				zoom = zoom))
+	}
+
+	private fun calculateZoomRatio(step: Int): Float
+	{
+		val value = sqrt(2.0).pow(abs(step))
+		val rounded = (value * 2).roundToInt() / 2f
+		return if(step >= 0) rounded else 1 / rounded
 	}
 
 	private fun setViewPosition(viewPosition: ViewPosition)

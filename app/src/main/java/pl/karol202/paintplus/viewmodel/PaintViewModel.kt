@@ -32,10 +32,10 @@ class PaintViewModel(application: Application,
                      private val historyService: HistoryService,
                      private val helpersService: HelpersService,
                      private val layerModesService: LayerModesService,
-                     private val optionColorsInvert: OptionColorsInvert,
+                     private val optionLayerColorsInvert: OptionLayerColorsInvert,
                      private val optionCopy: OptionCopy,
-                     private val optionCropImageBySelection: OptionCropImageBySelection,
-                     private val optionCropLayerBySelection: OptionCropLayerBySelection,
+                     private val optionImageCropBySelection: OptionImageCropBySelection,
+                     private val optionLayerCropBySelection: OptionLayerCropBySelection,
                      private val optionCut: OptionCut,
                      private val optionImageCapturePhoto: OptionImageCapturePhoto,
                      private val optionImageNew: OptionImageNew,
@@ -44,7 +44,7 @@ class PaintViewModel(application: Application,
                      private val optionImageFlatten: OptionImageFlatten,
                      private val optionImageFlip: OptionImageFlip,
                      private val optionImageRotate: OptionImageRotate,
-                     private val optionInvertSelection: OptionInvertSelection,
+                     private val optionSelectInversion: OptionSelectInversion,
                      private val optionLayerChangeOrder: OptionLayerChangeOrder,
                      private val optionLayerDelete: OptionLayerDelete,
                      private val optionLayerDuplicate: OptionLayerDuplicate,
@@ -56,7 +56,7 @@ class PaintViewModel(application: Application,
                      private val optionLayerPropertiesEdit: OptionLayerPropertiesEdit,
                      private val optionLayerSave: OptionLayerSave,
                      private val optionLayerSelect: OptionLayerSelect,
-                     private val optionLayerToImageSize: OptionLayerToImageSize,
+                     private val optionLayerFitToImage: OptionLayerFitToImage,
                      private val optionLayerVisibilityToggle: OptionLayerVisibilityToggle,
                      private val optionPaste: OptionPaste,
                      private val optionSelectAll: OptionSelectAll,
@@ -147,7 +147,7 @@ class PaintViewModel(application: Application,
 
 	fun flattenImage() = optionImageFlatten.execute()
 
-	fun cropImageBySelection() = optionCropImageBySelection.execute()
+	fun cropImageBySelection() = optionImageCropBySelection.execute()
 
 	fun newLayer() = optionTodo()
 
@@ -165,9 +165,9 @@ class PaintViewModel(application: Application,
 
 	fun rotateLayer() = optionTodo()
 
-	fun fitLayerToImage() = optionLayerToImageSize.execute()
+	fun fitLayerToImage() = optionLayerFitToImage.execute()
 
-	fun cropLayerBySelection() = optionCropLayerBySelection.execute()
+	fun cropLayerBySelection() = optionLayerCropBySelection.execute()
 
 	fun changeLayerOrder(layerIndex: Int, target: Int) = optionLayerChangeOrder.execute(layerIndex, target)
 
@@ -211,9 +211,9 @@ class PaintViewModel(application: Application,
 
 	fun selectNothing() = optionSelectNothing.execute()
 
-	fun invertSelection() = optionInvertSelection.execute()
+	fun invertSelection() = optionSelectInversion.execute()
 
-	fun invertColors() = optionColorsInvert.execute()
+	fun invertColors() = optionLayerColorsInvert.execute()
 
 	fun changeBrightness() = optionTodo()
 

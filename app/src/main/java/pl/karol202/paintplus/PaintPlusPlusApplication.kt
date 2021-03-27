@@ -67,10 +67,10 @@ class PaintPlusPlusApplication : Application()
 	}
 
 	private fun optionModule() = module {
-		single { OptionColorsInvert(get()) }
+		single { OptionLayerColorsInvert(get()) }
 		single { OptionCopy() }
-		single { OptionCropImageBySelection(get()) }
-		single { OptionCropLayerBySelection(get()) }
+		single { OptionImageCropBySelection(get()) }
+		single { OptionLayerCropBySelection(get()) }
 		single { OptionCut(get()) }
 		single { OptionImageCapturePhoto(get()) }
 		single { OptionImageNew(get()) }
@@ -80,7 +80,7 @@ class PaintPlusPlusApplication : Application()
 		single { OptionImageFlatten(get()) }
 		single { OptionImageFlip(get()) }
 		single { OptionImageRotate(get()) }
-		single { OptionInvertSelection(get()) }
+		single { OptionSelectInversion(get()) }
 		single { OptionLayerChangeOrder() }
 		single { OptionLayerDelete(get()) }
 		single { OptionLayerDuplicate() }
@@ -92,7 +92,7 @@ class PaintPlusPlusApplication : Application()
 		single { OptionLayerPropertiesEdit(get(), get()) }
 		single { OptionLayerSave(get(), get(), get()) }
 		single { OptionLayerSelect() }
-		single { OptionLayerToImageSize(get()) }
+		single { OptionLayerFitToImage(get()) }
 		single { OptionLayerVisibilityToggle() }
 		single { OptionOpen(get()) }
 		single { OptionPaste() }

@@ -17,31 +17,32 @@ package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionLayerCrop
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 
-class OptionCropLayerBySelection(private val imageService: ImageService,
+class OptionLayerCropBySelection(private val imageService: ImageService,
                                  private val historyService: HistoryService) : Option
 {
-	private val actionPreset = Action.Preset(R.string.history_action_layer_crop) {
-		imageService.image.requireSelectedLayer.bitmap
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_crop)
+
+	fun execute()
+	{
+		if(imageService.image.selectedLayer == null) return
+		historyService.commitAction { commit(imageService.image.requireSelectedLayer) }
 	}
 
-	fun execute() = historyService.commitAction(this::commit)
-
-	private fun commit(): Action.ToRevert = actionPreset.commit {
-		val oldLayer = imageService.image.requireSelectedLayer
+	private fun commit(oldLayer: Layer): Action.ToRevert
+	{
 		val bounds = imageService.selection.bounds
-		imageService.editImage {
-			withSelectedLayerUpdated(oldLayer.resized(bounds.left, bounds.top, bounds.width(), bounds.height()))
-		}
-		toRevert { revert(oldLayer) }
+		val newLayer = oldLayer.resized(bounds.left, bounds.top, bounds.width(), bounds.height())
+		imageService.editImage { withLayerUpdated(newLayer) }
+		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newLayer) }
 	}
 
-	private fun revert(oldLayer: Layer): Action.ToCommit = actionPreset.revert {
-		imageService.editImage { withSelectedLayerUpdated(oldLayer) }
-		toCommit { commit() }
+	private fun revert(oldLayer: Layer, newLayer: Layer): Action.ToCommit
+	{
+		imageService.editImage { withLayerUpdated(oldLayer) }
+		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer) }
 	}
 }

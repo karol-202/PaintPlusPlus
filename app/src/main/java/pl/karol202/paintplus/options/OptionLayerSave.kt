@@ -19,25 +19,28 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.SaveFormat
+import pl.karol202.paintplus.image.FileService
+import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerSave(private val recentViewModel: RecentViewModel,
-                      private val paintViewModel: PaintViewModel,
+class OptionLayerSave(private val paintViewModel: PaintViewModel,
+                      private val imageService: ImageService,
+                      private val fileService: FileService,
                       private val optionSave: OptionSave) : Option
 {
-	fun execute() = optionSave.execute(paintViewModel.image.selectedLayer.bitmap, this::onResult)
+	fun execute() = optionSave.execute(imageService.image.requireSelectedLayer.bitmap, this::onResult)
 
 	private fun onResult(result: OptionSave.SaveResult) = when(result)
 	{
-		is OptionSave.SaveResult.Success -> onSaved(result.uri)
+		is OptionSave.SaveResult.Success -> onSaved(result.uri, result.format)
 		is OptionSave.SaveResult.Failed.CannotSave -> onError(R.string.message_cannot_save_file)
 		is OptionSave.SaveResult.Failed.UnsupportedFormat -> onError(R.string.message_unsupported_format)
 	}
 
-	private fun onSaved(uri: Uri)
+	private fun onSaved(uri: Uri, format: SaveFormat)
 	{
-		recentViewModel.onFileEdit(uri)
+		fileService.onFileSave(uri, format)
 		paintViewModel.showMessage(R.string.message_saved)
 	}
 

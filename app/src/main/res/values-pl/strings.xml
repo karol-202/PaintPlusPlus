@@ -265,15 +265,14 @@
 	<string name="history_action_bitmap_change">Zmiana warstwy</string>
 	<string name="history_action_cut">Wycinanie</string>
 	<string name="history_action_layer_name_change">Zmiana nazwy warstwy</string>
-	<string name="history_action_layer_hide">Ukrycie warstwy</string>
-	<string name="history_action_layer_show">Pokazanie warstwy</string>
+	<string name="history_action_layer_visibility_change">Zmiana widoczności warstwy</string>
 	<string name="history_action_layer_properties_change">Zmiana właściwości warstwy</string>
 	<string name="history_action_layer_add">Dodanie warstwy</string>
 	<string name="history_action_paste">Wklejenie</string>
 	<string name="history_action_layer_duplicate">Duplikacja warstwy</string>
 	<string name="history_action_layer_delete">Usunięcie warstwy</string>
 	<string name="history_action_layer_order_move">Zmiana kolejności warstw</string>
-	<string name="history_action_layer_join">Połączenie warstw</string>
+	<string name="history_action_layer_merge">Połączenie warstw</string>
 	<string name="history_action_layer_drag">Przesunięcie warstwy</string>
 	<string name="history_action_image_flip">Odwrócenie obrazu</string>
 	<string name="history_action_image_resize">Zmiana wielkości obrazu</string>

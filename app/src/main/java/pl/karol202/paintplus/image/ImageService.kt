@@ -47,13 +47,17 @@ class ImageService(context: Context,
 		historyService.clearHistory()
 	}
 
-	fun editImage(builder: Image.() -> Image)
+	inline fun editImage(builder: Image.() -> Image) = setImage(image.builder())
+
+	inline fun editSelection(builder: Selection.() -> Selection) = setSelection(selection.builder())
+
+	fun setImage(image: Image)
 	{
-		_imageFlow.value = _imageFlow.value.builder()
+		_imageFlow.value = image
 	}
 
-	fun editSelection(builder: Selection.() -> Selection)
+	fun setSelection(selection: Selection)
 	{
-		_selectionFlow.value = _selectionFlow.value.builder()
+		_selectionFlow.value = selection
 	}
 }

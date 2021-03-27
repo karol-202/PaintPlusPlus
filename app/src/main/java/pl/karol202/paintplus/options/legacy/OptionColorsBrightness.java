@@ -33,7 +33,6 @@ import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection;
 import pl.karol202.paintplus.history.legacyaction.ActionLayerChange;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.image.layer.Layer;
-import pl.karol202.paintplus.image.LegacySelection;
 
 import java.util.Locale;
 

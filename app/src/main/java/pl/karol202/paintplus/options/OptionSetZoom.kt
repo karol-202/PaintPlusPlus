@@ -19,15 +19,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogSetZoomBinding
-import pl.karol202.paintplus.image.LegacyImage
-import pl.karol202.paintplus.image.ImageZoom
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
+import kotlin.math.roundToInt
 
-class OptionSetZoom(private val viewModel: PaintViewModel) : Option
+class OptionSetZoom(private val viewModel: PaintViewModel,
+                    private val viewService: ViewService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
-	                     private val image: LegacyImage) :
+	                     private val viewService: ViewService) :
 			Option.LayoutDialog<DialogSetZoomBinding>(builder, DialogSetZoomBinding::inflate)
 	{
 		private var dontFireEvent = false
@@ -46,13 +47,13 @@ class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 
 		private fun onZoomOut()
 		{
-			image.zoom = ImageZoom.getLowerZoom(image.zoom)
+			viewService.setLowerZoomStep()
 			updateText()
 		}
 
 		private fun onZoomIn()
 		{
-			image.zoom = ImageZoom.getGreaterZoom(image.zoom)
+			viewService.setGreaterZoomStep()
 			updateText()
 		}
 
@@ -65,22 +66,19 @@ class OptionSetZoom(private val viewModel: PaintViewModel) : Option
 					updateText()
 					views.editZoom.setSelection(views.editZoom.text.length - 1)
 				}
-				text != "%" -> {
-					val zoom = parseZoom(text)?.coerceIn(LegacyImage.MIN_ZOOM, LegacyImage.MAX_ZOOM)
-					if(zoom != null) image.zoom = zoom
-				}
+				text != "%" -> parseZoom(text)?.let(viewService::setZoom)
 			}
 		}
 
 		private fun updateText()
 		{
 			dontFireEvent = true
-			views.editZoom.setText(String.format(Locale.US, "%d%%", (image.zoom * 100).roundToInt()))
+			views.editZoom.setText(String.format(Locale.US, "%d%%", (viewService.zoom * 100).roundToInt()))
 			dontFireEvent = false
 		}
 
 		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toIntOrNull()?.div(100f)
 	}
 
-	fun execute() = viewModel.showDialog { Dialog(it, viewModel.image) }
+	fun execute() = viewModel.showDialog { Dialog(it, viewService) }
 }

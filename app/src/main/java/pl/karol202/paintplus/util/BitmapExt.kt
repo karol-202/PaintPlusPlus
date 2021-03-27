@@ -22,3 +22,5 @@ fun Bitmap.ensureMutable() = takeIf { isMutable } ?: copy(config, true)
 fun Bitmap.withAlpha(enabled: Boolean) = apply {
 	setHasAlpha(enabled)
 }
+
+fun Bitmap.duplicated() = copy(config, true)

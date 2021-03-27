@@ -19,7 +19,6 @@ package pl.karol202.paintplus.history.legacyaction;
 import android.graphics.*;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.image.LegacyImage;
-import pl.karol202.paintplus.image.LegacySelection;
 
 public class ActionSelectionChange extends LegacyAction
 {

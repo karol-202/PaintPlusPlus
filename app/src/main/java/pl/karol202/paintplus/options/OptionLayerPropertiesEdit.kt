@@ -3,7 +3,11 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerPropertiesBinding
+import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.history.legacyaction.ActionLayerPropertiesChange
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.Image
+import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.mode.LayerMode
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter
@@ -13,6 +17,8 @@ import pl.karol202.paintplus.util.setOnValueChangeListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
+                                private val imageService: ImageService,
+                                private val historyService: HistoryService,
                                 private val layerModesService: LayerModesService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
@@ -55,14 +61,26 @@ class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
 		private fun onApply() = onApply(layer.withOpacity(opacity).withMode(layerMode))
 	}
 
-	fun execute(layer: Layer) = viewModel.showDialog { Dialog(it, layer, layerModesService.layerModes, this::apply) }
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_properties_change)
 
-	private fun apply(layer: Layer)
+	fun execute(layer: Layer) = viewModel.showDialog { Dialog(it, layer, layerModesService.layerModes, this::onApplied) }
+
+	private fun onApplied(layer: Layer)
 	{
-		val action = ActionLayerPropertiesChange(image)
-		action.setLayerBeforeChange(layer)
-		if(layerMode.getClass() !== layer.mode.javaClass) layer.setMode(layerMode)
-		layer.setOpacity(opacity)
-		action.applyAction()
+		if(!imageService.image.hasLayer(layer)) return
+		historyService.commitAction { commit(layer) }
+	}
+
+	private fun commit(layer: Layer): Action.ToRevert
+	{
+		val oldImage = imageService.image
+		imageService.editImage { withLayerUpdated(layer) }
+		return actionPreset.toRevert(layer.bitmap) { revert(layer, oldImage) }
+	}
+
+	private fun revert(layer: Layer, oldImage: Image): Action.ToCommit
+	{
+		imageService.setImage(oldImage)
+		return actionPreset.toCommit(layer.bitmap) { commit(layer) }
 	}
 }

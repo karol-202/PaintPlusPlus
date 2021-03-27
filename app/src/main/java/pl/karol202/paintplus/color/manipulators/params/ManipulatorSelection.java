@@ -18,7 +18,6 @@ package pl.karol202.paintplus.color.manipulators.params;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import pl.karol202.paintplus.image.LegacySelection;
 import pl.karol202.paintplus.image.Selection;
 
 public class ManipulatorSelection

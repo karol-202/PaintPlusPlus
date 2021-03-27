@@ -16,22 +16,42 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.legacyaction.ActionLayerFlip
-import pl.karol202.paintplus.image.LegacyImage.FlipDirection
-import pl.karol202.paintplus.viewmodel.PaintViewModel
+import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.image.FlipDirection
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.layer.Layer
 
-class OptionLayerFlip(private val viewModel: PaintViewModel) : Option
+class OptionLayerFlip(private val imageService: ImageService,
+                      private val historyService: HistoryService,
+                      private val optionFlip: OptionFlip) : Option
 {
-	private val optionFlip = OptionFlip(viewModel, R.string.dialog_flip_layer, this::flip)
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_flip)
 
-	fun execute() = optionFlip.execute()
+	fun execute() = optionFlip.execute(R.string.dialog_flip_layer, this::onDirectionSelected)
 
-	private fun flip(direction: FlipDirection)
+	private fun onDirectionSelected(direction: FlipDirection)
 	{
-		val action = ActionLayerFlip(viewModel.image)
-		action.setLayerAndFlipDirection(viewModel.image.selectedLayerIndex, direction)
-		viewModel.image.selectedLayer.flip(direction)
-		action.applyAction()
-		viewModel.image.updateImage()
+		if(imageService.image.selectedLayer == null) return
+		historyService.commitAction { commit(imageService.image.requireSelectedLayer, direction) }
+	}
+
+	private fun commit(oldLayer: Layer, direction: FlipDirection): Action.ToRevert
+	{
+		val newLayer = flipLayer(oldLayer, direction)
+		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newLayer, direction) }
+	}
+
+	private fun revert(oldLayer: Layer, newLayer: Layer, direction: FlipDirection): Action.ToCommit
+	{
+		imageService.editImage { withLayerUpdated(oldLayer) }
+		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer, direction) }
+	}
+
+	private fun flipLayer(sourceLayer: Layer, direction: FlipDirection): Layer
+	{
+		val newLayer = sourceLayer.flipped(direction)
+		imageService.editImage { withLayerUpdated(newLayer) }
+		return newLayer
 	}
 }

@@ -28,7 +28,9 @@ class OptionImageFlatten(context: Context,
 {
 	private val flattenedLayerName = context.getString(R.string.flattened)
 
-	private val actionPreset = Action.Preset(R.string.history_action_image_flatten) { imageService.image.getFlattenedBitmap() }
+	private val actionPreset = Action.namePreset(R.string.history_action_image_flatten).withPreview {
+		imageService.image.getFlattenedBitmap()
+	}
 
 	fun execute() = historyService.commitAction(this::commit)
 
@@ -39,7 +41,7 @@ class OptionImageFlatten(context: Context,
 	}
 
 	private fun revert(image: Image): Action.ToCommit = actionPreset.revert {
-		imageService.editImage { image }
+		imageService.setImage(image)
 		toCommit { commit() }
 	}
 }
