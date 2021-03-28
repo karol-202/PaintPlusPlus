@@ -44,7 +44,6 @@ class OptionLayerDrag(private val viewModel: PaintViewModel,
 			views.editLayerOffsetY.setText(initialPosition.y.toString())
 		}
 
-		// TODO Add validation feedback (error indicator)
 		private fun onApply()
 		{
 			val x = views.editLayerOffsetX.text.toString().toIntOrNull() ?: 0

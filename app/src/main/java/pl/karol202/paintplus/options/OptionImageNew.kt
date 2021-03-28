@@ -54,6 +54,7 @@ class OptionImageNew(private val viewModel: PaintViewModel,
 			inputLayout.error = getValidationError(text?.toIntOrNull())
 		}
 
+		// TODO Don't dismiss the dialog if there are any errors
 		private fun onApply()
 		{
 			val width = views.editImageX.text.toString().toIntOrNull() ?: 0

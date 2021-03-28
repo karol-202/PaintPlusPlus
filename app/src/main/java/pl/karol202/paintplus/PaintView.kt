@@ -84,12 +84,7 @@ class PaintView(context: Context,
 	}
 
 	private val layerBoundsPath by cache({image.selectedLayer?.bounds}, {viewPosition.imageMatrix}) { bounds, imageMatrix ->
-		Path().apply {
-			if(bounds == null) return@apply
-			addRect(bounds.toRectF(), Path.Direction.CW)
-			close()
-			transform(imageMatrix)
-		}
+		bounds?.toRectF()?.toPath()?.transformedBy(imageMatrix) ?: Path()
 	}
 
 	private val selectionPath by cache({selection.region}, {viewPosition.imageMatrix}) { selectionRegion, imageMatrix ->

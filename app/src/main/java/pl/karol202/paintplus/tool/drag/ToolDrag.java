@@ -20,7 +20,6 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.history.legacyaction.ActionLayerDrag;
 import pl.karol202.paintplus.image.LegacyImage;
 import pl.karol202.paintplus.tool.StandardTool;
 import pl.karol202.paintplus.tool.ToolCoordinateSpace;

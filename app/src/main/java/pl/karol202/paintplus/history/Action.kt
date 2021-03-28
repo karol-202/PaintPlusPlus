@@ -62,7 +62,7 @@ sealed class Action
 
 		fun createThumbnailBitmap(bitmap: Bitmap): Bitmap
 		{
-			val dstRect = bitmap.size.fitInto(maxPreviewSize).toRect().centerInside(maxPreviewRect)
+			val dstRect = bitmap.size.fitInto(maxPreviewSize).toRect().centeredInside(maxPreviewRect)
 			val dstBitmap = Bitmap.createBitmap(maxPreviewSize.width, maxPreviewSize.height, Bitmap.Config.ARGB_8888)
 			return dstBitmap.applyCanvas {
 				drawBitmap(bitmap, null, dstRect, null)

@@ -15,9 +15,11 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.helpers.HelpersService
-import pl.karol202.paintplus.image.*
+import pl.karol202.paintplus.image.ColorsService
+import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.image.layer.mode.LayerModesService
 import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
@@ -39,8 +41,11 @@ class PaintViewModel(application: Application,
                      private val optionImageFlip: OptionImageFlip,
                      private val optionImageNew: OptionImageNew,
                      private val optionImageOpen: OptionImageOpen,
+                     private val optionImageResize: OptionImageResize,
                      private val optionImageRotate: OptionImageRotate,
-                     private val optionImageSave: OptionImageSave,
+                     private val optionImageSaveAs: OptionImageSaveAs,
+                     private val optionImageSaveLast: OptionImageSaveLast,
+                     private val optionImageScale: OptionImageScale,
                      private val optionLayerChangeOrder: OptionLayerChangeOrder,
                      private val optionLayerColorsBrightness: OptionLayerColorsBrightness,
                      private val optionLayerColorCurves: OptionLayerColorCurves,
@@ -57,8 +62,10 @@ class PaintViewModel(application: Application,
                      private val optionLayerNew: OptionLayerNew,
                      private val optionLayerOpen: OptionLayerOpen,
                      private val optionLayerPropertiesEdit: OptionLayerPropertiesEdit,
+                     private val optionLayerResize: OptionLayerResize,
                      private val optionLayerRotate: OptionLayerRotate,
                      private val optionLayerSave: OptionLayerSave,
+                     private val optionLayerScale: OptionLayerScale,
                      private val optionLayerSelect: OptionLayerSelect,
                      private val optionLayerVisibilityToggle: OptionLayerVisibilityToggle,
                      private val optionPaste: OptionPaste,
@@ -137,14 +144,13 @@ class PaintViewModel(application: Application,
 
 	fun openImageFromCamera() = optionImageCapturePhoto.execute()
 
-	// TODO Check for last format: executeWithUriAndFormat(image.lastUri, image.lastFormat) / executeWithUri(image.lastUri)
-	fun saveImage() = optionImageSave.execute()
+	fun saveImage() = optionImageSaveLast.execute()
 
-	fun saveImageAs() = optionImageSave.execute()
+	fun saveImageAs() = optionImageSaveAs.execute()
 
-	fun resizeImage() = optionTodo()
+	fun resizeImage() = optionImageResize.execute()
 
-	fun scaleImage() = optionTodo()
+	fun scaleImage() = optionImageScale.execute()
 
 	fun flipImage() = optionImageFlip.execute()
 
@@ -162,9 +168,9 @@ class PaintViewModel(application: Application,
 
 	fun dragLayer() = optionLayerDrag.execute()
 
-	fun resizeLayer() = optionTodo()
+	fun resizeLayer() = optionLayerResize.execute()
 
-	fun scaleLayer() = optionTodo()
+	fun scaleLayer() = optionLayerScale.execute()
 
 	fun flipLayer() = optionLayerFlip.execute()
 
@@ -223,8 +229,6 @@ class PaintViewModel(application: Application,
 	fun changeBrightness() = optionLayerColorsBrightness.execute()
 
 	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionLayerColorCurves.execute(channelType)
-
-	private fun optionTodo(): Unit = TODO()
 
 	fun setViewportSize(size: Size) = viewService.setViewportSize(size)
 

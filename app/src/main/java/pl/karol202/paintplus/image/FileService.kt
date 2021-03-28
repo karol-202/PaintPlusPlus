@@ -23,6 +23,7 @@ class FileService(private val context: Context,
 	private val _changedSinceSaveFlow = MutableStateFlow(false)
 
 	val lastUri get() = _currentFileFlow.value?.uri
+	val lastSaveFormat get() = _currentFileFlow.value?.saveFormat
 	val wasModifiedSinceSave get() = _changedSinceSaveFlow.value
 
 	fun onFileReset()

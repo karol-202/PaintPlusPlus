@@ -50,8 +50,14 @@ class Layer private constructor(val id: String,
 	val editCanvas = Canvas(bitmap)
 
 	val position = Point(x, y)
-	val width = bitmap.width
-	val height = bitmap.height
+	protected val objectWidth = bitmap.width
+protected get() {
+        return layer.width
+    }
+	protected val objectHeight = bitmap.height
+protected get() {
+        return layer.height
+    }
 	val bounds = Rect(x, y, x + width, y + height)
 	val matrix = Matrix().preTranslated(x.toFloat(), y.toFloat())
 
@@ -59,7 +65,7 @@ class Layer private constructor(val id: String,
 			withPosition(this.x + x, this.y + y)
 
 	fun resized(x: Int, y: Int, width: Int, height: Int) =
-			withEmptyBitmap(width, height).translated(x - this.x, y - this.y).apply {
+			withEmptyBitmap(width, height).withPosition(x, y).apply {
 				editCanvas.drawBitmap(this@Layer.bitmap, (this@Layer.x - x).toFloat(), (this@Layer.y - y).toFloat(), null)
 			}
 
