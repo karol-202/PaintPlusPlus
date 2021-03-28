@@ -119,11 +119,7 @@ class PaintView(context: Context,
 		}.bitmap
 
 		canvas.drawBitmap(resultBitmap, 0f, 0f, null)
-
-		if(currentTool.doesOnTopDraw())
-			canvas.withToolSpace(currentTool.onTopDrawingCoordinateSpace) {
-				currentTool.onTopDraw(this)
-			}
+		currentTool.drawOnTop(canvas)
 	}
 
 	private fun drawLayer(bitmap: Bitmap, canvas: Canvas, layer: Layer) =
@@ -132,18 +128,8 @@ class PaintView(context: Context,
 					withClip(viewPosition.getImageRect(image)) {
 						drawBitmap(layer.bitmap, viewPosition.imageMatrix * layer.matrix, layerPaint)
 					}
-				if(image.isLayerSelected(layer) && currentTool.doesOnLayerDraw(layer.visible))
-					withToolSpace(currentTool.onLayerDrawingCoordinateSpace) {
-						currentTool.onLayerDraw(this)
-					}
-			}
-
-	private fun Canvas.withToolSpace(space: ToolCoordinateSpace, block: Canvas.() -> Unit) =
-			if(space == ToolCoordinateSpace.SCREEN_SPACE) block()
-			else withMatrix(viewPosition.imageMatrix) {
-				val selectedLayer = image.selectedLayer
-				if(space == ToolCoordinateSpace.IMAGE_SPACE || selectedLayer == null) block()
-				else withTranslation(selectedLayer.x.toFloat(), selectedLayer.y.toFloat(), block)
+				if(image.isLayerSelected(layer))
+					currentTool.drawOnLayer(this, layer.visible)
 			}
 
 	private fun drawLayerBounds(canvas: Canvas) = canvas.drawPath(layerBoundsPath, layerBoundsPaint)
@@ -155,10 +141,10 @@ class PaintView(context: Context,
 	{
 		if(image.selectedLayer == null)
 		{
-			if(event.action != MotionEvent.ACTION_DOWN) currentTool.onTouch(event, context)
+			if(event.action != MotionEvent.ACTION_DOWN) currentTool.onTouch(event)
 			return false
 		}
-		return currentTool.onTouch(event, context).also {
+		return currentTool.onTouch(event).also {
 			if(it) invalidate()
 		}
 	}

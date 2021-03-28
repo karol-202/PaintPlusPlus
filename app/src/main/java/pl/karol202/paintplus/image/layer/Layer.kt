@@ -50,14 +50,8 @@ class Layer private constructor(val id: String,
 	val editCanvas = Canvas(bitmap)
 
 	val position = Point(x, y)
-	protected val objectWidth = bitmap.width
-protected get() {
-        return layer.width
-    }
-	protected val objectHeight = bitmap.height
-protected get() {
-        return layer.height
-    }
+	val width = bitmap.width
+	val height = bitmap.height
 	val bounds = Rect(x, y, x + width, y + height)
 	val matrix = Matrix().preTranslated(x.toFloat(), y.toFloat())
 

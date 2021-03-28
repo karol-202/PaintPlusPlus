@@ -79,7 +79,7 @@ public class ToolRubber extends StandardTool
 	}
 
 	@Override
-	public ToolCoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getInputCoordinateSpace()
 	{
 		return ToolCoordinateSpace.LAYER_SPACE;
 	}
@@ -237,7 +237,7 @@ public class ToolRubber extends StandardTool
 	}
 
 	@Override
-	public void onLayerDraw(Canvas canvas)
+	public void drawOnLayer(Canvas canvas)
 	{
 		resetClipping(canvas);
 		doImageClipping(canvas);
@@ -247,7 +247,7 @@ public class ToolRubber extends StandardTool
 	}
 
 	@Override
-	public void onTopDraw(Canvas canvas) { }
+	public void drawOnTop(Canvas canvas) { }
 
 	float getSize()
 	{

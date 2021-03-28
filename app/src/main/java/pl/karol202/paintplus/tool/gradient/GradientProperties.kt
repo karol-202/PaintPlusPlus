@@ -20,17 +20,21 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.fragment.app.Fragment
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.databinding.PropertiesGradientBinding
-import pl.karol202.paintplus.tool.ToolProperties
 import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.util.viewBinding
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class GradientProperties : ToolProperties(R.layout.properties_gradient)
+class GradientProperties : Fragment(R.layout.properties_gradient)
 {
-	private val toolGradient by lazy { tool as ToolGradient }
+	private val paintViewModel by sharedViewModel<PaintViewModel>()
+	private val toolGradient by inject<ToolGradient>()
+
 	private val views by viewBinding(PropertiesGradientBinding::bind)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)

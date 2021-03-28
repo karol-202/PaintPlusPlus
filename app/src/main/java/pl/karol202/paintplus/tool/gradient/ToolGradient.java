@@ -113,7 +113,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 
 	@Override
-	public ToolCoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getInputCoordinateSpace()
 	{
 		return ToolCoordinateSpace.LAYER_SPACE;
 	}
@@ -241,7 +241,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 
 	@Override
-	public void onLayerDraw(Canvas canvas)
+	public void drawOnLayer(Canvas canvas)
 	{
 		if(!canDrawGradient()) return;
 		resetClipping(canvas);
@@ -251,7 +251,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	}
 
 	@Override
-	public void onTopDraw(Canvas canvas)
+	public void drawOnTop(Canvas canvas)
 	{
 		if(firstPoint != null) drawPoint(canvas, firstPoint);
 		if(secondPoint != null) drawPoint(canvas, secondPoint);

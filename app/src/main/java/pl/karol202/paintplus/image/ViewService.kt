@@ -32,13 +32,16 @@ class ViewService(private val imageService: ImageService)
 
 	private val zoomSteps = (-12 until 8).map { calculateZoomRatio(it) }
 
+	private val xRange get() = (-viewportWidth / zoom)..imageWidth.toFloat()
+	private val yRange get() = (-viewportHeight / zoom)..imageHeight.toFloat()
+
 	fun centerView() = setViewPosition(viewPosition.copy(
 			x = (imageWidth - viewportWidth / zoom) / 2f,
 			y = (imageHeight - viewportHeight / zoom) / 2f))
 
 	fun offsetView(x: Int, y: Int) = setViewPosition(viewPosition.copy(
-			x = viewX + x,
-			y = viewY + y
+			x = (viewX + x).coerceIn(xRange),
+			y = (viewY + y).coerceIn(yRange)
 	))
 
 	fun setDefaultZoom() = setZoom(1f)

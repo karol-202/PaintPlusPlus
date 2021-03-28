@@ -22,7 +22,6 @@ import pl.karol202.paintplus.databinding.DialogSetZoomBinding
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
-import kotlin.math.roundToInt
 
 class OptionSetZoom(private val viewModel: PaintViewModel,
                     private val viewService: ViewService) : Option
@@ -73,11 +72,11 @@ class OptionSetZoom(private val viewModel: PaintViewModel,
 		private fun updateText()
 		{
 			dontFireEvent = true
-			views.editZoom.setText(String.format(Locale.US, "%d%%", (viewService.zoom * 100).roundToInt()))
+			views.editZoom.setText(String.format(Locale.US, "%.1f%%", viewService.zoom * 100))
 			dontFireEvent = false
 		}
 
-		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toIntOrNull()?.div(100f)
+		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toFloatOrNull()?.div(100f)
 	}
 
 	fun execute() = viewModel.showDialog { builder, _ ->

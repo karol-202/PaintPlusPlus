@@ -93,7 +93,7 @@ public class ToolSelection extends StandardTool
 	}
 
 	@Override
-	public ToolCoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getInputCoordinateSpace()
 	{
 		return ToolCoordinateSpace.IMAGE_SPACE;
 	}
@@ -377,10 +377,10 @@ public class ToolSelection extends StandardTool
 	}
 
 	@Override
-	public void onLayerDraw(Canvas canvas) { }
+	public void drawOnLayer(Canvas canvas) { }
 
 	@Override
-	public void onTopDraw(Canvas canvas)
+	public void drawOnTop(Canvas canvas)
 	{
 		if(rect.left == -1 || rect.top == -1 || rect.right == -1 || rect.bottom == -1) return;
 		paint.setStrokeWidth(SELECTION_LINE_WIDTH_PX / image.getZoom());

@@ -60,7 +60,7 @@ public class ToolColorPick extends StandardTool
 	}
 
 	@Override
-	public ToolCoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getInputCoordinateSpace()
 	{
 		return ToolCoordinateSpace.LAYER_SPACE;
 	}
@@ -182,10 +182,10 @@ public class ToolColorPick extends StandardTool
 	}
 
 	@Override
-	public void onLayerDraw(Canvas canvas) { }
+	public void drawOnLayer(Canvas canvas) { }
 
 	@Override
-	public void onTopDraw(Canvas canvas) { }
+	public void drawOnTop(Canvas canvas) { }
 
 	int getSize()
 	{

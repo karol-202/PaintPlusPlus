@@ -22,7 +22,7 @@ import pl.karol202.paintplus.databinding.ItemToolBinding
 import pl.karol202.paintplus.util.layoutInflater
 
 class ToolsAdapter(private val context: Context,
-                   private val tools: ToolsService,
+                   private val toolsService: ToolsService,
                    private val listener: (Tool) -> Unit) : RecyclerView.Adapter<ToolsAdapter.ViewHolder>()
 {
 	inner class ViewHolder(private val views: ItemToolBinding) : RecyclerView.ViewHolder(views.root)
@@ -39,7 +39,7 @@ class ToolsAdapter(private val context: Context,
 			ViewHolder(ItemToolBinding.inflate(context.layoutInflater, parent, false))
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-			holder.bind(tools.getTool(position))
+			holder.bind(toolsService.tools[position])
 
-	override fun getItemCount() = tools.tools.size
+	override fun getItemCount() = toolsService.tools.size
 }

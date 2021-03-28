@@ -65,7 +65,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	}
 
 	@Override
-	public ToolCoordinateSpace getCoordinateSpace()
+	public ToolCoordinateSpace getInputCoordinateSpace()
 	{
 		return ToolCoordinateSpace.LAYER_SPACE;
 	}
@@ -161,7 +161,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	}
 
 	@Override
-	public void onLayerDraw(Canvas canvas)
+	public void drawOnLayer(Canvas canvas)
 	{
 		updateLayer();
 		resetClipping(canvas);
@@ -173,7 +173,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	}
 
 	@Override
-	public void onTopDraw(Canvas canvas) { }
+	public void drawOnTop(Canvas canvas) { }
 
 	@Override
 	protected void updateLayer()

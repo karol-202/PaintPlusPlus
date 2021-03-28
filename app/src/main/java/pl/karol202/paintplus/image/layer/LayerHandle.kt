@@ -19,8 +19,8 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.plus
 import pl.karol202.paintplus.util.MathUtils.dpToPixels
-import pl.karol202.paintplus.util.translated
 import kotlin.math.roundToInt
 
 class LayerHandle(context: Context,
@@ -62,7 +62,7 @@ class LayerHandle(context: Context,
 			if(view === mainContainer) point
 			else findPointInMainContainer(
 					view = view.parent as? View ?: throw RuntimeException("Unexpected end of hierarchy."),
-					point = point.translated(view.x, view.y))
+					point = point + PointF(view.x, view.y))
 
 	fun onTouchMove(x: Float, y: Float)
 	{

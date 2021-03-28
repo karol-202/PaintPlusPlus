@@ -10,7 +10,6 @@ import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.image.layer.mode.LayerMode
 import pl.karol202.paintplus.image.layer.mode.LayerModeAdapter
-import pl.karol202.paintplus.image.layer.mode.LayerModesService
 import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.util.setOnValueChangeListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
@@ -18,7 +17,7 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
                                 private val imageService: ImageService,
                                 private val historyService: HistoryService,
-                                private val layerModesService: LayerModesService) : Option
+                                private val layerModes: List<LayerMode>) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     private val layer: Layer,
@@ -63,7 +62,7 @@ class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
 	private val actionPreset = Action.namePreset(R.string.history_action_layer_properties_change)
 
 	fun execute(layer: Layer) = viewModel.showDialog { builder, _ ->
-		Dialog(builder, layer, layerModesService.layerModes, this::onApplied)
+		Dialog(builder, layer, layerModes, this::onApplied)
 	}
 
 	private fun onApplied(layer: Layer)

@@ -13,12 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool
 
-package pl.karol202.paintplus.tool;
+import android.graphics.Canvas
+import android.view.MotionEvent
+import androidx.fragment.app.Fragment
 
-public interface OnToolChangeListener
+interface Tool
 {
-	void onToolSelected();
-	
-	void onOtherToolSelected();
+	val name: Int
+	val icon: Int
+	val propertiesFragmentClass: Class<out Fragment>
+
+	fun onTouch(event: MotionEvent): Boolean
+
+	fun drawOnLayer(canvas: Canvas, isLayerVisible: Boolean) {}
+
+	fun drawOnTop(canvas: Canvas) {}
 }
