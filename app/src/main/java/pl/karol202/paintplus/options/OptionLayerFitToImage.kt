@@ -16,13 +16,11 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionLayerResize
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerFitToImage(private val imageService: ImageService,
                             private val historyService: HistoryService) : Option

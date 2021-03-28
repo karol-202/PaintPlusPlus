@@ -3,9 +3,7 @@ package pl.karol202.paintplus.options
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.core.graphics.applyCanvas
-import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.image.HistoryService
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.util.component1
 import pl.karol202.paintplus.util.component2

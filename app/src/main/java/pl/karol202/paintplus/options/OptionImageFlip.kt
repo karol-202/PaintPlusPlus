@@ -16,7 +16,7 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
@@ -31,7 +31,10 @@ class OptionImageFlip(private val imageService: ImageService,
 
 	fun execute() = optionFlip.execute(R.string.dialog_flip_image, this::onDirectionSelected)
 
-	private fun onDirectionSelected(direction: FlipDirection) = historyService.commitAction { commit(direction) }
+	private fun onDirectionSelected(direction: FlipDirection)
+	{
+		historyService.commitAction { commit(direction) }
+	}
 
 	private fun commit(direction: FlipDirection): Action.ToRevert = actionPreset.commit {
 		flipImage(direction)

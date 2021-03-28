@@ -13,7 +13,7 @@ private const val DEFAULT_IMAGE_BACKGROUND = Color.WHITE
 class ImageService(context: Context,
                    private val historyService: HistoryService)
 {
-	private val defaultLayerName = context.getString(R.string.new_layer_name)
+	val defaultLayerName = context.getString(R.string.new_layer_name)
 
 	private val _imageFlow = MutableStateFlow(Image.new(width = DEFAULT_IMAGE_SIZE,
 	                                                    height = DEFAULT_IMAGE_SIZE,

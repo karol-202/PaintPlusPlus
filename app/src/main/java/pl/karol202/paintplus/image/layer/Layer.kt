@@ -16,6 +16,7 @@
 package pl.karol202.paintplus.image.layer
 
 import android.graphics.*
+import android.util.Size
 import androidx.core.graphics.plus
 import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.image.layer.mode.DefaultLayerMode
@@ -48,7 +49,7 @@ class Layer private constructor(val id: String,
 
 	val editCanvas = Canvas(bitmap)
 
-	val topLeft = Point(x, y)
+	val position = Point(x, y)
 	val width = bitmap.width
 	val height = bitmap.height
 	val bounds = Rect(x, y, x + width, y + height)

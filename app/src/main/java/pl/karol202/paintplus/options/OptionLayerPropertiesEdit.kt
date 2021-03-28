@@ -3,8 +3,7 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerPropertiesBinding
-import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionLayerPropertiesChange
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
@@ -63,7 +62,9 @@ class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
 
 	private val actionPreset = Action.namePreset(R.string.history_action_layer_properties_change)
 
-	fun execute(layer: Layer) = viewModel.showDialog { Dialog(it, layer, layerModesService.layerModes, this::onApplied) }
+	fun execute(layer: Layer) = viewModel.showDialog { builder, _ ->
+		Dialog(builder, layer, layerModesService.layerModes, this::onApplied)
+	}
 
 	private fun onApplied(layer: Layer)
 	{

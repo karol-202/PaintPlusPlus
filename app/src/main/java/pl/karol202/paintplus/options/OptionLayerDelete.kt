@@ -2,7 +2,7 @@ package pl.karol202.paintplus.options
 
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
@@ -30,10 +30,15 @@ class OptionLayerDelete(private val viewModel: PaintViewModel,
 	fun execute(layer: Layer)
 	{
 		if(!imageService.image.hasLayer(layer)) return
-		viewModel.showDialog { Dialog(it, layer) { onApplied(layer) } }
+		viewModel.showDialog { builder, _ ->
+			Dialog(builder, layer) { onApplied(layer) }
+		}
 	}
 
-	private fun onApplied(layer: Layer) = historyService.commitAction { commit(layer) }
+	private fun onApplied(layer: Layer)
+	{
+		historyService.commitAction { commit(layer) }
+	}
 
 	private fun commit(layer: Layer): Action.ToRevert
 	{

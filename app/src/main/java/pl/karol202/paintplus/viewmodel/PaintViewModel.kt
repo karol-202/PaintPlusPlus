@@ -31,35 +31,39 @@ class PaintViewModel(application: Application,
                      private val colorService: ColorsService,
                      private val historyService: HistoryService,
                      private val helpersService: HelpersService,
-                     private val layerModesService: LayerModesService,
-                     private val optionLayerColorsInvert: OptionLayerColorsInvert,
                      private val optionCopy: OptionCopy,
-                     private val optionImageCropBySelection: OptionImageCropBySelection,
-                     private val optionLayerCropBySelection: OptionLayerCropBySelection,
                      private val optionCut: OptionCut,
                      private val optionImageCapturePhoto: OptionImageCapturePhoto,
-                     private val optionImageNew: OptionImageNew,
-                     private val optionImageOpen: OptionImageOpen,
-                     private val optionImageSave: OptionImageSave,
+                     private val optionImageCropBySelection: OptionImageCropBySelection,
                      private val optionImageFlatten: OptionImageFlatten,
                      private val optionImageFlip: OptionImageFlip,
+                     private val optionImageNew: OptionImageNew,
+                     private val optionImageOpen: OptionImageOpen,
                      private val optionImageRotate: OptionImageRotate,
-                     private val optionSelectInversion: OptionSelectInversion,
+                     private val optionImageSave: OptionImageSave,
                      private val optionLayerChangeOrder: OptionLayerChangeOrder,
+                     private val optionLayerColorsBrightness: OptionLayerColorsBrightness,
+                     private val optionLayerColorCurves: OptionLayerColorCurves,
+                     private val optionLayerColorsInvert: OptionLayerColorsInvert,
+                     private val optionLayerCropBySelection: OptionLayerCropBySelection,
                      private val optionLayerDelete: OptionLayerDelete,
+                     private val optionLayerDrag: OptionLayerDrag,
                      private val optionLayerDuplicate: OptionLayerDuplicate,
+                     private val optionLayerFitToImage: OptionLayerFitToImage,
                      private val optionLayerFlip: OptionLayerFlip,
                      private val optionLayerInfoShow: OptionLayerInfoShow,
                      private val optionLayerMergeDown: OptionLayerMergeDown,
                      private val optionLayerNameChange: OptionLayerNameChange,
+                     private val optionLayerNew: OptionLayerNew,
                      private val optionLayerOpen: OptionLayerOpen,
                      private val optionLayerPropertiesEdit: OptionLayerPropertiesEdit,
+                     private val optionLayerRotate: OptionLayerRotate,
                      private val optionLayerSave: OptionLayerSave,
                      private val optionLayerSelect: OptionLayerSelect,
-                     private val optionLayerFitToImage: OptionLayerFitToImage,
                      private val optionLayerVisibilityToggle: OptionLayerVisibilityToggle,
                      private val optionPaste: OptionPaste,
                      private val optionSelectAll: OptionSelectAll,
+                     private val optionSelectInversion: OptionSelectInversion,
                      private val optionSelectNothing: OptionSelectNothing,
                      private val optionSetZoom: OptionSetZoom) : BaseViewModel(application)
 {
@@ -68,9 +72,10 @@ class PaintViewModel(application: Application,
 		NONE, TOOL_SELECTION, TOOL_PROPERTIES
 	}
 
+	// TODO Allow dialogs to be stateful
 	fun interface DialogDefinition
 	{
-		fun init(builder: AlertDialog.Builder)
+		fun init(builder: AlertDialog.Builder, dialogProvider: () -> AlertDialog?)
 	}
 
 	data class MessageEvent(@StringRes val text: Int)
@@ -149,13 +154,13 @@ class PaintViewModel(application: Application,
 
 	fun cropImageBySelection() = optionImageCropBySelection.execute()
 
-	fun newLayer() = optionTodo()
+	fun newLayer() = optionLayerNew.execute()
 
 	fun openLayer() = optionLayerOpen.execute()
 
 	fun saveLayer() = optionLayerSave.execute()
 
-	fun dragLayer() = optionTodo()
+	fun dragLayer() = optionLayerDrag.execute()
 
 	fun resizeLayer() = optionTodo()
 
@@ -163,7 +168,7 @@ class PaintViewModel(application: Application,
 
 	fun flipLayer() = optionLayerFlip.execute()
 
-	fun rotateLayer() = optionTodo()
+	fun rotateLayer() = optionLayerRotate.execute()
 
 	fun fitLayerToImage() = optionLayerFitToImage.execute()
 
@@ -215,9 +220,9 @@ class PaintViewModel(application: Application,
 
 	fun invertColors() = optionLayerColorsInvert.execute()
 
-	fun changeBrightness() = optionTodo()
+	fun changeBrightness() = optionLayerColorsBrightness.execute()
 
-	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionTodo()
+	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionLayerColorCurves.execute(channelType)
 
 	private fun optionTodo(): Unit = TODO()
 

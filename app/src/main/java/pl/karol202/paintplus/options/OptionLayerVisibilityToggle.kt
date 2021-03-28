@@ -1,9 +1,7 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
-import pl.karol202.paintplus.history.legacyaction.ActionLayerVisibilityChange
-import pl.karol202.paintplus.image.FlipDirection
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer

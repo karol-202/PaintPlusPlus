@@ -43,8 +43,8 @@ class OptionImageCapturePhoto(private val context: Context,
 		if(fileService.wasModifiedSinceSave) askAboutChanges() else capturePhoto()
 	}
 
-	private fun askAboutChanges() = viewModel.showDialog {
-		OptionImageOpen.UnsavedDialog(it) { capturePhoto() }
+	private fun askAboutChanges() = viewModel.showDialog { builder, _ ->
+		OptionImageOpen.UnsavedDialog(builder) { capturePhoto() }
 	}
 
 	private fun capturePhoto()

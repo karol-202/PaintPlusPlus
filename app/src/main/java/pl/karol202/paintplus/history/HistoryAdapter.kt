@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.karol202.paintplus.databinding.ItemHistoryActionBinding
 import pl.karol202.paintplus.databinding.ItemHistoryCurrentPositionBinding
-import pl.karol202.paintplus.history.action.Action
 import pl.karol202.paintplus.image.HistoryState
 import pl.karol202.paintplus.util.layoutInflater
 

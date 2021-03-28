@@ -89,8 +89,8 @@ class OptionOpen(private val context: Context,
 
 		if(bitmapSize fitsIn maxSize)
 			openBitmap(onResult, uri)
-		else viewModel.showDialog {
-			ScaleDialog(it, bitmapSize.fitInto(maxSize)) {
+		else viewModel.showDialog { builder, _ ->
+			ScaleDialog(builder, bitmapSize.fitInto(maxSize)) {
 				openBitmap(onResult, uri)
 			}
 		}
@@ -114,5 +114,7 @@ class OptionOpen(private val context: Context,
 	}
 
 	private fun showExifDialog(onApply: () -> Unit, onNoRotation: () -> Unit) =
-			viewModel.showDialog { RotationDialog(it, onApply, onNoRotation) }
+			viewModel.showDialog { builder, _ ->
+				RotationDialog(builder, onApply, onNoRotation)
+			}
 }

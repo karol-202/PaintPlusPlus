@@ -1,7 +1,7 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.util.toRect
@@ -14,7 +14,10 @@ class OptionSelectInversion(private val imageService: ImageService,
 		optionSelect.createPreviewBitmap()
 	}
 
-	fun execute() = historyService.commitAction(this::commit)
+	fun execute()
+	{
+		historyService.commitAction(this::commit)
+	}
 
 	private fun commit(): Action.ToRevert = actionPreset.commit {
 		invertSelection()

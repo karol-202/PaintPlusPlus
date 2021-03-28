@@ -80,5 +80,7 @@ class OptionSetZoom(private val viewModel: PaintViewModel,
 		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toIntOrNull()?.div(100f)
 	}
 
-	fun execute() = viewModel.showDialog { Dialog(it, viewService) }
+	fun execute() = viewModel.showDialog { builder, _ ->
+		Dialog(builder, viewService)
+	}
 }

@@ -16,7 +16,7 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.*
 
 class OptionImageCropBySelection(private val imageService: ImageService,
@@ -28,7 +28,10 @@ class OptionImageCropBySelection(private val imageService: ImageService,
 		imageService.image.getFlattenedBitmap()
 	}
 
-	fun execute() = historyService.commitAction(this::commit)
+	fun execute()
+	{
+		historyService.commitAction(this::commit)
+	}
 
 	// TODO Consider creating action that won't expand the size of the layer
 	private fun commit(): Action.ToRevert = actionPreset.commit {

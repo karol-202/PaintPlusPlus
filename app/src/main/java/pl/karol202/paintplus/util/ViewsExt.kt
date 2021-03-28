@@ -1,9 +1,12 @@
 package pl.karol202.paintplus.util
 
+import android.util.Size
 import android.view.View
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.Spinner
+
+val View.size get() = Size(width, height)
 
 fun SeekBar.setOnValueChangeListener(listener: (Int) -> Unit) =
 		setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

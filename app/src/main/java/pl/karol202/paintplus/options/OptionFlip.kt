@@ -49,5 +49,7 @@ class OptionFlip(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute(@StringRes title: Int, onFlip: (FlipDirection) -> Unit) = viewModel.showDialog { Dialog(it, title, onFlip) }
+	fun execute(@StringRes title: Int, onFlip: (FlipDirection) -> Unit) = viewModel.showDialog { builder, _ ->
+		Dialog(builder, title, onFlip)
+	}
 }

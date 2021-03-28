@@ -3,7 +3,7 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerNameBinding
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
@@ -33,21 +33,26 @@ class OptionLayerNameChange(private val viewModel: PaintViewModel,
 	fun execute(layer: Layer)
 	{
 		if(!imageService.image.hasLayer(layer)) return
-		viewModel.showDialog { Dialog(it, layer) { name -> onApply(layer, name) } }
+		viewModel.showDialog { builder, _ ->
+			Dialog(builder, layer) { name -> onApply(layer, name) }
+		}
 	}
 
-	private fun onApply(layer: Layer, newName: String) = historyService.commitAction { commit(layer, newName) }
+	private fun onApply(layer: Layer, newName: String)
+	{
+		historyService.commitAction { commit(layer, newName) }
+	}
 
 	private fun commit(oldLayer: Layer, newName: String): Action.ToRevert
 	{
 		val newLayer = oldLayer.withName(newName)
 		imageService.editImage { withLayerUpdated(newLayer) }
-		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newLayer) }
+		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newName) }
 	}
 
-	private fun revert(oldLayer: Layer, newLayer: Layer): Action.ToCommit
+	private fun revert(oldLayer: Layer, newName: String): Action.ToCommit
 	{
 		imageService.editImage { withLayerUpdated(oldLayer) }
-		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer, newLayer.name) }
+		return actionPreset.toCommit(oldLayer.bitmap) { commit(oldLayer, newName) }
 	}
 }

@@ -3,7 +3,7 @@ package pl.karol202.paintplus.options
 import android.graphics.*
 import androidx.core.graphics.withClip
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.ClipboardContent
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
@@ -33,7 +33,7 @@ class OptionCut(private val imageService: ImageService,
 		val selection = imageService.selection
 		val clipboardContent = optionCopy.createClipboardContent(layer)
 
-		layer.editCanvas.withClip(selection.path - layer.topLeft) {
+		layer.editCanvas.withClip(selection.path - layer.position) {
 			drawRect(0f, 0f, layer.width.toFloat(), layer.height.toFloat(), clearPaint)
 		}
 

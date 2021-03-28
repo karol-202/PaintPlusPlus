@@ -46,8 +46,8 @@ class OptionImageOpen(private val paintViewModel: PaintViewModel,
 		if(fileService.wasModifiedSinceSave) askAboutChanges() else executeWithoutSaving()
 	}
 
-	private fun askAboutChanges() = paintViewModel.showDialog {
-		UnsavedDialog(it) { executeWithoutSaving() }
+	private fun askAboutChanges() = paintViewModel.showDialog { builder, _ ->
+		UnsavedDialog(builder) { executeWithoutSaving() }
 	}
 
 	fun executeWithoutSaving() = openOption.execute(this::onResult)

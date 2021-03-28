@@ -128,16 +128,16 @@ class OptionSave(private val context: Context,
 	private fun executeWithUriAndFormatType(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri,
 	                                        formatType: SaveFormat.Type) = when(formatType)
 	{
-		SaveFormat.Type.JPEG -> viewModel.showDialog {
-			JpegFormatDialog(it, SaveFormat.Jpeg()) { format ->
+		SaveFormat.Type.JPEG -> viewModel.showDialog { builder, _ ->
+			JpegFormatDialog(builder, SaveFormat.Jpeg()) { format ->
 				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
 		}
 		SaveFormat.Type.PNG -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Png)
 		SaveFormat.Type.WEBP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Webp())
 		SaveFormat.Type.BMP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Bmp)
-		SaveFormat.Type.GIF -> viewModel.showDialog {
-			GifFormatDialog(it, SaveFormat.Gif()) { format ->
+		SaveFormat.Type.GIF -> viewModel.showDialog { builder, _ ->
+			GifFormatDialog(builder, SaveFormat.Gif()) { format ->
 				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
 		}

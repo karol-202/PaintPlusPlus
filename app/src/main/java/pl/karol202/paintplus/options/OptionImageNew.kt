@@ -22,7 +22,6 @@ import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogNewImageBinding
 import pl.karol202.paintplus.image.FileService
-import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.GraphicsHelper
@@ -34,7 +33,7 @@ class OptionImageNew(private val viewModel: PaintViewModel,
                      private val fileService: FileService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
-	                     currentSize: Size,
+	                     initialSize: Size,
 	                     private val onApply: (Size) -> Unit) :
 			Option.LayoutDialog<DialogNewImageBinding>(builder, DialogNewImageBinding::inflate)
 	{
@@ -44,9 +43,9 @@ class OptionImageNew(private val viewModel: PaintViewModel,
 			builder.setPositiveButton(R.string.ok) { _, _ -> onApply() }
 			builder.setNegativeButton(R.string.cancel, null)
 
-			views.editImageX.setText(currentSize.width.toString())
+			views.editImageX.setText(initialSize.width.toString())
 			views.editImageX.addTextChangedListener { onEdit(views.inputLayoutImageX, it?.toString()) }
-			views.editImageY.setText(currentSize.height.toString())
+			views.editImageY.setText(initialSize.height.toString())
 			views.editImageY.addTextChangedListener { onEdit(views.inputLayoutImageY, it?.toString()) }
 		}
 
@@ -70,7 +69,9 @@ class OptionImageNew(private val viewModel: PaintViewModel,
 		}
 	}
 
-	fun execute() = viewModel.showDialog { Dialog(it, imageService.image.size, this::onApply) }
+	fun execute() = viewModel.showDialog { builder, _ ->
+		Dialog(builder, imageService.image.size, this::onApply)
+	}
 
 	private fun onApply(size: Size)
 	{

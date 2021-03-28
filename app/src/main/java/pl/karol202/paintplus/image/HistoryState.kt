@@ -1,6 +1,6 @@
 package pl.karol202.paintplus.image
 
-import pl.karol202.paintplus.history.action.Action
+import pl.karol202.paintplus.history.Action
 
 data class HistoryState(val precedingActions: List<Action.ToRevert> = emptyList(),
                         val followingActions: List<Action.ToCommit> = emptyList())

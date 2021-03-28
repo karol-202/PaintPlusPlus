@@ -28,5 +28,7 @@ class OptionLayerInfoShow(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute(layer: Layer) = viewModel.showDialog { Dialog(it, layer) }
+	fun execute(layer: Layer) = viewModel.showDialog { builder, _ ->
+		Dialog(builder, layer)
+	}
 }

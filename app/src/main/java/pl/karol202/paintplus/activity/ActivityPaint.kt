@@ -23,20 +23,18 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.karol202.paintplus.color.picker.ColorPickerContract
 import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.history.ActivityHistory
-import pl.karol202.paintplus.options.legacy.LegacyOption.AppContextLegacy
 import pl.karol202.paintplus.settings.ActivitySettings
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 
-class ActivityPaint : AppCompatActivity(), AppContextLegacy
+class ActivityPaint : AppCompatActivity()
 {
 	companion object
 	{
@@ -96,7 +94,7 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 		currentDialog?.dismiss()
 		currentDialog =
 				if(definition != null) AlertDialog.Builder(this)
-						.apply(definition::init)
+						.also { definition.init(it) { currentDialog } }
 						.setOnDismissListener { paintViewModel.hideDialog() }
 						.show()
 				else null
@@ -182,16 +180,4 @@ class ActivityPaint : AppCompatActivity(), AppContextLegacy
 	fun toggleLayersSheet() = layers.toggleLayersSheet()
 
 	fun closeLayersSheet() = layers.closeLayersSheet()
-
-	// LEGACY
-
-	override fun getContext() = this
-
-	override fun createSnackbar(message: Int, duration: Int): Snackbar
-	{
-		val snackbar = Snackbar.make(views.mainContainer, message, duration)
-		val params = snackbar.view.layoutParams as CoordinatorLayout.LayoutParams
-		params.setMargins(0, 0, 0, -NavigationBarUtils.getNavigationBarHeight(this))
-		return snackbar
-	}
 }

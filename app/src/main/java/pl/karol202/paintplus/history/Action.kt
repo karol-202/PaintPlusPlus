@@ -1,4 +1,4 @@
-package pl.karol202.paintplus.history.action
+package pl.karol202.paintplus.history
 
 import android.graphics.Bitmap
 import androidx.annotation.StringRes
