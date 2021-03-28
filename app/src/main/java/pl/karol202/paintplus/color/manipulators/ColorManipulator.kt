@@ -13,25 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.color.manipulators
 
-package pl.karol202.paintplus.color.manipulators.params;
+import android.graphics.Bitmap
 
-public abstract class ColorsManipulatorParams
+interface ColorManipulator<P : ColorManipulator.Params>
 {
-	private ManipulatorSelection selection;
-	
-	ColorsManipulatorParams(ManipulatorSelection selection)
-	{
-		this.selection = selection;
-	}
-	
-	public ManipulatorSelection getSelection()
-	{
-		return selection;
-	}
-	
-	public void setSelection(ManipulatorSelection selection)
-	{
-		this.selection = selection;
-	}
+	abstract class Params(val selection: ColorManipulatorSelection?)
+
+	fun run(input: Bitmap, params: P): Bitmap
 }

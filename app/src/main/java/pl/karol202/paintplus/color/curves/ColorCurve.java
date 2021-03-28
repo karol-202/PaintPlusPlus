@@ -109,7 +109,7 @@ public class ColorCurve
 
 	public byte[] createByteColorsMap()
 	{
-		ColorChannel inChannel = channels.getIn();
+		ColorChannel inChannel = channels.getInput();
 		byte[] map = new byte[inChannel.getMaxValue() + 1];
 		for(int i = 0; i < map.length; i++)
 			map[i] = (byte) Math.round(evaluate(i));
@@ -118,7 +118,7 @@ public class ColorCurve
 
 	public short[] createShortColorsMap()
 	{
-		ColorChannel inChannel = channels.getIn();
+		ColorChannel inChannel = channels.getInput();
 		short[] map = new short[inChannel.getMaxValue() + 1];
 		for(int i = 0; i < map.length; i++)
 			map[i] = (short) Math.round(evaluate(i));
@@ -142,11 +142,16 @@ public class ColorCurve
 		return MathUtils.map(x, lower.x, higher.x, lower.y, higher.y);
 	}
 
+	public ChannelInOutSet getChannels()
+	{
+		return channels;
+	}
+
 	static ColorCurve defaultCurve(ChannelInOutSet channels)
 	{
 		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));
-		curve.addPoint(new Point(channels.getIn().getMaxValue(), channels.getOut().getMaxValue()));
+		curve.addPoint(new Point(channels.getInput().getMaxValue(), channels.getOutput().getMaxValue()));
 		return curve;
 	}
 
@@ -154,7 +159,7 @@ public class ColorCurve
 	{
 		ColorCurve curve = new ColorCurve(channels);
 		curve.addPoint(new Point(0, 0));
-		curve.addPoint(new Point(channels.getIn().getMaxValue(), 0));
+		curve.addPoint(new Point(channels.getInput().getMaxValue(), 0));
 		return curve;
 	}
 }

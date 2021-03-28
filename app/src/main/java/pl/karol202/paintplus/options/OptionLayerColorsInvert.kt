@@ -16,16 +16,16 @@
 package pl.karol202.paintplus.options
 
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.color.manipulators.ColorsInvert
-import pl.karol202.paintplus.color.manipulators.params.InvertParams
-import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
+import pl.karol202.paintplus.color.manipulators.InvertColorManipulator
+import pl.karol202.paintplus.color.manipulators.ColorManipulatorSelection
 import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 
 class OptionLayerColorsInvert(private val imageService: ImageService,
-                              private val historyService: HistoryService) : Option
+                              private val historyService: HistoryService,
+                              private val invertColorManipulator: InvertColorManipulator) : Option
 {
 	private val actionPreset = Action.namePreset(R.string.history_action_colors_invert)
 
@@ -37,8 +37,8 @@ class OptionLayerColorsInvert(private val imageService: ImageService,
 
 	private fun commit(oldLayer: Layer): Action.ToRevert
 	{
-		val params = InvertParams(ManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds))
-		val newBitmap = ColorsInvert().run(oldLayer.bitmap, params)
+		val params = InvertColorManipulator.Params(ColorManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds))
+		val newBitmap = invertColorManipulator.run(oldLayer.bitmap, params)
 		val newLayer = oldLayer.withBitmap(newBitmap)
 		imageService.editImage { withLayerUpdated(newLayer) }
 		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, newLayer) }

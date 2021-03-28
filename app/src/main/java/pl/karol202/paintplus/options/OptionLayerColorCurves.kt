@@ -23,9 +23,8 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType
 import pl.karol202.paintplus.color.curves.ColorChannelsAdapter
-import pl.karol202.paintplus.color.manipulators.ColorsCurveManipulator
-import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams
-import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
+import pl.karol202.paintplus.color.manipulators.CurvesColorsManipulator
+import pl.karol202.paintplus.color.manipulators.ColorManipulatorSelection
 import pl.karol202.paintplus.databinding.DialogColorCurvesBinding
 import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
@@ -37,13 +36,14 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerColorCurves(private val viewModel: PaintViewModel,
                              private val imageService: ImageService,
-                             private val historyService: HistoryService) : Option
+                             private val historyService: HistoryService,
+                             private val curvesColorsManipulator: CurvesColorsManipulator) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
 	                     channelType: ColorChannelType,
 	                     private val setDialogVisibility: (Boolean) -> Unit,
-	                     private val onApply: ((CurveManipulatorParams) -> Unit) -> Action.ToRevert?,
+	                     private val onApply: ((CurvesColorsManipulator.Params) -> Unit) -> Action.ToRevert?,
 	                     private val onRevert: (Action.ToRevert) -> Unit) :
 			Option.LayoutDialog<DialogColorCurvesBinding>(builder, DialogColorCurvesBinding::inflate)
 	{
@@ -133,7 +133,7 @@ class OptionLayerColorCurves(private val viewModel: PaintViewModel,
 		Dialog(builder, channelType, ::setVisibility, { onApply(channelType, it) }, this::onRevert)
 	}
 
-	private fun onApply(channelType: ColorChannelType, paramsModifier: (CurveManipulatorParams) -> Unit): Action.ToRevert?
+	private fun onApply(channelType: ColorChannelType, paramsModifier: (CurvesColorsManipulator.Params) -> Unit): Action.ToRevert?
 	{
 		if(imageService.image.selectedLayer == null) return null
 		return historyService.commitAction { commit(imageService.image.requireSelectedLayer, channelType, paramsModifier) }
@@ -142,18 +142,18 @@ class OptionLayerColorCurves(private val viewModel: PaintViewModel,
 	private fun onRevert(toRevert: Action.ToRevert) = historyService.revertAction(toRevert)
 
 	private fun commit(oldLayer: Layer, channelType: ColorChannelType,
-	                   paramsModifier: (CurveManipulatorParams) -> Unit): Action.ToRevert
+	                   paramsModifier: (CurvesColorsManipulator.Params) -> Unit): Action.ToRevert
 	{
-		val manipulatorSelection = ManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds)
-		val params = CurveManipulatorParams(manipulatorSelection, channelType).also(paramsModifier)
-		val newBitmap = ColorsCurveManipulator().run(oldLayer.bitmap, params)
+		val manipulatorSelection = ColorManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds)
+		val params = CurvesColorsManipulator.Params(manipulatorSelection, channelType).also(paramsModifier)
+		val newBitmap = curvesColorsManipulator.run(oldLayer.bitmap, params)
 		val newLayer = oldLayer.withBitmap(newBitmap)
 		imageService.editImage { withLayerUpdated(newLayer) }
 		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, channelType, paramsModifier, newLayer) }
 	}
 
 	private fun revert(oldLayer: Layer, channelType: ColorChannelType,
-	                   paramsModifier: (CurveManipulatorParams) -> Unit, newLayer: Layer): Action.ToCommit
+	                   paramsModifier: (CurvesColorsManipulator.Params) -> Unit, newLayer: Layer): Action.ToCommit
 	{
 		imageService.editImage { withLayerUpdated(oldLayer) }
 		return actionPreset.toCommit(newLayer.bitmap) { commit(oldLayer, channelType, paramsModifier) }

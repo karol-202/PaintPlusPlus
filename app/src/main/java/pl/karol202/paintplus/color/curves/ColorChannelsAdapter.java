@@ -50,7 +50,7 @@ public class ColorChannelsAdapter extends ArrayAdapter<ColorChannel>
 		imageView.setImageResource(channel.getIcon());
 
 		TextView textView = view.findViewById(R.id.text_color_channel);
-		textView.setText(channel.getName());
+		textView.setText(channel.getDisplayName());
 		return view;
 	}
 

@@ -20,9 +20,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.color.manipulators.ColorsBrightness
-import pl.karol202.paintplus.color.manipulators.params.BrightnessParams
-import pl.karol202.paintplus.color.manipulators.params.ManipulatorSelection
+import pl.karol202.paintplus.color.manipulators.BrightnessColorManipulator
+import pl.karol202.paintplus.color.manipulators.ColorManipulatorSelection
 import pl.karol202.paintplus.databinding.DialogColorsBrightnessBinding
 import pl.karol202.paintplus.history.Action
 import pl.karol202.paintplus.image.HistoryService
@@ -35,7 +34,8 @@ import java.util.*
 
 class OptionLayerColorsBrightness(private val viewModel: PaintViewModel,
                                   private val imageService: ImageService,
-                                  private val historyService: HistoryService) : Option
+                                  private val historyService: HistoryService,
+                                  private val brightnessColorManipulator: BrightnessColorManipulator) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
@@ -121,12 +121,9 @@ class OptionLayerColorsBrightness(private val viewModel: PaintViewModel,
 
 	private fun commit(oldLayer: Layer, brightness: Float, contrast: Float): Action.ToRevert
 	{
-		val manipulatorSelection = ManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds)
-		val params = BrightnessParams(manipulatorSelection).apply {
-			this.brightness = brightness
-			this.contrast = contrast
-		}
-		val newBitmap = ColorsBrightness().run(oldLayer.bitmap, params)
+		val manipulatorSelection = ColorManipulatorSelection.fromSelection(imageService.selection, oldLayer.bounds)
+		val params = BrightnessColorManipulator.Params(manipulatorSelection, brightness, contrast)
+		val newBitmap = brightnessColorManipulator.run(oldLayer.bitmap, params)
 		val newLayer = oldLayer.withBitmap(newBitmap)
 		imageService.editImage { withLayerUpdated(newLayer) }
 		return actionPreset.toRevert(oldLayer.bitmap) { revert(oldLayer, brightness, contrast, newLayer) }

@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import pl.karol202.paintplus.color.manipulators.InvertColorManipulator
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.mode.LayerModesService
@@ -30,7 +31,8 @@ class PaintPlusPlusApplication : Application()
 
 		startKoin {
 			androidContext(this@PaintPlusPlusApplication)
-			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(), viewModelModule())
+			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(),
+			        colorManipulatorModule(), viewModelModule())
 		}
 	}
 
@@ -55,10 +57,10 @@ class PaintPlusPlusApplication : Application()
 	}
 
 	private fun serviceModule() = module {
-		single { ImageService(get()) }
+		single { ImageService(get(), get()) }
 		single { ClipboardService() }
 		single { ColorsService() }
-		single { HistoryService() }
+		single { HistoryService(get()) }
 		single { HelpersService(get(), get()) }
 		single { ViewService(get()) }
 		single { ToolsService(get()) }
@@ -67,39 +69,43 @@ class PaintPlusPlusApplication : Application()
 	}
 
 	private fun optionModule() = module {
-		single { OptionLayerColorsInvert(get()) }
-		single { OptionCopy() }
-		single { OptionImageCropBySelection(get()) }
-		single { OptionLayerCropBySelection(get()) }
-		single { OptionCut(get()) }
-		single { OptionImageCapturePhoto(get()) }
-		single { OptionImageNew(get()) }
-		single { OptionImageOpen(get(), get(), get()) }
-		single { OptionImageSave(get(), get(), get()) }
+		single { OptionLayerColorsInvert(get(), get(), get()) }
+		single { OptionCopy(get(), get()) }
+		single { OptionImageCropBySelection(get(), get(), get(), get()) }
+		single { OptionLayerCropBySelection(get(), get()) }
+		single { OptionCut(get(), get(), get()) }
+		single { OptionImageCapturePhoto(get(), get(), get(), get(), get()) }
+		single { OptionImageNew(get(), get(), get(), get()) }
+		single { OptionImageOpen(get(), get(), get(), get(), get()) }
+		single { OptionImageSave(get(), get(), get(), get()) }
 		single { OptionFlip(get()) }
-		single { OptionImageFlatten(get()) }
-		single { OptionImageFlip(get()) }
-		single { OptionImageRotate(get()) }
-		single { OptionSelectInversion(get()) }
-		single { OptionLayerChangeOrder() }
-		single { OptionLayerDelete(get()) }
-		single { OptionLayerDuplicate() }
-		single { OptionLayerFlip(get()) }
+		single { OptionImageFlatten(get(), get(), get()) }
+		single { OptionImageFlip(get(), get(), get()) }
+		single { OptionImageRotate(get(), get(), get()) }
+		single { OptionSelectInversion(get(), get(), get()) }
+		single { OptionLayerChangeOrder(get(), get()) }
+		single { OptionLayerDelete(get(), get(), get()) }
+		single { OptionLayerDuplicate(get(), get(), get()) }
+		single { OptionLayerFlip(get(), get(), get()) }
 		single { OptionLayerInfoShow(get()) }
-		single { OptionLayerMergeDown() }
-		single { OptionLayerNameChange(get()) }
-		single { OptionLayerOpen(get(), get()) }
-		single { OptionLayerPropertiesEdit(get(), get()) }
-		single { OptionLayerSave(get(), get(), get()) }
-		single { OptionLayerSelect() }
-		single { OptionLayerFitToImage(get()) }
-		single { OptionLayerVisibilityToggle() }
-		single { OptionOpen(get()) }
-		single { OptionPaste() }
-		single { OptionSave(get()) }
-		single { OptionSelectAll(get()) }
-		single { OptionSelectNothing(get()) }
-		single { OptionSetZoom(get()) }
+		single { OptionLayerMergeDown(get(), get()) }
+		single { OptionLayerNameChange(get(), get(), get()) }
+		single { OptionLayerOpen(get(), get(), get(), get(), get()) }
+		single { OptionLayerPropertiesEdit(get(), get(), get(), get()) }
+		single { OptionLayerSave(get(), get(), get(), get()) }
+		single { OptionLayerSelect(get()) }
+		single { OptionLayerFitToImage(get(), get()) }
+		single { OptionLayerVisibilityToggle(get(), get()) }
+		single { OptionOpen(get(), get()) }
+		single { OptionPaste(get(), get(), get(), get()) }
+		single { OptionSave(get(), get(), get()) }
+		single { OptionSelectAll(get(), get(), get()) }
+		single { OptionSelectNothing(get(), get(), get()) }
+		single { OptionSetZoom(get(), get()) }
+	}
+
+	private fun colorManipulatorModule() = module {
+		single { InvertColorManipulator(get()) }
 	}
 
 	private fun viewModelModule() = module {
@@ -107,6 +113,6 @@ class PaintPlusPlusApplication : Application()
 		viewModel { PaintViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
 		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
 		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-		                           get()) }
+		                           get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 	}
 }

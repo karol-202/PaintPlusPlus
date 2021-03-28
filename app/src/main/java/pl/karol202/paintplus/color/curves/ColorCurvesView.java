@@ -21,10 +21,10 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import pl.karol202.paintplus.color.manipulators.CurvesColorsManipulator;
 import pl.karol202.paintplus.util.ErrorHandler;
 import pl.karol202.paintplus.R;
 import pl.karol202.paintplus.color.curves.ColorChannel.ColorChannelType;
-import pl.karol202.paintplus.color.manipulators.params.CurveManipulatorParams;
 import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class ColorCurvesView extends View
 
 	private ColorCurve getDefaultCurve(ChannelInOutSet set)
 	{
-		if(set.getIn() == set.getOut()) return ColorCurve.defaultCurve(set);
+		if(set.getInput() == set.getOutput()) return ColorCurve.defaultCurve(set);
 		else return ColorCurve.zeroCurve(set);
 	}
 
@@ -472,13 +472,13 @@ public class ColorCurvesView extends View
 		this.points = null;
 	}
 
-	public void attachCurvesToParamsObject(CurveManipulatorParams params)
+	public void attachCurvesToParamsObject(CurvesColorsManipulator.Params params)
 	{
 		for(ChannelInOutSet set : curves.keySet())
 		{
 			ColorCurve curve = curves.get(set);
 			ColorCurve defaultCurve = getDefaultCurve(set);
-			if(!curve.equals(defaultCurve)) params.addCurve(set, curve);
+			if(!curve.equals(defaultCurve)) params.addCurve(curve);
 		}
 	}
 

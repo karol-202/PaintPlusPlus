@@ -7,8 +7,8 @@ import androidx.core.graphics.minus
 import androidx.core.graphics.plus
 import androidx.core.graphics.toRectF
 
-infix fun Rect.intersectionWith(other: RectF) = RectF(this).apply {
-	intersect(other)
+infix fun Rect.intersectionWith(other: Rect) = Rect(this).run {
+	if(intersect(other)) this else null
 }
 
 fun RectF.rounded() = Rect().apply {

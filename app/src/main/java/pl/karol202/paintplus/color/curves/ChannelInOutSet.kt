@@ -13,13 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.color.curves
 
-package pl.karol202.paintplus.color.manipulators.params;
-
-public class InvertParams extends ColorsManipulatorParams
-{
-	public InvertParams(ManipulatorSelection selection)
-	{
-		super(selection);
-	}
-}
+data class ChannelInOutSet(val input: ColorChannel,
+                           val output: ColorChannel)

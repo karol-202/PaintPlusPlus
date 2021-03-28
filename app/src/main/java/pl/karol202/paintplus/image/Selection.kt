@@ -15,6 +15,7 @@ data class Selection(val region: Region)
 		fun fromRect(rect: Rect) = Selection(Region(rect))
 	}
 
+	val isEmpty = region.isEmpty
 	val path = region.boundaryPath
 	val bounds = region.bounds
 
