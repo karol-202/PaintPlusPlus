@@ -137,16 +137,8 @@ class PaintView(context: Context,
 	private fun drawSelection(canvas: Canvas) = canvas.drawPath(selectionPath, selectionPaint)
 
 	@SuppressLint("ClickableViewAccessibility")
-	override fun onTouchEvent(event: MotionEvent): Boolean
-	{
-		if(image.selectedLayer == null)
-		{
-			if(event.action != MotionEvent.ACTION_DOWN) currentTool.onTouch(event)
-			return false
-		}
-		return currentTool.onTouch(event).also {
-			if(it) invalidate()
-		}
+	override fun onTouchEvent(event: MotionEvent) = currentTool.onTouch(event).also {
+		if(it) invalidate()
 	}
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int)

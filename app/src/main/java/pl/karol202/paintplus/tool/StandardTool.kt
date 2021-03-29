@@ -16,15 +16,16 @@
 package pl.karol202.paintplus.tool
 
 import android.graphics.Canvas
+import android.graphics.Point
 import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.core.graphics.plus
 import androidx.core.graphics.times
 import androidx.core.graphics.withMatrix
-import androidx.core.graphics.withTranslation
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.div
 import pl.karol202.paintplus.util.minus
 
@@ -35,24 +36,33 @@ abstract class StandardTool(private val imageService: ImageService,
 	abstract val inputCoordinateSpace: ToolCoordinateSpace
 	abstract val isUsingSnapping: Boolean
 
-	abstract fun onTouchStart(x: Float, y: Float): Boolean
+	private var layer: Layer? = null
 
-	abstract fun onTouchMove(x: Float, y: Float): Boolean
+	abstract fun onTouchStart(point: PointF, layer: Layer): Boolean
 
-	abstract fun onTouchStop(x: Float, y: Float): Boolean
+	abstract fun onTouchMove(point: PointF, layer: Layer): Boolean
 
-	override fun onTouch(event: MotionEvent): Boolean
+	abstract fun onTouchStop(point: PointF, layer: Layer): Boolean
+
+	final override fun onTouch(event: MotionEvent): Boolean
 	{
 		val point = createTouchPoint(event.x, event.y)
 		return when(event.action)
 		{
-			MotionEvent.ACTION_DOWN -> onTouchStart(point.x, point.y)
+			MotionEvent.ACTION_DOWN ->
+			{
+				layer = imageService.image.selectedLayer
+				onTouchStart(point, layer ?: return false)
+			}
 			MotionEvent.ACTION_MOVE ->
 				(0 until event.historySize)
 						.map { createTouchPoint(event.getHistoricalX(it), event.getHistoricalY(it)) }
 						.plus(point)
-						.fold(true) { result, p -> result && onTouchMove(p.x, p.y) }
-			MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> onTouchStop(point.x, point.y)
+						.fold(true) { result, p -> result && onTouchMove(p, layer ?: return false) }
+			MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+				onTouchStop(point, layer ?: return false).also {
+					layer = null
+				}
 			else -> true
 		}
 	}
@@ -74,11 +84,7 @@ abstract class StandardTool(private val imageService: ImageService,
 
 	private fun PointF.snapTouchCoordinates() = if(isUsingSnapping) helpersService.snapPoint(this) else this
 
-	override fun getOnLayerDrawCoordinateSpace(layerVisible: Boolean): ToolCoordinateSpace? = null
-
-	override fun getOnTopDrawCoordinateSpace(): ToolCoordinateSpace? = null
-
-	override fun drawOnLayer(canvas: Canvas) { }
+	override fun drawOnLayer(canvas: Canvas, isLayerVisible: Boolean) { }
 
 	override fun drawOnTop(canvas: Canvas) { }
 

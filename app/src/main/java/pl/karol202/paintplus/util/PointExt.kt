@@ -7,6 +7,10 @@ import android.graphics.RectF
 operator fun PointF.component1() = x
 operator fun PointF.component2() = y
 
+operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
+
+operator fun Point.plus(other: PointF) = PointF(x + other.x, y + other.y)
+
 operator fun PointF.minus(other: Point) = PointF(x - other.x, y - other.y)
 
 operator fun PointF.times(factor: Float) = PointF(x * factor, y * factor)

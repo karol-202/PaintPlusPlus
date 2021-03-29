@@ -49,7 +49,7 @@
 		app:layout_constraintLeft_toRightOf="@+id/text_pick_size"
 		android:layout_marginEnd="32dp"
 		app:layout_constraintRight_toRightOf="parent"
-		android:max="49" />
+		android:max="48" />
 
 	<TextView
 		android:id="@+id/pick_size"

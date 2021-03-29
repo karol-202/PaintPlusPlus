@@ -52,6 +52,7 @@ class Layer private constructor(val id: String,
 	val position = Point(x, y)
 	val width = bitmap.width
 	val height = bitmap.height
+	val size = bitmap.size
 	val bounds = Rect(x, y, x + width, y + height)
 	val matrix = Matrix().preTranslated(x.toFloat(), y.toFloat())
 
