@@ -13,3 +13,7 @@ operator fun Region.plus(offset: Point) = Region(this).apply {
 fun Region.modified(rect: Rect, op: Region.Op) = Region(this).apply {
 	op(rect, op)
 }
+
+fun Region.modified(region: Region, op: Region.Op) = Region(this).apply {
+	op(region, op)
+}

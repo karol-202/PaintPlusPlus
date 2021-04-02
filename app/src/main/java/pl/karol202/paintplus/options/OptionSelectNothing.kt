@@ -25,8 +25,8 @@ class OptionSelectNothing(private val imageService: ImageService,
 		toRevert { revert(oldSelection) }
 	}
 
-	private fun revert(selection: Selection): Action.ToCommit = actionPreset.revert {
-		imageService.setSelection(selection)
+	private fun revert(oldSelection: Selection): Action.ToCommit = actionPreset.revert {
+		imageService.setSelection(oldSelection)
 		toCommit { commit() }
 	}
 }

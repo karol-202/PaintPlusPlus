@@ -12,6 +12,8 @@ import org.koin.dsl.module
 import pl.karol202.paintplus.color.manipulators.BrightnessColorManipulator
 import pl.karol202.paintplus.color.manipulators.CurvesColorsManipulator
 import pl.karol202.paintplus.color.manipulators.InvertColorManipulator
+import pl.karol202.paintplus.helpers.Grid
+import pl.karol202.paintplus.helpers.Helper
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.mode.*
@@ -46,7 +48,7 @@ class PaintPlusPlusApplication : Application()
 		startKoin {
 			androidContext(this@PaintPlusPlusApplication)
 			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(),
-			        colorManipulatorModule(), layerModesModule(), viewModelModule())
+			        colorManipulatorModule(), layerModesModule(), helpersModule(), viewModelModule())
 		}
 	}
 
@@ -75,7 +77,7 @@ class PaintPlusPlusApplication : Application()
 		single { ClipboardService() }
 		single { ColorsService() }
 		single { HistoryService(get()) }
-		single { HelpersService(get(), get()) }
+		single { HelpersService(getAll()) }
 		single { ViewService(get()) }
 		single { ToolsService(getAll()) }
 		single { FileService(get(), get()) }
@@ -146,6 +148,10 @@ class PaintPlusPlusApplication : Application()
 		single { MultiplyLayerMode(get()) } bind LayerMode::class
 		single { LighterLayerMode(get()) } bind LayerMode::class
 		single { DarkerLayerMode(get()) } bind LayerMode::class
+	}
+
+	private fun helpersModule() = module {
+		single { Grid(get(), get()) } bind Helper::class
 	}
 
 	private fun viewModelModule() = module {

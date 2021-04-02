@@ -47,3 +47,10 @@ fun RectF.toPath() = Path().apply {
 	addRect(this@toPath, Path.Direction.CW)
 	close()
 }
+
+fun Rect.copy(left: Int = this.left, top: Int = this.top, right: Int = this.right, bottom: Int = this.bottom) =
+		Rect(left, top, right, bottom)
+
+fun Rect.sorted() = Rect().apply {
+	sort()
+}

@@ -73,20 +73,22 @@ class ActivityPaint : AppCompatActivity()
 		drawers.initDrawers()
 		layers.initLayers()
 
+		views.paintView.helpers = paintViewModel.helpers
 		views.paintView.onViewportSizeChangeListener = paintViewModel::setViewportSize
 	}
 
 	private fun observeViewModel()
 	{
 		paintViewModel.imageFlow.collectIn(lifecycleScope) { views.paintView.image = it }
+		paintViewModel.selectionFlow.collectIn(lifecycleScope) { views.paintView.selection = it }
 		paintViewModel.viewPositionFlow.collectIn(lifecycleScope) { views.paintView.viewPosition = it }
 		paintViewModel.currentToolFlow.collectIn(lifecycleScope) { views.paintView.currentTool = it }
-		paintViewModel.selectionFlow.collectIn(lifecycleScope) { views.paintView.selection = it }
 		paintViewModel.settingsFlow.collectIn(lifecycleScope) { views.paintView.filtering = it.smoothView }
 		paintViewModel.titleFlow.collectIn(lifecycleScope) { views.toolbar.root.title = it }
 		paintViewModel.dialogFlow.collectIn(lifecycleScope) { updateDialog(it) }
 		paintViewModel.messageEventFlow.collectIn(lifecycleScope) { showSnackbar(it.text) }
 		paintViewModel.actionRequestEventFlow.collectIn(lifecycleScope) { onActionRequest(it) }
+		paintViewModel.viewUpdateEventFlow.collectIn(lifecycleScope) { views.paintView.invalidate() }
 	}
 
 	private fun updateDialog(definition: PaintViewModel.DialogDefinition?)

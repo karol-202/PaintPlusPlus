@@ -1,9 +1,13 @@
 package pl.karol202.paintplus.image
 
+import android.graphics.Path
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.Region
+import androidx.core.graphics.toRectF
+import androidx.core.graphics.toRegion
 import androidx.core.graphics.xor
+import pl.karol202.paintplus.util.modified
 import pl.karol202.paintplus.util.plus
 
 data class Selection(val region: Region)
@@ -25,34 +29,16 @@ data class Selection(val region: Region)
 
 	fun inverted(rect: Rect) = Selection(region xor rect)
 
-	/*
-	public void commitSelectionRectangle(Rect rect, Op op)
+	fun withRectangleOperation(rect: Rect, op: Region.Op) = Selection(region.modified(rect, op))
+
+	fun withOvalOperation(rect: Rect, op: Region.Op): Selection
 	{
-		ActionSelectionChange action = new ActionSelectionChange(image);
-		action.setOldRegion();
-
-		region.op(rect, op);
-		updatePath();
-
-		action.applyAction();
+		val ovalPath = Path().apply {
+			addOval(rect.toRectF(), Path.Direction.CW)
+		}
+		val ovalRegion = Region().apply {
+			setPath(ovalPath, rect.toRegion())
+		}
+		return Selection(region.modified(ovalRegion, op))
 	}
-
-	public void commitSelectionOval(Rect rect, Op op)
-	{
-		ActionSelectionChange action = new ActionSelectionChange(image);
-		action.setOldRegion();
-
-		RectF rectF = new RectF(rect);
-		Path ovalPath = new Path();
-		ovalPath.addOval(rectF, CW);
-
-		Region ovalRegion = new Region();
-		ovalRegion.setPath(ovalPath, new Region(0, 0, imageRect.right, imageRect.bottom));
-
-		region.op(ovalRegion, op);
-		updatePath();
-
-		action.applyAction();
-	}
-	 */
 }

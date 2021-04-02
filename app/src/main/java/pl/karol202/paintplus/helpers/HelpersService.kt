@@ -15,19 +15,12 @@
  */
 package pl.karol202.paintplus.helpers
 
-import android.content.Context
-import android.graphics.Canvas
 import android.graphics.PointF
-import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.image.ViewService
-import kotlin.reflect.KFunction
+import kotlinx.coroutines.flow.merge
 
-class HelpersService(context: Context,
-                     viewService: ViewService)
+class HelpersService(val helpers: List<Helper>)
 {
-	val grid = Grid(context, viewService)
-
-	private val helpers = listOf<Helper>(grid)
+	val updateEventFlow = helpers.mapNotNull { it.updateEventFlow }.merge()
 
 	fun snapX(x: Float) = snap(x, SnappingHelper::snapX)
 

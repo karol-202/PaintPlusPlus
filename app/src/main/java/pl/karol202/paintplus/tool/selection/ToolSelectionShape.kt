@@ -13,10 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool.selection
 
-package pl.karol202.paintplus.tool.selection;
+import pl.karol202.paintplus.R
 
-public interface OnSelectionEditListener
+enum class ToolSelectionShape(val displayName: Int,
+                              val icon: Int)
 {
-	void onStartSelectionEditing();
+	RECTANGLE(R.string.selection_shape_rectangle, R.drawable.ic_selection_rectangular_black_24px),
+	OVAL(R.string.selection_shape_oval, R.drawable.ic_selection_circular_black_24dp)
 }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
+import pl.karol202.paintplus.helpers.Grid
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.ColorsService
 import pl.karol202.paintplus.image.HistoryService
@@ -33,6 +34,7 @@ class PaintViewModel(application: Application,
                      private val colorService: ColorsService,
                      private val historyService: HistoryService,
                      private val helpersService: HelpersService,
+                     private val grid: Grid,
                      private val optionCopy: OptionCopy,
                      private val optionCut: OptionCut,
                      private val optionImageCapturePhoto: OptionImageCapturePhoto,
@@ -119,9 +121,11 @@ class PaintViewModel(application: Application,
 	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
 	val messageEventFlow: Flow<MessageEvent> = _messageEventFlow
 	val actionRequestEventFlow: Flow<ActionRequest<*>> = _actionRequestEventFlow
+	val viewUpdateEventFlow: Flow<Unit> = merge(toolsService.updateEventFlow, helpersService.updateEventFlow).conflate()
 
 	val currentTool get() = currentToolFlow.value
 	val currentColor get() = currentColorFlow.value
+	val helpers get() = helpersService.helpers
 
 	private fun createTitle(override: TitleOverride, tool: Tool): String
 	{
@@ -214,9 +218,9 @@ class PaintViewModel(application: Application,
 
 	fun centerImage() = viewService.centerView()
 
-	fun toggleGrid() = helpersService.grid.toggleGrid()
+	fun toggleGrid() = grid.toggleGrid()
 
-	fun toggleSnapToGrid() = helpersService.grid.toggleSnapping()
+	fun toggleSnapToGrid() = grid.toggleSnapping()
 
 	fun selectAll() = optionSelectAll.execute()
 

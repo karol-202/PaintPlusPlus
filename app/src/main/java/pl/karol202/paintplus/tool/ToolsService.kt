@@ -17,6 +17,7 @@ package pl.karol202.paintplus.tool
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.merge
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.tool.pan.ToolPan
 import pl.karol202.paintplus.tool.marker.ToolMarker
@@ -34,6 +35,8 @@ class ToolsService(val tools: List<Tool>)
 	private val _currentToolFlow = MutableStateFlow(tools.first())
 
 	val currentToolFlow: StateFlow<Tool> = _currentToolFlow
+
+	val updateEventFlow = tools.mapNotNull { it.updateEventFlow }.merge()
 
 	fun setCurrentTool(tool: Tool)
 	{

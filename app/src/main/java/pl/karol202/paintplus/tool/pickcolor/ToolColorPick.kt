@@ -17,6 +17,7 @@ package pl.karol202.paintplus.tool.pickcolor
 
 import android.graphics.*
 import androidx.core.graphics.contains
+import androidx.core.graphics.plus
 import androidx.core.graphics.toPoint
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService

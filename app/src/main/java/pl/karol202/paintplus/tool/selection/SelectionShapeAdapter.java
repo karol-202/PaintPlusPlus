@@ -50,7 +50,7 @@ class SelectionShapeAdapter extends ArrayAdapter<ToolSelectionShape>
 		imageView.setImageResource(mode.getIcon());
 
 		TextView textView = view.findViewById(R.id.text_selection_shape_name);
-		textView.setText(mode.getName());
+		textView.setText(mode.getDisplayName());
 		return view;
 	}
 

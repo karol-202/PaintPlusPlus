@@ -18,12 +18,15 @@ package pl.karol202.paintplus.tool
 import android.graphics.Canvas
 import android.view.MotionEvent
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.flow.Flow
 
 interface Tool
 {
 	val name: Int
 	val icon: Int
 	val propertiesFragmentClass: Class<out Fragment>
+
+	val updateEventFlow: Flow<Unit>? get() = null
 
 	fun onTouch(event: MotionEvent): Boolean
 

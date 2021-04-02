@@ -40,9 +40,9 @@ class PaintView(context: Context,
                 attrs: AttributeSet?) : SurfaceView(context, attrs)
 {
 	var image by invalidating(null as Image?).require()
+	var selection by invalidating(Selection.empty)
 	var viewPosition by invalidating(ViewPosition())
 	var currentTool by invalidating(null as Tool?).require()
-	var selection by invalidating(Selection.empty)
 	var helpers by invalidating(emptyList<Helper>())
 	var filtering by invalidating(false)
 	var onViewportSizeChangeListener: ((Size) -> Unit)? = null

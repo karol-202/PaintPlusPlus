@@ -1,6 +1,8 @@
 package pl.karol202.paintplus.util
 
 import android.view.View
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlin.properties.Delegates
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -32,4 +34,7 @@ fun <T : View, V> T.invalidating(default: V) = object : ReadWriteProperty<T, V> 
 		thisRef.invalidate()
 	}
 }
+
+fun <V> notifying(initial: V, notifyTarget: MutableSharedFlow<Unit>) =
+		Delegates.observable(initial) { _, _, _ -> notifyTarget.tryEmit(Unit) }
 
