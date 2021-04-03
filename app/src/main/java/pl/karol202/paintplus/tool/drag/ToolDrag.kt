@@ -42,9 +42,9 @@ class ToolDrag(private val imageService: ImageService,
 	override val inputCoordinateSpace get() = ToolCoordinateSpace.IMAGE_SPACE
 	override val isUsingSnapping get() = false
 
-	private val actionPreset = Action.namePreset(R.string.history_action_layer_drag)
-
 	var isOneAxis = false
+
+	private val actionPreset = Action.namePreset(R.string.history_action_layer_drag)
 
 	private var touchStart: PointF? = null
 

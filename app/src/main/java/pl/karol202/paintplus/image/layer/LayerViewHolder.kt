@@ -96,9 +96,9 @@ class LayerViewHolder(private val views: ItemLayerBinding,
 		return true
 	}
 
-	fun bind(layer: Layer, isLast: Boolean, isSelected: Boolean, areLayersLocked: Boolean)
+	fun bind(layer: Layer, isLast: Boolean, isSelected: Boolean, isImageLocked: Boolean)
 	{
-		boundLayer = BoundLayer(layer, isLast, areLayersLocked)
+		boundLayer = BoundLayer(layer, isLast, isImageLocked)
 
 		setViewOffset(0f, 0f)
 		setViewBackground(selected = isSelected)

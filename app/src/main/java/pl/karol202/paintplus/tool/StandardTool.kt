@@ -16,18 +16,20 @@
 package pl.karol202.paintplus.tool
 
 import android.graphics.Canvas
-import android.graphics.Point
 import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.core.graphics.plus
 import androidx.core.graphics.times
 import androidx.core.graphics.withMatrix
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.div
 import pl.karol202.paintplus.util.minus
+import kotlin.properties.Delegates
 
 abstract class StandardTool(private val imageService: ImageService,
                             private val viewService: ViewService,
@@ -35,6 +37,9 @@ abstract class StandardTool(private val imageService: ImageService,
 {
 	abstract val inputCoordinateSpace: ToolCoordinateSpace
 	abstract val isUsingSnapping: Boolean
+
+	private val _updateEventFlow = MutableSharedFlow<Unit>()
+	override val updateEventFlow: Flow<Unit> = _updateEventFlow
 
 	private var layer: Layer? = null
 
@@ -84,13 +89,16 @@ abstract class StandardTool(private val imageService: ImageService,
 
 	private fun PointF.snapTouchCoordinates() = if(isUsingSnapping) helpersService.snapPoint(this) else this
 
-	override fun drawOnLayer(canvas: Canvas, isLayerVisible: Boolean) { }
-
-	override fun drawOnTop(canvas: Canvas) { }
-
 	protected fun Canvas.withImageSpace(block: Canvas.() -> Unit) = withMatrix(viewService.viewPosition.imageMatrix, block)
 
 	protected fun Canvas.withLayerSpace(block: Canvas.() -> Unit) = imageService.image.selectedLayer?.let {
 		withMatrix(viewService.viewPosition.imageMatrix * it.matrix, block)
 	} ?: withImageSpace(block)
+
+	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> notifyUpdate() }
+
+	private fun notifyUpdate()
+	{
+		_updateEventFlow.tryEmit(Unit)
+	}
 }

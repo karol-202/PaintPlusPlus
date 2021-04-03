@@ -65,7 +65,7 @@ class LayersAdapter(private val context: Context,
 		holder.bind(layer = layer,
 		            isLast = position == layers.size - 1,
 		            isSelected = image.isLayerSelected(layer),
-		            areLayersLocked = image.layersLocked)
+		            isImageLocked = false) // TODO Change when image locking is introduced
 		viewHolders[position] = holder
 	}
 

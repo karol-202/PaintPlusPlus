@@ -81,7 +81,8 @@ class ToolSelection(context: Context,
 	override val inputCoordinateSpace get() = ToolCoordinateSpace.IMAGE_SPACE
 	override val isUsingSnapping get() = false
 
-	override val updateEventFlow = MutableSharedFlow<Unit>()
+	var shape = ToolSelectionShape.RECTANGLE
+	var mode = ToolSelectionMode.NEW
 
 	private val actionPreset = Action.namePreset(R.string.history_action_selection_change).withPreview {
 		optionSelect.createPreviewBitmap()
@@ -92,10 +93,7 @@ class ToolSelection(context: Context,
 		style = Paint.Style.STROKE
 	}
 
-	var shape = ToolSelectionShape.RECTANGLE
-	var mode = ToolSelectionMode.NEW
-
-	private var state by notifying<State>(State.Idle, updateEventFlow)
+	private var state by notifying<State>(State.Idle)
 	val isInEditMode get() = state is State.Edit
 
 	override fun onTouchStart(point: PointF, layer: Layer): Boolean

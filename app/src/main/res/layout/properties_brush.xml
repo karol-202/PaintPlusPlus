@@ -63,7 +63,7 @@
 		app:layout_constraintTop_toBottomOf="@+id/text_brush_size" />
 
 	<SeekBar
-		android:id="@+id/seek_brush_shape_offset"
+		android:id="@+id/seekBar_brush_shape_offset"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:max="49"
@@ -77,7 +77,7 @@
 		android:id="@+id/brush_shape_offset"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		app:layout_constraintLeft_toRightOf="@+id/seek_brush_shape_offset"
+		app:layout_constraintLeft_toRightOf="@+id/seekBar_brush_shape_offset"
 		app:layout_constraintTop_toTopOf="@+id/text_brush_shape_offset"
 		tools:text="100" />
 

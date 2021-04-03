@@ -17,8 +17,7 @@ private const val MAX_LAYERS = 8
 class Image private constructor(val width: Int,
                                 val height: Int,
                                 val layers: List<Layer>, // In order of drawing
-                                val selectedLayerIndex: Int?,
-                                val layersLocked: Boolean = false) // TODO Check if needed
+                                val selectedLayerIndex: Int?)
 {
 	companion object
 	{
@@ -162,6 +161,6 @@ class Image private constructor(val width: Int,
 			     })
 
 	private fun copy(width: Int = this.width, height: Int = this.height, layers: List<Layer> = this.layers,
-	                 selectedLayerIndex: Int? = this.selectedLayerIndex, layersLocked: Boolean = this.layersLocked) =
-			Image(width, height, layers, selectedLayerIndex, layersLocked)
+	                 selectedLayerIndex: Int? = this.selectedLayerIndex) =
+			Image(width, height, layers, selectedLayerIndex)
 }
