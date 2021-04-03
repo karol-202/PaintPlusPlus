@@ -179,10 +179,10 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	protected void updateLayer()
 	{
 		Layer newLayer = image.getSelectedLayer();
-		if(layer == null) layer = newLayer;
-		if(newLayer != layer)
-			shape.offsetShape(layer.getX() - newLayer.getX(), layer.getY() - newLayer.getY());
-		layer = newLayer;
+		if(currentLayer == null) currentLayer = newLayer;
+		if(newLayer != currentLayer)
+			shape.offsetShape(currentLayer.getX() - newLayer.getX(), currentLayer.getY() - newLayer.getY());
+		currentLayer = newLayer;
 
 		canvas = image.getSelectedCanvas();
 	}
@@ -190,7 +190,7 @@ public class ToolShape extends StandardTool implements OnShapeEditListener, OnTo
 	public void apply()
 	{
 		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_shape);
-		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), shape.getBoundsOfShape());
+		action.setLayerChange(image.getLayerIndex(currentLayer), currentLayer.getBitmap(), shape.getBoundsOfShape());
 
 		shape.apply(canvas);
 		action.applyAction();

@@ -128,7 +128,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	public boolean onTouchStart(float x, float y)
 	{
 		updateLayer();
-		if(layer == null) return false;
+		if(currentLayer == null) return false;
 
 		updateSelectionPath();
 		resetClipping(canvas);
@@ -279,10 +279,10 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	protected void updateLayer()
 	{
 		Layer newLayer = image.getSelectedLayer();
-		if(layer == null) layer = newLayer;
-		if(newLayer != layer)
-			offsetGradient(layer.getX() - newLayer.getX(), layer.getY() - newLayer.getY());
-		layer = newLayer;
+		if(currentLayer == null) currentLayer = newLayer;
+		if(newLayer != currentLayer)
+			offsetGradient(currentLayer.getX() - newLayer.getX(), currentLayer.getY() - newLayer.getY());
+		currentLayer = newLayer;
 
 		canvas = image.getSelectedCanvas();
 	}
@@ -297,7 +297,7 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 	void apply()
 	{
 		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_gradient);
-		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap());
+		action.setLayerChange(image.getLayerIndex(currentLayer), currentLayer.getBitmap());
 
 		shape.applyGradient(canvas);
 		action.applyAction();
@@ -406,11 +406,11 @@ public class ToolGradient extends StandardTool implements OnToolChangeListener
 
 	int getLayerWidth()
 	{
-		return layer.getWidth();
+		return currentLayer.getWidth();
 	}
 
 	int getLayerHeight()
 	{
-		return layer.getHeight();
+		return currentLayer.getHeight();
 	}
 }

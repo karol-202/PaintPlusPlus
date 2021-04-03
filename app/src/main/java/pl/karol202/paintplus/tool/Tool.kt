@@ -19,6 +19,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.flow.Flow
+import pl.karol202.paintplus.image.layer.Layer
 
 interface Tool
 {
@@ -30,7 +31,7 @@ interface Tool
 
 	fun onTouch(event: MotionEvent): Boolean
 
-	fun drawOnLayer(canvas: Canvas, isLayerVisible: Boolean) {}
+	fun drawOnLayer(canvas: Canvas, layer: Layer) {}
 
 	fun drawOnTop(canvas: Canvas) {}
 }

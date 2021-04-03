@@ -16,10 +16,12 @@
 package pl.karol202.paintplus.tool
 
 import android.graphics.Canvas
+import android.graphics.Point
 import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.core.graphics.plus
 import androidx.core.graphics.times
+import androidx.core.graphics.withClip
 import androidx.core.graphics.withMatrix
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,6 +31,7 @@ import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.div
 import pl.karol202.paintplus.util.minus
+import pl.karol202.paintplus.util.toRect
 import kotlin.properties.Delegates
 
 abstract class StandardTool(private val imageService: ImageService,
@@ -41,7 +44,8 @@ abstract class StandardTool(private val imageService: ImageService,
 	private val _updateEventFlow = MutableSharedFlow<Unit>()
 	override val updateEventFlow: Flow<Unit> = _updateEventFlow
 
-	private var layer: Layer? = null
+	protected var currentLayer: Layer? = null
+		private set
 
 	abstract fun onTouchStart(point: PointF, layer: Layer): Boolean
 
@@ -49,51 +53,56 @@ abstract class StandardTool(private val imageService: ImageService,
 
 	abstract fun onTouchStop(point: PointF, layer: Layer): Boolean
 
-	final override fun onTouch(event: MotionEvent): Boolean
+	final override fun onTouch(event: MotionEvent) = when(event.action)
 	{
-		val point = createTouchPoint(event.x, event.y)
-		return when(event.action)
-		{
-			MotionEvent.ACTION_DOWN ->
-			{
-				layer = imageService.image.selectedLayer
-				onTouchStart(point, layer ?: return false)
+		MotionEvent.ACTION_DOWN ->
+			imageService.image.selectedLayer?.let { layer ->
+				currentLayer = layer
+				onTouchStart(createTouchPoint(event.x, event.y, layer), layer)
 			}
-			MotionEvent.ACTION_MOVE ->
+		MotionEvent.ACTION_MOVE ->
+			currentLayer?.let { layer ->
 				(0 until event.historySize)
-						.map { createTouchPoint(event.getHistoricalX(it), event.getHistoricalY(it)) }
-						.plus(point)
-						.fold(true) { result, p -> result && onTouchMove(p, layer ?: return false) }
-			MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
-				onTouchStop(point, layer ?: return false).also {
-					layer = null
-				}
-			else -> true
-		}
-	}
+						.map { createTouchPoint(event.getHistoricalX(it), event.getHistoricalY(it), layer) }
+						.plus(createTouchPoint(event.x, event.y, layer))
+						.fold(true) { result, p -> result && onTouchMove(p, layer) }
+			}
+		MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+			currentLayer?.let { layer ->
+				currentLayer = null
+				onTouchStop(createTouchPoint(event.x, event.y, layer), layer)
+			}
+		else -> true
+	} ?: false
 
-	private fun createTouchPoint(x: Float, y: Float) = PointF(x, y).transformTouchCoordinates().snapTouchCoordinates()
+	private fun createTouchPoint(x: Float, y: Float, layer: Layer) =
+			PointF(x, y).transformTouchCoordinates(layer).snapTouchCoordinates()
 
-	private fun PointF.transformTouchCoordinates(): PointF
+	private fun PointF.transformTouchCoordinates(layer: Layer) = when(inputCoordinateSpace)
 	{
-		val selectedLayer = imageService.image.selectedLayer
-		return when
-		{
-			inputCoordinateSpace == ToolCoordinateSpace.LAYER_SPACE && selectedLayer != null ->
-				this / viewService.zoom + viewService.viewPosition.offset - selectedLayer.position
-			inputCoordinateSpace == ToolCoordinateSpace.IMAGE_SPACE ->
-				this / viewService.zoom + viewService.viewPosition.offset
-			else -> this
-		}
+		ToolCoordinateSpace.LAYER_SPACE -> (this / viewService.zoom) + viewService.viewPosition.offset - layer.position
+		ToolCoordinateSpace.IMAGE_SPACE -> (this / viewService.zoom) + viewService.viewPosition.offset
+		else -> this
 	}
 
-	private fun PointF.snapTouchCoordinates() = if(isUsingSnapping) helpersService.snapPoint(this) else this
+	private fun PointF.snapTouchCoordinates() =
+			if(isUsingSnapping) helpersService.snapPoint(this)
+			else this
 
-	protected fun Canvas.withImageSpace(block: Canvas.() -> Unit) = withMatrix(viewService.viewPosition.imageMatrix, block)
+	protected fun Canvas.withImageSpace(block: Canvas.() -> Unit) =
+			withMatrix(viewService.viewPosition.imageMatrix, block)
 
-	protected fun Canvas.withLayerSpace(block: Canvas.() -> Unit) = imageService.image.selectedLayer?.let {
-		withMatrix(viewService.viewPosition.imageMatrix * it.matrix, block)
-	} ?: withImageSpace(block)
+	protected fun Canvas.withImageClip(block: Canvas.() -> Unit) =
+			withClip(imageService.image.size.toRect(), block)
+
+	protected fun Canvas.withLayerClip(layer: Layer, block: Canvas.() -> Unit) =
+			withClip(layer.bounds, block)
+
+	protected fun Canvas.withSelectionClip(block: Canvas.() -> Unit) =
+			withClip(imageService.selection.bounds, block)
+
+	protected fun Canvas.withLayerSpace(layer: Layer, block: Canvas.() -> Unit) =
+			withMatrix(layer.matrix, block)
 
 	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> notifyUpdate() }
 

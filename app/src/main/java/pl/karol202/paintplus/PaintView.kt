@@ -128,8 +128,7 @@ class PaintView(context: Context,
 					withClip(viewPosition.getImageRect(image)) {
 						drawBitmap(layer.bitmap, viewPosition.imageMatrix * layer.matrix, layerPaint)
 					}
-				if(image.isLayerSelected(layer))
-					currentTool.drawOnLayer(this, layer.visible)
+				currentTool.drawOnLayer(this, layer)
 			}
 
 	private fun drawLayerBounds(canvas: Canvas) = canvas.drawPath(layerBoundsPath, layerBoundsPaint)

@@ -96,7 +96,7 @@ public class ToolRubber extends StandardTool
 		image.lockLayers();
 		canvas = image.getSelectedCanvas();
 		if(canvas == null) return false;
-		layer = image.getSelectedLayer();
+		currentLayer = image.getSelectedLayer();
 
 		updateSelectionPath();
 		resetClipping(canvas);
@@ -120,7 +120,7 @@ public class ToolRubber extends StandardTool
 		lastY = y;
 		pathCreated = false;
 		editStarted = true;
-		layer.setTemporaryHidden(true);
+		currentLayer.setTemporaryHidden(true);
 
 		viewDirtyRect = new Rect();
 		historyDirtyRect = new Rect();
@@ -153,7 +153,7 @@ public class ToolRubber extends StandardTool
 		if(lastX != -1 && lastY != -1) path.lineTo(x, y);
 
 		ActionLayerChange action = new ActionLayerChange(image, R.string.tool_rubber);
-		action.setLayerChange(image.getLayerIndex(layer), layer.getBitmap(), historyDirtyRect);
+		action.setLayerChange(image.getLayerIndex(currentLayer), currentLayer.getBitmap(), historyDirtyRect);
 
 		if(pathCreated) canvas.drawPath(path, pathPaint);
 		else
@@ -172,7 +172,7 @@ public class ToolRubber extends StandardTool
 		lastY = -1;
 		pathCreated = false;
 		editStarted = false;
-		layer.setTemporaryHidden(false);
+		currentLayer.setTemporaryHidden(false);
 
 		viewDirtyRect = null;
 		historyDirtyRect = null;
@@ -241,7 +241,7 @@ public class ToolRubber extends StandardTool
 	{
 		resetClipping(canvas);
 		doImageClipping(canvas);
-		canvas.drawBitmap(layer.getBitmap(), 0, 0, null);
+		canvas.drawBitmap(currentLayer.getBitmap(), 0, 0, null);
 		doSelectionClipping(canvas);
 		canvas.drawPath(path, pathPaint);
 	}

@@ -104,4 +104,6 @@ class Layer private constructor(val id: String,
 	                 bitmap: Bitmap = this.bitmap, mode: LayerMode = this.mode, visible: Boolean = this.visible,
 	                 opacity: Float = this.opacity) =
 			Layer(id, x, y, name, bitmap, mode, visible, opacity)
+
+	override operator fun equals(other: Any?) = id == (other as? Layer)?.id
 }

@@ -29,6 +29,7 @@ import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.StandardTool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
 import pl.karol202.paintplus.util.cropped
+import pl.karol202.paintplus.util.duplicated
 import pl.karol202.paintplus.util.preTranslated
 import kotlin.math.roundToInt
 
@@ -154,18 +155,26 @@ class ToolBrush(private val imageService: ImageService,
 
 	private fun commit(layer: Layer, brushBitmap: Bitmap, dirtyRect: Rect): Action.ToRevert
 	{
-		val oldBitmap = layer.bitmap.cropped(dirtyRect)
+		val oldBitmap = layer.bitmap.duplicated()
+		val oldDirtyBitmap = layer.bitmap.cropped(dirtyRect)
 		layer.editCanvas.drawBitmap(brushBitmap, dirtyRect.left.toFloat(), dirtyRect.top.toFloat(), null)
-		return actionPreset.toRevert(layer.bitmap) { revert(layer, brushBitmap, dirtyRect, oldBitmap) }
+		return actionPreset.toRevert(oldBitmap) { revert(layer, brushBitmap, dirtyRect, oldDirtyBitmap) }
 	}
 
-	private fun revert(layer: Layer, brushBitmap: Bitmap, dirtyRect: Rect, oldBitmap: Bitmap): Action.ToCommit
+	private fun revert(layer: Layer, brushBitmap: Bitmap, dirtyRect: Rect, oldDirtyBitmap: Bitmap): Action.ToCommit
 	{
-		layer.editCanvas.drawBitmap(oldBitmap, dirtyRect.left.toFloat(), dirtyRect.top.toFloat(), null)
-		return actionPreset.toCommit(layer.bitmap) { commit(layer, brushBitmap, dirtyRect) }
+		val newBitmap = layer.bitmap.duplicated()
+		layer.editCanvas.drawBitmap(oldDirtyBitmap, dirtyRect.left.toFloat(), dirtyRect.top.toFloat(), null)
+		return actionPreset.toCommit(newBitmap) { commit(layer, brushBitmap, dirtyRect) }
 	}
 
-	override fun drawOnLayer(canvas: Canvas, isLayerVisible: Boolean) = canvas.withLayerSpace {
-		state?.bitmap?.let { drawBitmap(it, 0f, 0f, null) }
+	override fun drawOnLayer(canvas: Canvas, layer: Layer)
+	{
+		if(layer != currentLayer || !layer.visible) return
+		canvas.withImageSpace {
+			withImageClip {
+				state?.bitmap?.let { drawBitmap(it, layer.matrix, null) }
+			}
+		}
 	}
 }
