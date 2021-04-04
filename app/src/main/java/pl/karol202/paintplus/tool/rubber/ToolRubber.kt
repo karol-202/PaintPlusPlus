@@ -13,51 +13,60 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package pl.karol202.paintplus.tool.marker
+package pl.karol202.paintplus.tool.rubber
 
 import android.graphics.*
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.image.ColorsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
+import pl.karol202.paintplus.tool.StandardTool
+import pl.karol202.paintplus.tool.ToolCoordinateSpace
 import pl.karol202.paintplus.tool.drawing.AbstractToolDrawing
 import pl.karol202.paintplus.util.cache
 
-class ToolMarker(imageService: ImageService,
+class ToolRubber(private val imageService: ImageService,
                  viewService: ViewService,
                  helpersService: HelpersService,
-                 historyService: HistoryService,
-                 private val colorsService: ColorsService) :
+                 historyService: HistoryService) :
 		AbstractToolDrawing(imageService, viewService, helpersService, historyService)
 {
-	override val name get() = R.string.tool_marker
-	override val icon get() = R.drawable.ic_tool_marker_black_24dp
-	override val propertiesFragmentClass get() = MarkerProperties::class.java
+	override val name get() = R.string.tool_rubber
+	override val icon get() = R.drawable.ic_tool_rubber_black_24dp
+	override val propertiesFragmentClass get() = RubberProperties::class.java
 
-	override val actionPreset = Action.namePreset(R.string.tool_marker)
+	override val actionPreset = Action.namePreset(R.string.tool_rubber)
 
-	override val pathPaint by cache({colorsService.currentColor}, {size}, {opacity}, {smoothEdge}) {
-		currentColor, size, opacity, smooth ->
+	override val pathPaint by cache({size}, {opacity}, {smoothEdge}) { size, opacity, smooth ->
 		Paint().apply {
 			style = Paint.Style.STROKE
 			strokeCap = Paint.Cap.ROUND
 			strokeJoin = Paint.Join.ROUND
-			color = currentColor
+			xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+			color = Color.TRANSPARENT
 			alpha = (opacity * 255).toInt()
 			strokeWidth = size
 			isAntiAlias = smooth
 		}
 	}
-	override val ovalPaint by cache({colorsService.currentColor}, {opacity}, {smoothEdge}) { currentColor, opacity, smooth ->
+	override val ovalPaint by cache({opacity}, {smoothEdge}) { opacity, smooth ->
 		Paint().apply {
-			color = currentColor
+			xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+			color = Color.TRANSPARENT
 			alpha = (opacity * 255).toInt()
 			isAntiAlias = smooth
 		}
+	}
+
+	override fun onTouchStart(point: PointF, layer: Layer) = super.onTouchStart(point, layer).also {
+		imageService.editImage { withLayerUpdated(layer.withVisibility(false)) }
+	}
+
+	override fun onTouchStop(point: PointF, layer: Layer) = super.onTouchStop(point, layer).also {
+		imageService.editImage { withLayerUpdated(layer.withVisibility(true)) }
 	}
 
 	override fun drawOnLayer(canvas: Canvas, layer: Layer)
@@ -66,10 +75,11 @@ class ToolMarker(imageService: ImageService,
 		val path = path ?: return
 		canvas.withImageSpace {
 			withImageClip {
+				drawBitmap(layer.bitmap, layer.matrix, null)
 				withLayerClip(layer) {
 					withSelectionClip {
 						withLayerSpace(layer) {
-							canvas.drawPath(path, pathPaint)
+							drawPath(path, pathPaint)
 						}
 					}
 				}
