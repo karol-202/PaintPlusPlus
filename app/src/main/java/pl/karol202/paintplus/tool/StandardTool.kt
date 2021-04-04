@@ -106,7 +106,7 @@ abstract class StandardTool(private val imageService: ImageService,
 
 	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> notifyUpdate() }
 
-	private fun notifyUpdate()
+	protected fun notifyUpdate()
 	{
 		_updateEventFlow.tryEmit(Unit)
 	}

@@ -25,6 +25,8 @@ data class Selection(val region: Region)
 
 	operator fun contains(point: Point) = bounds.contains(point.x, point.y)
 
+	fun contains(x: Int, y: Int) = bounds.contains(x, y)
+
 	fun translated(x: Int, y: Int) = Selection(region + Point(x, y))
 
 	fun inverted(rect: Rect) = Selection(region xor rect)
