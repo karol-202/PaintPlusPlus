@@ -13,41 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool.shape
 
-package pl.karol202.paintplus.tool.shape;
+import android.graphics.Paint
+import pl.karol202.paintplus.R
 
-import android.graphics.Paint;
-import pl.karol202.paintplus.R;
-
-public enum Join
+enum class Join(val displayName: Int,
+                val icon: Int,
+                val paintJoin: Paint.Join)
 {
 	MITTER(R.string.join_mitter, R.drawable.ic_join_mitter_black_24dp, Paint.Join.MITER),
 	BEVEL(R.string.join_bevel, R.drawable.ic_join_bevel_black_24dp, Paint.Join.BEVEL),
-	ROUND(R.string.join_round, R.drawable.ic_join_round_black_24dp, Paint.Join.ROUND);
-	
-	private int name;
-	private int icon;
-	private Paint.Join paintJoin;
-	
-	Join(int name, int icon, Paint.Join paintJoin)
-	{
-		this.name = name;
-		this.icon = icon;
-		this.paintJoin = paintJoin;
-	}
-	
-	public int getName()
-	{
-		return name;
-	}
-	
-	public int getIcon()
-	{
-		return icon;
-	}
-	
-	public Paint.Join getPaintJoin()
-	{
-		return paintJoin;
-	}
+	ROUND(R.string.join_round, R.drawable.ic_join_round_black_24dp, Paint.Join.ROUND)
 }

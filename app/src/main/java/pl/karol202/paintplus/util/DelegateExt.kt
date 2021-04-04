@@ -24,6 +24,19 @@ fun <T, V> ReadWriteProperty<T, V?>.require() = object : ReadWriteProperty<T, V>
 			this@require.setValue(thisRef, property, value)
 }
 
+fun <T, V> ReadWriteProperty<T, V>.onChange(onChange: (old: V, new: V) -> Unit) = object : ReadWriteProperty<T, V> {
+	override fun getValue(thisRef: T, property: KProperty<*>) =
+			this@onChange.getValue(thisRef, property)
+
+	override fun setValue(thisRef: T, property: KProperty<*>, value: V)
+	{
+		onChange(this@onChange.getValue(thisRef, property), value)
+		this@onChange.setValue(thisRef, property, value)
+	}
+}
+
+fun <T, V> ReadWriteProperty<T, V>.assert(assertion: (new: V) -> Boolean) = onChange { _, new -> require(assertion(new)) }
+
 fun <T : View, V> T.invalidating(default: V) = object : ReadWriteProperty<T, V> {
 	private var value = default
 

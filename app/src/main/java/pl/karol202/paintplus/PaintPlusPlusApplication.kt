@@ -35,7 +35,12 @@ import pl.karol202.paintplus.tool.pan.ToolPan
 import pl.karol202.paintplus.tool.pickcolor.ToolColorPick
 import pl.karol202.paintplus.tool.rubber.ToolRubber
 import pl.karol202.paintplus.tool.selection.ToolSelection
+import pl.karol202.paintplus.tool.shape.Shape
 import pl.karol202.paintplus.tool.shape.ToolShape
+import pl.karol202.paintplus.tool.shape.circle.ShapeCircle
+import pl.karol202.paintplus.tool.shape.line.ShapeLine
+import pl.karol202.paintplus.tool.shape.polygon.ShapePolygon
+import pl.karol202.paintplus.tool.shape.star.ShapeStar
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class PaintPlusPlusApplication : Application()
@@ -47,8 +52,8 @@ class PaintPlusPlusApplication : Application()
 
 		startKoin {
 			androidContext(this@PaintPlusPlusApplication)
-			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(),
-			        colorManipulatorModule(), layerModesModule(), helpersModule(), viewModelModule())
+			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(), toolsModule(),
+			        shapesModule(), colorManipulatorModule(), layerModesModule(), helpersModule(), viewModelModule())
 		}
 	}
 
@@ -130,6 +135,13 @@ class PaintPlusPlusApplication : Application()
 		single { ToolDrag(get()) } bind Tool::class
 		single { ToolRubber(get()) } bind Tool::class
 		single { ToolGradient(get()) } bind Tool::class
+	}
+
+	private fun shapesModule() = module {
+		single { ShapeLine(get(), get()) } bind Shape::class
+		single { ShapeCircle(get(), get()) } bind Shape::class
+		single { ShapePolygon(get(), get()) } bind Shape::class
+		single { ShapeStar(get(), get()) } bind Shape::class
 	}
 
 	private fun colorManipulatorModule() = module {

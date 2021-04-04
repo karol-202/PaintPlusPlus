@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package pl.karol202.paintplus.tool.shape.line
 
-package pl.karol202.paintplus.tool.shape;
+import android.graphics.Paint
+import pl.karol202.paintplus.R
 
-public interface OnShapeEditListener
+enum class Cap(val displayName: Int,
+               val icon: Int,
+               val paintCap: Paint.Cap)
 {
-	void onStartShapeEditing();
+	ROUND(R.string.line_cap_round, R.drawable.ic_cap_round_black_24dp, Paint.Cap.ROUND),
+	SQUARE(R.string.line_cap_square, R.drawable.ic_cap_square_black_24dp, Paint.Cap.SQUARE),
+	BUTT(R.string.line_cap_butt, R.drawable.ic_cap_butt_black_24dp, Paint.Cap.BUTT)
 }

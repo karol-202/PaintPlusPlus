@@ -57,6 +57,7 @@
 		android:layout_marginTop="4dp">
 
 		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/editText_star_corners"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="number"

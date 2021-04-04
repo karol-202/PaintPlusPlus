@@ -50,7 +50,7 @@ public class CapAdapter extends ArrayAdapter<Cap>
 		imageView.setImageResource(cap.getIcon());
 
 		TextView textView = view.findViewById(R.id.text_cap_name);
-		textView.setText(cap.getName());
+		textView.setText(cap.getDisplayName());
 		return view;
 	}
 

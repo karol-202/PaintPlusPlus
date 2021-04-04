@@ -17,9 +17,12 @@ package pl.karol202.paintplus.util
 
 import android.content.Context
 import android.graphics.Point
+import android.graphics.PointF
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import androidx.core.graphics.toPointF
 import kotlin.math.atan
+import kotlin.math.hypot
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -39,23 +42,29 @@ object MathUtils
 
 	@JvmStatic
 	fun distance(first: Point, second: Point) =
-			sqrt((first.x - second.x).toDouble().pow(2.0) +
-					     (first.y - second.y).toDouble().pow(2.0)).toFloat()
+			hypot((first.x - second.x).toFloat(), (first.y - second.y).toFloat())
+
+	@JvmStatic
+	fun distance(first: PointF, second: PointF) =
+			hypot(first.x - second.x, first.y - second.y)
 
 	@JvmStatic
 	fun dpToPixels(context: Context, dp: Float) =
 			TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
 
 	@JvmStatic
-	fun getAngle(center: Point, point: Point): Double
+	fun getAngle(center: Point, point: Point) = getAngle(center.toPointF(), point.toPointF())
+
+	@JvmStatic
+	fun getAngle(center: PointF, point: PointF): Double
 	{
-		val deltaX = (point.x - center.x).toDouble()
-		val deltaY = (center.y - point.y).toDouble()
+		val deltaX = point.x - center.x
+		val deltaY = center.y - point.y
 		val ratio = deltaX / deltaY
 		val angleRad = atan(ratio)
-		var angleDeg = Math.toDegrees(angleRad)
-		if(deltaY < 0) angleDeg += 180.0
-		if(angleDeg < 0) angleDeg += 360.0
+		var angleDeg = Math.toDegrees(angleRad.toDouble())
+		if(deltaY < 0) angleDeg += 180f
+		if(angleDeg < 0) angleDeg += 360f
 		return angleDeg
 	}
 }

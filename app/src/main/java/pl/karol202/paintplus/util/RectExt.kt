@@ -12,7 +12,11 @@ infix fun Rect.intersectionWith(other: Rect) = Rect(this).run {
 }
 
 fun RectF.rounded() = Rect().apply {
-	this@rounded.round(this)
+	round(this)
+}
+
+fun RectF.roundedOut() = Rect().apply {
+	roundOut(this)
 }
 
 fun Iterable<Rect>.union() = Rect().apply {
@@ -54,3 +58,5 @@ fun Rect.copy(left: Int = this.left, top: Int = this.top, right: Int = this.righ
 fun Rect.sorted() = Rect().apply {
 	sort()
 }
+
+fun Rect.inflated(amount: Int) = Rect(left - amount, top - amount, right + amount, bottom + amount)

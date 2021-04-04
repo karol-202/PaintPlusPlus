@@ -123,6 +123,7 @@ class PaintViewModel(application: Application,
 	val actionRequestEventFlow: Flow<ActionRequest<*>> = _actionRequestEventFlow
 	val viewUpdateEventFlow: Flow<Unit> = merge(toolsService.updateEventFlow, helpersService.updateEventFlow).conflate()
 
+	val tools get() = toolsService.tools
 	val currentTool get() = currentToolFlow.value
 	val currentColor get() = currentColorFlow.value
 	val helpers get() = helpersService.helpers

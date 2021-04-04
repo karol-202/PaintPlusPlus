@@ -50,7 +50,7 @@ public class JoinAdapter extends ArrayAdapter<Join>
 		imageView.setImageResource(join.getIcon());
 
 		TextView textView = view.findViewById(R.id.text_join_name);
-		textView.setText(join.getName());
+		textView.setText(join.getDisplayName());
 		return view;
 	}
 
