@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package pl.karol202.paintplus.tool.gradient
+package pl.karol202.paintplus.tool.gradient.shape
 
 import android.content.Context
 import android.view.View
@@ -23,8 +23,8 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.SpinnerItemGradientShapeBinding
 import pl.karol202.paintplus.util.layoutInflater
 
-internal class GradientShapeAdapter(context: Context,
-                                    shapes: List<GradientShape>) :
+class GradientShapeAdapter(context: Context,
+                           shapes: List<GradientShape>) :
 		ArrayAdapter<GradientShape>(context, R.layout.spinner_item_gradient_shape, shapes)
 {
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup): View

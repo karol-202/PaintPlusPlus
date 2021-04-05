@@ -14,34 +14,37 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.gradient;
+package pl.karol202.paintplus.tool.gradient.shape;
 
 import android.graphics.*;
+import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.gradient.ToolGradient;
 
-class GradientShapeLinear extends GradientShape
+public class GradientShapeLinear extends AbstractGradientShape
 {
 	GradientShapeLinear(ToolGradient toolGradient)
 	{
 		super(toolGradient);
 	}
-	
+
 	@Override
-	int getName()
+	public int getName()
 	{
 		return R.string.gradient_shape_linear;
 	}
-	
+
 	@Override
-	int getIcon()
+	public int getIcon()
 	{
 		return R.drawable.ic_gradient_shape_linear;
 	}
-	
+
+	@NonNull
 	@Override
-	Shader createShader()
+	public Shader createShader(@NonNull Point start, @NonNull Point end)
 	{
-		return new LinearGradient(getFirstPoint().x, getFirstPoint().y, getSecondPoint().x, getSecondPoint().y,
+		return new LinearGradient(start.x, start.y, end.x, end.y,
 								  getColorsArray(), getPositionsArray(), getTileMode());
 	}
 }

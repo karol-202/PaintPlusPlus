@@ -16,15 +16,14 @@
 package pl.karol202.paintplus.util
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.PointF
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.core.graphics.toPointF
-import kotlin.math.atan
-import kotlin.math.hypot
-import kotlin.math.pow
-import kotlin.math.sqrt
+import pl.karol202.paintplus.util.MathUtils.map
+import kotlin.math.*
 
 object MathUtils
 {
@@ -66,5 +65,15 @@ object MathUtils
 		if(deltaY < 0) angleDeg += 180f
 		if(angleDeg < 0) angleDeg += 360f
 		return angleDeg
+	}
+
+	@JvmStatic
+	fun mapColor(src: Float, srcMin: Float, srcMax: Float, colorMin: Int, colorMax: Int): Int
+	{
+		val alpha = map(src, srcMin, srcMax, Color.alpha(colorMin).toFloat(), Color.alpha(colorMax).toFloat()).roundToInt()
+		val red = map(src, srcMin, srcMax, Color.red(colorMin).toFloat(), Color.red(colorMax).toFloat()).roundToInt()
+		val green = map(src, srcMin, srcMax, Color.green(colorMin).toFloat(), Color.green(colorMax).toFloat()).roundToInt()
+		val blue = map(src, srcMin, srcMax, Color.blue(colorMin).toFloat(), Color.blue(colorMax).toFloat()).roundToInt()
+		return Color.argb(alpha, red, green, blue)
 	}
 }

@@ -21,11 +21,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.databinding.PropertiesGradientBinding
+import pl.karol202.paintplus.tool.gradient.shape.GradientShapeAdapter
+import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.util.viewBinding
 import pl.karol202.paintplus.viewmodel.PaintViewModel
@@ -41,17 +44,17 @@ class GradientProperties : Fragment(R.layout.properties_gradient)
 	{
 		setHasOptionsMenu(true)
 
-		toolGradient.setOnGradientEditListener(this::onGradientEdit)
+		toolGradient.updateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
 
 		views.gradientPreview.setGradient(toolGradient.gradient)
 		views.gradientPreview.setOnClickListener { openGradientDialog() }
 
 		views.checkGradientRevert.isChecked = toolGradient.isReverted
-		views.checkGradientRevert.setOnCheckedChangeListener { _, checked -> toolGradient.setRevert(checked) }
+		views.checkGradientRevert.setOnCheckedChangeListener { _, checked -> toolGradient.isReverted = checked }
 
-		views.spinnerGradientShape.adapter = GradientShapeAdapter(requireContext(), toolGradient.shapes.shapes)
-		views.spinnerGradientShape.setSelection(toolGradient.shapeId)
-		views.spinnerGradientShape.setOnItemSelectedListener { toolGradient.shapeId = it }
+		views.spinnerGradientShape.adapter = GradientShapeAdapter(requireContext(), toolGradient.gradientShapes)
+		views.spinnerGradientShape.setSelection(toolGradient.gradientShapes.indexOf(toolGradient.shape))
+		views.spinnerGradientShape.setOnItemSelectedListener { toolGradient.shape = toolGradient.gradientShapes[it] }
 
 		views.spinnerGradientRepeatability.adapter = GradientRepeatabilityAdapter(requireContext())
 		views.spinnerGradientRepeatability.setSelection(toolGradient.repeatability.ordinal)
@@ -80,16 +83,15 @@ class GradientProperties : Fragment(R.layout.properties_gradient)
 		return super.onOptionsItemSelected(item)
 	}
 
-	private fun onGradientEdit()
-	{
-		activity?.invalidateOptionsMenu()
-	}
-
 	private fun openGradientDialog() =
-			GradientDialog(requireContext(), toolGradient.gradient, this::pickColor, this::onGradientUpdate).show()
+			GradientDialog(requireContext(), toolGradient.gradient, this::pickColor, this::onGradientEdited).show()
 
 	private fun pickColor(config: ColorPickerConfig, callback: (Int?) -> Unit) =
 			paintViewModel.makeActionRequest(PaintViewModel.ActionRequest.PickColor(config, callback))
 
-	private fun onGradientUpdate() = views.gradientPreview.update()
+	private fun onGradientEdited(gradient: Gradient)
+	{
+		toolGradient.gradient = gradient
+		views.gradientPreview.setGradient(gradient)
+	}
 }

@@ -14,37 +14,41 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.gradient;
+package pl.karol202.paintplus.tool.gradient.shape;
 
+import android.graphics.Point;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
+import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.gradient.ToolGradient;
 
-class GradientShapeRadial extends GradientShape
+public class GradientShapeRadial extends AbstractGradientShape
 {
 	GradientShapeRadial(ToolGradient toolGradient)
 	{
 		super(toolGradient);
 	}
-	
+
 	@Override
-	int getName()
+	public int getName()
 	{
 		return R.string.gradient_shape_radial;
 	}
-	
+
 	@Override
-	int getIcon()
+	public int getIcon()
 	{
 		return R.drawable.ic_gradient_shape_radial;
 	}
-	
+
+	@NonNull
 	@Override
-	Shader createShader()
+	public Shader createShader(@NonNull Point start, @NonNull Point end)
 	{
-		float radius = (float) Math.hypot(getSecondPoint().x - getFirstPoint().x, getSecondPoint().y - getFirstPoint().y);
+		float radius = (float) Math.hypot(end.x - start.x, end.y - start.y);
 		radius = Math.max(radius, 0.01f);
-		return new RadialGradient(getFirstPoint().x, getFirstPoint().y, radius,
+		return new RadialGradient(start.x, start.y, radius,
 								  getColorsArray(), getPositionsArray(), getTileMode());
 	}
 }

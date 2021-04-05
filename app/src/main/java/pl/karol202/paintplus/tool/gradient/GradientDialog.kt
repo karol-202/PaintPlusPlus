@@ -16,21 +16,19 @@
 package pl.karol202.paintplus.tool.gradient
 
 import android.content.Context
+import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.databinding.DialogGradientBinding
-import pl.karol202.paintplus.tool.gradient.GradientView.OnGradientEditorUpdateListener
 import pl.karol202.paintplus.util.layoutInflater
 import java.util.*
 
-internal class GradientDialog(private val context: Context,
-                              private val originalGradient: Gradient,
-                              private val colorPicker: (ColorPickerConfig, (Int?) -> Unit) -> Unit,
-                              private val onGradientUpdate: () -> Unit)
+class GradientDialog(private val context: Context,
+                     private val initialGradient: Gradient,
+                     private val colorPicker: (ColorPickerConfig, (Int?) -> Unit) -> Unit,
+                     private val onApply: (Gradient) -> Unit)
 {
-	private val gradient = Gradient(originalGradient)
-
 	private val views = DialogGradientBinding.inflate(context.layoutInflater)
 	private val dialog = createDialog()
 
@@ -42,18 +40,8 @@ internal class GradientDialog(private val context: Context,
 		builder.setPositiveButton(R.string.ok) { _, _ -> applyGradient() }
 		builder.setNegativeButton(R.string.cancel, null)
 
-		views.gradientView.setGradientUpdateListener(object : OnGradientEditorUpdateListener
-		                                             {
-			                                             override fun onGradientPositionUpdated(position: Float) =
-			                                             		this@GradientDialog.onGradientPositionUpdated(position)
-
-			                                             override fun onGradientSelectionUpdated(position: Float, color: Int) =
-			                                             		this@GradientDialog.onGradientSelectionUpdated(position, color)
-
-			                                             override fun onGradientPointAdded() =
-			                                             		this@GradientDialog.onGradientPointAdded()
-		                                             })
-		views.gradientView.gradient = gradient
+		views.gradientView.onGradientUpdated = this::onGradientUpdated
+		views.gradientView.gradient = initialGradient
 
 		views.textGradientPosition.text = ""
 
@@ -62,7 +50,7 @@ internal class GradientDialog(private val context: Context,
 		views.buttonDeleteGradientPoint.setOnClickListener { onDeleteButtonClick() }
 		views.buttonDeleteGradientPoint.isEnabled = false
 
-		views.gradientColor.setColor(views.gradientView.selectedColor)
+		views.gradientColor.setColor(views.gradientView.selectedColor ?: Color.TRANSPARENT)
 		views.gradientColor.setOnClickListener { onColorViewClick() }
 
 		return builder.create()
@@ -70,42 +58,30 @@ internal class GradientDialog(private val context: Context,
 
 	fun show() = dialog.show()
 
-	private fun applyGradient()
-	{
-		originalGradient.setGradient(gradient)
-		onGradientUpdate()
-	}
+	private fun applyGradient() = onApply(views.gradientView.gradient)
 
-	private fun onGradientPositionUpdated(position: Float)
+	private fun onGradientUpdated()
 	{
-		views.textGradientPosition.text = position.takeUnless { it == -1f }
-				?.let { String.format(Locale.US, "%.0f%%", position * 100) }
+		views.textGradientPosition.text = views.gradientView.selectedPosition
+				?.let { String.format(Locale.US, "%.0f%%", it * 100) }
 				?: ""
+		views.gradientColor.setColor(views.gradientView.selectedColor ?: Color.TRANSPARENT)
+		views.buttonAddGradientPoint.isChecked = views.gradientView.addingMode
+		views.buttonDeleteGradientPoint.isEnabled = views.gradientView.canDeletePoint
 	}
 
-	private fun onGradientSelectionUpdated(position: Float, color: Int)
+	private fun onAddButtonCheckedChange(checked: Boolean)
 	{
-		onGradientPositionUpdated(position)
-		views.buttonDeleteGradientPoint.isEnabled = views.gradientView.canDeletePoint()
-		views.gradientColor.setColor(color)
+		views.gradientView.addingMode = checked
 	}
-
-	private fun onGradientPointAdded()
-	{
-		views.buttonAddGradientPoint.isChecked = false
-		onAddButtonCheckedChange(false)
-	}
-
-	private fun onAddButtonCheckedChange(checked: Boolean) = views.gradientView.setAddingMode(checked)
 
 	private fun onDeleteButtonClick() = views.gradientView.deleteSelectedPoint()
 
 	private fun onColorViewClick()
 	{
-		if(views.gradientView.isAnyColorSelected) pickColor()
+		val selectedColor = views.gradientView.selectedColor ?: return
+		colorPicker(ColorPickerConfig(selectedColor, true), this::onColorPick)
 	}
 
-	private fun pickColor() = colorPicker(ColorPickerConfig(views.gradientView.selectedColor, true), this::onColorPick)
-
-	private fun onColorPick(color: Int?) = color?.let { views.gradientView.selectedColor = it }
+	private fun onColorPick(color: Int?) = color?.let { views.gradientView.setSelectedColor(it) }
 }

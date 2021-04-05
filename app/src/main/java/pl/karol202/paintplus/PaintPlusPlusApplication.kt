@@ -30,6 +30,7 @@ import pl.karol202.paintplus.tool.brush.ToolBrush
 import pl.karol202.paintplus.tool.drag.ToolDrag
 import pl.karol202.paintplus.tool.fill.ToolFill
 import pl.karol202.paintplus.tool.gradient.ToolGradient
+import pl.karol202.paintplus.tool.gradient.shape.*
 import pl.karol202.paintplus.tool.marker.ToolMarker
 import pl.karol202.paintplus.tool.pan.ToolPan
 import pl.karol202.paintplus.tool.pickcolor.ToolColorPick
@@ -53,7 +54,8 @@ class PaintPlusPlusApplication : Application()
 		startKoin {
 			androidContext(this@PaintPlusPlusApplication)
 			modules(appModule(), databaseModule(), repositoryModule(), serviceModule(), optionModule(), toolsModule(),
-			        shapesModule(), colorManipulatorModule(), layerModesModule(), helpersModule(), viewModelModule())
+			        shapesModule(), gradientShapesModule(), colorManipulatorModule(), layerModesModule(), helpersModule(),
+			        viewModelModule())
 		}
 	}
 
@@ -142,6 +144,14 @@ class PaintPlusPlusApplication : Application()
 		single { ShapeCircle(get(), get()) } bind Shape::class
 		single { ShapePolygon(get(), get()) } bind Shape::class
 		single { ShapeStar(get(), get()) } bind Shape::class
+	}
+
+	private fun gradientShapesModule() = module {
+		single { GradientShapeLinear(get()) } bind GradientShape::class
+		single { GradientShapeBilinear(get()) } bind GradientShape::class
+		single { GradientShapeRadial(get()) } bind GradientShape::class
+		single { GradientShapeSweep(get()) } bind GradientShape::class
+		single { GradientShapeSweepSymmetric(get()) } bind GradientShape::class
 	}
 
 	private fun colorManipulatorModule() = module {

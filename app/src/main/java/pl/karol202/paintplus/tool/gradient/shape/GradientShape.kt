@@ -13,17 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package pl.karol202.paintplus.tool.gradient
+package pl.karol202.paintplus.tool.gradient.shape
 
-internal class GradientShapes(toolGradient: ToolGradient)
+import android.graphics.Canvas
+import android.graphics.Paint
+import pl.karol202.paintplus.tool.gradient.ToolGradient
+import android.graphics.PointF
+import android.graphics.Shader.TileMode
+import android.graphics.Shader
+import pl.karol202.paintplus.tool.gradient.Gradient
+
+interface GradientShape
 {
-	val shapes = listOf(GradientShapeLinear(toolGradient),
-	                    GradientShapeBilinear(toolGradient),
-	                    GradientShapeRadial(toolGradient),
-	                    GradientShapeSweep(toolGradient),
-	                    GradientShapeSweepSymmetric(toolGradient))
+	val name: Int
+	val icon: Int
 
-	fun getShape(id: Int) = shapes[id]
+	fun applyGradient(canvas: Canvas)
 
-	fun getShapeId(shape: GradientShape) = shapes.indexOf(shape)
+	fun onScreenDraw(canvas: Canvas)
 }

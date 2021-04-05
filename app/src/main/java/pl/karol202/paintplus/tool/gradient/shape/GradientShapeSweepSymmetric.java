@@ -14,17 +14,20 @@
  *    limitations under the License.
  */
 
-package pl.karol202.paintplus.tool.gradient;
+package pl.karol202.paintplus.tool.gradient.shape;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
+import pl.karol202.paintplus.tool.gradient.ToolGradient;
 import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.*;
 
-class GradientShapeSweepSymmetric extends GradientShape
+public class GradientShapeSweepSymmetric extends AbstractGradientShape
 {
 	private int[] oldColors;
 	private float[] oldPositions;
@@ -35,22 +38,23 @@ class GradientShapeSweepSymmetric extends GradientShape
 	}
 
 	@Override
-	int getName()
+	public int getName()
 	{
 		return R.string.gradient_shape_sweep_symmetric;
 	}
 
 	@Override
-	int getIcon()
+	public int getIcon()
 	{
 		return R.drawable.ic_gradient_shape_sweep_symmetric;
 	}
 
+	@NonNull
 	@Override
-	Shader createShader()
+	public Shader createShader(@NonNull Point start, @NonNull Point end)
 	{
-		float angle = (float) Math.toDegrees(Math.atan2(getSecondPoint().y - getFirstPoint().y,
-														getSecondPoint().x - getFirstPoint().x));
+		float angle = (float) Math.toDegrees(Math.atan2(end.y - start.y,
+														end.x - start.x));
 		float offset = MathUtils.map(angle, -180, 180, -0.5f, 0.5f);
 
 		mirrorGradient();
@@ -88,7 +92,7 @@ class GradientShapeSweepSymmetric extends GradientShape
 			lastPosition = position;
 		}
 
-		return new SweepGradient(getFirstPoint().x, getFirstPoint().y, newColors, newPositions);
+		return new SweepGradient(start.x, start.y, newColors, newPositions);
 	}
 
 	private void mirrorGradient()
@@ -135,15 +139,6 @@ class GradientShapeSweepSymmetric extends GradientShape
 				higherPosition = positions[i];
 			}
 		}
-		return mapColor(position, lowerPosition, higherPosition, lowerColor, higherColor);
-	}
-
-	private int mapColor(float src, float srcMin, float srcMax, int colorMin, int colorMax)
-	{
-		int alpha = Math.round(MathUtils.map(src, srcMin, srcMax, Color.alpha(colorMin), Color.alpha(colorMax)));
-		int red = Math.round(MathUtils.map(src, srcMin, srcMax, Color.red(colorMin), Color.red(colorMax)));
-		int green = Math.round(MathUtils.map(src, srcMin, srcMax, Color.green(colorMin), Color.green(colorMax)));
-		int blue = Math.round(MathUtils.map(src, srcMin, srcMax, Color.blue(colorMin), Color.blue(colorMax)));
-		return Color.argb(alpha, red, green, blue);
+		return MathUtils.mapColor(position, lowerPosition, higherPosition, lowerColor, higherColor);
 	}
 }

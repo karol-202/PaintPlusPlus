@@ -15,17 +15,11 @@
  */
 package pl.karol202.paintplus.activity
 
-import android.content.pm.PackageManager
-import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.forEach
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.color.curves.ColorChannel
-import pl.karol202.paintplus.image.LegacyImage
-import pl.karol202.paintplus.options.*
-import pl.karol202.paintplus.options.legacy.*
-import pl.karol202.paintplus.recent.RecentViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class ActivityPaintActions(private val activity: ActivityPaint,

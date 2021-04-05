@@ -15,30 +15,32 @@
  */
 package pl.karol202.paintplus.tool.shape
 
-import android.graphics.*
-import androidx.core.graphics.*
-import kotlinx.coroutines.flow.*
-import pl.karol202.paintplus.tool.StandardTool
-import pl.karol202.paintplus.tool.OnToolChangeListener
-import pl.karol202.paintplus.tool.shape.AbstractShape
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.PointF
+import android.graphics.Rect
+import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.minus
+import androidx.core.graphics.toPoint
+import androidx.core.graphics.withTranslation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.tool.shape.ShapeToolProperties
-import pl.karol202.paintplus.tool.ToolCoordinateSpace
-import pl.karol202.paintplus.history.legacyaction.ActionLayerChange
-import pl.karol202.paintplus.image.ColorsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.tool.drawing.AbstractToolDrawing
+import pl.karol202.paintplus.tool.OnToolChangeListener
+import pl.karol202.paintplus.tool.StandardTool
+import pl.karol202.paintplus.tool.ToolCoordinateSpace
 import pl.karol202.paintplus.util.cropped
 import pl.karol202.paintplus.util.duplicated
 import pl.karol202.paintplus.util.onChange
-import pl.karol202.paintplus.util.topLeft
 
-class ToolShape(imageService: ImageService,
+class ToolShape(private val imageService: ImageService,
                 viewService: ViewService,
                 helpersService: HelpersService,
                 private val historyService: HistoryService,
@@ -74,7 +76,7 @@ class ToolShape(imageService: ImageService,
 
 	override fun drawOnLayer(canvas: Canvas, layer: Layer)
 	{
-		if(layer != currentLayer || !layer.visible) return
+		if(layer != imageService.image.selectedLayer || !layer.visible) return
 		canvas.withImageSpace {
 			shape.drawOnLayer(canvas, true)
 			withImageClip {
@@ -89,15 +91,13 @@ class ToolShape(imageService: ImageService,
 
 	fun apply()
 	{
-		val layer = currentLayer ?: return
+		val layer = imageService.image.selectedLayer ?: return
 		val dirtyRect = shape.bounds ?: return
 		val dirtyBitmap = Bitmap.createBitmap(dirtyRect.width(), dirtyRect.height(), Bitmap.Config.ARGB_8888).applyCanvas {
 			withTranslation(-dirtyRect.left.toFloat(), -dirtyRect.top.toFloat()) {
-				withImageClip {
-					withLayerClip(layer) {
-						withSelectionClip {
-							shape.apply(this)
-						}
+				withLayerClip(layer) {
+					withSelectionClip {
+						shape.apply(this)
 					}
 				}
 			}
