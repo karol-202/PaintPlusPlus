@@ -16,16 +16,15 @@
 package pl.karol202.paintplus.tool
 
 import android.graphics.Canvas
-import android.graphics.Point
 import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.core.graphics.plus
-import androidx.core.graphics.times
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withMatrix
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import pl.karol202.paintplus.helpers.HelpersService
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
@@ -36,13 +35,11 @@ import kotlin.properties.Delegates
 
 abstract class StandardTool(private val imageService: ImageService,
                             private val viewService: ViewService,
-                            private val helpersService: HelpersService) : Tool
+                            private val helpersService: HelpersService,
+                            private val effectsService: EffectsService) : Tool
 {
 	abstract val inputCoordinateSpace: ToolCoordinateSpace
 	abstract val isUsingSnapping: Boolean
-
-	private val _updateEventFlow = MutableSharedFlow<Unit>()
-	override val updateEventFlow: Flow<Unit> = _updateEventFlow
 
 	protected var currentLayer: Layer? = null
 		private set
@@ -104,10 +101,5 @@ abstract class StandardTool(private val imageService: ImageService,
 	protected fun Canvas.withLayerSpace(layer: Layer, block: Canvas.() -> Unit) =
 			withMatrix(layer.matrix, block)
 
-	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> notifyUpdate() }
-
-	protected fun notifyUpdate()
-	{
-		_updateEventFlow.tryEmit(Unit)
-	}
+	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> effectsService.notifyViewUpdate() }
 }

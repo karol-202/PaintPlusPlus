@@ -21,10 +21,7 @@ import androidx.core.graphics.toRect
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.image.ColorsService
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.StandardTool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
@@ -36,8 +33,10 @@ import kotlin.math.roundToInt
 class ToolBrush(private val imageService: ImageService,
                 viewService: ViewService,
                 helpersService: HelpersService,
+                effectsService: EffectsService,
                 private val historyService: HistoryService,
-                private val colorsService: ColorsService) : StandardTool(imageService, viewService, helpersService)
+                private val colorsService: ColorsService) :
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	private class DrawingState(val shader: Shader,
 	                           val paint: Paint,

@@ -24,6 +24,7 @@ import androidx.core.graphics.toPointF
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.ColorsService
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.tool.shape.AbstractShape
 import pl.karol202.paintplus.util.MathUtils
@@ -37,7 +38,9 @@ import kotlin.math.sin
 class ShapeCircle(context: Context,
                   viewService: ViewService,
                   colorsService: ColorsService,
-                  private val helpersService: HelpersService) : AbstractShape(context, viewService, colorsService)
+                  effectsService: EffectsService,
+                  private val helpersService: HelpersService) :
+		AbstractShape(context, viewService, colorsService, effectsService)
 {
 	private enum class DragType
 	{

@@ -20,24 +20,23 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.paintplus.R
-import pl.karol202.paintplus.databinding.PropertiesDragBinding
 import pl.karol202.paintplus.databinding.PropertiesSelectionBinding
-import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.options.OptionSelectAll
 import pl.karol202.paintplus.options.OptionSelectInversion
 import pl.karol202.paintplus.options.OptionSelectNothing
-import pl.karol202.paintplus.tool.drag.ToolDrag
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.util.viewBinding
+import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class SelectionProperties : Fragment(R.layout.properties_selection)
 {
+	private val paintViewModel by sharedViewModel<PaintViewModel>()
 	private val toolSelection by inject<ToolSelection>()
 	private val optionSelectAll by inject<OptionSelectAll>()
 	private val optionSelectNothing by inject<OptionSelectNothing>()
@@ -48,7 +47,7 @@ class SelectionProperties : Fragment(R.layout.properties_selection)
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		setHasOptionsMenu(true)
-		toolSelection.updateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
+		paintViewModel.viewUpdateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
 
 		views.spinnerSelectionShape.adapter = SelectionShapeAdapter(requireContext())
 		views.spinnerSelectionShape.setSelection(toolSelection.shape.ordinal)

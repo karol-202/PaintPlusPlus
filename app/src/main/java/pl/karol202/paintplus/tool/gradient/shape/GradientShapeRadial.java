@@ -21,15 +21,9 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.gradient.ToolGradient;
 
 public class GradientShapeRadial extends AbstractGradientShape
 {
-	GradientShapeRadial(ToolGradient toolGradient)
-	{
-		super(toolGradient);
-	}
-
 	@Override
 	public int getName()
 	{

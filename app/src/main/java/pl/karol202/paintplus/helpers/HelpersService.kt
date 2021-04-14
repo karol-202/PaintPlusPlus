@@ -20,8 +20,6 @@ import kotlinx.coroutines.flow.merge
 
 class HelpersService(val helpers: List<Helper>)
 {
-	val updateEventFlow = helpers.mapNotNull { it.updateEventFlow }.merge()
-
 	fun snapX(x: Float) = snap(x, SnappingHelper::snapX)
 
 	fun snapY(y: Float) = snap(y, SnappingHelper::snapY)

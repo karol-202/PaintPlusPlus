@@ -23,9 +23,9 @@ import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 
-class OptionLayerColorsInvert(private val imageService: ImageService,
-                              private val historyService: HistoryService,
-                              private val invertColorManipulator: InvertColorManipulator) : Option
+class OptionLayerColorInvert(private val imageService: ImageService,
+                             private val historyService: HistoryService,
+                             private val invertColorManipulator: InvertColorManipulator) : Option
 {
 	private val actionPreset = Action.namePreset(R.string.history_action_colors_invert)
 

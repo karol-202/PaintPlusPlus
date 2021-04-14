@@ -25,13 +25,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.PropertiesShapeBinding
 import pl.karol202.paintplus.util.*
+import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 
 class ShapeToolProperties : Fragment(R.layout.properties_shape)
 {
+	private val paintViewModel by sharedViewModel<PaintViewModel>()
 	private val toolShape by inject<ToolShape>()
 
 	private val views by viewBinding(PropertiesShapeBinding::bind)
@@ -40,7 +43,7 @@ class ShapeToolProperties : Fragment(R.layout.properties_shape)
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		setHasOptionsMenu(true)
-		toolShape.updateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
+		paintViewModel.viewUpdateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
 
 		views.spinnerShape.adapter = ShapeAdapter(requireContext(), toolShape.shapes)
 		views.spinnerShape.setSelection(toolShape.shapeIndex)

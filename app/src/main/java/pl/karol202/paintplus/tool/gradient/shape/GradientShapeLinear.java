@@ -16,18 +16,14 @@
 
 package pl.karol202.paintplus.tool.gradient.shape;
 
-import android.graphics.*;
+import android.graphics.LinearGradient;
+import android.graphics.Point;
+import android.graphics.Shader;
 import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.gradient.ToolGradient;
 
 public class GradientShapeLinear extends AbstractGradientShape
 {
-	GradientShapeLinear(ToolGradient toolGradient)
-	{
-		super(toolGradient);
-	}
-
 	@Override
 	public int getName()
 	{

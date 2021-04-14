@@ -50,19 +50,26 @@ class ViewService(private val imageService: ImageService)
 
 	fun setGreaterZoomStep() = zoomSteps.firstOrNull { it > zoom }?.let(this::setZoom)
 
-	fun setZoom(zoom: Float, focusX: Float = 0.5f, focusY: Float = 0.5f)
+	fun setZoom(zoom: Float) = setZoomWithFocusRatio(zoom)
+
+	fun setZoom(zoom: Float, focusX: Float, focusY: Float)
+	{
+		val focusRatioX = map(focusX, -viewX * this.zoom, (-viewX + imageWidth) * this.zoom, 0f, 1f)
+		val focusRatioY = map(focusY, -viewY * this.zoom, (-viewY + imageHeight) * this.zoom, 0f, 1f)
+		setZoomWithFocusRatio(zoom, focusRatioX, focusRatioY)
+	}
+
+	private fun setZoomWithFocusRatio(zoom: Float, focusX: Float = 0.5f, focusY: Float = 0.5f)
 	{
 		if(zoom !in ZOOM_RANGE) return setZoom(zoom.coerceIn(ZOOM_RANGE), focusX, focusY)
 
-		val focusXInImage = map(focusX, -viewX * this.zoom, (-viewX + imageWidth) * this.zoom, 0f, 1f)
-		val focusYInImage = map(focusY, -viewY * this.zoom, (-viewY + imageHeight) * this.zoom, 0f, 1f)
 		val offsetXLeft = viewX * (this.zoom / zoom) - viewX
 		val offsetYTop = viewY * (this.zoom / zoom) - viewY
 		val offsetXRight = (viewX * this.zoom + (imageWidth * zoom - imageWidth * this.zoom)) / zoom - viewX
 		val offsetYBottom = (viewY * this.zoom + (imageHeight * zoom - imageHeight * this.zoom)) / zoom - viewY
 		setViewPosition(ViewPosition(
-				x = viewX + lerp(focusXInImage, offsetXLeft, offsetXRight),
-				y = viewY + lerp(focusYInImage, offsetYTop, offsetYBottom),
+				x = viewX + lerp(focusX, offsetXLeft, offsetXRight),
+				y = viewY + lerp(focusY, offsetYTop, offsetYBottom),
 				zoom = zoom))
 	}
 
@@ -81,5 +88,6 @@ class ViewService(private val imageService: ImageService)
 	fun setViewportSize(size: Size)
 	{
 		_viewportSizeFlow.value = size
+		centerView()
 	}
 }

@@ -25,12 +25,13 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogFormatGifBinding
 import pl.karol202.paintplus.databinding.DialogFormatJpegBinding
 import pl.karol202.paintplus.file.*
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.FileService
 import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionSave(private val context: Context,
-                 private val viewModel: PaintViewModel,
+                 private val effectsService: EffectsService,
                  private val fileService: FileService) : Option
 {
 	sealed class SaveResult
@@ -105,7 +106,7 @@ class OptionSave(private val context: Context,
 	}
 
 	fun execute(bitmap: Bitmap, onResult: (SaveResult) -> Unit) =
-			viewModel.makeActionRequest(PaintViewModel.ActionRequest.SaveFile(getSuggestedName()) {
+			effectsService.makeActionRequest(PaintViewModel.ActionRequest.SaveFile(getSuggestedName()) {
 				onUriSelected(bitmap, onResult, it)
 			})
 
@@ -128,7 +129,7 @@ class OptionSave(private val context: Context,
 	private fun executeWithUriAndFormatType(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri,
 	                                        formatType: SaveFormat.Type) = when(formatType)
 	{
-		SaveFormat.Type.JPEG -> viewModel.showDialog { builder, _ ->
+		SaveFormat.Type.JPEG -> effectsService.showDialog { builder, _ ->
 			JpegFormatDialog(builder, SaveFormat.Jpeg()) { format ->
 				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
@@ -136,20 +137,21 @@ class OptionSave(private val context: Context,
 		SaveFormat.Type.PNG -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Png)
 		SaveFormat.Type.WEBP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Webp())
 		SaveFormat.Type.BMP -> executeWithUriAndFormat(bitmap, onResult, uri, SaveFormat.Bmp)
-		SaveFormat.Type.GIF -> viewModel.showDialog { builder, _ ->
+		SaveFormat.Type.GIF -> effectsService.showDialog { builder, _ ->
 			GifFormatDialog(builder, SaveFormat.Gif()) { format ->
 				executeWithUriAndFormat(bitmap, onResult, uri, format)
 			}
 		}
 	}
 
-	fun executeWithUriAndFormat(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri, format: SaveFormat) = viewModel.postLongTask {
-		uri.openFileDescriptor(context, FileDescriptorMode.WRITE)?.useSuppressingIOException { desc ->
-			val result = format.save(context, desc.fileDescriptor.toFileOutputStream(), bitmap)
-			if(result) Unit else null
-		} ?: return@postLongTask onError(onResult, uri, SaveResult.Failed.CannotSave)
-		onResult(SaveResult.Success(uri, format))
-	}
+	fun executeWithUriAndFormat(bitmap: Bitmap, onResult: (SaveResult) -> Unit, uri: Uri, format: SaveFormat) =
+			effectsService.postLongTask {
+				uri.openFileDescriptor(context, FileDescriptorMode.WRITE)?.useSuppressingIOException { desc ->
+					val result = format.save(context, desc.fileDescriptor.toFileOutputStream(), bitmap)
+					if(result) Unit else null
+				} ?: return@postLongTask onError(onResult, uri, SaveResult.Failed.CannotSave)
+				onResult(SaveResult.Success(uri, format))
+			}
 
 	private fun onError(onResult: (SaveResult) -> Unit, uriToDelete: Uri?, error: SaveResult.Failed)
 	{

@@ -24,11 +24,12 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogScaleBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import kotlin.math.roundToInt
 
-class OptionScale(private val viewModel: PaintViewModel) : Option
+class OptionScale(private val effectsService: EffectsService) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
@@ -117,5 +118,5 @@ class OptionScale(private val viewModel: PaintViewModel) : Option
 	}
 
 	fun execute(@StringRes title: Int, initialSize: Size, onApply: (Size, Boolean) -> Unit) =
-			viewModel.showDialog { builder, _ -> Dialog(builder, title, initialSize, onApply) }
+			effectsService.showDialog { builder, _ -> Dialog(builder, title, initialSize, onApply) }
 }

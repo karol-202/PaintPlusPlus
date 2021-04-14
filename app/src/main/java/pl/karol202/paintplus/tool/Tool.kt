@@ -27,8 +27,6 @@ interface Tool
 	val icon: Int
 	val propertiesFragmentClass: Class<out Fragment>
 
-	val updateEventFlow: Flow<Unit>? get() = null
-
 	fun onTouch(event: MotionEvent): Boolean
 
 	fun drawOnLayer(canvas: Canvas, layer: Layer) {}

@@ -27,6 +27,7 @@ import pl.karol202.paintplus.color.manipulators.CurvesColorsManipulator
 import pl.karol202.paintplus.color.manipulators.ColorManipulatorSelection
 import pl.karol202.paintplus.databinding.DialogColorCurvesBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
@@ -34,9 +35,9 @@ import pl.karol202.paintplus.util.SeekBarTouchListener
 import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerColorCurves(private val viewModel: PaintViewModel,
-                             private val imageService: ImageService,
+class OptionLayerColorCurves(private val imageService: ImageService,
                              private val historyService: HistoryService,
+                             private val effectsService: EffectsService,
                              private val curvesColorsManipulator: CurvesColorsManipulator) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
@@ -128,7 +129,7 @@ class OptionLayerColorCurves(private val viewModel: PaintViewModel,
 
 	private val actionPreset = Action.namePreset(R.string.history_action_color_curves)
 
-	fun execute(channelType: ColorChannelType) = viewModel.showDialog { builder, dialogProvider ->
+	fun execute(channelType: ColorChannelType) = effectsService.showDialog { builder, dialogProvider ->
 		fun setVisibility(visibility: Boolean) = if(visibility) dialogProvider()?.show() else dialogProvider()?.hide()
 		Dialog(builder, channelType, ::setVisibility, { onApply(channelType, it) }, this::onRevert)
 	}

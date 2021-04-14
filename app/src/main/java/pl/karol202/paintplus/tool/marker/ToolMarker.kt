@@ -19,10 +19,7 @@ import android.graphics.*
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.image.ColorsService
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.drawing.AbstractToolDrawing
 import pl.karol202.paintplus.util.cache
@@ -30,9 +27,10 @@ import pl.karol202.paintplus.util.cache
 class ToolMarker(imageService: ImageService,
                  viewService: ViewService,
                  helpersService: HelpersService,
+                 effectsService: EffectsService,
                  historyService: HistoryService,
                  private val colorsService: ColorsService) :
-		AbstractToolDrawing(imageService, viewService, helpersService, historyService)
+		AbstractToolDrawing(imageService, viewService, helpersService, effectsService, historyService)
 {
 	override val name get() = R.string.tool_marker
 	override val icon get() = R.drawable.ic_tool_marker_black_24dp

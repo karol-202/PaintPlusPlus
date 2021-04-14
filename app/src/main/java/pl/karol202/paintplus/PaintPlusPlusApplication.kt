@@ -42,6 +42,7 @@ import pl.karol202.paintplus.tool.shape.circle.ShapeCircle
 import pl.karol202.paintplus.tool.shape.line.ShapeLine
 import pl.karol202.paintplus.tool.shape.polygon.ShapePolygon
 import pl.karol202.paintplus.tool.shape.star.ShapeStar
+import pl.karol202.paintplus.viewmodel.HistoryViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class PaintPlusPlusApplication : Application()
@@ -88,70 +89,85 @@ class PaintPlusPlusApplication : Application()
 		single { ViewService(get()) }
 		single { ToolsService(getAll()) }
 		single { FileService(get(), get()) }
+		single { EffectsService() }
 	}
 
 	private fun optionModule() = module {
-		single { OptionLayerColorsInvert(get(), get(), get()) }
 		single { OptionCopy(get(), get()) }
-		single { OptionImageCropBySelection(get(), get(), get(), get()) }
-		single { OptionLayerCropBySelection(get(), get()) }
 		single { OptionCut(get(), get(), get()) }
-		single { OptionImageCapturePhoto(get(), get(), get(), get(), get()) }
-		single { OptionImageNew(get(), get(), get(), get()) }
-		single { OptionImageOpen(get(), get(), get(), get(), get()) }
-		single { OptionImageSave(get(), get(), get(), get()) }
 		single { OptionFlip(get()) }
+		single { OptionImageCapturePhoto(get(), get(), get(), get(), get()) }
+		single { OptionImageCropBySelection(get(), get(), get(), get()) }
 		single { OptionImageFlatten(get(), get(), get()) }
 		single { OptionImageFlip(get(), get(), get()) }
+		single { OptionImageNew(get(), get(), get(), get()) }
+		single { OptionImageOpen(get(), get(), get(), get(), get()) }
+		single { OptionImageResize(get(), get(), get()) }
 		single { OptionImageRotate(get(), get(), get()) }
-		single { OptionSelectInversion(get(), get(), get()) }
+		single { OptionImageSave(get(), get(), get(), get()) }
+		single { OptionImageSaveAs(get()) }
+		single { OptionImageSaveLast(get(), get()) }
+		single { OptionImageScale(get(), get(), get()) }
 		single { OptionLayerChangeOrder(get(), get()) }
+		single { OptionLayerColorBrightness(get(), get(), get(), get()) }
+		single { OptionLayerColorCurves(get(), get(), get(), get()) }
+		single { OptionLayerColorInvert(get(), get(), get()) }
+		single { OptionLayerCropBySelection(get(), get()) }
 		single { OptionLayerDelete(get(), get(), get()) }
+		single { OptionLayerDrag(get(), get(), get()) }
 		single { OptionLayerDuplicate(get(), get(), get()) }
+		single { OptionLayerFitToImage(get(), get()) }
 		single { OptionLayerFlip(get(), get(), get()) }
 		single { OptionLayerInfoShow(get()) }
 		single { OptionLayerMergeDown(get(), get()) }
 		single { OptionLayerNameChange(get(), get(), get()) }
+		single { OptionLayerNew(get(), get(), get()) }
 		single { OptionLayerOpen(get(), get(), get(), get(), get()) }
 		single { OptionLayerPropertiesEdit(get(), get(), get(), getAll()) }
+		single { OptionLayerResize(get(), get(), get()) }
+		single { OptionLayerRotate(get(), get(), get()) }
 		single { OptionLayerSave(get(), get(), get(), get()) }
+		single { OptionLayerScale(get(), get(), get()) }
 		single { OptionLayerSelect(get()) }
-		single { OptionLayerFitToImage(get(), get()) }
 		single { OptionLayerVisibilityToggle(get(), get()) }
 		single { OptionOpen(get(), get()) }
 		single { OptionPaste(get(), get(), get(), get()) }
+		single { OptionResize(get()) }
 		single { OptionSave(get(), get(), get()) }
+		single { OptionScale(get()) }
+		single { OptionSelect(get()) }
 		single { OptionSelectAll(get(), get(), get()) }
+		single { OptionSelectInversion(get(), get(), get()) }
 		single { OptionSelectNothing(get(), get(), get()) }
 		single { OptionSetZoom(get(), get()) }
 	}
 
 	private fun toolsModule() = module {
-		single { ToolPan(get()) } bind Tool::class
-		single { ToolMarker(get()) } bind Tool::class
-		single { ToolBrush(get()) } bind Tool::class
-		single { ToolFill(get()) } bind Tool::class
-		single { ToolShape(get()) } bind Tool::class
-		single { ToolSelection(get()) } bind Tool::class
-		single { ToolColorPick(get()) } bind Tool::class
-		single { ToolDrag(get()) } bind Tool::class
-		single { ToolRubber(get()) } bind Tool::class
-		single { ToolGradient(get()) } bind Tool::class
+		single { ToolPan(get(), get()) } bind Tool::class
+		single { ToolMarker(get(), get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolBrush(get(), get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolFill(get(), get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolShape(get(), get(), get(), get(), get(), getAll()) } bind Tool::class
+		single { ToolSelection(get(), get(), get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolColorPick(get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolDrag(get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolRubber(get(), get(), get(), get(), get()) } bind Tool::class
+		single { ToolGradient(get(), get(), get(), get(), get(), get(), getAll()) } bind Tool::class
 	}
 
 	private fun shapesModule() = module {
-		single { ShapeLine(get(), get()) } bind Shape::class
-		single { ShapeCircle(get(), get()) } bind Shape::class
-		single { ShapePolygon(get(), get()) } bind Shape::class
-		single { ShapeStar(get(), get()) } bind Shape::class
+		single { ShapeLine(get(), get(), get(), get(), get()) } bind Shape::class
+		single { ShapeCircle(get(), get(), get(), get(), get()) } bind Shape::class
+		single { ShapePolygon(get(), get(), get(), get(), get()) } bind Shape::class
+		single { ShapeStar(get(), get(), get(), get(), get()) } bind Shape::class
 	}
 
 	private fun gradientShapesModule() = module {
-		single { GradientShapeLinear(get()) } bind GradientShape::class
-		single { GradientShapeBilinear(get()) } bind GradientShape::class
-		single { GradientShapeRadial(get()) } bind GradientShape::class
-		single { GradientShapeSweep(get()) } bind GradientShape::class
-		single { GradientShapeSweepSymmetric(get()) } bind GradientShape::class
+		single { GradientShapeLinear() } bind GradientShape::class
+		single { GradientShapeBilinear() } bind GradientShape::class
+		single { GradientShapeRadial() } bind GradientShape::class
+		single { GradientShapeSweep() } bind GradientShape::class
+		single { GradientShapeSweepSymmetric() } bind GradientShape::class
 	}
 
 	private fun colorManipulatorModule() = module {
@@ -173,7 +189,7 @@ class PaintPlusPlusApplication : Application()
 	}
 
 	private fun helpersModule() = module {
-		single { Grid(get(), get()) } bind Helper::class
+		single { Grid(get(), get(), get()) } bind Helper::class
 	}
 
 	private fun viewModelModule() = module {
@@ -181,6 +197,7 @@ class PaintPlusPlusApplication : Application()
 		viewModel { PaintViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
 		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
 		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(),
-		                           get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+		                           get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+		viewModel { HistoryViewModel(get(), get()) }
 	}
 }

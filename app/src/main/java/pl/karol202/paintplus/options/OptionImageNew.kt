@@ -21,15 +21,16 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogNewImageBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.FileService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionImageNew(private val viewModel: PaintViewModel,
-                     private val imageService: ImageService,
+class OptionImageNew(private val imageService: ImageService,
                      private val viewService: ViewService,
+                     private val effectsService: EffectsService,
                      private val fileService: FileService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
@@ -70,7 +71,7 @@ class OptionImageNew(private val viewModel: PaintViewModel,
 		}
 	}
 
-	fun execute() = viewModel.showDialog { builder, _ ->
+	fun execute() = effectsService.showDialog { builder, _ ->
 		Dialog(builder, imageService.image.size, this::onApply)
 	}
 

@@ -21,18 +21,15 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.image.FlipDirection
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.Image
-import pl.karol202.paintplus.image.ImageService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.util.getDisplayName
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
 class OptionLayerOpen(private val context: Context,
-                      private val viewModel: PaintViewModel,
                       private val imageService: ImageService,
                       private val historyService: HistoryService,
+                      private val effectsService: EffectsService,
                       private val openOption: OptionOpen) : Option
 {
 	private val actionPreset = Action.namePreset(R.string.history_action_layer_add)
@@ -42,7 +39,7 @@ class OptionLayerOpen(private val context: Context,
 	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{
 		is OptionOpen.OpenResult.Success -> onUriSelected(result.uri, result.bitmap, result.exifOrientation)
-		is OptionOpen.OpenResult.Failed -> viewModel.showMessage(R.string.message_cannot_open_file)
+		is OptionOpen.OpenResult.Failed -> effectsService.showMessage(R.string.message_cannot_open_file)
 	}
 
 	private fun onUriSelected(uri: Uri, bitmap: Bitmap, orientation: Int?) =

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerPropertiesBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
@@ -14,9 +15,9 @@ import pl.karol202.paintplus.util.setOnItemSelectedListener
 import pl.karol202.paintplus.util.setOnValueChangeListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
-                                private val imageService: ImageService,
+class OptionLayerPropertiesEdit(private val imageService: ImageService,
                                 private val historyService: HistoryService,
+                                private val effectsService: EffectsService,
                                 private val layerModes: List<LayerMode>) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
@@ -61,7 +62,7 @@ class OptionLayerPropertiesEdit(private val viewModel: PaintViewModel,
 
 	private val actionPreset = Action.namePreset(R.string.history_action_layer_properties_change)
 
-	fun execute(layer: Layer) = viewModel.showDialog { builder, _ ->
+	fun execute(layer: Layer) = effectsService.showDialog { builder, _ ->
 		Dialog(builder, layer, layerModes, this::onApplied)
 	}
 

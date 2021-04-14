@@ -19,14 +19,15 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.SaveFormat
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.FileService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionImageSave(private val paintViewModel: PaintViewModel,
-                      private val imageService: ImageService,
+class OptionImageSave(private val imageService: ImageService,
                       private val fileService: FileService,
+                      private val effectsService: EffectsService,
                       private val optionSave: OptionSave) : Option
 {
 	private val bitmapToSave get() = imageService.image.getFlattenedBitmap()
@@ -50,8 +51,8 @@ class OptionImageSave(private val paintViewModel: PaintViewModel,
 	private fun onSaved(uri: Uri, format: SaveFormat)
 	{
 		fileService.onFileSave(uri, format)
-		paintViewModel.showMessage(R.string.message_saved)
+		effectsService.showMessage(R.string.message_saved)
 	}
 
-	private fun onError(@StringRes message: Int) = paintViewModel.showMessage(message)
+	private fun onError(@StringRes message: Int) = effectsService.showMessage(message)
 }

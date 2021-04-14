@@ -35,7 +35,6 @@ import pl.karol202.paintplus.util.*
 private val PAINT_DASH = floatArrayOf(5f, 5f)
 private const val CHECKERBOARD_OFFSET = 8f
 
-// TODO Center view on start
 class PaintView(context: Context,
                 attrs: AttributeSet?) : SurfaceView(context, attrs)
 {

@@ -3,6 +3,8 @@ package pl.karol202.paintplus.util
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+// TODO Consider reducing cache size
+
 class MemoizeDelegate1<T1, R>(private val func: (T1) -> R) : ReadOnlyProperty<Any?, (T1) -> R>
 {
 	private val cache = mutableMapOf<T1, R>()

@@ -12,8 +12,6 @@ interface Shape
 	val icon: Int
 	val propertiesClass: Class<out Fragment>
 
-	val updateEventFlow: Flow<Unit>
-
 	var opacity: Float
 	var smooth: Boolean
 

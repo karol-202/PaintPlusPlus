@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogRotateLayerBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
@@ -27,9 +28,9 @@ import pl.karol202.paintplus.util.setOnValueChangeListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import kotlin.math.roundToInt
 
-class OptionLayerRotate(private val viewModel: PaintViewModel,
-                        private val imageService: ImageService,
-                        private val historyService: HistoryService) : Option
+class OptionLayerRotate(private val imageService: ImageService,
+                        private val historyService: HistoryService,
+                        private val effectsService: EffectsService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     private val onApply: (Float) -> Unit) :
@@ -66,7 +67,7 @@ class OptionLayerRotate(private val viewModel: PaintViewModel,
 
 	fun execute()
 	{
-		viewModel.showDialog { builder, _ ->
+		effectsService.showDialog { builder, _ ->
 			Dialog(builder, this::onApply)
 		}
 	}

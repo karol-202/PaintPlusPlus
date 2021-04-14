@@ -44,7 +44,7 @@ class GradientProperties : Fragment(R.layout.properties_gradient)
 	{
 		setHasOptionsMenu(true)
 
-		toolGradient.updateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
+		paintViewModel.viewUpdateEventFlow.collectIn(lifecycleScope) { activity?.invalidateOptionsMenu() }
 
 		views.gradientPreview.setGradient(toolGradient.gradient)
 		views.gradientPreview.setOnClickListener { openGradientDialog() }

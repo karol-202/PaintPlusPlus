@@ -23,17 +23,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.ImageLoader
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.util.*
-import pl.karol202.paintplus.viewmodel.PaintViewModel
 import pl.karol202.paintplus.viewmodel.PaintViewModel.ActionRequest
 
 private const val MIME_FILTER = "image/*"
 
 class OptionOpen(private val context: Context,
-                 private val viewModel: PaintViewModel) : Option
+                 private val effectsService: EffectsService) : Option
 {
 	sealed class OpenResult
 	{
@@ -73,7 +70,7 @@ class OptionOpen(private val context: Context,
 	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
 
 	fun execute(onResult: (OpenResult) -> Unit) =
-			viewModel.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER)) { onUriSelected(onResult, it) })
+			effectsService.makeActionRequest(ActionRequest.OpenFile(listOf(MIME_FILTER)) { onUriSelected(onResult, it) })
 
 	private fun onUriSelected(onResult: (OpenResult) -> Unit, uri: Uri?)
 	{
@@ -89,14 +86,14 @@ class OptionOpen(private val context: Context,
 
 		if(bitmapSize fitsIn maxSize)
 			openBitmap(onResult, uri)
-		else viewModel.showDialog { builder, _ ->
+		else effectsService.showDialog { builder, _ ->
 			ScaleDialog(builder, bitmapSize.fitInto(maxSize)) {
 				openBitmap(onResult, uri)
 			}
 		}
 	}
 
-	private fun openBitmap(onResult: (OpenResult) -> Unit, uri: Uri) = viewModel.postLongTask {
+	private fun openBitmap(onResult: (OpenResult) -> Unit, uri: Uri) = effectsService.postLongTask {
 		val result = uri.openFileDescriptor(context, FileDescriptorMode.READ)?.useSuppressingIOException { desc ->
 			val bitmap = ImageLoader.openBitmap(desc.fileDescriptor)?.fitInto(maxSize)
 			val exifOrientation = ImageLoader.getExifOrientation(desc.fileDescriptor)
@@ -114,7 +111,7 @@ class OptionOpen(private val context: Context,
 	}
 
 	private fun showExifDialog(onApply: () -> Unit, onNoRotation: () -> Unit) =
-			viewModel.showDialog { builder, _ ->
+			effectsService.showDialog { builder, _ ->
 				RotationDialog(builder, onApply, onNoRotation)
 			}
 }

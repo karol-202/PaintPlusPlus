@@ -24,6 +24,7 @@ import pl.karol202.paintplus.color.manipulators.BrightnessColorManipulator
 import pl.karol202.paintplus.color.manipulators.ColorManipulatorSelection
 import pl.karol202.paintplus.databinding.DialogColorsBrightnessBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
@@ -32,10 +33,10 @@ import pl.karol202.paintplus.util.setOnValueChangeListener
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 
-class OptionLayerColorsBrightness(private val viewModel: PaintViewModel,
-                                  private val imageService: ImageService,
-                                  private val historyService: HistoryService,
-                                  private val brightnessColorManipulator: BrightnessColorManipulator) : Option
+class OptionLayerColorBrightness(private val imageService: ImageService,
+                                 private val historyService: HistoryService,
+                                 private val effectsService: EffectsService,
+                                 private val brightnessColorManipulator: BrightnessColorManipulator) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
@@ -106,7 +107,7 @@ class OptionLayerColorsBrightness(private val viewModel: PaintViewModel,
 
 	private val actionPreset = Action.namePreset(R.string.history_action_brightness)
 
-	fun execute() = viewModel.showDialog { builder, dialogProvider ->
+	fun execute() = effectsService.showDialog { builder, dialogProvider ->
 		fun setVisibility(visibility: Boolean) = if(visibility) dialogProvider()?.show() else dialogProvider()?.hide()
 		Dialog(builder, ::setVisibility, this::onApply, this::onRevert)
 	}

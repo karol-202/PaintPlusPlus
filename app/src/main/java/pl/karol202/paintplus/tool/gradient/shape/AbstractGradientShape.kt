@@ -16,32 +16,39 @@
 package pl.karol202.paintplus.tool.gradient.shape
 
 import android.graphics.*
+import pl.karol202.paintplus.tool.gradient.Gradient
+import pl.karol202.paintplus.tool.gradient.GradientRepeatability
 import pl.karol202.paintplus.tool.gradient.ToolGradient
 import pl.karol202.paintplus.util.cache
+import pl.karol202.paintplus.util.memoize
 
-abstract class AbstractGradientShape(private val toolGradient: ToolGradient) : GradientShape
+abstract class AbstractGradientShape : GradientShape
 {
-	protected val positionsArray get() =
-		if(toolGradient.isReverted) toolGradient.gradient.revertedPositionsArray
-		else toolGradient.gradient.positionsArray
-	protected val colorsArray get() =
-		if(toolGradient.isReverted) toolGradient.gradient.revertedColorsArray
-		else toolGradient.gradient.colorsArray
-	protected val tileMode get() = toolGradient.repeatability.tileMode
+	override var gradient = Gradient.createSimpleGradient(Color.WHITE, Color.BLACK)
+	override var repeatability = GradientRepeatability.NO_REPEAT
+	override var isReverted = false
 
-	private val paint by cache({toolGradient.gradient}, {toolGradient.repeatability}, {toolGradient.isReverted}) { _, _, _ ->
+	protected val positionsArray get() =
+		if(isReverted) gradient.revertedPositionsArray
+		else gradient.positionsArray
+	protected val colorsArray get() =
+		if(isReverted) gradient.revertedColorsArray
+		else gradient.colorsArray
+	protected val tileMode get() = repeatability.tileMode
+
+	private val paint by memoize { _: Gradient, _: GradientRepeatability, _: Boolean, start: Point, end: Point ->
 		Paint().apply {
-			val (start, end) = toolGradient.gradientPoints ?: return@apply
 			shader = createShader(start, end)
 		}
 	}
 
 	abstract fun createShader(start: Point, end: Point): Shader
 
-	override fun applyGradient(canvas: Canvas) = drawGradient(canvas)
+	override fun applyGradient(canvas: Canvas, start: Point, end: Point) = drawGradient(canvas, start, end)
 
-	override fun onScreenDraw(canvas: Canvas) = drawGradient(canvas)
+	override fun onScreenDraw(canvas: Canvas, start: Point, end: Point) = drawGradient(canvas, start, end)
 
-	private fun drawGradient(canvas: Canvas) =
-			canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), paint)
+	private fun drawGradient(canvas: Canvas, start: Point, end: Point) =
+			canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(),
+			                paint(gradient, repeatability, isReverted, start, end))
 }

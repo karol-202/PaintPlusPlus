@@ -18,17 +18,17 @@ package pl.karol202.paintplus.tool.gradient
 import android.content.Context
 import android.graphics.*
 import androidx.core.graphics.*
-import pl.karol202.paintplus.tool.StandardTool
-import pl.karol202.paintplus.tool.OnToolChangeListener
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
+import pl.karol202.paintplus.tool.OnToolChangeListener
+import pl.karol202.paintplus.tool.StandardTool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
-import pl.karol202.paintplus.tool.gradient.shape.AbstractGradientShape
 import pl.karol202.paintplus.tool.gradient.shape.GradientShape
 import pl.karol202.paintplus.util.MathUtils
 import pl.karol202.paintplus.util.duplicated
@@ -41,10 +41,12 @@ private const val MAX_TOUCH_DISTANCE_DP = 35f
 class ToolGradient(private val context: Context,
                    private val imageService: ImageService,
                    private val viewService: ViewService,
+                   effectsService: EffectsService,
                    private val helpersService: HelpersService,
                    private val historyService: HistoryService,
-                   val gradientShapes: List<GradientShape>) : StandardTool(imageService, viewService, helpersService),
-                                                                      OnToolChangeListener
+                   val gradientShapes: List<GradientShape>) :
+		StandardTool(imageService, viewService, helpersService, effectsService),
+		OnToolChangeListener
 {
 	private enum class DragType
 	{
@@ -81,17 +83,19 @@ class ToolGradient(private val context: Context,
 	override val inputCoordinateSpace get() = ToolCoordinateSpace.IMAGE_SPACE
 	override val isUsingSnapping get() = false
 
-	var gradient by notifying(Gradient.createSimpleGradient(Color.WHITE, Color.BLACK))
 	var shape by notifying(gradientShapes.first())
-	var repeatability by notifying(GradientRepeatability.NO_REPEAT)
-	var isReverted by notifying(false)
+	var gradient: Gradient
+		get() = shape.gradient
+		set(value) = gradientShapes.forEach { it.gradient = value }
+	var repeatability: GradientRepeatability
+		get() = shape.repeatability
+		set(value) = gradientShapes.forEach { it.repeatability = value }
+	var isReverted: Boolean
+		get() = shape.isReverted
+		set(value) = gradientShapes.forEach { it.isReverted = value }
 
 	private val actionPreset = Action.namePreset(R.string.tool_gradient)
 
-	private val maskPaint = Paint().apply {
-		xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
-		color = Color.argb(160, 208, 208, 208)
-	}
 	private val pointOuterPaint = Paint().apply {
 		isAntiAlias = true
 		style = Paint.Style.FILL
@@ -105,7 +109,6 @@ class ToolGradient(private val context: Context,
 
 	private var state: State by notifying(State.Idle)
 	val isInEditMode get() = state is State.Edit
-	val gradientPoints get() = (state as? State.Edit)?.let { it.start to it.end }
 
 	override fun onTouchStart(point: PointF, layer: Layer): Boolean
 	{
@@ -171,11 +174,12 @@ class ToolGradient(private val context: Context,
 	override fun drawOnLayer(canvas: Canvas, layer: Layer)
 	{
 		if(layer != imageService.image.selectedLayer || !layer.visible || !isInEditMode) return
+		val editState = state as? State.Edit ?: return
 		canvas.withImageSpace {
 			withImageClip {
 				withLayerClip(layer) {
 					withSelectionClip {
-						shape.onScreenDraw(canvas)
+						shape.onScreenDraw(canvas, editState.start, editState.end)
 					}
 				}
 			}
@@ -208,10 +212,11 @@ class ToolGradient(private val context: Context,
 	fun apply()
 	{
 		val layer = imageService.image.selectedLayer ?: return
+		val editState = state as? State.Edit ?: return
 		val bitmap = Bitmap.createBitmap(layer.width, layer.height, Bitmap.Config.ARGB_8888).applyCanvas {
 			withTranslation(-layer.x.toFloat(), -layer.y.toFloat()) {
 				withSelectionClip {
-					shape.applyGradient(this)
+					shape.applyGradient(this, editState.start, editState.end)
 				}
 			}
 		}

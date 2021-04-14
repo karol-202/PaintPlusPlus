@@ -3,10 +3,11 @@ package pl.karol202.paintplus.options
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogLayerInfoBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerInfoShow(private val viewModel: PaintViewModel) : Option
+class OptionLayerInfoShow(private val effectsService: EffectsService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     layer: Layer) :
@@ -28,7 +29,7 @@ class OptionLayerInfoShow(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute(layer: Layer) = viewModel.showDialog { builder, _ ->
+	fun execute(layer: Layer) = effectsService.showDialog { builder, _ ->
 		Dialog(builder, layer)
 	}
 }

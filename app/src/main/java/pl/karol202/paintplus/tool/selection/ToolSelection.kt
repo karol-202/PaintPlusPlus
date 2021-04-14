@@ -18,15 +18,10 @@ package pl.karol202.paintplus.tool.selection
 import android.content.Context
 import android.graphics.*
 import androidx.core.graphics.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.Selection
-import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.options.OptionSelect
 import pl.karol202.paintplus.tool.StandardTool
@@ -35,7 +30,6 @@ import pl.karol202.paintplus.util.*
 import pl.karol202.paintplus.util.MathUtils.dpToPixels
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlin.properties.Delegates
 
 private const val MAX_DRAG_DISTANCE_DP = 50f
 private const val SELECTION_LINE_WIDTH_DP = 1f
@@ -43,9 +37,11 @@ private const val SELECTION_LINE_WIDTH_DP = 1f
 class ToolSelection(context: Context,
                     private val imageService: ImageService,
                     private val viewService: ViewService,
+                    effectsService: EffectsService,
                     private val helpersService: HelpersService,
                     private val historyService: HistoryService,
-                    private val optionSelect: OptionSelect) : StandardTool(imageService, viewService, helpersService)
+                    private val optionSelect: OptionSelect) :
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	private enum class MoveType
 	{

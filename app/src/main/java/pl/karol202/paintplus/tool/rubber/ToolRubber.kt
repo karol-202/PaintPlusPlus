@@ -19,20 +19,20 @@ import android.graphics.*
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
-import pl.karol202.paintplus.tool.StandardTool
-import pl.karol202.paintplus.tool.ToolCoordinateSpace
 import pl.karol202.paintplus.tool.drawing.AbstractToolDrawing
 import pl.karol202.paintplus.util.cache
 
 class ToolRubber(private val imageService: ImageService,
                  viewService: ViewService,
                  helpersService: HelpersService,
+                 effectsService: EffectsService,
                  historyService: HistoryService) :
-		AbstractToolDrawing(imageService, viewService, helpersService, historyService)
+		AbstractToolDrawing(imageService, viewService, helpersService, effectsService, historyService)
 {
 	override val name get() = R.string.tool_rubber
 	override val icon get() = R.drawable.ic_tool_rubber_black_24dp

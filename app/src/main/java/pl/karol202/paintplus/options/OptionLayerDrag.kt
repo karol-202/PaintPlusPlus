@@ -20,14 +20,15 @@ import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogDragLayerBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionLayerDrag(private val viewModel: PaintViewModel,
-                      private val imageService: ImageService,
-                      private val historyService: HistoryService) : Option
+class OptionLayerDrag(private val imageService: ImageService,
+                      private val historyService: HistoryService,
+                      private val effectsService: EffectsService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     initialPosition: Point,
@@ -57,7 +58,7 @@ class OptionLayerDrag(private val viewModel: PaintViewModel,
 	fun execute()
 	{
 		val selectedLayer = imageService.image.selectedLayer ?: return
-		viewModel.showDialog { builder, _ ->
+		effectsService.showDialog { builder, _ ->
 			Dialog(builder, selectedLayer.position) { onApply(selectedLayer, it) }
 		}
 	}

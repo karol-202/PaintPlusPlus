@@ -30,12 +30,13 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 import kotlin.math.roundToInt
 
-class ToolFill(private val paintViewModel: PaintViewModel,
-               private val imageService: ImageService,
+class ToolFill(private val imageService: ImageService,
                viewService: ViewService,
                helpersService: HelpersService,
+               private val effectsService: EffectsService,
                private val historyService: HistoryService,
-               private val colorsService: ColorsService) : StandardTool(imageService, viewService, helpersService)
+               private val colorsService: ColorsService) :
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	override val name get() = R.string.tool_fill
 	override val icon get() = R.drawable.ic_tool_fill_black_24dp
@@ -60,10 +61,10 @@ class ToolFill(private val paintViewModel: PaintViewModel,
 
 	override fun onTouchStop(point: PointF, layer: Layer): Boolean
 	{
-		paintViewModel.postLongTask {
+		effectsService.postLongTask {
 			val bitmap = fill(layer, point.toPoint(), imageService.selection, colorsService.currentColor) ?: return@postLongTask
 			historyService.commitAction { commit(layer, bitmap) }
-			notifyUpdate()
+			effectsService.notifyViewUpdate()
 		}
 		return false
 	}

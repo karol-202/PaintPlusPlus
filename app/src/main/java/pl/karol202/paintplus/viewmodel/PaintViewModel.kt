@@ -16,15 +16,13 @@ import pl.karol202.paintplus.color.curves.ColorChannel
 import pl.karol202.paintplus.color.picker.ColorPickerConfig
 import pl.karol202.paintplus.helpers.Grid
 import pl.karol202.paintplus.helpers.HelpersService
-import pl.karol202.paintplus.image.ColorsService
-import pl.karol202.paintplus.image.HistoryService
-import pl.karol202.paintplus.image.ImageService
-import pl.karol202.paintplus.image.ViewService
+import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.options.*
 import pl.karol202.paintplus.settings.SettingsRepository
 import pl.karol202.paintplus.tool.Tool
 import pl.karol202.paintplus.tool.ToolsService
+import pl.karol202.paintplus.util.collectIn
 
 class PaintViewModel(application: Application,
                      settingsRepository: SettingsRepository,
@@ -34,6 +32,7 @@ class PaintViewModel(application: Application,
                      private val colorService: ColorsService,
                      private val historyService: HistoryService,
                      private val helpersService: HelpersService,
+                     private val effectsService: EffectsService,
                      private val grid: Grid,
                      private val optionCopy: OptionCopy,
                      private val optionCut: OptionCut,
@@ -49,9 +48,9 @@ class PaintViewModel(application: Application,
                      private val optionImageSaveLast: OptionImageSaveLast,
                      private val optionImageScale: OptionImageScale,
                      private val optionLayerChangeOrder: OptionLayerChangeOrder,
-                     private val optionLayerColorsBrightness: OptionLayerColorsBrightness,
+                     private val optionLayerColorBrightness: OptionLayerColorBrightness,
                      private val optionLayerColorCurves: OptionLayerColorCurves,
-                     private val optionLayerColorsInvert: OptionLayerColorsInvert,
+                     private val optionLayerColorInvert: OptionLayerColorInvert,
                      private val optionLayerCropBySelection: OptionLayerCropBySelection,
                      private val optionLayerDelete: OptionLayerDelete,
                      private val optionLayerDrag: OptionLayerDrag,
@@ -107,9 +106,6 @@ class PaintViewModel(application: Application,
 	private val context: Context get() = getApplication()
 
 	private val _titleOverrideFlow = MutableStateFlow(TitleOverride.NONE)
-	private val _dialogFlow = MutableStateFlow<DialogDefinition?>(null)
-	private val _messageEventFlow = MutableSharedFlow<MessageEvent>(extraBufferCapacity = 16)
-	private val _actionRequestEventFlow = MutableSharedFlow<ActionRequest<*>>(extraBufferCapacity = 16)
 
 	val imageFlow = imageService.imageFlow
 	val selectionFlow = imageService.selectionFlow
@@ -117,16 +113,28 @@ class PaintViewModel(application: Application,
 	val currentToolFlow = toolsService.currentToolFlow
 	val currentColorFlow = colorService.currentColorFlow
 	val settingsFlow = settingsRepository.settings
+	val dialogFlow = effectsService.dialogFlow
+	val messageEventFlow = effectsService.messageEventFlow
+	val actionRequestEventFlow = effectsService.actionRequestEventFlow
+	val viewUpdateEventFlow = effectsService.viewUpdateEventFlow
+
 	val titleFlow = _titleOverrideFlow.combine(currentToolFlow) { override, tool -> createTitle(override, tool) }
-	val dialogFlow: StateFlow<DialogDefinition?> = _dialogFlow
-	val messageEventFlow: Flow<MessageEvent> = _messageEventFlow
-	val actionRequestEventFlow: Flow<ActionRequest<*>> = _actionRequestEventFlow
-	val viewUpdateEventFlow: Flow<Unit> = merge(toolsService.updateEventFlow, helpersService.updateEventFlow).conflate()
 
 	val tools get() = toolsService.tools
 	val currentTool get() = currentToolFlow.value
 	val currentColor get() = currentColorFlow.value
 	val helpers get() = helpersService.helpers
+
+	init
+	{
+		effectsService.longTaskRunFlow.collectIn(viewModelScope, this::postLongTask)
+	}
+
+	// TODO Split task into two parts: asynchronous operation and result callback (executed in UI thread)
+	private fun postLongTask(task: () -> Unit)
+	{
+		viewModelScope.launch(Dispatchers.IO) { task() }
+	}
 
 	private fun createTitle(override: TitleOverride, tool: Tool): String
 	{
@@ -229,9 +237,9 @@ class PaintViewModel(application: Application,
 
 	fun invertSelection() = optionSelectInversion.execute()
 
-	fun invertColors() = optionLayerColorsInvert.execute()
+	fun invertColors() = optionLayerColorInvert.execute()
 
-	fun changeBrightness() = optionLayerColorsBrightness.execute()
+	fun changeBrightness() = optionLayerColorBrightness.execute()
 
 	fun changeColorCurves(channelType: ColorChannel.ColorChannelType) = optionLayerColorCurves.execute(channelType)
 
@@ -246,29 +254,7 @@ class PaintViewModel(application: Application,
 		_titleOverrideFlow.value = titleOverride
 	}
 
-	fun showDialog(dialogDefinition: DialogDefinition)
-	{
-		_dialogFlow.value = dialogDefinition
-	}
+	fun hideDialog() = effectsService.hideDialog()
 
-	fun hideDialog()
-	{
-		_dialogFlow.value = null
-	}
-
-	fun showMessage(@StringRes text: Int)
-	{
-		_messageEventFlow.tryEmit(MessageEvent(text))
-	}
-
-	fun <R> makeActionRequest(request: ActionRequest<R>)
-	{
-		_actionRequestEventFlow.tryEmit(request)
-	}
-
-	// TODO Split task into two parts: asynchronous operation and result callback (executed in UI thread)
-	fun postLongTask(task: () -> Unit)
-	{
-		viewModelScope.launch(Dispatchers.IO) { task() }
-	}
+	fun <R> makeActionRequest(request: ActionRequest<R>) = effectsService.makeActionRequest(request)
 }

@@ -22,7 +22,6 @@ import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import androidx.annotation.NonNull;
 import pl.karol202.paintplus.R;
-import pl.karol202.paintplus.tool.gradient.ToolGradient;
 import pl.karol202.paintplus.util.MathUtils;
 
 import java.util.*;
@@ -31,11 +30,6 @@ public class GradientShapeSweepSymmetric extends AbstractGradientShape
 {
 	private int[] oldColors;
 	private float[] oldPositions;
-
-	GradientShapeSweepSymmetric(ToolGradient toolGradient)
-	{
-		super(toolGradient);
-	}
 
 	@Override
 	public int getName()

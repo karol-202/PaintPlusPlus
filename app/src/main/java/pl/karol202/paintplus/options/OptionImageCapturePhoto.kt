@@ -22,6 +22,7 @@ import android.os.ParcelFileDescriptor
 import androidx.core.content.FileProvider
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.file.ImageLoader
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.FileService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
@@ -33,7 +34,7 @@ import java.io.IOException
 class OptionImageCapturePhoto(private val context: Context,
                               private val imageService: ImageService,
                               private val viewService: ViewService,
-                              private val viewModel: PaintViewModel,
+                              private val effectsService: EffectsService,
                               private val fileService: FileService) : Option
 {
 	private val maxSize = squareSize(GraphicsHelper.maxTextureSize)
@@ -43,7 +44,7 @@ class OptionImageCapturePhoto(private val context: Context,
 		if(fileService.wasModifiedSinceSave) askAboutChanges() else capturePhoto()
 	}
 
-	private fun askAboutChanges() = viewModel.showDialog { builder, _ ->
+	private fun askAboutChanges() = effectsService.showDialog { builder, _ ->
 		OptionImageOpen.UnsavedDialog(builder) { capturePhoto() }
 	}
 
@@ -51,7 +52,7 @@ class OptionImageCapturePhoto(private val context: Context,
 	{
 		val photoFile = createPhotoFile() ?: return onError()
 		val photoUri = FileProvider.getUriForFile(context, context.packageName, photoFile)
-		viewModel.makeActionRequest(PaintViewModel.ActionRequest.CapturePhoto(photoUri) { onCaptureResult(photoUri, it) })
+		effectsService.makeActionRequest(PaintViewModel.ActionRequest.CapturePhoto(photoUri) { onCaptureResult(photoUri, it) })
 	}
 
 	private fun createPhotoFile() = try
@@ -84,5 +85,5 @@ class OptionImageCapturePhoto(private val context: Context,
 		return true
 	}
 
-	private fun onError() = viewModel.showMessage(R.string.message_cannot_capture_photo)
+	private fun onError() = effectsService.showMessage(R.string.message_cannot_capture_photo)
 }

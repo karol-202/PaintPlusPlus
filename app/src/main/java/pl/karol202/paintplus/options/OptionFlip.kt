@@ -19,10 +19,11 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogFlipBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.FlipDirection
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionFlip(private val viewModel: PaintViewModel) : Option
+class OptionFlip(private val effectsService: EffectsService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     @StringRes title: Int,
@@ -49,7 +50,7 @@ class OptionFlip(private val viewModel: PaintViewModel) : Option
 		}
 	}
 
-	fun execute(@StringRes title: Int, onFlip: (FlipDirection) -> Unit) = viewModel.showDialog { builder, _ ->
+	fun execute(@StringRes title: Int, onFlip: (FlipDirection) -> Unit) = effectsService.showDialog { builder, _ ->
 		Dialog(builder, title, onFlip)
 	}
 }

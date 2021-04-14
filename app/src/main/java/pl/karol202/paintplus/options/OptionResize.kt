@@ -30,6 +30,7 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogResizeBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.util.BoundsPreviewView
 import pl.karol202.paintplus.util.GraphicsHelper
 import pl.karol202.paintplus.util.MathUtils
@@ -37,7 +38,7 @@ import pl.karol202.paintplus.util.toRectF
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import kotlin.math.roundToInt
 
-class OptionResize(private val viewModel: PaintViewModel) : Option
+class OptionResize(private val effectsService: EffectsService) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
@@ -152,5 +153,5 @@ class OptionResize(private val viewModel: PaintViewModel) : Option
 	}
 
 	fun execute(@StringRes title: Int, initialRect: Rect, onApply: (Rect) -> Unit) =
-			viewModel.showDialog { builder, _ -> Dialog(builder, title, initialRect, onApply) }
+			effectsService.showDialog { builder, _ -> Dialog(builder, title, initialRect, onApply) }
 }

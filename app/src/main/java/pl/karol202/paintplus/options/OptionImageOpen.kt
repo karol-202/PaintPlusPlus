@@ -23,10 +23,10 @@ import pl.karol202.paintplus.R
 import pl.karol202.paintplus.image.*
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 
-class OptionImageOpen(private val paintViewModel: PaintViewModel,
-                      private val imageService: ImageService,
+class OptionImageOpen(private val imageService: ImageService,
                       private val viewService: ViewService,
                       private val fileService: FileService,
+                      private val effectsService: EffectsService,
                       private val openOption: OptionOpen) : Option
 {
 	class UnsavedDialog(builder: AlertDialog.Builder,
@@ -46,7 +46,7 @@ class OptionImageOpen(private val paintViewModel: PaintViewModel,
 		if(fileService.wasModifiedSinceSave) askAboutChanges() else executeWithoutSaving()
 	}
 
-	private fun askAboutChanges() = paintViewModel.showDialog { builder, _ ->
+	private fun askAboutChanges() = effectsService.showDialog { builder, _ ->
 		UnsavedDialog(builder) { executeWithoutSaving() }
 	}
 
@@ -57,7 +57,7 @@ class OptionImageOpen(private val paintViewModel: PaintViewModel,
 	private fun onResult(result: OptionOpen.OpenResult) = when(result)
 	{
 		is OptionOpen.OpenResult.Success -> openImageFromBitmap(result.uri, result.bitmap, result.exifOrientation)
-		is OptionOpen.OpenResult.Failed -> paintViewModel.showMessage(R.string.message_cannot_open_file)
+		is OptionOpen.OpenResult.Failed -> effectsService.showMessage(R.string.message_cannot_open_file)
 	}
 
 	private fun openImageFromBitmap(uri: Uri, bitmap: Bitmap, orientation: Int?)

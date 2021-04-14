@@ -20,9 +20,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.Size
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ViewPosition
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.cache
@@ -36,7 +34,8 @@ private const val LINE_OFFSET_BASE = 20
 private const val SNAP_DISTANCE_DP = 15
 
 class Grid(context: Context,
-           private val viewService: ViewService) : SnappingHelper
+           effectsService: EffectsService,
+           private val viewService: ViewService) : AbstractHelper(effectsService), SnappingHelper
 {
 	private data class LinesSet(val vertical: List<Int>,
 	                            val horizontal: List<Int>)
@@ -46,12 +45,10 @@ class Grid(context: Context,
 		DISABLED, VISIBLE, VISIBLE_WITH_SNAPPING
 	}
 
-	private val _stateFlow = MutableStateFlow(State.DISABLED)
+	private var state by notifying(State.DISABLED)
 
-	override val updateEventFlow = _stateFlow.map { }
-
-	private val isEnabled get() = _stateFlow.value != State.DISABLED
-	private val isSnappingEnabled get() = _stateFlow.value == State.VISIBLE_WITH_SNAPPING
+	private val isEnabled get() = state != State.DISABLED
+	private val isSnappingEnabled get() = state == State.VISIBLE_WITH_SNAPPING
 
 	private val density = context.resources.displayMetrics.density
 	private val snapDistance = (SNAP_DISTANCE_DP * density).toInt()
@@ -140,7 +137,7 @@ class Grid(context: Context,
 
 	fun toggleGrid()
 	{
-		_stateFlow.value = when(_stateFlow.value)
+		state = when(state)
 		{
 			State.DISABLED -> State.VISIBLE
 			else -> State.DISABLED
@@ -149,7 +146,7 @@ class Grid(context: Context,
 
 	fun toggleSnapping()
 	{
-		_stateFlow.value = when(_stateFlow.value)
+		state = when(state)
 		{
 			State.DISABLED -> State.DISABLED
 			State.VISIBLE -> State.VISIBLE_WITH_SNAPPING

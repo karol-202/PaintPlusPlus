@@ -15,19 +15,21 @@
  */
 package pl.karol202.paintplus.tool.pickcolor
 
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.PointF
 import androidx.core.graphics.contains
 import androidx.core.graphics.plus
 import androidx.core.graphics.toPoint
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.image.ColorsService
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.image.layer.Layer
 import pl.karol202.paintplus.tool.StandardTool
 import pl.karol202.paintplus.tool.ToolCoordinateSpace
-import pl.karol202.paintplus.util.plus
 import pl.karol202.paintplus.util.toRect
 import kotlin.math.floor
 import kotlin.math.pow
@@ -37,7 +39,9 @@ import kotlin.math.sqrt
 class ToolColorPick(private val imageService: ImageService,
                     viewService: ViewService,
                     helpersService: HelpersService,
-                    private val colorsService: ColorsService) : StandardTool(imageService, viewService, helpersService)
+                    effectsService: EffectsService,
+                    private val colorsService: ColorsService) :
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	override val name get() = R.string.tool_color_pick
 	override val icon get() = R.drawable.ic_tool_color_pick_black_24dp

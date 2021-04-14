@@ -23,12 +23,10 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.minus
 import androidx.core.graphics.toPoint
 import androidx.core.graphics.withTranslation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onStart
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
@@ -43,18 +41,17 @@ import pl.karol202.paintplus.util.onChange
 class ToolShape(private val imageService: ImageService,
                 viewService: ViewService,
                 helpersService: HelpersService,
+                effectsService: EffectsService,
                 private val historyService: HistoryService,
-                val shapes: List<Shape>) : StandardTool(imageService, viewService, helpersService),
-                                           OnToolChangeListener
+                val shapes: List<Shape>) :
+		StandardTool(imageService, viewService, helpersService, effectsService),
+		OnToolChangeListener
 {
 	override val name get() = R.string.tool_shape
 	override val icon get() = R.drawable.ic_tool_shape_black_24dp
 	override val propertiesFragmentClass get() = ShapeToolProperties::class.java
 	override val inputCoordinateSpace get() = ToolCoordinateSpace.IMAGE_SPACE
 	override val isUsingSnapping get() = false
-
-	override val updateEventFlow: Flow<Unit>
-		get() = super.updateEventFlow.flatMapLatest { shape.updateEventFlow.onStart { emit(Unit) } }
 
 	var opacity: Float
 		get() = shape.opacity

@@ -21,6 +21,7 @@ import android.graphics.Paint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import pl.karol202.paintplus.image.ColorsService
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.util.MathUtils.dpToPixels
 import pl.karol202.paintplus.util.cache
@@ -31,12 +32,10 @@ private const val TRANSLUCENT_SHAPE_OPACITY = 0.5f
 
 abstract class AbstractShape(private val context: Context,
                              private val viewService: ViewService,
-                             private val colorsService: ColorsService) : Shape
+                             private val colorsService: ColorsService,
+                             private val effectsService: EffectsService) : Shape
 {
 	protected val maxTouchDistancePx get() = dpToPixels(context, MAX_TOUCH_DISTANCE_DP) / viewService.zoom
-
-	private val _updateEventFlow = MutableSharedFlow<Unit>()
-	override val updateEventFlow: Flow<Unit> = _updateEventFlow
 
 	override var opacity by notifying(1f)
 	override var smooth by notifying(true)
@@ -54,10 +53,5 @@ abstract class AbstractShape(private val context: Context,
 		}
 	}
 
-	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> notifyUpdate() }
-
-	private fun notifyUpdate()
-	{
-		_updateEventFlow.tryEmit(Unit)
-	}
+	protected fun <V> notifying(initial: V) = Delegates.observable(initial) { _, _, _ -> effectsService.notifyViewUpdate() }
 }

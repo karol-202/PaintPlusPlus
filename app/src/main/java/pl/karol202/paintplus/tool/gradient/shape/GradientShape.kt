@@ -15,20 +15,22 @@
  */
 package pl.karol202.paintplus.tool.gradient.shape
 
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import pl.karol202.paintplus.tool.gradient.ToolGradient
-import android.graphics.PointF
 import android.graphics.Shader.TileMode
-import android.graphics.Shader
 import pl.karol202.paintplus.tool.gradient.Gradient
+import pl.karol202.paintplus.tool.gradient.GradientRepeatability
 
 interface GradientShape
 {
 	val name: Int
 	val icon: Int
 
-	fun applyGradient(canvas: Canvas)
+	var gradient: Gradient
+	var repeatability: GradientRepeatability
+	var isReverted: Boolean
 
-	fun onScreenDraw(canvas: Canvas)
+	fun applyGradient(canvas: Canvas, start: Point, end: Point)
+
+	fun onScreenDraw(canvas: Canvas, start: Point, end: Point)
 }

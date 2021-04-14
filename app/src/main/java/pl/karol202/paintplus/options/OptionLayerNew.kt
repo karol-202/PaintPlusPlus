@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogNewLayerBinding
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.Image
 import pl.karol202.paintplus.image.ImageService
@@ -37,9 +38,9 @@ import pl.karol202.paintplus.viewmodel.PaintViewModel
 import kotlin.math.max
 import kotlin.math.min
 
-class OptionLayerNew(private val viewModel: PaintViewModel,
-                     private val imageService: ImageService,
-                     private val historyService: HistoryService) : Option
+class OptionLayerNew(private val imageService: ImageService,
+                     private val historyService: HistoryService,
+                     private val effectsService: EffectsService) : Option
 {
 	@SuppressLint("ClickableViewAccessibility")
 	private class Dialog(builder: AlertDialog.Builder,
@@ -117,7 +118,7 @@ class OptionLayerNew(private val viewModel: PaintViewModel,
 	private val actionPreviewBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 	private val actionPreset = Action.namePreset(R.string.history_action_layer_add).withPreview { actionPreviewBitmap }
 
-	fun execute() = viewModel.showDialog { builder, _ ->
+	fun execute() = effectsService.showDialog { builder, _ ->
 		Dialog(builder, imageService.defaultLayerName, imageService.image.size, this::onApply)
 	}
 

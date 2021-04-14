@@ -19,12 +19,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.DialogSetZoomBinding
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.ViewService
 import pl.karol202.paintplus.viewmodel.PaintViewModel
 import java.util.*
 
-class OptionSetZoom(private val viewModel: PaintViewModel,
-                    private val viewService: ViewService) : Option
+class OptionSetZoom(private val viewService: ViewService,
+                    private val effectsService: EffectsService) : Option
 {
 	private class Dialog(builder: AlertDialog.Builder,
 	                     private val viewService: ViewService) :
@@ -79,7 +80,7 @@ class OptionSetZoom(private val viewModel: PaintViewModel,
 		private fun parseZoom(text: String) = text.substring(0, text.length - 1).toFloatOrNull()?.div(100f)
 	}
 
-	fun execute() = viewModel.showDialog { builder, _ ->
+	fun execute() = effectsService.showDialog { builder, _ ->
 		Dialog(builder, viewService)
 	}
 }

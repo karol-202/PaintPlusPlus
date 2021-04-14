@@ -22,6 +22,7 @@ import androidx.core.graphics.toPoint
 import pl.karol202.paintplus.R
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
@@ -34,7 +35,9 @@ import kotlin.math.abs
 class ToolDrag(private val imageService: ImageService,
                viewService: ViewService,
                private val helpersService: HelpersService,
-               private val historyService: HistoryService) : StandardTool(imageService, viewService, helpersService)
+               effectsService: EffectsService,
+               private val historyService: HistoryService) :
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	override val name get() = R.string.tool_drag
 	override val icon get() = R.drawable.ic_tool_drag_black_24dp

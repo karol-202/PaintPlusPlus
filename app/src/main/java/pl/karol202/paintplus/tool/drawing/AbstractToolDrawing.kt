@@ -21,6 +21,7 @@ import androidx.core.graphics.toRect
 import androidx.core.graphics.withClip
 import pl.karol202.paintplus.helpers.HelpersService
 import pl.karol202.paintplus.history.Action
+import pl.karol202.paintplus.image.EffectsService
 import pl.karol202.paintplus.image.HistoryService
 import pl.karol202.paintplus.image.ImageService
 import pl.karol202.paintplus.image.ViewService
@@ -35,8 +36,9 @@ import pl.karol202.paintplus.util.duplicated
 abstract class AbstractToolDrawing(private val imageService: ImageService,
                                    viewService: ViewService,
                                    helpersService: HelpersService,
+                                   effectsService: EffectsService,
                                    private val historyService: HistoryService) :
-		StandardTool(imageService, viewService, helpersService)
+		StandardTool(imageService, viewService, helpersService, effectsService)
 {
 	private sealed class Result
 	{

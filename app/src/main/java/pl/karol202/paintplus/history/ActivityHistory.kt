@@ -15,29 +15,20 @@
  */
 package pl.karol202.paintplus.history
 
-import androidx.appcompat.app.AppCompatActivity
-import pl.karol202.paintplus.image.LegacyImage
-import pl.karol202.paintplus.history.HistoryAdapter
-import androidx.recyclerview.widget.RecyclerView
 import android.os.Bundle
 import android.view.Menu
-import pl.karol202.paintplus.R
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.DividerItemDecoration
-import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.karol202.paintplus.R
 import pl.karol202.paintplus.databinding.ActivityHistoryBinding
-import pl.karol202.paintplus.databinding.ActivityPaintBinding
 import pl.karol202.paintplus.image.HistoryState
 import pl.karol202.paintplus.util.collectIn
 import pl.karol202.paintplus.util.viewBinding
 import pl.karol202.paintplus.viewmodel.HistoryViewModel
-import pl.karol202.paintplus.viewmodel.PaintViewModel
-import java.lang.RuntimeException
 
 class ActivityHistory : AppCompatActivity()
 {
